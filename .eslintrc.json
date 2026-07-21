@@ -1,0 +1,123 @@
+{
+	"root": true,
+	"env": {
+		"browser": true,
+		"es2022": true,
+		"node": true
+	},
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module",
+		"ecmaFeatures": {
+		"modules": true
+		}
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:import/recommended",
+		"plugin:promise/recommended",
+		"plugin:jsdoc/recommended"
+	],
+	"plugins": ["import", "promise", "jsdoc"],
+	"rules": {
+		"indent": ["error", 2],
+		"linebreak-style": ["error", "unix"],
+		"quotes": [
+		"error",
+		"single",
+		{
+			"avoidEscape": true
+		}
+		],
+		"semi": ["error", "always"],
+		"no-unused-vars": [
+		"error",
+		{
+			"argsIgnorePattern": "^_"
+		}
+		],
+		"no-console": [
+		"warn",
+		{
+			"allow": ["warn", "error"]
+		}
+		],
+		"prefer-const": "error",
+		"no-var": "error",
+		"object-shorthand": "error",
+		"prefer-arrow-callback": "error",
+		"arrow-spacing": "error",
+		"no-duplicate-imports": "error",
+		"import/order": [
+		"error",
+		{
+			"groups": [
+			"builtin",
+			"external",
+			"internal",
+			"parent",
+			"sibling",
+			"index"
+			],
+			"pathGroups": [
+			{
+				"pattern": "@/**",
+				"group": "internal"
+			}
+			],
+			"pathGroupsExcludedImportTypes": ["builtin"],
+			"alphabetize": {
+			"order": "asc"
+			}
+		}
+		],
+		"import/no-unresolved": "error",
+		"import/no-cycle": "error",
+		"promise/always-return": "error",
+		"promise/no-return-wrap": "error",
+		"promise/param-names": "error",
+		"promise/catch-or-return": "error",
+		"jsdoc/require-jsdoc": [
+		"warn",
+		{
+			"require": {
+			"FunctionDeclaration": true,
+			"MethodDefinition": true,
+			"ClassDeclaration": true,
+			"ArrowFunctionExpression": true,
+			"FunctionExpression": true
+			}
+		}
+		],
+		"jsdoc/check-values": "error",
+		"jsdoc/check-param-names": "error"
+	},
+	"overrides": [
+		{
+		"files": ["*.test.js", "*.spec.js", "tests/**"],
+		"env": {
+			"vitest": true
+		},
+		"rules": {
+			"no-console": "off",
+			"jsdoc/require-jsdoc": "off"
+		}
+		},
+		{
+		"files": ["scripts/**"],
+		"env": {
+			"node": true
+		},
+		"rules": {
+			"no-console": "off"
+		}
+		}
+	],
+	"ignorePatterns": [
+		"dist/",
+		"node_modules/",
+		"public/",
+		"*.config.js",
+		"*.config.mjs"
+	]
+}
