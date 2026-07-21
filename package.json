@@ -12,7 +12,8 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "lint": "eslint src --ext .js --fix",
+    "lint": "eslint src --max-warnings 0",
+    "lint:fix": "eslint src --fix",
     "format": "prettier --write \"src/**/*.{js,css,html}\"",
     "format:check": "prettier --check \"src/**/*.{js,css,html}\"",
     "prepare": "husky"
@@ -36,7 +37,7 @@
     "axe-core": "4.12.1",
     "esbuild": "0.28.1",
     "eslint": "10.7.0",
-    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-import-x": "^4.0.0",
     "eslint-plugin-jsdoc": "63.2.0",
     "eslint-plugin-promise": "7.3.0",
     "husky": "9.1.7",
@@ -52,7 +53,7 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "browserlist": [
+  "browserslist": [
     "last 2 Chrome versions",
     "last 2 Firefox versions",
     "last 2 Safari versions",
