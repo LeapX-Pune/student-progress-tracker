@@ -13,6 +13,21 @@ Thumbs.db
 *.swp
 *.swo
 
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+
+# Environment files
+.env
+.env.local
+
+# Test/coverage
+coverage/
+playwright-report/
+test-results/
+
 # Web Browser & Temporary Files
 *.log
 .cache/
