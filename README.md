@@ -34,7 +34,4 @@ student-progress-tracker/
 2. Open `index.html` directly in any standard web browser (Chrome, Firefox, Safari, Edge).
 
 ## Team Members
-- Member 1 - [Role/Name]
-- Member 2 - [Role/Name]
-- Member 3 - [Role/Name]
-- Member 4 - [Role/Name]
+
