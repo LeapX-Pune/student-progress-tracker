@@ -1,17 +1,11 @@
 # Operating System Files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+.DS_Store
+.Trash
 
 # IDE & Editor Files
 .vscode/
-.idea/
 *.swp
-*.swo
 
 # Dependencies
 node_modules/
@@ -31,3 +25,13 @@ test-results/
 # Web Browser & Temporary Files
 *.log
 .cache/
+
+# Personal Docs
+project-demo/
+project-docs/
+
+
+# Agent Related
+.opencode/
+SKILL.md
+skills-lock.json
