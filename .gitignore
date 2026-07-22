@@ -4,7 +4,6 @@
 .Trash
 
 # IDE & Editor Files
-.vscode/
 *.swp
 
 # Dependencies
