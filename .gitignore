@@ -24,6 +24,7 @@ test-results/
 # Web Browser & Temporary Files
 *.log
 .cache/
+ dasboard_1_demo
 
 # Personal Docs
 project-demo/
@@ -34,3 +35,9 @@ project-docs/
 .opencode/
 SKILL.md
 skills-lock.json
+
+PRD.pdf
+task.md
+to-do.csv
+explanation.md
+ develop
