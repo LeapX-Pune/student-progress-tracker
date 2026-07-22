@@ -52,7 +52,7 @@ export default [
       'linebreak-style': ['error', 'unix'],
       quotes: ['error', 'single', { avoidEscape: true }],
       semi: ['error', 'always'],
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
       'no-console': [
         'warn',
         { allow: ['warn', 'error', 'log', 'info', 'debug', 'table', 'time', 'timeEnd'] },
