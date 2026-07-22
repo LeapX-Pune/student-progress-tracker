@@ -105,9 +105,21 @@ export default [
       'jsdoc/require-jsdoc': 'off',
     },
   },
-  // Build scripts — allow console
+  // Build scripts — allow console, Node.js globals
   {
     files: ['scripts/**'],
+    languageOptions: {
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        setTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearTimeout: 'readonly',
+        clearInterval: 'readonly',
+        URL: 'readonly',
+        AbortController: 'readonly',
+      },
+    },
     rules: {
       'no-console': 'off',
     },
