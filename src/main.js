@@ -1,1 +1,1 @@
-console.log('app');
+console.warn('app');
