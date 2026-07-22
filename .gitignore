@@ -16,3 +16,7 @@ Thumbs.db
 # Web Browser & Temporary Files
 *.log
 .cache/
+PRD.pdf
+task.md
+to-do.csv
+explanation.md
