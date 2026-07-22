@@ -53,7 +53,10 @@ export default [
       quotes: ['error', 'single', { avoidEscape: true }],
       semi: ['error', 'always'],
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-console': [
+        'warn',
+        { allow: ['warn', 'error', 'log', 'info', 'debug', 'table', 'time', 'timeEnd'] },
+      ],
       'prefer-const': 'error',
       'no-var': 'error',
       'object-shorthand': 'error',
