@@ -14,10 +14,9 @@ if (existsSync(distDir)) rmSync(distDir, { recursive: true });
 mkdirSync(distDir, { recursive: true });
 
 // Build with esbuild
-const result = await build({
+await build({
   entryPoints: ['src/main.js'],
   bundle: true,
-  outfile: resolve(distDir, 'main.js'),
   format: 'esm',
   target: 'es2022',
   minify: true,
@@ -44,7 +43,6 @@ const result = await build({
 
 console.log('Build complete');
 console.log(`Output: ${distDir}`);
-console.log(`Bundle size: ${(result.metafile.outputs['main.js'].bytes / 1024).toFixed(1)} KB`);
 
 // Copy static assets
 function copyDir(src, dest) {
