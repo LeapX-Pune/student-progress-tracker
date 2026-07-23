@@ -337,20 +337,20 @@ backend.
 
 ```json
 {
-  "scripts": {
-    "dev": "node scripts/dev.js",
-    "build": "node scripts/build.js",
-    "preview": "npx serve dist",
-    "test": "node scripts/test.js",
-    "test:watch": "node scripts/test.js --watch",
-    "test:coverage": "node scripts/test.js --coverage",
-    "test:e2e": "npx playwright test",
-    "lint": "node scripts/lint.js",
-    "lint:fix": "node scripts/lint.js --fix",
-    "format": "npx prettier --write \"src/**/*.{js,css,html}\"",
-    "deploy:preview": "node scripts/deploy.js preview",
-    "deploy:prod": "node scripts/deploy.js production"
-  }
+    "scripts": {
+        "dev": "node scripts/dev.js",
+        "build": "node scripts/build.js",
+        "preview": "npx serve dist",
+        "test": "node scripts/test.js",
+        "test:watch": "node scripts/test.js --watch",
+        "test:coverage": "node scripts/test.js --coverage",
+        "test:e2e": "npx playwright test",
+        "lint": "node scripts/lint.js",
+        "lint:fix": "node scripts/lint.js --fix",
+        "format": "npx prettier --write \"src/**/*.{js,css,html}\"",
+        "deploy:preview": "node scripts/deploy.js preview",
+        "deploy:prod": "node scripts/deploy.js production"
+    }
 }
 ```
 
@@ -366,12 +366,12 @@ backend.
 
 ```json
 {
-  "semi": true,
-  "singleQuote": true,
-  "tabWidth": 2,
-  "trailingComma": "es5",
-  "printWidth": 100,
-  "bracketSpacing": true
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "printWidth": 100,
+    "bracketSpacing": true
 }
 ```
 

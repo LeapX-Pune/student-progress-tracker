@@ -23,11 +23,9 @@ export function getMockServer() {
 
 /**
  * ApiService class handles all API requests.
- * Implements core logic for Day 1 tasks:
- * - API-001: Core ApiService class
- * - API-002: Request interceptor (auth token injection)
- * - API-003: Response interceptor (error handling and normalization)
- * - API-015: Configurable base URL
+ * Provides a centralized fetch wrapper with automatic token injection,
+ * response normalization, timeout handling, retry logic with exponential backoff,
+ * and request deduplication.
  */
 export class ApiService {
     /**
@@ -35,10 +33,14 @@ export class ApiService {
      */
     constructor(baseUrl = '') {
         this.baseUrl = baseUrl || (window.CONFIG && window.CONFIG.API_BASE_URL) || '/api';
+
+        this.pendingRequests = new Map();
+        this.timeoutMs = 10000;
+        this.maxRetries = 3;
     }
 
     /**
-     *
+     * Request interceptor to inject authentication tokens.
      */
     _requestInterceptor(options, endpoint) {
         const headers = new Headers(options.headers || {});
@@ -58,7 +60,7 @@ export class ApiService {
     }
 
     /**
-     *
+     * Response interceptor to normalize the response format and handle common errors.
      */
     async _responseInterceptor(response) {
         if (!response.ok) {
@@ -83,19 +85,108 @@ export class ApiService {
     }
 
     /**
-     *
+     * Generate a unique key for deduplication based on method, url, and body.
+     */
+    _getRequestKey(method, url, body) {
+        return `${method}:${url}:${body || ''}`;
+    }
+
+    /**
+     * Helper to detect network errors for retry logic.
+     */
+    _isNetworkError(error) {
+        return (
+            error.name === 'TypeError' ||
+            error.message === 'Failed to fetch' ||
+            error.message.includes('NetworkError')
+        );
+    }
+
+    /**
+     * Core request method
      */
     async request(endpoint, options = {}) {
-        const url = `${this.baseUrl}${endpoint}`;
-        const fetchOptions = this._requestInterceptor(options, endpoint);
+        const {
+            method = 'GET',
+            body,
+            retryCount = 0,
+            skipDedup = false,
+            ...otherOptions
+        } = options;
 
-        try {
-            const response = await fetch(url, fetchOptions);
-            return await this._responseInterceptor(response);
-        } catch (error) {
-            console.error(`API Error on ${endpoint}:`, error);
-            throw error;
+        const url = `${this.baseUrl}${endpoint}`;
+
+        // Check deduplication
+        const requestKey = !skipDedup && this._getRequestKey(method, url, body);
+        if (requestKey && this.pendingRequests.has(requestKey)) {
+            return this.pendingRequests.get(requestKey);
         }
+
+        // 1. Run request interceptor
+        const fetchOptions = this._requestInterceptor({ method, body, ...otherOptions }, endpoint);
+
+        // Timeout handling
+        const controller = new AbortController();
+        fetchOptions.signal = controller.signal;
+
+        const timeoutPromise = new Promise((_resolve, reject) => {
+            setTimeout(() => {
+                controller.abort();
+                reject(new Error('Request timeout'));
+            }, this.timeoutMs);
+        });
+
+        // The actual fetch wrapped in our interceptors
+        const fetchPromise = fetch(url, fetchOptions)
+            .then(async response => {
+                if (requestKey) this.pendingRequests.delete(requestKey);
+                return await this._responseInterceptor(response);
+            })
+            .catch(error => {
+                if (requestKey) this.pendingRequests.delete(requestKey);
+
+                // Handle abort specifically
+                if (error.name === 'AbortError') {
+                    throw new Error(
+                        error.message === 'The user aborted a request.'
+                            ? 'Request cancelled'
+                            : 'Request timeout'
+                    );
+                }
+
+                // Retry with exponential backoff on network errors
+                if (retryCount < this.maxRetries && this._isNetworkError(error)) {
+                    const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+                    return new Promise(resolve =>
+                        setTimeout(
+                            () =>
+                                resolve(
+                                    this.request(endpoint, {
+                                        ...options,
+                                        retryCount: retryCount + 1,
+                                    })
+                                ),
+                            delay
+                        )
+                    );
+                }
+
+                console.error(`API Error on ${endpoint}:`, error);
+                throw error;
+            });
+
+        // Race fetch against timeout
+        const requestPromise = Promise.race([fetchPromise, timeoutPromise]);
+
+        // Store for deduplication
+        if (requestKey) {
+            this.pendingRequests.set(requestKey, requestPromise);
+            // Ensure we clean up if race resolves before finally block
+            // eslint-disable-next-line promise/catch-or-return
+            requestPromise.finally(() => this.pendingRequests.delete(requestKey));
+        }
+
+        return requestPromise;
     }
 
     /**

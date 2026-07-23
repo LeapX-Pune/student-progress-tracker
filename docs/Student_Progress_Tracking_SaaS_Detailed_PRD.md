@@ -420,26 +420,26 @@ Render    Profile   Course   Charts    Toast/Empty
 ```javascript
 // AuthContext.js - Singleton pattern
 const AuthContext = {
-  state: { user: null, token: null, isAuthenticated: false },
-  subscribers: new Set(),
+    state: { user: null, token: null, isAuthenticated: false },
+    subscribers: new Set(),
 
-  subscribe(fn) {
-    this.subscribers.add(fn);
-    return () => this.subscribers.delete(fn);
-  },
-  notify() {
-    this.subscribers.forEach(fn => fn(this.state));
-  },
+    subscribe(fn) {
+        this.subscribers.add(fn);
+        return () => this.subscribers.delete(fn);
+    },
+    notify() {
+        this.subscribers.forEach(fn => fn(this.state));
+    },
 
-  login(credentials) {
-    /* ... */
-  },
-  logout() {
-    /* ... */
-  },
-  restoreSession() {
-    /* ... */
-  },
+    login(credentials) {
+        /* ... */
+    },
+    logout() {
+        /* ... */
+    },
+    restoreSession() {
+        /* ... */
+    },
 };
 ```
 
@@ -596,15 +596,15 @@ cursor-not-allowed)
 
 ```typescript
 interface Student {
-  id: string; // "stu_001"
-  name: string; // "Alex Johnson"
-  email: string; // "alex@student.edu"
-  avatarUrl?: string; // "https://..." or null
-  studentId: string; // "STU-2024-001"
-  enrolledAt: string; // "2024-01-15T00:00:00Z"
-  overallProgress: number; // 0-100 (calculated)
-  currentStreak: number; // days
-  lastActiveAt: string; // "2024-01-20T14:30:00Z"
+    id: string; // "stu_001"
+    name: string; // "Alex Johnson"
+    email: string; // "alex@student.edu"
+    avatarUrl?: string; // "https://..." or null
+    studentId: string; // "STU-2024-001"
+    enrolledAt: string; // "2024-01-15T00:00:00Z"
+    overallProgress: number; // 0-100 (calculated)
+    currentStreak: number; // days
+    lastActiveAt: string; // "2024-01-20T14:30:00Z"
 }
 ```
 
@@ -612,24 +612,24 @@ interface Student {
 
 ```typescript
 interface Course {
-  id: string; // "course_001"
-  title: string; // "Full Stack Web Development"
-  instructor: string; // "Dr. Sarah Chen"
-  thumbnailUrl: string; // "https://..."
-  description: string;
-  totalModules: number; // 20
-  completedModules: number; // 13
-  progress: number; // 0-100 (calculated)
-  status: 'not-started' | 'in-progress' | 'completed';
-  currentGrade: number; // 87.5
-  letterGrade: 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'D' | 'F';
-  nextModule?: {
-    id: string;
-    title: string;
-    dueDate?: string;
-  };
-  lastAccessedAt: string; // "2024-01-19T10:00:00Z"
-  term: string; // "Spring 2024"
+    id: string; // "course_001"
+    title: string; // "Full Stack Web Development"
+    instructor: string; // "Dr. Sarah Chen"
+    thumbnailUrl: string; // "https://..."
+    description: string;
+    totalModules: number; // 20
+    completedModules: number; // 13
+    progress: number; // 0-100 (calculated)
+    status: 'not-started' | 'in-progress' | 'completed';
+    currentGrade: number; // 87.5
+    letterGrade: 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'D' | 'F';
+    nextModule?: {
+        id: string;
+        title: string;
+        dueDate?: string;
+    };
+    lastAccessedAt: string; // "2024-01-19T10:00:00Z"
+    term: string; // "Spring 2024"
 }
 ```
 
@@ -637,26 +637,26 @@ interface Course {
 
 ```typescript
 interface QuizScore {
-  id: string; // "quiz_001"
-  label: string; // "Quiz 1: HTML Basics"
-  score: number; // 85
-  maxScore: number; // 100
-  percentage: number; // 85
-  completedAt: string; // "2024-01-10T12:00:00Z"
-  courseId: string; // "course_001"
+    id: string; // "quiz_001"
+    label: string; // "Quiz 1: HTML Basics"
+    score: number; // 85
+    maxScore: number; // 100
+    percentage: number; // 85
+    completedAt: string; // "2024-01-10T12:00:00Z"
+    courseId: string; // "course_001"
 }
 
 interface GradeDistribution {
-  grade: 'A' | 'B' | 'C' | 'D' | 'F';
-  count: number;
-  percentage: number; // of total assignments
+    grade: 'A' | 'B' | 'C' | 'D' | 'F';
+    count: number;
+    percentage: number; // of total assignments
 }
 
 interface WeeklyProgress {
-  week: number; // 1-12
-  dateRange: string; // "Jan 8 - Jan 14"
-  courses: Record<string, number>; // { "course_001": 15, "course_002": 8 }
-  cumulative: number; // overall %
+    week: number; // 1-12
+    dateRange: string; // "Jan 8 - Jan 14"
+    courses: Record<string, number>; // { "course_001": 15, "course_002": 8 }
+    cumulative: number; // overall %
 }
 ```
 
@@ -687,65 +687,65 @@ interface WeeklyProgress {
 
 ```json
 {
-  "students": [
-    {
-      "id": "stu_001",
-      "name": "Alex Johnson",
-      "email": "alex@student.edu",
-      "password": "demo123",
-      "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=alex",
-      "studentId": "STU-2024-001",
-      "enrolledAt": "2024-01-15T00:00:00Z"
-    }
-  ],
-  "courses": [
-    {
-      "id": "course_001",
-      "studentId": "stu_001",
-      "title": "Full Stack Web Development",
-      "instructor": "Dr. Sarah Chen",
-      "thumbnailUrl": "https://picsum.photos/seed/course1/400/225",
-      "description": "Complete web development bootcamp",
-      "totalModules": 20,
-      "completedModules": 13,
-      "status": "in-progress",
-      "currentGrade": 87.5,
-      "term": "Spring 2024",
-      "lastAccessedAt": "2024-01-19T10:00:00Z"
-    }
-  ],
-  "quizScores": [
-    {
-      "id": "q_001",
-      "studentId": "stu_001",
-      "courseId": "course_001",
-      "label": "Quiz 1: HTML Basics",
-      "score": 90,
-      "maxScore": 100,
-      "completedAt": "2024-01-10T12:00:00Z"
-    }
-  ],
-  "gradeDistribution": [
-    { "grade": "A", "count": 5, "percentage": 35 },
-    { "grade": "B", "count": 6, "percentage": 42 },
-    { "grade": "C", "count": 2, "percentage": 14 },
-    { "grade": "D", "count": 1, "percentage": 7 },
-    { "grade": "F", "count": 0, "percentage": 0 }
-  ],
-  "weeklyProgress": [
-    {
-      "week": 1,
-      "dateRange": "Jan 8-14",
-      "courses": { "course_001": 10 },
-      "cumulative": 10
-    },
-    {
-      "week": 2,
-      "dateRange": "Jan 15-21",
-      "courses": { "course_001": 25 },
-      "cumulative": 25
-    }
-  ]
+    "students": [
+        {
+            "id": "stu_001",
+            "name": "Alex Johnson",
+            "email": "alex@student.edu",
+            "password": "demo123",
+            "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=alex",
+            "studentId": "STU-2024-001",
+            "enrolledAt": "2024-01-15T00:00:00Z"
+        }
+    ],
+    "courses": [
+        {
+            "id": "course_001",
+            "studentId": "stu_001",
+            "title": "Full Stack Web Development",
+            "instructor": "Dr. Sarah Chen",
+            "thumbnailUrl": "https://picsum.photos/seed/course1/400/225",
+            "description": "Complete web development bootcamp",
+            "totalModules": 20,
+            "completedModules": 13,
+            "status": "in-progress",
+            "currentGrade": 87.5,
+            "term": "Spring 2024",
+            "lastAccessedAt": "2024-01-19T10:00:00Z"
+        }
+    ],
+    "quizScores": [
+        {
+            "id": "q_001",
+            "studentId": "stu_001",
+            "courseId": "course_001",
+            "label": "Quiz 1: HTML Basics",
+            "score": 90,
+            "maxScore": 100,
+            "completedAt": "2024-01-10T12:00:00Z"
+        }
+    ],
+    "gradeDistribution": [
+        { "grade": "A", "count": 5, "percentage": 35 },
+        { "grade": "B", "count": 6, "percentage": 42 },
+        { "grade": "C", "count": 2, "percentage": 14 },
+        { "grade": "D", "count": 1, "percentage": 7 },
+        { "grade": "F", "count": 0, "percentage": 0 }
+    ],
+    "weeklyProgress": [
+        {
+            "week": 1,
+            "dateRange": "Jan 8-14",
+            "courses": { "course_001": 10 },
+            "cumulative": 10
+        },
+        {
+            "week": 2,
+            "dateRange": "Jan 15-21",
+            "courses": { "course_001": 25 },
+            "cumulative": 25
+        }
+    ]
 }
 ```
 
@@ -869,36 +869,36 @@ interface WeeklyProgress {
 # .github/workflows/deploy.yml
 name: Deploy to Production
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+    push:
+        branches: [main]
+    workflow_dispatch:
 
 jobs:
-  lint-test-build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: '20', cache: 'npm' }
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run test:coverage
-      - run: npm run build
-      - uses: actions/upload-artifact@v4
-        with: { name: dist, path: dist }
+    lint-test-build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with: { node-version: '20', cache: 'npm' }
+            - run: npm ci
+            - run: npm run lint
+            - run: npm run test:coverage
+            - run: npm run build
+            - uses: actions/upload-artifact@v4
+              with: { name: dist, path: dist }
 
-  deploy-vercel:
-    needs: lint-test-build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with: { name: dist, path: dist }
-      - uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
+    deploy-vercel:
+        needs: lint-test-build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/download-artifact@v4
+              with: { name: dist, path: dist }
+            - uses: amondnet/vercel-action@v25
+              with:
+                  vercel-token: ${{ secrets.VERCEL_TOKEN }}
+                  vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+                  vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+                  vercel-args: '--prod'
 ```
 
 ### 12.2 Environment Configuration
