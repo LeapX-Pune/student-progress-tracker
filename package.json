@@ -4,6 +4,10 @@
   "description": "A web-based platform designed to help students and educators monitor academic performance, track assignments, and analyze learning progress.",
   "type": "module",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "analyze": "vite build --mode analyze",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -27,6 +31,8 @@
     "axe-core": "^4.12.1",
     "jsdom": "^29.1.1",
     "msw": "^2.15.0",
+    "rollup-plugin-visualizer": "^7.0.1",
+    "vite": "^8.1.5",
     "vitest": "^4.1.10"
   }
 }

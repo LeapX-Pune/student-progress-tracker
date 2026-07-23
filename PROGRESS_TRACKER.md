@@ -34,37 +34,61 @@
 
 ## Day 1 — Build Foundation + Core UX Components (Part 12 + Part 10)
 
-**Status:** 🔄 In Progress
+**Status:** ✅ Complete
 
 ### Part 12 — Build Optimization (DEP-001 to DEP-006)
 
 | Task | ID | Status |
 |------|----|--------|
-| Production build script (minified JS/CSS, sourcemaps, asset hashing) | DEP-001 | ⬜ |
-| Bundle size monitoring with CI warning at 100KB gzipped | DEP-002 | ⬜ |
-| Preload critical resources (fonts, CSS, hero images) | DEP-004 | ⬜ |
+| Production build script (minified JS/CSS, sourcemaps, asset hashing) | DEP-001 | ✅ |
+| Bundle size monitoring with CI warning at 100KB gzipped | DEP-002 | ✅ |
+| Preload critical resources (fonts, CSS, hero images) | DEP-004 | ✅ |
 
 ### Part 12 — Environment Configuration (DEP-007 to DEP-011)
 
 | Task | ID | Status |
 |------|----|--------|
-| Environment variable template (`.env.example`) | DEP-007 | ⬜ |
-| Environment-specific configs (dev/staging/prod) | DEP-008 | ⬜ |
-| API endpoint mock/real swap via env var | DEP-011 | ⬜ |
+| Environment variable template (`.env.example`) | DEP-007 | ✅ |
+| Environment-specific configs (dev/staging/prod) | DEP-008 | ✅ |
+| API endpoint mock/real swap via env var | DEP-011 | ✅ |
 
 ### Part 10 — Core UI Components (UX-001 to UX-008)
 
 | Task | ID | Status |
 |------|----|--------|
-| ToastNotification system | UX-001 | ⬜ |
-| SkeletonLoader (shimmer, CardSkeleton, ChartSkeleton) | UX-002 | ⬜ |
-| EmptyState (illustration, title, description, actions) | UX-003 | ⬜ |
-| ErrorBoundary (catches errors, fallback UI with retry) | UX-004 | ⬜ |
-| RetryButton (loading state) | UX-005 | ⬜ |
-| LoadingSpinner (accessible, label option) | UX-006 | ⬜ |
-| Modal/Dialog (backdrop, focus trap, ESC to close) | UX-007 | ⬜ |
-| Tooltip (position-aware, accessible) | UX-008 | ⬜ |
-| Write unit + component tests alongside each component | — | ⬜ |
+| ToastNotification system | UX-001 | ✅ |
+| SkeletonLoader (shimmer, CardSkeleton, ChartSkeleton) | UX-002 | ✅ |
+| EmptyState (illustration, title, description, actions) | UX-003 | ✅ |
+| ErrorBoundary (catches errors, fallback UI with retry) | UX-004 | ✅ |
+| RetryButton (loading state) | UX-005 | ✅ |
+| LoadingSpinner (accessible, label option) | UX-006 | ✅ |
+| Modal/Dialog (backdrop, focus trap, ESC to close) | UX-007 | ✅ |
+| Tooltip (position-aware, accessible) | UX-008 | ✅ |
+| Write unit + component tests alongside each component | — | ✅ |
+
+**Files created/modified:**
+- `vite.config.js` — Vite bundler config with chunk size warning at 100KB, sourcemaps, asset hashing
+- `index.html` — Updated for Vite entry point with font preconnect/preload
+- `package.json` — Added dev/build/preview/analyze scripts
+- `.env.example` — Environment variable template
+- `.env.development`, `.env.staging`, `.env.production` — Env-specific configs
+- `src/utils/env.js` — Env utility (getConfig, isDevelopment, isStaging, isProduction, isMockApiEnabled)
+- `src/services/api.js` — API client with mock/real swap, token-based auth headers
+- `src/services/mock.js` — Mock server (fetch interceptor) for all 4 API endpoints
+- `src/styles/main.css` — Design tokens, global styles, skip-link, reduced-motion
+- `src/styles/components/*.css` — 8 component CSS files with variants
+- `src/components/Toast.js` — Toast system with success/error/warning/info, auto-dismiss, slide animations
+- `src/components/SkeletonLoader.js` — Skeleton text/card/chart with shimmer animation
+- `src/components/EmptyState.js` — Empty state with illustrations and actions
+- `src/components/ErrorBoundary.js` — Error boundary with retry support
+- `src/components/RetryButton.js` — Retry button with loading spinner state
+- `src/components/LoadingSpinner.js` — Accessible spinner (sm/md/lg) with sr-only label
+- `src/components/Modal.js` — Modal with backdrop, focus trap, ESC close, mobile bottom-sheet
+- `src/components/Tooltip.js` — Position-aware tooltip (top/bottom/left/right), viewport-bound
+- `src/components/index.js` — Barrel exports
+- `src/main.js` — App entry point
+- `src/utils/errors.js` — Error normalization and global error handlers
+- `tests/components/*.test.js` — 60 unit tests across all 8 components
 
 ---
 
