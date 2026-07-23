@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import {
   updateDocumentTitle,
   saveScrollPosition,
@@ -12,6 +12,13 @@ describe('router', () => {
   beforeEach(() => {
     document.title = 'Test'
     window.scrollTo = vi.fn()
+    vi.useFakeTimers()
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => cb())
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.restoreAllMocks()
   })
 
   it('updateDocumentTitle sets page title', () => {
