@@ -1,0 +1,25 @@
+.course-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.course-status-badge--completed {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.course-status-badge--in-progress {
+    background-color: #f3e8ff;
+    color: #6b21a8;
+}
+
+.course-status-badge--not-started {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}

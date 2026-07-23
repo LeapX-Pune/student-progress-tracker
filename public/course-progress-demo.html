@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Progress Demo</title>
+    <!-- Import Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Import Module CSS -->
+    <link rel="stylesheet" href="../src/styles/courses/course-grid.css">
+    <link rel="stylesheet" href="../src/styles/courses/course-card.css">
+    <link rel="stylesheet" href="../src/styles/courses/progress-bar.css">
+    <link rel="stylesheet" href="../src/styles/courses/status-badge.css">
+    <link rel="stylesheet" href="../src/styles/courses/module-progress.css">
+    <link rel="stylesheet" href="../src/styles/courses/course-thumbnail.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            margin: 0;
+            padding: 40px;
+        }
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h2 {
+            margin-bottom: 24px;
+            color: #111827;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2>Course Progress (Demo)</h2>
+        <div id="course-progress-container"></div>
+    </div>
+
+    <script type="module">
+        import { mountCourseGrid } from '../src/components/courses/CourseGrid.js';
+
+        const mockCourses = [
+            {
+                id: 'course_001',
+                title: 'Full Stack Web Development',
+                instructor: 'Dr. Ankit Verma',
+                thumbnailUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMiw4eziKnZ6okVY_lRgegT53w_bfaxA5sUs0Ng0QbCs4QwyszbRkV2Eq-&s=10',
+                totalModules: 20,
+                completedModules: 13,
+                status: 'in-progress',
+                currentGrade: 'A-',
+                nextModule: 'React Hooks Deep Dive'
+            },
+            {
+                id: 'course_002',
+                title: 'Data Structures & Algorithms',
+                instructor: 'Prof. Priya Sharma',
+                thumbnailUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU3_ZKJtTtwNplnn5J4iYmalV0v4rGBSDaWKPolk8j-WnHkPnlzumMXzc&s=10',
+                totalModules: 15,
+                completedModules: 15,
+                status: 'completed',
+                currentGrade: 94.0
+            },
+            {
+                id: 'course_003',
+                title: 'UX Design Fundamentals',
+                instructor: 'Prof. Sneha Iyer',
+                thumbnailUrl: 'https://spot-digital.com.tw/wp-content/uploads/2025/06/UIUX-1024x683.webp',
+                totalModules: 12,
+                completedModules: 0,
+                status: 'not-started',
+                currentGrade: null,
+                nextModule: 'Introduction to Wireframing'
+            }
+        ];
+
+        const container = document.getElementById('course-progress-container');
+        mountCourseGrid(container, mockCourses);
+    </script>
+</body>
+</html>

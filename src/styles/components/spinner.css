@@ -1,37 +1,57 @@
 .spinner {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
 }
 
 .spinner__circle {
-  animation: spinner-rotate 0.8s linear infinite;
+    animation: spinner-rotate 0.8s linear infinite;
 }
 
 .spinner__path {
-  stroke: currentColor;
-  stroke-linecap: round;
-  animation: spinner-dash 1.5s ease-in-out infinite;
+    stroke: currentColor;
+    stroke-linecap: round;
+    animation: spinner-dash 1.5s ease-in-out infinite;
 }
 
-.spinner--sm .spinner__circle { width: 16px; height: 16px; }
-.spinner--md .spinner__circle { width: 24px; height: 24px; }
-.spinner--lg .spinner__circle { width: 40px; height: 40px; }
+.spinner--sm .spinner__circle {
+    width: 16px;
+    height: 16px;
+}
+.spinner--md .spinner__circle {
+    width: 24px;
+    height: 24px;
+}
+.spinner--lg .spinner__circle {
+    width: 40px;
+    height: 40px;
+}
 
 .spinner--inside-btn {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 @keyframes spinner-rotate {
-  100% { transform: rotate(360deg); }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes spinner-dash {
-  0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
-  50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
-  100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+    }
 }
