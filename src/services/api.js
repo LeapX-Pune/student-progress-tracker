@@ -1,3 +1,26 @@
+import { getConfig } from '../utils/env.js';
+
+let mockHandlers = null;
+
+/**
+ *
+ */
+export async function initApi() {
+    const config = getConfig();
+
+    if (config.apiMockEnabled) {
+        const { setupMockServer } = await import('./mock.js');
+        mockHandlers = setupMockServer();
+    }
+}
+
+/**
+ *
+ */
+export function getMockServer() {
+    return mockHandlers;
+}
+
 /**
  * ApiService class handles all API requests.
  * Provides a centralized fetch wrapper with automatic token injection,
@@ -9,8 +32,6 @@ export class ApiService {
      *
      */
     constructor(baseUrl = '') {
-        // Configurable base URL fallback:
-        // If not provided in constructor, it checks for a global config or defaults to '/api'
         this.baseUrl = baseUrl || (window.CONFIG && window.CONFIG.API_BASE_URL) || '/api';
 
         this.pendingRequests = new Map();
@@ -25,10 +46,7 @@ export class ApiService {
         const headers = new Headers(options.headers || {});
         headers.set('Content-Type', 'application/json');
 
-        // Skip token for auth endpoints if necessary (e.g. login)
         if (!options.noToken && !endpoint.startsWith('/auth/')) {
-            // In a real scenario, this would come from the Storage Module (Part 9)
-            // Using localStorage directly as a fallback for now
             const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
             if (token) {
                 headers.set('Authorization', `Bearer ${token}`);
@@ -59,7 +77,6 @@ export class ApiService {
             throw error;
         }
 
-        // Try to parse JSON response, fallback to text or null
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
             return response.json();
@@ -172,7 +189,6 @@ export class ApiService {
         return requestPromise;
     }
 
-    // Convenience methods
     /**
      *
      */
@@ -221,5 +237,4 @@ export class ApiService {
     }
 }
 
-// Export a singleton instance for global use
 export const api = new ApiService();

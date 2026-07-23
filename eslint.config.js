@@ -40,6 +40,9 @@ export default [
                 matchMedia: 'readonly',
                 requestAnimationFrame: 'readonly',
                 cancelAnimationFrame: 'readonly',
+                HTMLElement: 'readonly',
+                HTMLTemplateElement: 'readonly',
+                customElements: 'readonly',
                 import: 'readonly',
                 // node globals
                 process: 'readonly',
@@ -48,7 +51,7 @@ export default [
             },
         },
         rules: {
-            indent: ['error', 4],
+            indent: ['error', 4, { SwitchCase: 1 }],
             'linebreak-style': ['error', 'unix'],
             quotes: ['error', 'single', { avoidEscape: true }],
             semi: ['error', 'always'],
@@ -103,9 +106,42 @@ export default [
             'jsdoc/check-param-names': 'error',
         },
     },
-    // Test files - relax rules
+    // Test files - relax rules, add jsdom/vitest globals
     {
         files: ['**/*.test.js', '**/*.spec.js', 'tests/**'],
+        languageOptions: {
+            globals: {
+                // vitest globals
+                vi: 'readonly',
+                describe: 'readonly',
+                it: 'readonly',
+                expect: 'readonly',
+                beforeEach: 'readonly',
+                afterEach: 'readonly',
+                beforeAll: 'readonly',
+                afterAll: 'readonly',
+                // jsdom / browser globals
+                document: 'readonly',
+                window: 'readonly',
+                localStorage: 'readonly',
+                sessionStorage: 'readonly',
+                HTMLElement: 'readonly',
+                HTMLTemplateElement: 'readonly',
+                customElements: 'readonly',
+                MouseEvent: 'readonly',
+                KeyboardEvent: 'readonly',
+                setTimeout: 'readonly',
+                clearTimeout: 'readonly',
+                setInterval: 'readonly',
+                clearInterval: 'readonly',
+                fetch: 'readonly',
+                Request: 'readonly',
+                Response: 'readonly',
+                URL: 'readonly',
+                AbortController: 'readonly',
+                console: 'readonly',
+            },
+        },
         rules: {
             'no-console': 'off',
             'jsdoc/require-jsdoc': 'off',

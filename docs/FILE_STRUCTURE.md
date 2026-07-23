@@ -188,63 +188,85 @@ student-progress-tracker/
 
 ### `/public`
 
-
 #### `/public` - Static Assets
-Serves files directly without processing. Contains the main `index.html` which loads all CDN dependencies (Tailwind, Chart.js, Lucide) and the application bundle.
+
+Serves files directly without processing. Contains the main `index.html` which
+loads all CDN dependencies (Tailwind, Chart.js, Lucide) and the application
+bundle.
 
 #### `/src` - Application Source Code
+
 Main source directory following feature-based organization.
 
 ##### `/src/components` - Reusable UI Components
+
 Organized by feature domain:
+
 - **`/auth`** - Authentication-related components (login form, guards, avatar)
-- **`/dashboard`** - Dashboard-specific components (profile card, header, skeletons)
-- **`/courses`** - Course display components (cards, grid, progress bars, badges)
+- **`/dashboard`** - Dashboard-specific components (profile card, header,
+  skeletons)
+- **`/courses`** - Course display components (cards, grid, progress bars,
+  badges)
 - **`/charts`** - Chart.js wrapper components with configuration
 - **`/ui`** - Generic reusable UI primitives (button, input, modal, toast)
 - **`/layout`** - Layout components (header, footer, sidebar, container)
 
 ##### `/src/pages` - Page-Level Components
-Top-level components that compose features into complete pages. Each page handles its own data fetching and error states.
+
+Top-level components that compose features into complete pages. Each page
+handles its own data fetching and error states.
 
 ##### `/src/layouts` - Layout Wrappers
-Wrapper components that provide consistent structure across page groups (auth pages vs dashboard pages).
+
+Wrapper components that provide consistent structure across page groups (auth
+pages vs dashboard pages).
 
 ##### `/src/services` - Business Logic & External Communication
+
 - **`/api`** - All API communication layer with retry, timeout, interceptors
 - **`/storage`** - Abstraction over Web Storage API with fallbacks
 - **`/chart`** - Chart.js lifecycle management (create, update, destroy)
 
 ##### `/src/hooks` - Custom React-like Hooks
-Reusable stateful logic extracted into composable functions. Implemented using vanilla JS with Proxy-based reactivity.
+
+Reusable stateful logic extracted into composable functions. Implemented using
+vanilla JS with Proxy-based reactivity.
 
 ##### `/src/context` - Global State Management
-Singleton context objects providing app-wide state (auth, notifications, app config) without prop drilling.
+
+Singleton context objects providing app-wide state (auth, notifications, app
+config) without prop drilling.
 
 ##### `/src/utils` - Pure Utility Functions
-Stateless helper functions organized by domain (dates, validation, charts, DOM, errors).
+
+Stateless helper functions organized by domain (dates, validation, charts, DOM,
+errors).
 
 ##### `/src/router` - Client-Side Routing
-Hash-based SPA router with route guards, lazy loading support, and navigation guards.
+
+Hash-based SPA router with route guards, lazy loading support, and navigation
+guards.
 
 ##### `/src/mock` - Development Mock Backend
-MSW (Mock Service Worker) or custom mock server for development without real backend.
+
+MSW (Mock Service Worker) or custom mock server for development without real
+backend.
 
 ---
 
 ## File Naming Conventions
 
-| Type | Convention | Example |
-|------|------------|---------|
-| Components | PascalCase | `CourseCard.js`, `LoginForm.js` |
-| Pages | PascalCase + Page | `DashboardPage.js`, `LoginPage.js` |
-| Hooks | camelCase + use | `useAuth.js`, `useApi.js` |
-| Services | PascalCase + Service | `StorageService.js`, `ChartService.js` |
-| Utils | camelCase + Utils | `dateUtils.js`, `chartUtils.js` |
-| Context | PascalCase + Context | `AuthContext.js` |
-| Constants | UPPER_SNAKE_CASE | `API_ENDPOINTS.js`, `STORAGE_KEYS.js` |
-| Tests | `.test.js` or `.spec.js` | `CourseCard.test.js`, `login.spec.js` |
-| Styles | kebab-case | `main.css`, `components.css` |
+| Type       | Convention               | Example                                |
+| ---------- | ------------------------ | -------------------------------------- |
+| Components | PascalCase               | `CourseCard.js`, `LoginForm.js`        |
+| Pages      | PascalCase + Page        | `DashboardPage.js`, `LoginPage.js`     |
+| Hooks      | camelCase + use          | `useAuth.js`, `useApi.js`              |
+| Services   | PascalCase + Service     | `StorageService.js`, `ChartService.js` |
+| Utils      | camelCase + Utils        | `dateUtils.js`, `chartUtils.js`        |
+| Context    | PascalCase + Context     | `AuthContext.js`                       |
+| Constants  | UPPER_SNAKE_CASE         | `API_ENDPOINTS.js`, `STORAGE_KEYS.js`  |
+| Tests      | `.test.js` or `.spec.js` | `CourseCard.test.js`, `login.spec.js`  |
+| Styles     | kebab-case               | `main.css`, `components.css`           |
 
 ---
 
@@ -297,8 +319,11 @@ MSW (Mock Service Worker) or custom mock server for development without real bac
 ```
 
 **Rules:**
-1. **Pages** can import from: `components/`, `hooks/`, `services/`, `context/`, `utils/`
-2. **Components** can import from: `components/ui/`, `hooks/`, `services/`, `utils/`
+
+1. **Pages** can import from: `components/`, `hooks/`, `services/`, `context/`,
+   `utils/`
+2. **Components** can import from: `components/ui/`, `hooks/`, `services/`,
+   `utils/`
 3. **Hooks** can import from: `services/`, `utils/`, `context/`
 4. **Services** can import from: `utils/` only
 5. **Utils** cannot import from any other `src/` module
@@ -309,26 +334,28 @@ MSW (Mock Service Worker) or custom mock server for development without real bac
 ## Configuration Files
 
 ### `package.json` Key Scripts
+
 ```json
 {
-  "scripts": {
-    "dev": "node scripts/dev.js",
-    "build": "node scripts/build.js",
-    "preview": "npx serve dist",
-    "test": "node scripts/test.js",
-    "test:watch": "node scripts/test.js --watch",
-    "test:coverage": "node scripts/test.js --coverage",
-    "test:e2e": "npx playwright test",
-    "lint": "node scripts/lint.js",
-    "lint:fix": "node scripts/lint.js --fix",
-    "format": "npx prettier --write \"src/**/*.{js,css,html}\"",
-    "deploy:preview": "node scripts/deploy.js preview",
-    "deploy:prod": "node scripts/deploy.js production"
-  }
+    "scripts": {
+        "dev": "node scripts/dev.js",
+        "build": "node scripts/build.js",
+        "preview": "npx serve dist",
+        "test": "node scripts/test.js",
+        "test:watch": "node scripts/test.js --watch",
+        "test:coverage": "node scripts/test.js --coverage",
+        "test:e2e": "npx playwright test",
+        "lint": "node scripts/lint.js",
+        "lint:fix": "node scripts/lint.js --fix",
+        "format": "npx prettier --write \"src/**/*.{js,css,html}\"",
+        "deploy:preview": "node scripts/deploy.js preview",
+        "deploy:prod": "node scripts/deploy.js production"
+    }
 }
 ```
 
 ### `.eslintrc.json` Key Rules
+
 - `no-unused-vars`: error
 - `prefer-const`: error
 - `no-console`: warn (allow in dev)
@@ -336,14 +363,15 @@ MSW (Mock Service Worker) or custom mock server for development without real bac
 - `complexity`: [warn, 10]
 
 ### `.prettierrc`
+
 ```json
 {
-  "semi": true,
-  "singleQuote": true,
-  "tabWidth": 2,
-  "trailingComma": "es5",
-  "printWidth": 100,
-  "bracketSpacing": true
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "printWidth": 100,
+    "bracketSpacing": true
 }
 ```
 
@@ -370,6 +398,7 @@ dist/
 ## Environment Configuration
 
 ### `.env.example`
+
 ```env
 # API Configuration
 VITE_API_BASE_URL=http://localhost:3001/api
@@ -389,6 +418,7 @@ VITE_APP_URL=https://student-tracker.example.com
 ```
 
 ### Environment-Specific Overrides
+
 - `.env.development` - Local development
 - `.env.preview` - Preview deployments
 - `.env.production` - Production
@@ -472,6 +502,7 @@ test-results/
 ## Documentation Maintenance
 
 This file structure document should be updated when:
+
 - New feature modules are added
 - Directory structure changes significantly
 - New configuration files are added

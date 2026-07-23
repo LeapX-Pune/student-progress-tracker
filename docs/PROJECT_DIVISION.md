@@ -9,22 +9,24 @@
 
 ## 1. Project Division Overview
 
-The project is divided into **12 distinct parts/modules**, each representing a self-contained area of functionality that can be developed, tested, and deployed independently. Git/GitHub Version Control is Part 1 as specified.
+The project is divided into **12 distinct parts/modules**, each representing a
+self-contained area of functionality that can be developed, tested, and deployed
+independently. Git/GitHub Version Control is Part 1 as specified.
 
-| Part | Module Name | Description | Estimated Effort | Dependencies |
-|------|-------------|-------------|------------------|--------------|
-| **Part 1** | **Git/GitHub & Version Control** | Repository setup, branching strategy, CI/CD pipeline, code review process | 1 week | — |
-| **Part 2** | **Project Setup & Configuration** | Build tooling, linting, formatting, dev server, mock API, environment config | 1 week | Part 1 |
-| **Part 3** | **Authentication Module** | Login, session management, protected routes, logout, token storage | 1.5 weeks | Part 2 |
-| **Part 4** | **Core Layout & Navigation** | Responsive shell, header, sidebar, routing, mobile drawer | 1 week | Part 3 |
-| **Part 5** | **Dashboard - Student Profile** | Profile card, overall progress, avatar, metadata display | 0.5 weeks | Part 4 |
-| **Part 6** | **Dashboard - Course Progress Cards** | Course grid, progress bars, status badges, module counters | 1 week | Part 4 |
-| **Part 7** | **Dashboard - Grade Visualizations** | Chart.js integration: bar, doughnut, line charts with responsiveness | 1.5 weeks | Part 4, Part 6 |
-| **Part 8** | **API Integration Layer** | Centralized API service, interceptors, retry logic, loading states | 1 week | Part 3 |
-| **Part 9** | **Data Persistence & State** | localStorage/sessionStorage abstraction, hydration, theme, filters | 0.5 weeks | Part 3 |
-| **Part 10** | **Error Handling & UX Polish** | Toast system, skeleton loaders, empty states, retry, offline detection | 1 week | Part 5, 6, 7 |
-| **Part 11** | **Responsive Design & Cross-Browser** | Breakpoint testing, touch targets, mobile nav, chart resize, a11y | 1 week | Part 4-10 |
-| **Part 12** | **Deployment & Operations** | Production build, Vercel/Netlify config, monitoring, documentation | 0.5 weeks | Part 1, 11 |
+| Part        | Module Name                           | Description                                                                  | Estimated Effort | Dependencies   |
+| ----------- | ------------------------------------- | ---------------------------------------------------------------------------- | ---------------- | -------------- |
+| **Part 1**  | **Git/GitHub & Version Control**      | Repository setup, branching strategy, CI/CD pipeline, code review process    | 1 week           | —              |
+| **Part 2**  | **Project Setup & Configuration**     | Build tooling, linting, formatting, dev server, mock API, environment config | 1 week           | Part 1         |
+| **Part 3**  | **Authentication Module**             | Login, session management, protected routes, logout, token storage           | 1.5 weeks        | Part 2         |
+| **Part 4**  | **Core Layout & Navigation**          | Responsive shell, header, sidebar, routing, mobile drawer                    | 1 week           | Part 3         |
+| **Part 5**  | **Dashboard - Student Profile**       | Profile card, overall progress, avatar, metadata display                     | 0.5 weeks        | Part 4         |
+| **Part 6**  | **Dashboard - Course Progress Cards** | Course grid, progress bars, status badges, module counters                   | 1 week           | Part 4         |
+| **Part 7**  | **Dashboard - Grade Visualizations**  | Chart.js integration: bar, doughnut, line charts with responsiveness         | 1.5 weeks        | Part 4, Part 6 |
+| **Part 8**  | **API Integration Layer**             | Centralized API service, interceptors, retry logic, loading states           | 1 week           | Part 3         |
+| **Part 9**  | **Data Persistence & State**          | localStorage/sessionStorage abstraction, hydration, theme, filters           | 0.5 weeks        | Part 3         |
+| **Part 10** | **Error Handling & UX Polish**        | Toast system, skeleton loaders, empty states, retry, offline detection       | 1 week           | Part 5, 6, 7   |
+| **Part 11** | **Responsive Design & Cross-Browser** | Breakpoint testing, touch targets, mobile nav, chart resize, a11y            | 1 week           | Part 4-10      |
+| **Part 12** | **Deployment & Operations**           | Production build, Vercel/Netlify config, monitoring, documentation           | 0.5 weeks        | Part 1, 11     |
 
 ---
 
@@ -58,43 +60,43 @@ graph TD
 
 ## 3. Team Assignment Recommendations
 
-| Role | Primary Parts | Secondary Parts |
-|------|---------------|-----------------|
-| **Tech Lead** | Part 1, Part 12 | All (reviews) |
-| **Frontend Engineer 1** | Part 2, Part 3, Part 8 | Part 9 |
-| **Frontend Engineer 2** | Part 4, Part 5, Part 6 | Part 10 |
-| **Frontend Engineer 3** | Part 7, Part 11 | Part 10 |
-| **QA Engineer** | Part 10, Part 11, Part 12 | All (testing) |
+| Role                    | Primary Parts             | Secondary Parts |
+| ----------------------- | ------------------------- | --------------- |
+| **Tech Lead**           | Part 1, Part 12           | All (reviews)   |
+| **Frontend Engineer 1** | Part 2, Part 3, Part 8    | Part 9          |
+| **Frontend Engineer 2** | Part 4, Part 5, Part 6    | Part 10         |
+| **Frontend Engineer 3** | Part 7, Part 11           | Part 10         |
+| **QA Engineer**         | Part 10, Part 11, Part 12 | All (testing)   |
 
 ---
 
 ## 4. Cross-Cutting Concerns (Apply to All Parts)
 
-| Concern | Implementation |
-|---------|----------------|
-| **Code Style** | ESLint + Prettier (enforced in CI) |
-| **Type Safety** | JSDoc + TypeScript `// @ts-check` in JS files |
-| **Testing** | Unit (Vitest), Integration (Vitest + MSW), E2E (Playwright) |
-| **Documentation** | JSDoc for all public functions, README per module |
-| **Accessibility** | axe-core in CI, manual keyboard testing per PR |
-| **Performance** | Bundle size budget (100KB gzipped), Lighthouse CI |
-| **Security** | CSP headers, no `innerHTML` with user data, token expiry check |
+| Concern           | Implementation                                                 |
+| ----------------- | -------------------------------------------------------------- |
+| **Code Style**    | ESLint + Prettier (enforced in CI)                             |
+| **Type Safety**   | JSDoc + TypeScript `// @ts-check` in JS files                  |
+| **Testing**       | Unit (Vitest), Integration (Vitest + MSW), E2E (Playwright)    |
+| **Documentation** | JSDoc for all public functions, README per module              |
+| **Accessibility** | axe-core in CI, manual keyboard testing per PR                 |
+| **Performance**   | Bundle size budget (100KB gzipped), Lighthouse CI              |
+| **Security**      | CSP headers, no `innerHTML` with user data, token expiry check |
 
 ---
 
 ## 5. Technology Stack Summary
 
-| Category | Technology | Version | Rationale |
-|----------|------------|---------|-----------|
-| **Language** | Vanilla JavaScript (ES2022) | — | No framework overhead, maximum portability |
-| **Styling** | Tailwind CSS (CDN) | 3.4+ | Utility-first, no build step required |
-| **Charts** | Chart.js | 4.4+ | Tree-shakeable, accessible, responsive |
-| **Icons** | Lucide (CDN) | 0.400+ | Lightweight, consistent, tree-shakeable |
-| **Routing** | Custom hash router | — | Zero-dep, works on static hosting |
-| **Mock API** | JSON Server | 1.0+ | Zero-config REST API for development |
-| **Testing** | Vitest + Playwright | Latest | Fast unit, reliable E2E |
-| **CI/CD** | GitHub Actions | — | Native integration, free for public |
-| **Deployment** | Vercel / Netlify | — | SPA fallback, edge network, free tier |
+| Category       | Technology                  | Version | Rationale                                  |
+| -------------- | --------------------------- | ------- | ------------------------------------------ |
+| **Language**   | Vanilla JavaScript (ES2022) | —       | No framework overhead, maximum portability |
+| **Styling**    | Tailwind CSS (CDN)          | 3.4+    | Utility-first, no build step required      |
+| **Charts**     | Chart.js                    | 4.4+    | Tree-shakeable, accessible, responsive     |
+| **Icons**      | Lucide (CDN)                | 0.400+  | Lightweight, consistent, tree-shakeable    |
+| **Routing**    | Custom hash router          | —       | Zero-dep, works on static hosting          |
+| **Mock API**   | JSON Server                 | 1.0+    | Zero-config REST API for development       |
+| **Testing**    | Vitest + Playwright         | Latest  | Fast unit, reliable E2E                    |
+| **CI/CD**      | GitHub Actions              | —       | Native integration, free for public        |
+| **Deployment** | Vercel / Netlify            | —       | SPA fallback, edge network, free tier      |
 
 ---
 
@@ -174,16 +176,16 @@ student-progress-tracker/
 
 ## 7. Integration Points Between Parts
 
-| From Part | To Part | Interface | Data Flow |
-|-----------|---------|-----------|-----------|
-| Part 3 (Auth) | Part 4 (Layout) | `AuthContext` | `user`, `isAuthenticated`, `login()`, `logout()` |
-| Part 3 (Auth) | Part 8 (API) | `auth.getToken()` | Bearer token in Authorization header |
-| Part 4 (Layout) | Part 5,6,7 (Dashboard) | Route params + Context | `studentId` → data fetching |
-| Part 8 (API) | Part 5,6,7 (Dashboard) | `api.getStudent()`, `api.getCourses()`, `api.getGrades()` | JSON data → component state |
-| Part 9 (Storage) | Part 3 (Auth) | `storage.set/get/remove('auth')` | Token persistence |
-| Part 9 (Storage) | Part 4 (Layout) | `storage.get('theme')` | Theme hydration |
-| Part 10 (Errors) | Part 5,6,7 (Dashboard) | `notify.error()`, `notify.success()` | User feedback |
-| Part 11 (Responsive) | Part 7 (Charts) | `useMediaQuery()`, `chart.resize()` | Chart container resize |
+| From Part            | To Part                | Interface                                                 | Data Flow                                        |
+| -------------------- | ---------------------- | --------------------------------------------------------- | ------------------------------------------------ |
+| Part 3 (Auth)        | Part 4 (Layout)        | `AuthContext`                                             | `user`, `isAuthenticated`, `login()`, `logout()` |
+| Part 3 (Auth)        | Part 8 (API)           | `auth.getToken()`                                         | Bearer token in Authorization header             |
+| Part 4 (Layout)      | Part 5,6,7 (Dashboard) | Route params + Context                                    | `studentId` → data fetching                      |
+| Part 8 (API)         | Part 5,6,7 (Dashboard) | `api.getStudent()`, `api.getCourses()`, `api.getGrades()` | JSON data → component state                      |
+| Part 9 (Storage)     | Part 3 (Auth)          | `storage.set/get/remove('auth')`                          | Token persistence                                |
+| Part 9 (Storage)     | Part 4 (Layout)        | `storage.get('theme')`                                    | Theme hydration                                  |
+| Part 10 (Errors)     | Part 5,6,7 (Dashboard) | `notify.error()`, `notify.success()`                      | User feedback                                    |
+| Part 11 (Responsive) | Part 7 (Charts)        | `useMediaQuery()`, `chart.resize()`                       | Chart container resize                           |
 
 ---
 
@@ -207,20 +209,20 @@ A part is considered **complete** when:
 
 ## 9. Risk Mitigation by Part
 
-| Part | Key Risk | Mitigation Strategy |
-|------|----------|---------------------|
-| **1** | CI/CD misconfiguration | Use template workflows, test on fork first |
-| **2** | Build tool complexity | Zero-config approach (esbuild/Vite), CDN for deps |
-| **3** | Token security | HttpOnly cookies in prod, expiry validation, secure flags |
-| **4** | Layout shift on nav toggle | Reserve space, use CSS transforms, `will-change` |
-| **5** | Avatar loading CORS | Fallback to initials, `crossorigin="anonymous"` |
-| **6** | Progress bar animation jank | CSS-only animation, `prefers-reduced-motion` |
-| **7** | Chart.js memory leaks | `chart.destroy()` in cleanup, single instance per canvas |
-| **8** | Race conditions in parallel fetches | Request deduplication, AbortController |
-| **9** | Private browsing storage errors | try/catch wrapper, in-memory fallback |
-| **10** | Toast spam on retry loops | Debounce, max 3 toasts, dismissible |
-| **11** | Chart resize on orientation change | Debounced resize listener, `matchMedia` |
-| **12** | SPA routing 404 on refresh | `_redirects` / `vercel.json` rewrite rules |
+| Part   | Key Risk                            | Mitigation Strategy                                       |
+| ------ | ----------------------------------- | --------------------------------------------------------- |
+| **1**  | CI/CD misconfiguration              | Use template workflows, test on fork first                |
+| **2**  | Build tool complexity               | Zero-config approach (esbuild/Vite), CDN for deps         |
+| **3**  | Token security                      | HttpOnly cookies in prod, expiry validation, secure flags |
+| **4**  | Layout shift on nav toggle          | Reserve space, use CSS transforms, `will-change`          |
+| **5**  | Avatar loading CORS                 | Fallback to initials, `crossorigin="anonymous"`           |
+| **6**  | Progress bar animation jank         | CSS-only animation, `prefers-reduced-motion`              |
+| **7**  | Chart.js memory leaks               | `chart.destroy()` in cleanup, single instance per canvas  |
+| **8**  | Race conditions in parallel fetches | Request deduplication, AbortController                    |
+| **9**  | Private browsing storage errors     | try/catch wrapper, in-memory fallback                     |
+| **10** | Toast spam on retry loops           | Debounce, max 3 toasts, dismissible                       |
+| **11** | Chart resize on orientation change  | Debounced resize listener, `matchMedia`                   |
+| **12** | SPA routing 404 on refresh          | `_redirects` / `vercel.json` rewrite rules                |
 
 ---
 
@@ -228,33 +230,40 @@ A part is considered **complete** when:
 
 ### 10.1 Part Completion Handoff
 
-When a part is complete, the owner creates a **Handoff Document** in `docs/handoffs/part-{N}-handoff.md`:
+When a part is complete, the owner creates a **Handoff Document** in
+`docs/handoffs/part-{N}-handoff.md`:
 
 ```markdown
 # Part N Handoff: [Module Name]
 
 ## Completed Features
+
 - [ ] Feature 1
 - [ ] Feature 2
 
 ## API Contracts Exposed
+
 - `functionName(param): ReturnType` — Description
 
 ## Known Limitations
+
 - Limitation 1
 - Limitation 2
 
 ## Test Coverage
+
 - Unit: X%
 - Integration: Y%
 
 ## Dependencies for Next Parts
+
 - Part N+1 needs: [specific exports]
 ```
 
 ### 10.2 Cross-Part Dependency Requests
 
 Use GitHub Issues with label `dependency-request`:
+
 - Title: `[Part N] Need [specific export] from [Part M]`
 - Description: What, why, when needed
 - Assignee: Owner of Part M
@@ -263,32 +272,32 @@ Use GitHub Issues with label `dependency-request`:
 
 ## 11. Quality Gates Summary
 
-| Gate | Trigger | Checks | Blocking |
-|------|---------|--------|----------|
-| **Pre-commit** | `git commit` | lint-staged (ESLint, Prettier) | Yes |
-| **PR Validation** | Pull Request opened | Lint, Typecheck, Unit Tests, Build | Yes |
-| **Merge Gate** | PR approved | All CI green, coverage > 80%, no a11y violations | Yes |
-| **Deploy Preview** | Merge to main | E2E smoke tests, Lighthouse CI | No (warn) |
-| **Production Deploy** | Tag `v*` pushed | Full E2E, bundle size, security scan | Yes |
+| Gate                  | Trigger             | Checks                                           | Blocking  |
+| --------------------- | ------------------- | ------------------------------------------------ | --------- |
+| **Pre-commit**        | `git commit`        | lint-staged (ESLint, Prettier)                   | Yes       |
+| **PR Validation**     | Pull Request opened | Lint, Typecheck, Unit Tests, Build               | Yes       |
+| **Merge Gate**        | PR approved         | All CI green, coverage > 80%, no a11y violations | Yes       |
+| **Deploy Preview**    | Merge to main       | E2E smoke tests, Lighthouse CI                   | No (warn) |
+| **Production Deploy** | Tag `v*` pushed     | Full E2E, bundle size, security scan             | Yes       |
 
 ---
 
 ## 12. Appendix: Part-to-PRD Requirement Traceability
 
-| Part | PRD Functional Requirements Covered |
-|------|--------------------------------------|
-| **Part 1** | FR-10 (Deployment), FR-10 (Version Control) |
-| **Part 2** | FR-6 (Responsive foundation), FR-8 (Loading foundation) |
-| **Part 3** | FR-1, FR-2, FR-9 (Auth), FR-10 (Protected routes) |
-| **Part 4** | FR-6 (Responsive layout), FR-3 (Dashboard shell) |
-| **Part 5** | FR-3 (Student profile), FR-4 (Overall progress) |
-| **Part 6** | FR-4 (Course cards), FR-5 (Progress bars), FR-6 (Responsive grid) |
-| **Part 7** | FR-5 (Grade charts), FR-6 (Responsive charts), FR-8 (Chart loading) |
-| **Part 8** | FR-5 (API data), FR-7 (Error handling), FR-8 (Loading states) |
-| **Part 9** | FR-2 (Session persistence), FR-6 (Theme persistence) |
-| **Part 10** | FR-7 (All error handling), FR-8 (All loading states) |
-| **Part 11** | FR-6 (All responsive requirements) |
-| **Part 12** | FR-10 (Public deployment) |
+| Part        | PRD Functional Requirements Covered                                 |
+| ----------- | ------------------------------------------------------------------- |
+| **Part 1**  | FR-10 (Deployment), FR-10 (Version Control)                         |
+| **Part 2**  | FR-6 (Responsive foundation), FR-8 (Loading foundation)             |
+| **Part 3**  | FR-1, FR-2, FR-9 (Auth), FR-10 (Protected routes)                   |
+| **Part 4**  | FR-6 (Responsive layout), FR-3 (Dashboard shell)                    |
+| **Part 5**  | FR-3 (Student profile), FR-4 (Overall progress)                     |
+| **Part 6**  | FR-4 (Course cards), FR-5 (Progress bars), FR-6 (Responsive grid)   |
+| **Part 7**  | FR-5 (Grade charts), FR-6 (Responsive charts), FR-8 (Chart loading) |
+| **Part 8**  | FR-5 (API data), FR-7 (Error handling), FR-8 (Loading states)       |
+| **Part 9**  | FR-2 (Session persistence), FR-6 (Theme persistence)                |
+| **Part 10** | FR-7 (All error handling), FR-8 (All loading states)                |
+| **Part 11** | FR-6 (All responsive requirements)                                  |
+| **Part 12** | FR-10 (Public deployment)                                           |
 
 ---
 
