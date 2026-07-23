@@ -25,7 +25,7 @@ await build({
   outdir: distDir,
   publicPath: '/',
   loader: {
-    '.css': 'text',
+    '.css': 'css',
     '.svg': 'dataurl',
     '.png': 'file',
     '.jpg': 'file',

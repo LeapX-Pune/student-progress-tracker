@@ -40,6 +40,9 @@ export default [
                 matchMedia: 'readonly',
                 requestAnimationFrame: 'readonly',
                 cancelAnimationFrame: 'readonly',
+                HTMLElement: 'readonly',
+                HTMLTemplateElement: 'readonly',
+                customElements: 'readonly',
                 import: 'readonly',
                 // node globals
                 process: 'readonly',
@@ -48,7 +51,7 @@ export default [
             },
         },
         rules: {
-            indent: ['error', 4],
+            indent: ['error', 4, { SwitchCase: 1 }],
             'linebreak-style': ['error', 'unix'],
             quotes: ['error', 'single', { avoidEscape: true }],
             semi: ['error', 'always'],

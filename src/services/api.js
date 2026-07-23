@@ -1,4 +1,25 @@
-// assets/js/api.js
+import { getConfig } from '../utils/env.js';
+
+let mockHandlers = null;
+
+/**
+ *
+ */
+export async function initApi() {
+    const config = getConfig();
+
+    if (config.apiMockEnabled) {
+        const { setupMockServer } = await import('./mock.js');
+        mockHandlers = setupMockServer();
+    }
+}
+
+/**
+ *
+ */
+export function getMockServer() {
+    return mockHandlers;
+}
 
 /**
  * ApiService class handles all API requests.
@@ -13,23 +34,17 @@ export class ApiService {
      *
      */
     constructor(baseUrl = '') {
-        // Configurable base URL fallback:
-        // If not provided in constructor, it checks for a global config or defaults to '/api'
         this.baseUrl = baseUrl || (window.CONFIG && window.CONFIG.API_BASE_URL) || '/api';
     }
 
     /**
-     * Request interceptor to inject authentication tokens.
-     * (API-002: Implement request interceptor)
+     *
      */
     _requestInterceptor(options, endpoint) {
         const headers = new Headers(options.headers || {});
         headers.set('Content-Type', 'application/json');
 
-        // Skip token for auth endpoints if necessary (e.g. login)
         if (!options.noToken && !endpoint.startsWith('/auth/')) {
-            // In a real scenario, this would come from the Storage Module (Part 9)
-            // Using localStorage directly as a fallback for now
             const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
             if (token) {
                 headers.set('Authorization', `Bearer ${token}`);
@@ -43,8 +58,7 @@ export class ApiService {
     }
 
     /**
-     * Response interceptor to normalize the response format and handle common errors.
-     * (API-003: Implement response interceptor)
+     *
      */
     async _responseInterceptor(response) {
         if (!response.ok) {
@@ -61,7 +75,6 @@ export class ApiService {
             throw error;
         }
 
-        // Try to parse JSON response, fallback to text or null
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
             return response.json();
@@ -70,28 +83,21 @@ export class ApiService {
     }
 
     /**
-     * Core request method
+     *
      */
     async request(endpoint, options = {}) {
         const url = `${this.baseUrl}${endpoint}`;
-
-        // 1. Run request interceptor
         const fetchOptions = this._requestInterceptor(options, endpoint);
 
         try {
-            // 2. Perform fetch
             const response = await fetch(url, fetchOptions);
-
-            // 3. Run response interceptor
             return await this._responseInterceptor(response);
         } catch (error) {
-            // Catch network errors and intercepted HTTP errors
             console.error(`API Error on ${endpoint}:`, error);
             throw error;
         }
     }
 
-    // Convenience methods
     /**
      *
      */
@@ -140,5 +146,4 @@ export class ApiService {
     }
 }
 
-// Export a singleton instance for global use
 export const api = new ApiService();

@@ -1,20 +1,2 @@
 # Default: tech lead reviews everything
 * @kshitij-das-01
-
-# Auth module
-/src/components/auth/ @zenthar-dev
-
-# Dashboard & UI
-/src/components/ @saishendge6 @sauryamanbisen-art @MIT-REHAN
-/src/pages/ @saishendge6 @sauryamanbisen-art @MIT-REHAN
-
-# API
-/src/services/ @pulaksaha143
-
-# Charts
-/src/services/charts.js @shahkhushi0307 @sumittiwari1302
-
-# CI/CD & Config
-/.github/ @kshitij-das-01 @Ankitbhalke137
-/scripts/ @kshitij-das-01 @Ankitbhalke137
-/mock-api/ @kshitij-das-01 @Ankitbhalke137 @pulaksaha143
