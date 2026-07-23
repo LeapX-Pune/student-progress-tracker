@@ -8,26 +8,41 @@ const config = {
   enableAnalytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
   enableNotifications: import.meta.env.VITE_ENABLE_NOTIFICATIONS !== 'false',
   cacheTtlSeconds: parseInt(import.meta.env.VITE_CACHE_TTL_SECONDS || '300', 10),
-}
+};
 
+/**
+ *
+ */
 export function getConfig() {
-  return { ...config }
+  return { ...config };
 }
 
+/**
+ *
+ */
 export function isDevelopment() {
-  return config.appEnv === 'development'
+  return config.appEnv === 'development';
 }
 
+/**
+ *
+ */
 export function isStaging() {
-  return config.appEnv === 'staging'
+  return config.appEnv === 'staging';
 }
 
+/**
+ *
+ */
 export function isProduction() {
-  return config.appEnv === 'production'
+  return config.appEnv === 'production';
 }
 
+/**
+ *
+ */
 export function isMockApiEnabled() {
-  return config.apiMockEnabled
+  return config.apiMockEnabled;
 }
 
-export default config
+export default config;

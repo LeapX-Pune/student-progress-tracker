@@ -17,17 +17,31 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   animation: toast-slide-in 300ms ease forwards;
-  transition: opacity var(--transition-base), transform var(--transition-base);
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base);
 }
 
 .toast--removing {
   animation: toast-slide-out 200ms ease forwards;
 }
 
-.toast--success { background: var(--color-success-light); border-left: 4px solid var(--color-success); }
-.toast--error { background: var(--color-error-light); border-left: 4px solid var(--color-error); }
-.toast--warning { background: var(--color-warning-light); border-left: 4px solid var(--color-warning); }
-.toast--info { background: var(--color-info-light); border-left: 4px solid var(--color-info); }
+.toast--success {
+  background: var(--color-success-light);
+  border-left: 4px solid var(--color-success);
+}
+.toast--error {
+  background: var(--color-error-light);
+  border-left: 4px solid var(--color-error);
+}
+.toast--warning {
+  background: var(--color-warning-light);
+  border-left: 4px solid var(--color-warning);
+}
+.toast--info {
+  background: var(--color-info-light);
+  border-left: 4px solid var(--color-info);
+}
 
 .toast__icon {
   flex-shrink: 0;
@@ -47,10 +61,18 @@
   margin: 0 0 0.25rem;
 }
 
-.toast--success .toast__title { color: var(--color-success); }
-.toast--error .toast__title { color: var(--color-error); }
-.toast--warning .toast__title { color: var(--color-warning); }
-.toast--info .toast__title { color: var(--color-info); }
+.toast--success .toast__title {
+  color: var(--color-success);
+}
+.toast--error .toast__title {
+  color: var(--color-error);
+}
+.toast--warning .toast__title {
+  color: var(--color-warning);
+}
+.toast--info .toast__title {
+  color: var(--color-info);
+}
 
 .toast__message {
   font-size: 0.8125rem;
@@ -69,15 +91,32 @@
   transition: color var(--transition-fast);
 }
 
-.toast__close:hover { color: var(--color-gray-600); }
-.toast__close:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.toast__close:hover {
+  color: var(--color-gray-600);
+}
+.toast__close:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
 
 @keyframes toast-slide-in {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes toast-slide-out {
-  from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(100%); opacity: 0; }
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }

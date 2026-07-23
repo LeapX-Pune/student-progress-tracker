@@ -9,12 +9,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   animation: skeleton-shimmer 1.5s infinite;
 }
 
@@ -61,7 +56,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   animation: skeleton-shimmer 1.5s infinite;
 }
 
@@ -83,11 +78,13 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   animation: skeleton-shimmer 1.5s infinite;
 }
 
-.skeleton-card__line:last-child { width: 40%; }
+.skeleton-card__line:last-child {
+  width: 40%;
+}
 
 .skeleton-chart {
   border: 1px solid var(--color-gray-200);
@@ -115,17 +112,31 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   animation: skeleton-shimmer 1.5s infinite;
 }
 
-.skeleton-chart__bar-item:nth-child(1) { height: 60%; }
-.skeleton-chart__bar-item:nth-child(2) { height: 80%; }
-.skeleton-chart__bar-item:nth-child(3) { height: 45%; }
-.skeleton-chart__bar-item:nth-child(4) { height: 90%; }
-.skeleton-chart__bar-item:nth-child(5) { height: 70%; }
+.skeleton-chart__bar-item:nth-child(1) {
+  height: 60%;
+}
+.skeleton-chart__bar-item:nth-child(2) {
+  height: 80%;
+}
+.skeleton-chart__bar-item:nth-child(3) {
+  height: 45%;
+}
+.skeleton-chart__bar-item:nth-child(4) {
+  height: 90%;
+}
+.skeleton-chart__bar-item:nth-child(5) {
+  height: 70%;
+}
 
 @keyframes skeleton-shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }

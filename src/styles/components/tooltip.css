@@ -25,10 +25,18 @@
   opacity: 1;
 }
 
-.tooltip--top { transform: translateY(-4px); }
-.tooltip--bottom { transform: translateY(4px); }
-.tooltip--left { transform: translateX(-4px); }
-.tooltip--right { transform: translateX(4px); }
+.tooltip--top {
+  transform: translateY(-4px);
+}
+.tooltip--bottom {
+  transform: translateY(4px);
+}
+.tooltip--left {
+  transform: translateX(-4px);
+}
+.tooltip--right {
+  transform: translateX(4px);
+}
 
 .tooltip--visible.tooltip--top,
 .tooltip--visible.tooltip--bottom {
