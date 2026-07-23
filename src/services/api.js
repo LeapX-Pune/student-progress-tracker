@@ -1,4 +1,5 @@
 import { getConfig } from '../utils/env.js';
+import { getAuthToken } from './authStorage.js';
 
 let mockHandlers = null;
 
@@ -47,9 +48,9 @@ export class ApiService {
         headers.set('Content-Type', 'application/json');
 
         if (!options.noToken && !endpoint.startsWith('/auth/')) {
-            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-            if (token) {
-                headers.set('Authorization', `Bearer ${token}`);
+            const authData = getAuthToken();
+            if (authData?.token) {
+                headers.set('Authorization', `Bearer ${authData.token}`);
             }
         }
 

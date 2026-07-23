@@ -1,35 +1,21 @@
 /**
- * Shared UI — Part 10 (used by Part 3 – Authentication)
- * File: src/components/ui/Toast.js
+ * @fileoverview Toast — Re-export Shim — Part 3.
  *
- * Purpose:
- *   Global toast/snack-bar notification system. Displays
- *   short, auto-dismissing messages for user feedback events
- *   such as login success, authentication errors, session
- *   expiry, and offline detection.
+ * The canonical Toast implementation lives in `src/components/Toast.js`
+ * (authored by Part 10 — UX Foundation).  This file re-exports everything
+ * from there so that auth components can use the stable `ui/Toast` import
+ * path without duplicating logic or creating a second implementation.
  *
- * Planned variants (to be implemented):
- *   - success  — green; e.g. "Logged in successfully" (3 s)
- *   - error    — red;   e.g. "Invalid credentials" (5 s, dismissible)
- *   - warning  — amber; e.g. "Session expiring soon"
- *   - info     — blue;  e.g. general informational messages
+ * ─── Import convention ───────────────────────────────────────────────────────
  *
- * Key responsibilities (to be implemented):
- *   - Render a toast container (top-right desktop / bottom-center mobile)
- *   - Stack multiple toasts with LIFO ordering
- *   - Auto-dismiss after the configured duration
- *   - Dismiss on close button click
- *   - ARIA: role="alert" or role="status" + aria-live region so
- *     screen readers announce messages (FR-ERR-001, UX-034)
- *   - Expose a programmatic API: notify.success(), notify.error(), etc.
- *   - Maximum 3 simultaneous toasts (debounce / drop oldest)
+ *   // Auth components (and all other modules) should use:
+ *   import { showToast } from '../ui/Toast.js';
  *
- * Dependencies (once implemented):
- *   - context/NotificationContext.js  (Part 10 scope)
+ *   // Never import from the canonical path directly in auth code — doing so
+ *   // would break if the Part 10 team reorganises the file structure.
  *
- * TODO: Implement toast rendering, stack management, and ARIA
- *       live regions. (Part 10 primary scope; boilerplate placed
- *       here so Part 3 auth flows can reference the API immediately)
+ * @module components/ui/Toast
+ * @see module:components/Toast
  */
 
-export {};
+export * from '../Toast.js';
