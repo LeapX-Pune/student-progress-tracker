@@ -2,7 +2,9 @@
     background-color: #ffffff;
     border-radius: 10px;
     border: 1px solid #e5e7eb;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    box-shadow:
+        0 4px 6px -1px rgb(0 0 0 / 0.05),
+        0 2px 4px -2px rgb(0 0 0 / 0.05);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -15,9 +17,11 @@
 @media (hover: hover) and (pointer: fine) {
     .course-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+        box-shadow:
+            0 10px 15px -3px rgb(0 0 0 / 0.1),
+            0 4px 6px -4px rgb(0 0 0 / 0.05);
     }
-    
+
     .course-card:hover .course-thumbnail__img {
         transform: scale(1.05);
     }
@@ -28,7 +32,7 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    gap: 16px; 
+    gap: 16px;
 }
 
 .course-card__header {

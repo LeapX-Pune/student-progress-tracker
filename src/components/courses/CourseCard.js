@@ -1,41 +1,44 @@
+import { formatGrade } from '../../utils/courseHelpers.js';
 import { createCourseThumbnail } from './CourseThumbnail.js';
 import { createProgressBar } from './ProgressBar.js';
 import { createStatusBadge } from './StatusBadge.js';
-import { formatGrade } from '../../utils/courseHelpers.js';
 
+/**
+ *
+ */
 export function createCourseCard(course) {
     const card = document.createElement('div');
     card.className = 'course-card';
     card.setAttribute('tabindex', '0');
-    
+
     card.appendChild(createCourseThumbnail(course.thumbnailUrl, course.title));
-    
+
     const content = document.createElement('div');
     content.className = 'course-card__content';
-    
+
     const header = document.createElement('div');
     header.className = 'course-card__header';
-    
+
     const title = document.createElement('h3');
     title.className = 'course-card__title';
     title.textContent = course.title;
-    
+
     const instructor = document.createElement('p');
     instructor.className = 'course-card__instructor';
     instructor.textContent = course.instructor;
-    
+
     header.appendChild(title);
     header.appendChild(instructor);
     content.appendChild(header);
-    
+
     const statusWrapper = document.createElement('div');
     statusWrapper.className = 'course-card__status-wrapper';
     statusWrapper.appendChild(createStatusBadge(course.status));
     content.appendChild(statusWrapper);
-    
+
     const details = document.createElement('div');
     details.className = 'course-card__details';
-    
+
     // Modules Row
     const modulesRow = document.createElement('div');
     modulesRow.className = 'course-card__detail-row';
@@ -48,7 +51,7 @@ export function createCourseCard(course) {
     modulesRow.appendChild(modulesLabel);
     modulesRow.appendChild(modulesValue);
     details.appendChild(modulesRow);
-    
+
     // Grade Row
     const gradeRow = document.createElement('div');
     gradeRow.className = 'course-card__detail-row';
@@ -65,7 +68,7 @@ export function createCourseCard(course) {
     gradeRow.appendChild(gradeLabel);
     gradeRow.appendChild(gradeValue);
     details.appendChild(gradeRow);
-    
+
     // Next Row
     const nextRow = document.createElement('div');
     nextRow.className = 'course-card__detail-row';
@@ -74,7 +77,7 @@ export function createCourseCard(course) {
     nextLabel.textContent = 'Next';
     const nextValue = document.createElement('span');
     nextValue.className = 'course-card__detail-value';
-    
+
     if (course.status === 'completed') {
         nextValue.textContent = '-';
         nextValue.style.color = '#9ca3af'; // Gray out the dash for completed
@@ -83,16 +86,18 @@ export function createCourseCard(course) {
     } else {
         nextValue.textContent = 'N/A';
     }
-    
+
     nextRow.appendChild(nextLabel);
     nextRow.appendChild(nextValue);
     details.appendChild(nextRow);
-    
+
     content.appendChild(details);
-    
+
     // Progress Bar
-    content.appendChild(createProgressBar(course.completedModules, course.totalModules, course.status));
-    
+    content.appendChild(
+        createProgressBar(course.completedModules, course.totalModules, course.status)
+    );
+
     card.appendChild(content);
     return card;
 }
