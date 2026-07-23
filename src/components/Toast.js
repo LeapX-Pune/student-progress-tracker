@@ -14,6 +14,9 @@ const ICONS = {
 
 let container = null;
 
+/**
+ *
+ */
 function getContainer() {
     const existing = document.getElementById('toast-root');
     if (existing && document.body.contains(existing)) {
@@ -33,6 +36,9 @@ function getContainer() {
     return container;
 }
 
+/**
+ *
+ */
 export function showToast({
     title,
     message,
@@ -67,6 +73,9 @@ export function showToast({
     return toast;
 }
 
+/**
+ *
+ */
 function removeToast(toast) {
     if (toast._timeout) {
         clearTimeout(toast._timeout);
@@ -83,18 +92,30 @@ function removeToast(toast) {
     );
 }
 
+/**
+ *
+ */
 export function showSuccess(title, message) {
     return showToast({ type: 'success', title, message });
 }
 
+/**
+ *
+ */
 export function showError(title, message) {
     return showToast({ type: 'error', title, message });
 }
 
+/**
+ *
+ */
 export function showWarning(title, message) {
     return showToast({ type: 'warning', title, message });
 }
 
+/**
+ *
+ */
 export function showInfo(title, message) {
     return showToast({ type: 'info', title, message });
 }

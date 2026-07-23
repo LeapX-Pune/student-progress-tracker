@@ -1,3 +1,6 @@
+/**
+ *
+ */
 export function createEmptyState({ title, description, illustration, actions = [] } = {}) {
     const container = document.createElement('div');
     container.className = 'empty-state';

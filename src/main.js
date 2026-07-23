@@ -3,6 +3,9 @@ import { initApi } from './services/api.js';
 import { initMotionPreferences } from './utils/animations.js';
 import { initScrollRestoration, updateDocumentTitle } from './utils/router.js';
 
+/**
+ *
+ */
 async function init() {
     initMotionPreferences();
     initScrollRestoration();

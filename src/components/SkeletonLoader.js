@@ -1,3 +1,6 @@
+/**
+ *
+ */
 export function createSkeletonText(lines = 3) {
     const wrapper = document.createElement('div');
     wrapper.className = 'skeleton-text-group';
@@ -26,6 +29,9 @@ export function createSkeletonText(lines = 3) {
     return wrapper;
 }
 
+/**
+ *
+ */
 export function createSkeletonCard() {
     const card = document.createElement('div');
     card.className = 'skeleton-card';
@@ -52,6 +58,9 @@ export function createSkeletonCard() {
     return card;
 }
 
+/**
+ *
+ */
 export function createSkeletonChart() {
     const chart = document.createElement('div');
     chart.className = 'skeleton-chart';
@@ -78,6 +87,9 @@ export function createSkeletonChart() {
     return chart;
 }
 
+/**
+ *
+ */
 export function renderSkeleton(container, type = 'card', count = 1) {
     const fragment = document.createDocumentFragment();
 
@@ -103,6 +115,9 @@ export function renderSkeleton(container, type = 'card', count = 1) {
     container.appendChild(fragment);
 }
 
+/**
+ *
+ */
 export function removeSkeletons(container) {
     const skeletons = container.querySelectorAll(
         '.skeleton-card, .skeleton-chart, .skeleton-text-group'

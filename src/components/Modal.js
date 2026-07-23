@@ -4,6 +4,9 @@ const FOCUSABLE_SELECTOR =
 let openModal = null;
 let modalIdCounter = 0;
 
+/**
+ *
+ */
 export function createModal({ title, body, footer, onClose, size = 'md', ariaDescription } = {}) {
     if (openModal) {
         openModal.close();
@@ -68,6 +71,9 @@ export function createModal({ title, body, footer, onClose, size = 'md', ariaDes
 
     const modalObj = {
         element: overlay,
+        /**
+         *
+         */
         close: () => {
             overlay.classList.remove('modal-overlay--open');
             overlay.addEventListener(
@@ -88,6 +94,9 @@ export function createModal({ title, body, footer, onClose, size = 'md', ariaDes
 
     openModal = modalObj;
 
+    /**
+     *
+     */
     function handleKeydown(e) {
         if (e.key === 'Escape') {
             e.preventDefault();

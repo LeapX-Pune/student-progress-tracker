@@ -1,3 +1,6 @@
+/**
+ *
+ */
 export function createLoadingSpinner({ size = 'md', label = 'Loading...' } = {}) {
     const container = document.createElement('div');
     container.className = `spinner spinner--${size}`;

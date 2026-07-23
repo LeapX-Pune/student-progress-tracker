@@ -1,4 +1,11 @@
-export function createErrorBoundary({ title = 'Something went wrong', message = 'An unexpected error occurred. Please try again.', onRetry = null } = {}) {
+/**
+ *
+ */
+export function createErrorBoundary({
+    title = 'Something went wrong',
+    message = 'An unexpected error occurred. Please try again.',
+    onRetry = null,
+} = {}) {
     const container = document.createElement('div');
     container.className = 'error-boundary';
     container.setAttribute('role', 'alert');
@@ -43,6 +50,9 @@ export function createErrorBoundary({ title = 'Something went wrong', message = 
     return container;
 }
 
+/**
+ *
+ */
 export function withErrorBoundary(container, { title, message, onRetry } = {}) {
     const errorUI = createErrorBoundary({ title, message, onRetry });
     container.innerHTML = '';

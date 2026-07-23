@@ -1,5 +1,8 @@
 let tooltipIdCounter = 0;
 
+/**
+ *
+ */
 export function createTooltip(triggerEl, { content, position = 'top', delay = 200 } = {}) {
     const tooltipId = `tooltip-${++tooltipIdCounter}`;
     const wrapper = document.createElement('span');
@@ -19,6 +22,9 @@ export function createTooltip(triggerEl, { content, position = 'top', delay = 20
     let showTimeout = null;
     let hideTimeout = null;
 
+    /**
+     *
+     */
     function show() {
         if (hideTimeout) {
             clearTimeout(hideTimeout);
@@ -31,6 +37,9 @@ export function createTooltip(triggerEl, { content, position = 'top', delay = 20
         }, delay);
     }
 
+    /**
+     *
+     */
     function hide() {
         if (showTimeout) {
             clearTimeout(showTimeout);
@@ -42,6 +51,9 @@ export function createTooltip(triggerEl, { content, position = 'top', delay = 20
         }, 100);
     }
 
+    /**
+     *
+     */
     function positionTooltip() {
         const triggerRect = triggerEl.getBoundingClientRect();
         const tooltipRect = tooltip.getBoundingClientRect();
@@ -88,6 +100,9 @@ export function createTooltip(triggerEl, { content, position = 'top', delay = 20
     triggerEl.addEventListener('blur', hide);
 
     return {
+        /**
+         *
+         */
         destroy: () => {
             triggerEl.removeEventListener('mouseenter', show);
             triggerEl.removeEventListener('mouseleave', hide);
@@ -95,6 +110,9 @@ export function createTooltip(triggerEl, { content, position = 'top', delay = 20
             triggerEl.removeEventListener('blur', hide);
             tooltip.remove();
         },
+        /**
+         *
+         */
         update: newContent => {
             tooltip.textContent = newContent;
         },
