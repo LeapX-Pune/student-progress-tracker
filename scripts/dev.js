@@ -56,13 +56,13 @@ const ctx = await build({
 
 await ctx.watch();
 
-const staticServer = spawn('npx', ['serve', 'public', '-p', '3000', '--no-clipboard'], {
+const staticServer = spawn('npx', ['serve', 'public', '-p', '4173', '--no-clipboard'], {
     cwd: rootDir,
     stdio: 'inherit',
     shell: true,
 });
 
-console.log('Dev server running at http://localhost:3000');
+console.log('Dev server running at http://localhost:4173');
 console.log('Mock API at http://localhost:3001/api');
 
 process.on('SIGINT', () => {
