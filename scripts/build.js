@@ -63,3 +63,8 @@ copyFileSync(resolve(publicDir, 'index.html'), resolve(distDir, 'index.html'));
 if (existsSync(resolve(publicDir, 'assets'))) {
     copyDir(resolve(publicDir, 'assets'), resolve(distDir, 'assets'));
 }
+
+// Copy standalone source files referenced by index.html
+const srcDir = resolve(rootDir, 'src');
+copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(distDir, 'style.css'));
+copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(distDir, 'script.js'));
