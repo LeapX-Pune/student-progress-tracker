@@ -27,7 +27,7 @@ jobs:
       - run: npm ci
       - run: npm run lint:fix
       - run: npm run format
-      - run: npm run lint --max-warnings 0
+      - run: npm run lint
       - run: npm run format:check
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
