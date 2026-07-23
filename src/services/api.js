@@ -5,11 +5,14 @@
  * and request deduplication.
  */
 export class ApiService {
+    /**
+     *
+     */
     constructor(baseUrl = '') {
         // Configurable base URL fallback:
         // If not provided in constructor, it checks for a global config or defaults to '/api'
         this.baseUrl = baseUrl || (window.CONFIG && window.CONFIG.API_BASE_URL) || '/api';
-        
+
         this.pendingRequests = new Map();
         this.timeoutMs = 10000;
         this.maxRetries = 3;
@@ -75,9 +78,11 @@ export class ApiService {
      * Helper to detect network errors for retry logic.
      */
     _isNetworkError(error) {
-        return error.name === 'TypeError' || 
-               error.message === 'Failed to fetch' || 
-               error.message.includes('NetworkError');
+        return (
+            error.name === 'TypeError' ||
+            error.message === 'Failed to fetch' ||
+            error.message.includes('NetworkError')
+        );
     }
 
     /**
@@ -93,7 +98,7 @@ export class ApiService {
         } = options;
 
         const url = `${this.baseUrl}${endpoint}`;
-        
+
         // Check deduplication
         const requestKey = !skipDedup && this._getRequestKey(method, url, body);
         if (requestKey && this.pendingRequests.has(requestKey)) {
@@ -107,7 +112,7 @@ export class ApiService {
         const controller = new AbortController();
         fetchOptions.signal = controller.signal;
 
-        const timeoutPromise = new Promise((_, reject) => {
+        const timeoutPromise = new Promise((_resolve, reject) => {
             setTimeout(() => {
                 controller.abort();
                 reject(new Error('Request timeout'));
@@ -116,26 +121,36 @@ export class ApiService {
 
         // The actual fetch wrapped in our interceptors
         const fetchPromise = fetch(url, fetchOptions)
-            .then(async (response) => {
+            .then(async response => {
                 if (requestKey) this.pendingRequests.delete(requestKey);
                 return await this._responseInterceptor(response);
             })
             .catch(error => {
                 if (requestKey) this.pendingRequests.delete(requestKey);
-                
+
                 // Handle abort specifically
                 if (error.name === 'AbortError') {
-                    throw new Error(error.message === 'The user aborted a request.' ? 'Request cancelled' : 'Request timeout');
+                    throw new Error(
+                        error.message === 'The user aborted a request.'
+                            ? 'Request cancelled'
+                            : 'Request timeout'
+                    );
                 }
 
                 // Retry with exponential backoff on network errors
                 if (retryCount < this.maxRetries && this._isNetworkError(error)) {
                     const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
-                    return new Promise(resolve => 
-                        setTimeout(() => resolve(this.request(endpoint, {
-                            ...options,
-                            retryCount: retryCount + 1
-                        })), delay)
+                    return new Promise(resolve =>
+                        setTimeout(
+                            () =>
+                                resolve(
+                                    this.request(endpoint, {
+                                        ...options,
+                                        retryCount: retryCount + 1,
+                                    })
+                                ),
+                            delay
+                        )
                     );
                 }
 
@@ -150,6 +165,7 @@ export class ApiService {
         if (requestKey) {
             this.pendingRequests.set(requestKey, requestPromise);
             // Ensure we clean up if race resolves before finally block
+            // eslint-disable-next-line promise/catch-or-return
             requestPromise.finally(() => this.pendingRequests.delete(requestKey));
         }
 
@@ -157,10 +173,16 @@ export class ApiService {
     }
 
     // Convenience methods
+    /**
+     *
+     */
     get(endpoint, options = {}) {
         return this.request(endpoint, { method: 'GET', ...options });
     }
 
+    /**
+     *
+     */
     post(endpoint, body, options = {}) {
         return this.request(endpoint, {
             method: 'POST',
@@ -169,6 +191,9 @@ export class ApiService {
         });
     }
 
+    /**
+     *
+     */
     put(endpoint, body, options = {}) {
         return this.request(endpoint, {
             method: 'PUT',
@@ -177,6 +202,9 @@ export class ApiService {
         });
     }
 
+    /**
+     *
+     */
     patch(endpoint, body, options = {}) {
         return this.request(endpoint, {
             method: 'PATCH',
@@ -185,6 +213,9 @@ export class ApiService {
         });
     }
 
+    /**
+     *
+     */
     delete(endpoint, options = {}) {
         return this.request(endpoint, { method: 'DELETE', ...options });
     }
