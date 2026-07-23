@@ -9,6 +9,9 @@
  * - API-015: Configurable base URL
  */
 export class ApiService {
+  /**
+   *
+   */
   constructor(baseUrl = '') {
     // Configurable base URL fallback:
     // If not provided in constructor, it checks for a global config or defaults to '/api'
@@ -35,7 +38,7 @@ export class ApiService {
 
     return {
       ...options,
-      headers
+      headers,
     };
   }
 
@@ -45,13 +48,13 @@ export class ApiService {
    */
   async _responseInterceptor(response) {
     if (!response.ok) {
-      let error = new Error(`HTTP ${response.status}`);
+      const error = new Error(`HTTP ${response.status}`);
       error.status = response.status;
       try {
         const errorData = await response.json();
         error.message = errorData.message || error.message;
         error.data = errorData;
-      } catch (e) {
+      } catch (_e) {
         const errorText = await response.text();
         error.message = errorText || error.message;
       }
@@ -71,14 +74,14 @@ export class ApiService {
    */
   async request(endpoint, options = {}) {
     const url = `${this.baseUrl}${endpoint}`;
-    
+
     // 1. Run request interceptor
     const fetchOptions = this._requestInterceptor(options, endpoint);
 
     try {
       // 2. Perform fetch
       const response = await fetch(url, fetchOptions);
-      
+
       // 3. Run response interceptor
       return await this._responseInterceptor(response);
     } catch (error) {
@@ -89,34 +92,49 @@ export class ApiService {
   }
 
   // Convenience methods
+  /**
+   *
+   */
   get(endpoint, options = {}) {
     return this.request(endpoint, { method: 'GET', ...options });
   }
 
+  /**
+   *
+   */
   post(endpoint, body, options = {}) {
-    return this.request(endpoint, { 
-      method: 'POST', 
-      body: JSON.stringify(body), 
-      ...options 
+    return this.request(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      ...options,
     });
   }
 
+  /**
+   *
+   */
   put(endpoint, body, options = {}) {
-    return this.request(endpoint, { 
-      method: 'PUT', 
-      body: JSON.stringify(body), 
-      ...options 
+    return this.request(endpoint, {
+      method: 'PUT',
+      body: JSON.stringify(body),
+      ...options,
     });
   }
 
+  /**
+   *
+   */
   patch(endpoint, body, options = {}) {
-    return this.request(endpoint, { 
-      method: 'PATCH', 
-      body: JSON.stringify(body), 
-      ...options 
+    return this.request(endpoint, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+      ...options,
     });
   }
 
+  /**
+   *
+   */
   delete(endpoint, options = {}) {
     return this.request(endpoint, { method: 'DELETE', ...options });
   }
