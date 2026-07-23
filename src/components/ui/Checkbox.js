@@ -1,22 +1,67 @@
 /**
- * Shared UI — Part 2 / Part 10 (used by Part 3 – Authentication)
- * File: src/components/ui/Checkbox.js
+ * @fileoverview Checkbox — Accessible Checkbox Component — Part 3 / Part 10.
  *
- * Purpose:
- *   Generic, accessible, reusable checkbox component. Used by
- *   the RememberMe sub-component and any other future form that
- *   requires a boolean toggle input.
+ * Creates a native `<input type="checkbox">` with a properly associated
+ * `<label>`.  Used by the RememberMe component.
  *
- * Key responsibilities (to be implemented):
- *   - Render <input type="checkbox"> with an associated <label>
- *   - Accept: id, name, checked, label, disabled, onChange
- *   - Visible focus ring on keyboard navigation
- *   - Minimum touch target area 44×44 px (FR-RESP-003)
- *   - ARIA: implicit role="checkbox", no extra role needed for
- *     native element; ensure label association is correct
- *
- * TODO: Implement checkbox rendering and accessibility attributes.
- *       (Part 2 / Part 10 scope — referenced by RememberMe)
+ * @module components/ui/Checkbox
  */
 
-export {};
+/**
+ * Creates an accessible labelled checkbox element.
+ *
+ * @param {Object}   opts              - Checkbox configuration
+ * @param {string}   opts.id          - Element id (links label → input)
+ * @param {string}   opts.name        - Input name attribute
+ * @param {string}   opts.label       - Visible label text
+ * @param {boolean}  [opts.checked=false]   - Initial checked state
+ * @param {boolean}  [opts.disabled=false]  - Disables the checkbox
+ * @param {string}   [opts.className='']   - Extra CSS classes on the wrapper
+ * @param {function} [opts.onChange]  - change event handler (receives Event)
+ * @returns {{ wrapper: HTMLDivElement, input: HTMLInputElement }}
+ *
+ * @example
+ * const { wrapper, input } = createCheckbox({
+ *   id: 'remember-me',
+ *   name: 'rememberMe',
+ *   label: 'Remember me',
+ *   checked: false,
+ *   onChange: e => console.log('checked:', e.target.checked),
+ * });
+ * formEl.append(wrapper);
+ * // Read value:  input.checked
+ */
+export function createCheckbox({
+    id,
+    name,
+    label,
+    checked = false,
+    disabled = false,
+    className = '',
+    onChange,
+} = {}) {
+    const wrapper = document.createElement('div');
+    wrapper.className = `checkbox${className ? ` ${className}` : ''}`;
+
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.id = id;
+    input.name = name;
+    input.checked = checked;
+    input.disabled = disabled;
+    input.className = 'checkbox__input';
+
+    if (typeof onChange === 'function') {
+        input.addEventListener('change', onChange);
+    }
+
+    const labelEl = document.createElement('label');
+    labelEl.htmlFor = id;
+    labelEl.className = 'checkbox__label';
+    labelEl.textContent = label ?? '';
+
+    wrapper.appendChild(input);
+    wrapper.appendChild(labelEl);
+
+    return { wrapper, input };
+}
