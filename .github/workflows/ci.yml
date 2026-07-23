@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event_name == 'pull_request' && github.head_ref || '' }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v4
         with:
@@ -29,7 +29,8 @@ jobs:
       - run: npm run format
       - run: npm run lint
       - run: npm run format:check
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - if: github.event_name == 'pull_request'
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-fix lint and format"
           commit_user_name: "github-actions[bot]"
