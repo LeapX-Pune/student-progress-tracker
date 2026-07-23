@@ -1,15 +1,21 @@
+let tooltipIdCounter = 0;
+
 /**
  *
  */
 export function createTooltip(triggerEl, { content, position = 'top', delay = 200 } = {}) {
+    const tooltipId = `tooltip-${++tooltipIdCounter}`;
     const wrapper = document.createElement('span');
     wrapper.className = 'tooltip-wrapper';
     triggerEl.parentNode.insertBefore(wrapper, triggerEl);
     wrapper.appendChild(triggerEl);
 
+    triggerEl.setAttribute('aria-describedby', tooltipId);
+
     const tooltip = document.createElement('span');
     tooltip.className = `tooltip tooltip--${position}`;
     tooltip.setAttribute('role', 'tooltip');
+    tooltip.id = tooltipId;
     tooltip.textContent = content;
     document.body.appendChild(tooltip);
 

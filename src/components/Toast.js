@@ -18,11 +18,19 @@ let container = null;
  *
  */
 function getContainer() {
+    const existing = document.getElementById('toast-root');
+    if (existing && document.body.contains(existing)) {
+        existing.className = 'toast-container';
+        existing.removeAttribute('aria-live');
+        existing.removeAttribute('aria-atomic');
+        return existing;
+    }
+
     if (!container || !document.body.contains(container)) {
         container = document.createElement('div');
         container.className = 'toast-container';
         container.setAttribute('aria-live', 'polite');
-        container.setAttribute('role', 'status');
+        container.setAttribute('aria-atomic', 'true');
         document.body.appendChild(container);
     }
     return container;

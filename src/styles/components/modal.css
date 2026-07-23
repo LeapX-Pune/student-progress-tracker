@@ -72,9 +72,14 @@
     background: var(--color-gray-100);
 }
 
+.modal__close:active {
+    color: var(--color-gray-700);
+    background: var(--color-gray-200);
+}
+
 .modal__close:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 .modal__body {

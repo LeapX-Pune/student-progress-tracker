@@ -20,9 +20,10 @@ describe('SkeletonLoader', () => {
         expect(items.length).toBe(3);
     });
 
-    it('sets aria-hidden on skeleton text', () => {
+    it('sets role status on skeleton text', () => {
         const el = createSkeletonText();
-        expect(el.getAttribute('aria-hidden')).toBe('true');
+        expect(el.getAttribute('role')).toBe('status');
+        expect(el.getAttribute('aria-label')).toBe('Loading content');
     });
 
     it('creates a skeleton card', () => {

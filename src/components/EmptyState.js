@@ -4,10 +4,12 @@
 export function createEmptyState({ title, description, illustration, actions = [] } = {}) {
     const container = document.createElement('div');
     container.className = 'empty-state';
+    container.setAttribute('role', 'status');
 
     if (illustration) {
         const img = document.createElement('div');
         img.className = 'empty-state__illustration';
+        img.setAttribute('aria-hidden', 'true');
         img.innerHTML = illustration;
         container.appendChild(img);
     }

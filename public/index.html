@@ -11,13 +11,18 @@
     <link rel="stylesheet" href="/main.css">
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
     <div id="app">
-        <header>
+        <header role="banner">
             <h1>Student Progress Tracker</h1>
         </header>
-        <main id="main-content">
+        <main id="main-content" role="main" tabindex="-1">
         </main>
     </div>
+
+    <div id="toast-root" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
     <script type="module" src="/main.js"></script>
 </body>
 </html>

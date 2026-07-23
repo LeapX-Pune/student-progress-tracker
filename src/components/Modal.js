@@ -2,20 +2,26 @@ const FOCUSABLE_SELECTOR =
     'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 let openModal = null;
+let modalIdCounter = 0;
 
 /**
  *
  */
-export function createModal({ title, body, footer, onClose, size = 'md' } = {}) {
+export function createModal({ title, body, footer, onClose, size = 'md', ariaDescription } = {}) {
     if (openModal) {
         openModal.close();
     }
+
+    const modalId = `modal-${++modalIdCounter}`;
+    const titleId = `${modalId}-title`;
+    const descId = `${modalId}-desc`;
 
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
-    overlay.setAttribute('aria-labelledby', 'modal-title');
+    overlay.setAttribute('aria-labelledby', titleId);
+    if (ariaDescription) overlay.setAttribute('aria-describedby', descId);
 
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -24,7 +30,7 @@ export function createModal({ title, body, footer, onClose, size = 'md' } = {}) 
 
     modal.innerHTML = `
     <div class="modal__header">
-      <h2 class="modal__title" id="modal-title">${title || ''}</h2>
+      <h2 class="modal__title" id="${titleId}">${title || ''}</h2>
       <button class="modal__close" aria-label="Close dialog">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
@@ -35,6 +41,7 @@ export function createModal({ title, body, footer, onClose, size = 'md' } = {}) 
 
     const bodyEl = document.createElement('div');
     bodyEl.className = 'modal__body';
+    if (ariaDescription) bodyEl.id = descId;
     if (typeof body === 'string') {
         bodyEl.innerHTML = body;
     } else if (body instanceof HTMLElement) {
@@ -81,6 +88,7 @@ export function createModal({ title, body, footer, onClose, size = 'md' } = {}) 
             if (openModal === modalObj) openModal = null;
             if (onClose) onClose();
             document.removeEventListener('keydown', handleKeydown);
+            document.body.style.overflow = '';
         },
     };
 
@@ -125,6 +133,8 @@ export function createModal({ title, body, footer, onClose, size = 'md' } = {}) 
         const firstFocusable = modal.querySelector(FOCUSABLE_SELECTOR);
         if (firstFocusable) firstFocusable.focus();
     });
+
+    document.body.style.overflow = 'hidden';
 
     return modalObj;
 }
