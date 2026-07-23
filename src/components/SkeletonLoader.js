@@ -1,8 +1,17 @@
 export function createSkeletonText(lines = 3) {
   const wrapper = document.createElement('div')
   wrapper.className = 'skeleton-text-group'
-  wrapper.setAttribute('aria-hidden', 'true')
-  wrapper.style.cssText = 'display:flex;flex-direction:column;gap:0.75rem;'
+  wrapper.setAttribute('role', 'status')
+  wrapper.setAttribute('aria-label', 'Loading content')
+
+  const srOnly = document.createElement('span')
+  srOnly.className = 'sr-only'
+  srOnly.textContent = 'Loading...'
+  wrapper.appendChild(srOnly)
+
+  const group = document.createElement('div')
+  group.style.cssText = 'display:flex;flex-direction:column;gap:0.75rem;'
+  group.setAttribute('aria-hidden', 'true')
 
   for (let i = 0; i < lines; i++) {
     const skeleton = document.createElement('div')
@@ -10,18 +19,27 @@ export function createSkeletonText(lines = 3) {
     if (i === lines - 1) {
       skeleton.style.width = '40%'
     }
-    wrapper.appendChild(skeleton)
+    group.appendChild(skeleton)
   }
 
+  wrapper.appendChild(group)
   return wrapper
 }
 
 export function createSkeletonCard() {
   const card = document.createElement('div')
   card.className = 'skeleton-card'
-  card.setAttribute('aria-hidden', 'true')
+  card.setAttribute('role', 'status')
+  card.setAttribute('aria-label', 'Loading card content')
 
-  card.innerHTML = `
+  const srOnly = document.createElement('span')
+  srOnly.className = 'sr-only'
+  srOnly.textContent = 'Loading...'
+  card.appendChild(srOnly)
+
+  const content = document.createElement('div')
+  content.setAttribute('aria-hidden', 'true')
+  content.innerHTML = `
     <div class="skeleton-card__thumbnail"></div>
     <div class="skeleton-card__lines">
       <div class="skeleton-card__line" style="width:70%"></div>
@@ -29,6 +47,7 @@ export function createSkeletonCard() {
       <div class="skeleton-card__line"></div>
     </div>
   `
+  card.appendChild(content)
 
   return card
 }
@@ -36,10 +55,18 @@ export function createSkeletonCard() {
 export function createSkeletonChart() {
   const chart = document.createElement('div')
   chart.className = 'skeleton-chart'
-  chart.setAttribute('aria-hidden', 'true')
+  chart.setAttribute('role', 'status')
+  chart.setAttribute('aria-label', 'Loading chart')
 
-  chart.innerHTML = '<div class="skeleton-chart__bar"></div>'
-  const bar = chart.querySelector('.skeleton-chart__bar')
+  const srOnly = document.createElement('span')
+  srOnly.className = 'sr-only'
+  srOnly.textContent = 'Loading chart...'
+  chart.appendChild(srOnly)
+
+  const content = document.createElement('div')
+  content.setAttribute('aria-hidden', 'true')
+  content.innerHTML = '<div class="skeleton-chart__bar"></div>'
+  const bar = content.querySelector('.skeleton-chart__bar')
 
   for (let i = 0; i < 5; i++) {
     const item = document.createElement('div')
@@ -47,6 +74,7 @@ export function createSkeletonChart() {
     bar.appendChild(item)
   }
 
+  chart.appendChild(content)
   return chart
 }
 
