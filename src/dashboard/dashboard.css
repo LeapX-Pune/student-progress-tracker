@@ -242,9 +242,7 @@ body {
     border-radius: var(--radius-xl);
     padding: 1.5rem;
     box-shadow: var(--shadow-premium);
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .premium-card:hover {
