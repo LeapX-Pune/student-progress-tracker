@@ -22,13 +22,13 @@
  * @module components/auth/LoginForm
  */
 
-import { createInput } from '../ui/Input.js';
-import { createButton, setButtonLoading } from '../ui/Button.js';
-import { createRememberMe } from './RememberMe.js';
-import { createDemoCredentials } from './DemoCredentials.js';
-import { validateLoginForm } from '../../utils/validation.js';
-import { getRedirectPath } from '../../services/authStorage.js';
 import AuthContext from '../../context/AuthContext.js';
+import { getRedirectPath } from '../../services/authStorage.js';
+import { validateLoginForm } from '../../utils/validation.js';
+import { createButton, setButtonLoading } from '../ui/Button.js';
+import { createInput } from '../ui/Input.js';
+import { createDemoCredentials } from './DemoCredentials.js';
+import { createRememberMe } from './RememberMe.js';
 
 // ─── Factory ──────────────────────────────────────────────────────────────────
 
@@ -90,6 +90,9 @@ export function createLoginForm(container, { onSuccess } = {}) {
         placeholder: 'student@demo.com',
         required: true,
         autocomplete: 'email',
+        /**
+         *
+         */
         onChange: () => setEmailError(null), // clear error on every keystroke
     });
     formEl.appendChild(emailWrapper);
@@ -107,6 +110,9 @@ export function createLoginForm(container, { onSuccess } = {}) {
         placeholder: '••••••',
         required: true,
         autocomplete: 'current-password',
+        /**
+         *
+         */
         onChange: () => setPasswordError(null),
     });
     formEl.appendChild(passwordWrapper);
@@ -128,6 +134,9 @@ export function createLoginForm(container, { onSuccess } = {}) {
 
     // ── Demo credentials ───────────────────────────────────────────────────────
     const demoBlock = createDemoCredentials({
+        /**
+         *
+         */
         onFill: ({ email, password }) => {
             emailInput.value = email;
             passwordInput.value = password;
@@ -156,6 +165,9 @@ export function createLoginForm(container, { onSuccess } = {}) {
 
     // ── Submit handler ─────────────────────────────────────────────────────────
 
+    /**
+     *
+     */
     async function handleSubmit(e) {
         e.preventDefault();
         clearBannerError();

@@ -18,8 +18,8 @@
  * @module pages/LoginPage
  */
 
-import AuthContext from '../context/AuthContext.js';
 import { createLoginForm } from '../components/auth/LoginForm.js';
+import AuthContext from '../context/AuthContext.js';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -46,7 +46,12 @@ export function createLoginPage(container) {
         // TODO (Part 4 — Routing): router.navigate(ROUTES.DASHBOARD);
         window.location.hash = '/dashboard';
         // Return a no-op destroy handle — page won't be rendered.
-        return { destroy: () => {} };
+        return {
+            /**
+             *
+             */
+            destroy: () => {},
+        };
     }
 
     // ── Set document title ────────────────────────────────────────────────────
@@ -73,6 +78,9 @@ export function createLoginPage(container) {
     logoImg.className = 'login-page__logo';
     logoImg.width = 48;
     logoImg.height = 48;
+    /**
+     *
+     */
     logoImg.onerror = () => {
         // If the SVG asset is missing, fall back to a text logo.
         logoImg.style.display = 'none';
@@ -92,10 +100,15 @@ export function createLoginPage(container) {
     // Login illustration
     const illustration = document.createElement('img');
     illustration.src = '/src/assets/auth/login.svg';
-    illustration.alt = '';          // decorative — hidden from screen readers
+    illustration.alt = ''; // decorative — hidden from screen readers
     illustration.setAttribute('aria-hidden', 'true');
     illustration.className = 'login-page__illustration';
-    illustration.onerror = () => { illustration.style.display = 'none'; };
+    /**
+     *
+     */
+    illustration.onerror = () => {
+        illustration.style.display = 'none';
+    };
 
     heroPanel.appendChild(logoArea);
     heroPanel.appendChild(heroTagline);
@@ -116,6 +129,9 @@ export function createLoginPage(container) {
 
     // ── Mount LoginForm into the card ─────────────────────────────────────────
     const loginFormHandle = createLoginForm(formCard, {
+        /**
+         *
+         */
         onSuccess: (_user, destination) => {
             // TODO (Part 4 — Routing): router.navigate(destination);
             window.location.hash = destination;

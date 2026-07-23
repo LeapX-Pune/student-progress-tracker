@@ -23,10 +23,10 @@
  */
 
 import { ENV } from '../config/env.js';
-import { ERROR_CODES, ROUTES } from '../utils/constants.js';
 import { authApi } from '../services/authApi.js';
 import { saveAuthToken, getAuthToken, clearAuthToken } from '../services/authStorage.js';
 import { isTokenExpired } from '../utils/authHelpers.js';
+import { ERROR_CODES, ROUTES } from '../utils/constants.js';
 
 // ─── Private helper functions ─────────────────────────────────────────────────
 
@@ -132,7 +132,10 @@ const AuthContext = (() => {
      */
     function subscribe(callback) {
         if (typeof callback !== 'function') {
-            console.warn('[AuthContext] subscribe() expects a function, received:', typeof callback);
+            console.warn(
+                '[AuthContext] subscribe() expects a function, received:',
+                typeof callback
+            );
             return () => {};
         }
         _subscribers.add(callback);
@@ -205,7 +208,9 @@ const AuthContext = (() => {
             const { token, expiresAt, user } = stored;
 
             if (!token || !user || typeof user !== 'object') {
-                console.warn('[AuthContext] Malformed session payload found in storage — clearing.');
+                console.warn(
+                    '[AuthContext] Malformed session payload found in storage — clearing.'
+                );
                 clearAuthToken();
                 setState({ isLoading: false });
                 return;
@@ -250,7 +255,9 @@ const AuthContext = (() => {
             const { token, expiresAt, user } = authResponse;
 
             if (!token || !user || !expiresAt) {
-                throw new Error('Auth response is missing required fields: token, expiresAt, user.');
+                throw new Error(
+                    'Auth response is missing required fields: token, expiresAt, user.'
+                );
             }
 
             const rememberMe = credentials.rememberMe === true;

@@ -21,9 +21,9 @@
  * @module services/authApi
  */
 
-import { api } from './api.js';
-import { API_ENDPOINTS, ERROR_CODES } from '../utils/constants.js';
 import { ENV } from '../config/env.js';
+import { API_ENDPOINTS, ERROR_CODES } from '../utils/constants.js';
+import { api } from './api.js';
 
 // ─── Exported API ─────────────────────────────────────────────────────────────
 
@@ -59,9 +59,13 @@ export async function login({ email, password }) {
     const timeoutId = setTimeout(() => controller.abort(), ENV.API_TIMEOUT || 10000);
 
     try {
-        const response = await api.post(API_ENDPOINTS.AUTH_LOGIN, { email, password }, {
-            signal: controller.signal
-        });
+        const response = await api.post(
+            API_ENDPOINTS.AUTH_LOGIN,
+            { email, password },
+            {
+                signal: controller.signal,
+            }
+        );
         clearTimeout(timeoutId);
         return response;
     } catch (err) {
@@ -80,7 +84,7 @@ export async function login({ email, password }) {
                 message: err.data?.message ?? 'The request contained invalid data.',
             };
         }
-        
+
         if (err.status === 401) {
             throw {
                 code: ERROR_CODES.INVALID_CREDENTIALS,
@@ -107,7 +111,7 @@ export async function login({ email, password }) {
 export async function logout() {
     try {
         await api.post('/auth/logout', {});
-    } catch (err) {
+    } catch (_err) {
         // Fire-and-forget: fail silently so the client can still clear local state.
     }
 }

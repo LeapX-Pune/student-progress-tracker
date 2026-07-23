@@ -41,11 +41,11 @@ export function requireAuth(context) {
  * Prevents authenticated users from navigating to the login page
  * or other authentication-related routes.
  *
- * @param {Object} context - The routing context
+ * @param {Object} _context - The routing context
  * @returns {{ redirect: string } | null}
  *   Redirect to dashboard if already authenticated, null if allowed
  */
-export function redirectIfAuthenticated(context) {
+export function redirectIfAuthenticated(_context) {
     const { isAuthenticated } = AuthContext.getState();
 
     if (isAuthenticated) {
