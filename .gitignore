@@ -37,9 +37,9 @@ project-docs/
 .opencode/
 SKILL.md
 skills-lock.json
-
+graphify-out/
 PRD.pdf
 task.md
 to-do.csv
 explanation.md
- develop
+develop

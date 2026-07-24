@@ -95,7 +95,6 @@ hr {
 /* Responsive */
 
 @media (max-width: 768px) {
-
     .container {
         padding: 20px;
     }
@@ -118,7 +117,6 @@ hr {
 }
 
 @media (max-width: 480px) {
-
     body {
         padding: 20px 10px;
     }
