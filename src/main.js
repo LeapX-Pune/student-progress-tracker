@@ -80,7 +80,12 @@ function showAppView() {
     const authRoot = document.getElementById('auth-root');
     if (authRoot) authRoot.style.display = 'none';
     const appShell = document.querySelector('.app-shell');
-    if (appShell) appShell.style.display = '';
+    if (appShell) {
+        appShell.style.display = '';
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+    }
 }
 
 /**
