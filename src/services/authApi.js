@@ -113,5 +113,6 @@ export async function logout() {
         await api.post('/auth/logout', {});
     } catch (_err) {
         // Fire-and-forget: fail silently so the client can still clear local state.
+        // The server session will eventually expire anyway.
     }
 }
