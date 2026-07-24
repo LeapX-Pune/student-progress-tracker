@@ -1,4 +1,5 @@
 import { build } from 'esbuild';
+import { copyFileSync, existsSync, mkdirSync } from 'fs';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
@@ -6,6 +7,17 @@ import { dirname, resolve } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const rootDir = resolve(__dirname, '..');
+const publicDir = resolve(rootDir, 'public');
+const srcDir = resolve(rootDir, 'src');
+
+function copyAsset(src, dest) {
+    if (existsSync(src)) {
+        copyFileSync(src, dest);
+        console.log(`Copied ${src} -> ${dest}`);
+    } else {
+        console.warn(`Warning: ${src} not found, skipping`);
+    }
+}
 
 // Start JSON Server mock API
 const mockApi = spawn(
@@ -21,6 +33,13 @@ const mockApi = spawn(
     ],
     { cwd: rootDir, stdio: 'inherit', shell: true }
 );
+
+// Ensure public dir exists
+if (!existsSync(publicDir)) mkdirSync(publicDir, { recursive: true });
+
+// Copy assets needed by index.html
+copyAsset(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
+copyAsset(resolve(srcDir, 'pages', 'script.js'), resolve(publicDir, 'script.js'));
 
 // esbuild watch mode
 const ctx = await build({
