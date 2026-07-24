@@ -37,8 +37,7 @@ project-docs/
 .opencode/
 SKILL.md
 skills-lock.json
-graphify-out
-
+graphify-out/
 PRD.pdf
 task.md
 to-do.csv

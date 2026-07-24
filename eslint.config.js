@@ -44,6 +44,7 @@ export default [
                 HTMLButtonElement: 'readonly',
                 HTMLTemplateElement: 'readonly',
                 customElements: 'readonly',
+                Chart: 'readonly',
                 import: 'readonly',
                 // node globals
                 process: 'readonly',
