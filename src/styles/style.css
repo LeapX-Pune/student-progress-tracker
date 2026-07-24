@@ -1065,6 +1065,7 @@ svg.lucide {
 
     .app-shell.is-drawer-open .sidebar {
         transform: translateX(0);
+        z-index: 50;
     }
 
     .app-shell.is-collapsed .sidebar {
