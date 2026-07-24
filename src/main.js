@@ -13,9 +13,9 @@ async function init() {
 
     await initApi();
 
-    const app = document.getElementById('app');
+    const app = document.querySelector('.app-shell');
     if (app) {
-        app.classList.add('app--ready', 'anim-fade-in');
+        app.classList.add('app--ready');
     }
 }
 
