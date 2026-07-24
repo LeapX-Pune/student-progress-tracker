@@ -1,5 +1,7 @@
 import './styles/main.css';
 import { withErrorBoundary } from './components/ErrorBoundary.js';
+import { createLoadingSpinner } from './components/LoadingSpinner.js';
+import { renderSkeleton, removeSkeletons } from './components/SkeletonLoader.js';
 import { showError, showInfo } from './components/Toast.js';
 import AuthContext from './context/AuthContext.js';
 import { createLoginPage } from './pages/LoginPage.js';
@@ -100,6 +102,25 @@ function wireAuth() {
 /**
  *
  */
+function wireLoadingStates() {
+    const pageContent = document.querySelector('[data-page-content]');
+    if (!pageContent) return;
+
+    document.addEventListener('pathway:route', () => {
+        renderSkeleton(pageContent, 'card', 3);
+    });
+
+    /**
+     *
+     */
+    window._removePageSkeletons = () => {
+        removeSkeletons(pageContent);
+    };
+}
+
+/**
+ *
+ */
 async function init() {
     initMotionPreferences();
     initScrollRestoration();
@@ -108,9 +129,17 @@ async function init() {
     wireNetworkDetection();
     wireErrorBoundary();
     wireAuth();
+    wireLoadingStates();
+
+    const spinner = createLoadingSpinner({ size: 'lg', label: 'Loading application...' });
+    spinner.style.cssText =
+        'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;';
+    document.body.appendChild(spinner);
 
     await AuthContext.restoreSession();
     await initApi();
+
+    if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
 
     const app = document.querySelector('.app-shell');
     if (app) app.classList.add('app--ready');
