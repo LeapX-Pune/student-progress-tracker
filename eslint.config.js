@@ -132,6 +132,7 @@ export default [
                 customElements: 'readonly',
                 MouseEvent: 'readonly',
                 KeyboardEvent: 'readonly',
+                Event: 'readonly',
                 setTimeout: 'readonly',
                 clearTimeout: 'readonly',
                 setInterval: 'readonly',

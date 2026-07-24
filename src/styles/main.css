@@ -9,6 +9,7 @@
 @import './components/animations.css';
 @import './components/accessibility.css';
 @import './components/login.css';
+@import './components/image-loader.css';
 
 :root {
     --color-primary: #4f46e5;
