@@ -1,8 +1,11 @@
 import './styles/main.css';
+import { createEmptyState } from './components/EmptyState.js';
 import { withErrorBoundary } from './components/ErrorBoundary.js';
 import { createLoadingSpinner } from './components/LoadingSpinner.js';
+import { createModal } from './components/Modal.js';
 import { renderSkeleton, removeSkeletons } from './components/SkeletonLoader.js';
 import { showError, showInfo } from './components/Toast.js';
+import { createTooltip } from './components/Tooltip.js';
 import AuthContext from './context/AuthContext.js';
 import { createLoginPage } from './pages/LoginPage.js';
 import { initApi } from './services/api.js';
@@ -121,6 +124,61 @@ function wireLoadingStates() {
 /**
  *
  */
+function wireTooltips() {
+    document.querySelectorAll('.icon-button, .nav-link, .action-btn-circle').forEach(el => {
+        const label =
+            el.getAttribute('aria-label') || el.querySelector('.nav-label')?.textContent?.trim();
+        if (label) {
+            createTooltip(el, { content: label, position: 'bottom' });
+        }
+    });
+}
+
+/**
+ *
+ */
+function wireAppInteractions() {
+    const pageContent = document.querySelector('[data-page-content]');
+    if (!pageContent) return;
+
+    document.addEventListener('pathway:route', () => {
+        if (!pageContent.querySelector('.route-placeholder, .settings-page')) {
+            return;
+        }
+    });
+
+    /**
+     *
+     */
+    window._showEmptyState = opts => {
+        const emptyEl = createEmptyState(opts);
+        pageContent.innerHTML = '';
+        pageContent.appendChild(emptyEl);
+    };
+
+    /**
+     *
+     */
+    window._showModal = opts => {
+        return createModal(opts);
+    };
+
+    document.querySelector('[data-notification-clear]')?.addEventListener('click', () => {
+        createModal({
+            title: 'Clear Notifications',
+            body: 'Mark all notifications as read?',
+            footer: '<button class="btn btn--primary" data-confirm-clear>Clear all</button>',
+            /**
+             *
+             */
+            onClose: () => {},
+        });
+    });
+}
+
+/**
+ *
+ */
 async function init() {
     initMotionPreferences();
     initScrollRestoration();
@@ -130,6 +188,8 @@ async function init() {
     wireErrorBoundary();
     wireAuth();
     wireLoadingStates();
+    wireTooltips();
+    wireAppInteractions();
 
     const spinner = createLoadingSpinner({ size: 'lg', label: 'Loading application...' });
     spinner.style.cssText =
