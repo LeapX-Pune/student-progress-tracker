@@ -265,6 +265,13 @@
             return;
         }
 
+        if (routeKey === 'students') {
+            pageContent.innerHTML = `
+                <iframe src="dashboard.html" style="width: 100%; height: calc(100vh - 140px); border: none; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); background: transparent;" title="Student Dashboard"></iframe>
+            `;
+            return;
+        }
+
         pageContent.innerHTML = `
 
         <div class="route-placeholder">
