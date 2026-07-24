@@ -8,6 +8,7 @@
 @import './components/tooltip.css';
 @import './components/animations.css';
 @import './components/accessibility.css';
+@import './components/login.css';
 
 :root {
     --color-primary: #4f46e5;

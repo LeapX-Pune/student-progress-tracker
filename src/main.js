@@ -1,6 +1,8 @@
 import './styles/main.css';
 import { withErrorBoundary } from './components/ErrorBoundary.js';
 import { showError, showInfo } from './components/Toast.js';
+import AuthContext from './context/AuthContext.js';
+import { createLoginPage } from './pages/LoginPage.js';
 import { initApi } from './services/api.js';
 import { initMotionPreferences } from './utils/animations.js';
 import { handleGlobalErrors } from './utils/errors.js';
@@ -47,6 +49,54 @@ function wireErrorBoundary() {
     };
 }
 
+let loginPageInstance = null;
+
+/**
+ *
+ */
+function showLoginView() {
+    if (loginPageInstance) return;
+    const authRoot = document.getElementById('auth-root');
+    if (!authRoot) return;
+    const appShell = document.querySelector('.app-shell');
+    if (appShell) appShell.style.display = 'none';
+    authRoot.style.display = '';
+    loginPageInstance = createLoginPage(authRoot);
+}
+
+/**
+ *
+ */
+function showAppView() {
+    if (loginPageInstance) {
+        loginPageInstance.destroy();
+        loginPageInstance = null;
+    }
+    const authRoot = document.getElementById('auth-root');
+    if (authRoot) authRoot.style.display = 'none';
+    const appShell = document.querySelector('.app-shell');
+    if (appShell) appShell.style.display = '';
+}
+
+/**
+ *
+ */
+function wireAuth() {
+    AuthContext.subscribe(({ isAuthenticated, isLoading }) => {
+        if (isLoading) return;
+        if (isAuthenticated) showAppView();
+        else showLoginView();
+    });
+
+    const signOutBtn = document.querySelector('.profile-dropdown-item--danger');
+    if (signOutBtn) {
+        signOutBtn.addEventListener('click', () => {
+            AuthContext.logout();
+            showInfo('Signed Out', 'You have been signed out successfully.');
+        });
+    }
+}
+
 /**
  *
  */
@@ -57,13 +107,13 @@ async function init() {
     wireGlobalErrorHandler();
     wireNetworkDetection();
     wireErrorBoundary();
+    wireAuth();
 
+    await AuthContext.restoreSession();
     await initApi();
 
     const app = document.querySelector('.app-shell');
-    if (app) {
-        app.classList.add('app--ready');
-    }
+    if (app) app.classList.add('app--ready');
 }
 
 document.addEventListener('DOMContentLoaded', init);
