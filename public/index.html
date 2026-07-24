@@ -12,11 +12,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="main.css" />
 </head>
-<body>
+<body class="dark">
+
+  <!-- SKIP TO MAIN CONTENT (first tabbable element) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- MOBILE OVERLAY -->
   <div class="drawer-overlay" data-drawer-overlay></div>
+
+  <!-- AUTH ROOT (login page renders here when not authenticated) -->
+  <div id="auth-root"></div>
 
   <div class="app-shell">
 
@@ -186,17 +193,14 @@
       </header>
 
       <!-- DYNAMIC PAGE CONTENT -->
-      <main class="page-content" data-page-content></main>
+      <main class="page-content" data-page-content id="main-content"></main>
 
     </div>
 
   </div>
 
-  <script src="script.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    lucide.createIcons();
-  </script>
+   <script src="script.js"></script>
+   <script type="module" src="main.js"></script>
 
 </body>
 </html>

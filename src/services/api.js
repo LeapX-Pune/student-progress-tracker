@@ -8,11 +8,15 @@ let mockHandlers = null;
  *
  */
 export async function initApi() {
-    const config = getConfig();
+    try {
+        const config = getConfig();
 
-    if (config.apiMockEnabled) {
-        const { setupMockServer } = await import('./mock.js');
-        mockHandlers = setupMockServer();
+        if (config.apiMockEnabled) {
+            const { setupMockServer } = await import('./mock.js');
+            mockHandlers = setupMockServer();
+        }
+    } catch (err) {
+        console.warn('[API] Failed to initialize mock server:', err);
     }
 }
 
