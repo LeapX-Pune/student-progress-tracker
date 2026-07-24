@@ -12,3 +12,4 @@ export { createRetryButton } from './RetryButton.js';
 export { createLoadingSpinner } from './LoadingSpinner.js';
 export { createModal } from './Modal.js';
 export { createTooltip } from './Tooltip.js';
+export { createImageLoader } from './ImageLoader.js';
