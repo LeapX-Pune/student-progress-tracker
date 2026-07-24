@@ -676,56 +676,44 @@
      Grades Page — Chart states & initialization
    ------------------------------------------------------------------------ */
 
-    /**
-     *
-     */
     function showLoading(container) {
-        const ls = container.querySelector('.loading-state');
-        const es = container.querySelector('.error-state');
-        const ems = container.querySelector('.empty-state');
-        const ph = container.querySelector('.chart-placeholder-text');
+        var ls = container.querySelector('.loading-state');
+        var es = container.querySelector('.error-state');
+        var ems = container.querySelector('.empty-state');
+        var ph = container.querySelector('.chart-placeholder-text');
         if (ls) ls.style.display = 'flex';
         if (es) es.style.display = 'none';
         if (ems) ems.style.display = 'none';
         if (ph) ph.style.display = 'none';
     }
 
-    /**
-     *
-     */
     function showChart(container) {
-        const ls = container.querySelector('.loading-state');
-        const es = container.querySelector('.error-state');
-        const ems = container.querySelector('.empty-state');
-        const ph = container.querySelector('.chart-placeholder-text');
+        var ls = container.querySelector('.loading-state');
+        var es = container.querySelector('.error-state');
+        var ems = container.querySelector('.empty-state');
+        var ph = container.querySelector('.chart-placeholder-text');
         if (ls) ls.style.display = 'none';
         if (es) es.style.display = 'none';
         if (ems) ems.style.display = 'none';
         if (ph) ph.style.display = 'flex';
     }
 
-    /**
-     *
-     */
     function initGradesPage() {
-        const containers = document.querySelectorAll('.chart-container');
+        var containers = document.querySelectorAll('.chart-container');
         if (!containers.length) return;
 
-        containers.forEach(container => {
+        containers.forEach(function (container) {
             showLoading(container);
-            setTimeout(() => {
+            setTimeout(function () {
                 showChart(container);
             }, 2500);
         });
 
-        document.querySelectorAll('.retry-btn').forEach(btn => {
-            /**
-             *
-             */
+        document.querySelectorAll('.retry-btn').forEach(function (btn) {
             btn.onclick = function () {
-                const c = this.closest('.chart-container');
+                var c = this.closest('.chart-container');
                 showLoading(c);
-                setTimeout(() => {
+                setTimeout(function () {
                     showChart(c);
                 }, 2000);
             };
