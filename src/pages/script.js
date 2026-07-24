@@ -20,6 +20,7 @@
         analytics: 'Analytics',
         attendance: 'Attendance',
         settings: 'Settings',
+        login: 'Sign In',
     };
 
     const DEFAULT_ROUTE = 'overview';
