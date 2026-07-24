@@ -116,3 +116,5 @@ export async function logout() {
         // The server session will eventually expire anyway.
     }
 }
+
+export const authApi = { login, logout };
