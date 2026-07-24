@@ -65,8 +65,8 @@
 body {
     margin: 0;
     font-family: var(--font-sans);
-    color: var(--color-gray-900);
-    background: var(--color-gray-50);
+    color: var(--text-primary);
+    background: var(--surface-page);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
 }

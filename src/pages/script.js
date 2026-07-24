@@ -290,11 +290,11 @@
 
         if (!toggle) return;
 
-        if (localStorage.getItem('theme') === 'dark') {
+        if (localStorage.getItem('theme') === 'dark' || !localStorage.getItem('theme')) {
             document.body.classList.add('dark');
-
-            toggle.checked = true;
         }
+
+        toggle.checked = document.body.classList.contains('dark');
 
         toggle.addEventListener('change', () => {
             if (toggle.checked) {
