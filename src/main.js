@@ -1,4 +1,5 @@
 import './styles/main.css';
+import { withErrorBoundary } from './components/ErrorBoundary.js';
 import { showError, showInfo } from './components/Toast.js';
 import { initApi } from './services/api.js';
 import { initMotionPreferences } from './utils/animations.js';
@@ -30,12 +31,32 @@ function wireNetworkDetection() {
 /**
  *
  */
+function wireErrorBoundary() {
+    const pageContent = document.querySelector('[data-page-content]');
+    if (!pageContent) return;
+
+    document.addEventListener('pathway:route', () => {
+        window._pageContent = pageContent;
+    });
+
+    /**
+     *
+     */
+    window._showErrorBoundary = ({ title, message, onRetry } = {}) => {
+        withErrorBoundary(pageContent, { title, message, onRetry });
+    };
+}
+
+/**
+ *
+ */
 async function init() {
     initMotionPreferences();
     initScrollRestoration();
     updateDocumentTitle();
     wireGlobalErrorHandler();
     wireNetworkDetection();
+    wireErrorBoundary();
 
     await initApi();
 
