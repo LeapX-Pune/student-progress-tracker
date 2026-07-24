@@ -41,6 +41,10 @@ if (!existsSync(publicDir)) mkdirSync(publicDir, { recursive: true });
 copyAsset(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
 copyAsset(resolve(srcDir, 'pages', 'script.js'), resolve(publicDir, 'script.js'));
 
+// Copy assets needed by standalone HTML pages
+copyAsset(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(publicDir, 'dashboard.css'));
+copyAsset(resolve(srcDir, 'dashboard', 'dashboard.js'), resolve(publicDir, 'dashboard.js'));
+
 // esbuild watch mode
 const ctx = await context({
     entryPoints: ['src/main.js'],
