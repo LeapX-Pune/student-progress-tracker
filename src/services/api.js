@@ -1,4 +1,5 @@
 import { getConfig } from '../utils/env.js';
+import { normalizeApiError } from '../utils/errors.js';
 import { getAuthToken } from './authStorage.js';
 
 let mockHandlers = null;
@@ -75,7 +76,15 @@ export class ApiService {
                 const errorText = await response.text();
                 error.message = errorText || error.message;
             }
-            throw error;
+
+            const normalizedError = normalizeApiError(error);
+
+            // Handle 401 Unauthorized globally
+            if (response.status === 401) {
+                window.dispatchEvent(new window.CustomEvent('auth:unauthorized'));
+            }
+
+            throw normalizedError;
         }
 
         const contentType = response.headers.get('content-type');
