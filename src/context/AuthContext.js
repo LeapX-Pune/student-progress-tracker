@@ -23,7 +23,7 @@
  */
 
 import { ENV } from '../config/env.js';
-import { authApi } from '../services/authApi.js';
+import * as authApi from '../services/authApi.js';
 import { saveAuthToken, getAuthToken, clearAuthToken } from '../services/authStorage.js';
 import { isTokenExpired } from '../utils/authHelpers.js';
 import { ERROR_CODES, ROUTES } from '../utils/constants.js';
