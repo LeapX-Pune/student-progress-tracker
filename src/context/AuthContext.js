@@ -304,6 +304,14 @@ const AuthContext = (() => {
         console.warn(`[AuthContext] Session ended. Navigate to ${ROUTES.LOGIN} via the router.`);
     }
 
+    // Listen for global unauthorized events (e.g., from api.js)
+    window.addEventListener('auth:unauthorized', () => {
+        if (_state.isAuthenticated) {
+            console.warn('[AuthContext] 401 Unauthorized detected globally. Logging out.');
+            logout();
+        }
+    });
+
     return {
         subscribe,
         unsubscribe,
