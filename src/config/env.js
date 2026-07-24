@@ -22,7 +22,8 @@ const DEFAULTS = {
  *
  */
 function getEnv(key, defaultValue) {
-    const value = import.meta.env[key];
+    const env = typeof import.meta !== 'undefined' && import.meta.env;
+    const value = env ? env[key] : undefined;
     if (value === undefined || value === '') return defaultValue;
     if (value === 'true') return true;
     if (value === 'false') return false;
