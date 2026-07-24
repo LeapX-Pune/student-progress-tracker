@@ -10,6 +10,7 @@
 @import './components/accessibility.css';
 @import './components/login.css';
 @import './components/image-loader.css';
+@import './components/lazy-loader.css';
 
 :root {
     --color-primary: #4f46e5;

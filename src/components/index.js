@@ -13,3 +13,4 @@ export { createLoadingSpinner } from './LoadingSpinner.js';
 export { createModal } from './Modal.js';
 export { createTooltip } from './Tooltip.js';
 export { createImageLoader } from './ImageLoader.js';
+export { createLazyLoader, createLazyImage } from './LazyLoader.js';
