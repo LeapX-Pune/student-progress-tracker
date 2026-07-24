@@ -83,7 +83,6 @@ function showAppView() {
     const appShell = document.querySelector('.app-shell');
     if (appShell) {
         appShell.style.display = '';
-        // Reinitialize Lucide icons for newly visible elements
         createIcons({ icons });
     }
 }
@@ -213,7 +212,6 @@ async function init() {
     const app = document.querySelector('.app-shell');
     if (app) app.classList.add('app--ready');
 
-    // Initialize Lucide icons after DOM is ready
     createIcons({ icons });
 }
 

@@ -241,6 +241,11 @@ svg {
     flex-shrink: 0;
 }
 
+svg.lucide {
+    width: 24px;
+    height: 24px;
+}
+
 .nav-icon svg,
 .icon-button svg,
 .menu-toggle svg,

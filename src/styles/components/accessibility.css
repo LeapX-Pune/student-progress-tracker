@@ -44,10 +44,6 @@ textarea,
     border-width: 0;
 }
 
-[aria-hidden='true'] {
-    display: none;
-}
-
 [aria-busy='true'] {
     cursor: progress;
 }
