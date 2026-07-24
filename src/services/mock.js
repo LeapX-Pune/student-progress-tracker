@@ -181,11 +181,64 @@ async function handleGetGrades(request) {
     });
 }
 
+/**
+ * Handle individual course fetch
+ */
+async function handleGetCourse(request) {
+    await delay(200);
+    const url = new URL(request.url);
+    const id = url.pathname.split('/').pop();
+
+    const course = mockCourses.find(c => c.id === id);
+    if (course) {
+        return new Response(JSON.stringify(course), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+
+    return new Response(JSON.stringify({ message: 'Course not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
+ * Handle course progress fetch
+ */
+async function handleGetCourseProgress(request) {
+    await delay(200);
+    const url = new URL(request.url);
+    const id = url.pathname.split('/')[3];
+
+    const course = mockCourses.find(c => c.id === id);
+    if (course) {
+        return new Response(
+            JSON.stringify({
+                id,
+                completedModules: course.completedModules,
+                totalModules: course.totalModules,
+            }),
+            {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            }
+        );
+    }
+
+    return new Response(JSON.stringify({ message: 'Course not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
 const routes = {
     'POST:/api/auth/login': handleLogin,
     'GET:/api/students/:id': handleGetStudent,
     'GET:/api/students/:id/courses': handleGetCourses,
     'GET:/api/students/:id/grades': handleGetGrades,
+    'GET:/api/courses/:id': handleGetCourse,
+    'GET:/api/courses/:id/progress': handleGetCourseProgress,
 };
 
 /**
