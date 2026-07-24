@@ -10,6 +10,8 @@ node_modules/
 
 # Build outputs
 dist/
+public/style.css
+public/script.js
 
 # Environment files
 .env

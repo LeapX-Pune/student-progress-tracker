@@ -2,10 +2,17 @@ import { build } from 'esbuild';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
+import { copyFileSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const rootDir = resolve(__dirname, '..');
+
+// Copy standalone source files referenced by index.html for dev server
+const srcDir = resolve(rootDir, 'src');
+const publicDir = resolve(rootDir, 'public');
+copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
+copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(publicDir, 'script.js'));
 
 // Start JSON Server mock API
 const mockApi = spawn(
