@@ -86,3 +86,31 @@ body {
 .skip-link:focus {
     top: 0;
 }
+
+/* ==========================
+   DARK THEME OVERRIDES
+   ========================== */
+
+body.dark {
+    --color-gray-50: #1e293b;
+    --color-gray-100: #253244;
+    --color-gray-200: #334155;
+    --color-gray-300: #475569;
+    --color-gray-400: #64748b;
+    --color-gray-500: #94a3b8;
+    --color-gray-600: #cbd5e1;
+    --color-gray-700: #e2e8f0;
+    --color-gray-800: #f1f5f9;
+    --color-gray-900: #f8fafc;
+
+    --color-primary-light: #312e81;
+    --color-success-light: #064e3b;
+    --color-warning-light: #78350f;
+    --color-error-light: #7f1d1d;
+    --color-info-light: #0c4a6e;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+}

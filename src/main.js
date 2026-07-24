@@ -3,7 +3,7 @@ import { createEmptyState } from './components/EmptyState.js';
 import { withErrorBoundary } from './components/ErrorBoundary.js';
 import { createLoadingSpinner } from './components/LoadingSpinner.js';
 import { createModal } from './components/Modal.js';
-import { renderSkeleton, removeSkeletons } from './components/SkeletonLoader.js';
+import { removeSkeletons } from './components/SkeletonLoader.js';
 import { showError, showInfo } from './components/Toast.js';
 import { createTooltip } from './components/Tooltip.js';
 import AuthContext from './context/AuthContext.js';
@@ -115,7 +115,7 @@ function wireLoadingStates() {
     if (!pageContent) return;
 
     document.addEventListener('pathway:route', () => {
-        renderSkeleton(pageContent, 'card', 3);
+        removeSkeletons(pageContent);
     });
 
     /**
@@ -130,7 +130,7 @@ function wireLoadingStates() {
  *
  */
 function wireTooltips() {
-    document.querySelectorAll('.icon-button, .nav-link, .action-btn-circle').forEach(el => {
+    document.querySelectorAll('.icon-button, .action-btn-circle').forEach(el => {
         const label =
             el.getAttribute('aria-label') || el.querySelector('.nav-label')?.textContent?.trim();
         if (label) {
