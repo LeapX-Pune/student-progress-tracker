@@ -1,4 +1,5 @@
 import './styles/main.css';
+import { createIcons, icons } from 'lucide';
 import { createEmptyState } from './components/EmptyState.js';
 import { withErrorBoundary } from './components/ErrorBoundary.js';
 import { createLoadingSpinner } from './components/LoadingSpinner.js';
@@ -82,9 +83,8 @@ function showAppView() {
     const appShell = document.querySelector('.app-shell');
     if (appShell) {
         appShell.style.display = '';
-        if (window.lucide) {
-            window.lucide.createIcons();
-        }
+        // Reinitialize Lucide icons for newly visible elements
+        createIcons({ icons });
     }
 }
 
@@ -147,6 +147,7 @@ function wireAppInteractions() {
     if (!pageContent) return;
 
     document.addEventListener('pathway:route', () => {
+        createIcons({ icons });
         if (!pageContent.querySelector('.route-placeholder, .settings-page')) {
             return;
         }
@@ -159,13 +160,16 @@ function wireAppInteractions() {
         const emptyEl = createEmptyState(opts);
         pageContent.innerHTML = '';
         pageContent.appendChild(emptyEl);
+        createIcons({ icons });
     };
 
     /**
      *
      */
     window._showModal = opts => {
-        return createModal(opts);
+        const modal = createModal(opts);
+        createIcons({ icons });
+        return modal;
     };
 
     document.querySelector('[data-notification-clear]')?.addEventListener('click', () => {
@@ -208,6 +212,13 @@ async function init() {
 
     const app = document.querySelector('.app-shell');
     if (app) app.classList.add('app--ready');
+
+    // Initialize Lucide icons after DOM is ready
+    createIcons({ icons });
 }
 
-document.addEventListener('DOMContentLoaded', init);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}

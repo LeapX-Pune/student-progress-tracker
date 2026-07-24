@@ -241,6 +241,30 @@ svg {
     flex-shrink: 0;
 }
 
+.nav-icon svg,
+.icon-button svg,
+.menu-toggle svg,
+.sidebar-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+.brand-glyph svg,
+.collapse-toggle svg {
+    width: 18px;
+    height: 18px;
+}
+
+.search-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.profile-chevron {
+    width: 16px;
+    height: 16px;
+}
+
 :focus-visible {
     outline: none;
     box-shadow: var(--shadow-focus);
@@ -566,7 +590,7 @@ svg {
     display: flex;
     align-items: center;
     gap: var(--space-4);
-    height: var(--header-height);
+    height: 64px; /* Increased from default for more breathing room */
     padding: 0 var(--space-4);
     border-bottom: 1px solid var(--border-subtle);
     background: var(--surface-header);
