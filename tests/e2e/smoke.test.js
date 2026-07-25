@@ -57,10 +57,10 @@ test.describe('Application Shell', () => {
     test('navigating to a different route updates breadcrumb and content', async ({ page }) => {
         await page.goto('/');
         await page.evaluate(() => {
-            window.location.hash = '#/students';
+            window.location.hash = '#/courses';
         });
-        await expect(page.locator('[data-breadcrumb-label]')).toHaveText('Students');
-        await expect(page.locator('.route-placeholder h2')).toHaveText('Students');
-        await expect(page).toHaveTitle(/Students.*The Reality/);
+        await expect(page.locator('[data-breadcrumb-label]')).toHaveText('Courses');
+        await expect(page.locator('.route-placeholder h2')).toHaveText('Courses');
+        await expect(page).toHaveTitle(/Courses.*The Reality/);
     });
 });

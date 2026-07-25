@@ -269,7 +269,6 @@ svg.lucide {
     width: 16px;
     height: 16px;
 }
-
 :focus-visible {
     outline: none;
     box-shadow: var(--shadow-focus);
@@ -295,6 +294,8 @@ svg.lucide {
     display: flex;
     align-items: stretch;
     min-height: 100vh;
+    padding: var(--space-3);
+    gap: var(--space-3);
 }
 
 /* --------------------------------------------------------------------------
@@ -305,11 +306,12 @@ svg.lucide {
     flex: 0 0 var(--sidebar-width);
     width: var(--sidebar-width);
     position: sticky;
-    top: 0;
+    top: var(--space-3);
     align-self: flex-start;
-    height: 100vh;
+    height: calc(100vh - var(--space-3) * 2);
+    border-radius: var(--radius-lg);
     background: var(--surface-sidebar);
-    border-right: 1px solid var(--border-subtle);
+    border: 1px solid var(--border-subtle);
     box-shadow: var(--shadow-sm);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -590,15 +592,17 @@ svg.lucide {
 
 .app-header {
     position: sticky;
-    top: 0;
+    top: var(--space-3);
     z-index: 30;
     display: flex;
     align-items: center;
     gap: var(--space-4);
-    height: 64px; /* Increased from default for more breathing room */
+    height: var(--header-height);
     padding: 0 var(--space-4);
-    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: var(--space-3);
+    border-radius: var(--radius-lg);
     background: var(--surface-header);
+    border: 1px solid var(--border-subtle);
     box-shadow: var(--shadow-sm);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -778,8 +782,8 @@ svg.lucide {
 
 .notification-panel {
     position: absolute;
-    top: calc(var(--header-height) + 4px);
-    right: var(--space-4);
+    top: calc(var(--header-height) + var(--space-3) + 4px);
+    right: var(--space-3);
     width: 300px;
     border-radius: var(--radius-lg);
     background: var(--surface-card);
@@ -1052,14 +1056,19 @@ svg.lucide {
 
 /* Tablet — sidebar becomes an off-canvas drawer */
 @media (max-width: 960px) {
+    .app-shell {
+        padding: var(--space-2);
+        gap: 0;
+    }
+
     .sidebar {
         position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
+        top: var(--space-2);
+        left: var(--space-2);
+        height: calc(100vh - var(--space-2) * 2);
         width: min(var(--sidebar-width), 82vw);
         flex-basis: min(var(--sidebar-width), 82vw);
-        transform: translateX(-100%);
+        transform: translateX(calc(-100% - var(--space-4)));
         transition: transform var(--duration-slow) var(--ease-out);
     }
 
@@ -1098,6 +1107,9 @@ svg.lucide {
         display: flex;
     }
 
+    .main-column {
+        padding-left: var(--space-2);
+    }
     .breadcrumb-current {
         font-size: var(--text-md);
     }
@@ -1109,7 +1121,12 @@ svg.lucide {
 
 /* Mobile */
 @media (max-width: 640px) {
+    .app-shell {
+        padding: var(--space-2) var(--space-2) 0;
+    }
+
     .app-header {
+        top: var(--space-2);
         padding: 0 var(--space-3);
         gap: var(--space-2);
     }
