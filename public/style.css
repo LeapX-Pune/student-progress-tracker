@@ -1459,12 +1459,158 @@ svg.lucide {
     font-size: 48px;
 }
 
-@media (max-width: 768px) {
+/* ==========================================================================
+   DAY 5 — RESPONSIVE DESIGN
+   ========================================================================== */
+
+/* Desktop (1025px and above) */
+@media (min-width: 1025px) {
     .charts-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+
+    .chart-card {
+        padding: var(--space-6);
     }
 
     .chart-container {
-        height: 240px;
+        height: 300px;
+    }
+
+    .skeleton-chart {
+        height: 180px;
+    }
+}
+
+/* Tablet (641px – 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .grades-header {
+        margin-bottom: 28px;
+    }
+
+    .grades-header h1 {
+        font-size: var(--text-xl);
+    }
+
+    .charts-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .chart-card {
+        padding: 20px;
+    }
+
+    .chart-container {
+        height: 260px;
+    }
+
+    .skeleton-chart {
+        height: 150px;
+    }
+
+    .loading-state,
+    .error-state,
+    .empty-state {
+        padding: 16px;
+    }
+
+    .state-icon {
+        font-size: 40px;
+    }
+
+    .retry-btn {
+        padding: 8px 18px;
+    }
+}
+
+/* Mobile (640px and below) */
+@media (max-width: 640px) {
+    .grades-header {
+        margin-bottom: 20px;
+    }
+
+    .grades-header h1 {
+        font-size: var(--text-lg);
+        margin-bottom: 6px;
+    }
+
+    .grades-header p {
+        font-size: var(--text-xs);
+    }
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .chart-card {
+        padding: 16px;
+        border-radius: var(--radius-lg);
+    }
+
+    .chart-title {
+        font-size: var(--text-base);
+        margin-bottom: 4px;
+    }
+
+    .chart-subtitle {
+        font-size: var(--text-xs);
+        margin-bottom: 14px;
+    }
+
+    .chart-container {
+        height: 220px;
+        border-radius: var(--radius-md);
+    }
+
+    .chart-placeholder-text {
+        font-size: var(--text-sm);
+    }
+
+    .loading-state,
+    .error-state,
+    .empty-state {
+        padding: 14px;
+        border-radius: var(--radius-md);
+        gap: 10px;
+    }
+
+    .skeleton-title {
+        height: 16px;
+    }
+
+    .skeleton-subtitle {
+        height: 10px;
+    }
+
+    .skeleton-chart {
+        height: 120px;
+    }
+
+    .skeleton-legend {
+        height: 12px;
+    }
+
+    .state-icon {
+        font-size: 36px;
+    }
+
+    .error-state h4,
+    .empty-state h4 {
+        font-size: var(--text-base);
+        margin: 8px 0 6px;
+    }
+
+    .error-state p,
+    .empty-state p {
+        font-size: var(--text-xs);
+        margin-bottom: 14px;
+    }
+
+    .retry-btn {
+        padding: 8px 16px;
+        font-size: var(--text-xs);
     }
 }
