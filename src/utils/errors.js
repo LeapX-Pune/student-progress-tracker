@@ -58,14 +58,16 @@ export function normalizeApiError(error) {
 /**
  *
  */
-export function handleGlobalErrors() {
+export function handleGlobalErrors(onError) {
     window.addEventListener('error', event => {
         console.error('Global error caught:', event.error || event.message);
+        if (onError) onError(event.error || { message: event.message });
         event.preventDefault();
     });
 
     window.addEventListener('unhandledrejection', event => {
         console.error('Unhandled promise rejection:', event.reason);
+        if (onError) onError(event.reason);
         event.preventDefault();
     });
 }

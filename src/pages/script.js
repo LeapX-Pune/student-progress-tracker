@@ -458,11 +458,11 @@
 
         if (!toggle) return;
 
-        if (localStorage.getItem('theme') === 'dark') {
+        if (localStorage.getItem('theme') === 'dark' || !localStorage.getItem('theme')) {
             document.body.classList.add('dark');
-
-            toggle.checked = true;
         }
+
+        toggle.checked = document.body.classList.contains('dark');
 
         toggle.addEventListener('change', () => {
             if (toggle.checked) {
@@ -507,7 +507,22 @@
         document.title = ROUTES[routeKey] + ' \u2014 The Reality';
 
         playPageTransition();
-        renderPlaceholder(routeKey);
+
+        try {
+            renderPlaceholder(routeKey);
+        } catch (err) {
+            console.error('Route render error:', err);
+            if (typeof window._showErrorBoundary === 'function') {
+                window._showErrorBoundary({
+                    title: 'Page Render Error',
+                    message: err.message || 'Failed to render this page.',
+                    /**
+                     *
+                     */
+                    onRetry: () => handleRouteChange(pushState),
+                });
+            }
+        }
 
         let event;
         if (typeof window.CustomEvent === 'function') {

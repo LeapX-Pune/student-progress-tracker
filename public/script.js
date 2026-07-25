@@ -458,11 +458,11 @@
 
         if (!toggle) return;
 
-        if (localStorage.getItem('theme') === 'dark') {
+        if (localStorage.getItem('theme') === 'dark' || !localStorage.getItem('theme')) {
             document.body.classList.add('dark');
-
-            toggle.checked = true;
         }
+
+        toggle.checked = document.body.classList.contains('dark');
 
         toggle.addEventListener('change', () => {
             if (toggle.checked) {
@@ -507,7 +507,22 @@
         document.title = ROUTES[routeKey] + ' \u2014 The Reality';
 
         playPageTransition();
-        renderPlaceholder(routeKey);
+
+        try {
+            renderPlaceholder(routeKey);
+        } catch (err) {
+            console.error('Route render error:', err);
+            if (typeof window._showErrorBoundary === 'function') {
+                window._showErrorBoundary({
+                    title: 'Page Render Error',
+                    message: err.message || 'Failed to render this page.',
+                    /**
+                     *
+                     */
+                    onRetry: () => handleRouteChange(pushState),
+                });
+            }
+        }
 
         let event;
         if (typeof window.CustomEvent === 'function') {
@@ -676,44 +691,56 @@
      Grades Page — Chart states & initialization
    ------------------------------------------------------------------------ */
 
+    /**
+     *
+     */
     function showLoading(container) {
-        var ls = container.querySelector('.loading-state');
-        var es = container.querySelector('.error-state');
-        var ems = container.querySelector('.empty-state');
-        var ph = container.querySelector('.chart-placeholder-text');
+        const ls = container.querySelector('.loading-state');
+        const es = container.querySelector('.error-state');
+        const ems = container.querySelector('.empty-state');
+        const ph = container.querySelector('.chart-placeholder-text');
         if (ls) ls.style.display = 'flex';
         if (es) es.style.display = 'none';
         if (ems) ems.style.display = 'none';
         if (ph) ph.style.display = 'none';
     }
 
+    /**
+     *
+     */
     function showChart(container) {
-        var ls = container.querySelector('.loading-state');
-        var es = container.querySelector('.error-state');
-        var ems = container.querySelector('.empty-state');
-        var ph = container.querySelector('.chart-placeholder-text');
+        const ls = container.querySelector('.loading-state');
+        const es = container.querySelector('.error-state');
+        const ems = container.querySelector('.empty-state');
+        const ph = container.querySelector('.chart-placeholder-text');
         if (ls) ls.style.display = 'none';
         if (es) es.style.display = 'none';
         if (ems) ems.style.display = 'none';
         if (ph) ph.style.display = 'flex';
     }
 
+    /**
+     *
+     */
     function initGradesPage() {
-        var containers = document.querySelectorAll('.chart-container');
+        const containers = document.querySelectorAll('.chart-container');
         if (!containers.length) return;
 
-        containers.forEach(function (container) {
+        containers.forEach(container => {
             showLoading(container);
-            setTimeout(function () {
+            setTimeout(() => {
                 showChart(container);
             }, 2500);
         });
 
-        document.querySelectorAll('.retry-btn').forEach(function (btn) {
+        document.querySelectorAll('.retry-btn').forEach(btn => {
+            /**
+             *
+             */
             btn.onclick = function () {
-                var c = this.closest('.chart-container');
+                const c = this.closest('.chart-container');
                 showLoading(c);
-                setTimeout(function () {
+                setTimeout(() => {
                     showChart(c);
                 }, 2000);
             };

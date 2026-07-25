@@ -68,3 +68,12 @@ if (existsSync(resolve(publicDir, 'assets'))) {
 const srcDir = resolve(rootDir, 'src');
 copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(distDir, 'style.css'));
 copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(distDir, 'script.js'));
+
+// Copy assets for standalone HTML pages
+copyFileSync(resolve(publicDir, 'dashboard.html'), resolve(distDir, 'dashboard.html'));
+copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(distDir, 'dashboard.css'));
+copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.js'), resolve(distDir, 'dashboard.js'));
+copyFileSync(
+    resolve(publicDir, 'course-progress-demo.html'),
+    resolve(distDir, 'course-progress-demo.html')
+);
