@@ -26,6 +26,7 @@ const quizConfig = {
 
     options: {
         responsive: true,
+        maintainAspectRatio: false,
 
         plugins: {
             legend: {
@@ -33,11 +34,7 @@ const quizConfig = {
             },
 
             title: {
-                display: true,
-                text: 'Quiz Scores (%)',
-                font: {
-                    size: 20,
-                },
+                display: false,
             },
 
             tooltip: {
@@ -58,6 +55,7 @@ const quizConfig = {
                 max: 100,
 
                 ticks: {
+                    font: { size: 11 },
                     /**
                      *
                      */
@@ -67,15 +65,19 @@ const quizConfig = {
                 },
 
                 title: {
-                    display: true,
-                    text: 'Percentage',
+                    display: false,
                 },
             },
 
             x: {
+                ticks: {
+                    font: { size: 11 },
+                    maxRotation: 0,
+                    minRotation: 0,
+                },
+
                 title: {
-                    display: true,
-                    text: 'Quizzes',
+                    display: false,
                 },
             },
         },

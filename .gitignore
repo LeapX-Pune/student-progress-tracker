@@ -36,6 +36,7 @@ project-docs/
 
 # Agent Related
 .opencode/
+.kiro/
 SKILL.md
 skills-lock.json
 graphify-out/
