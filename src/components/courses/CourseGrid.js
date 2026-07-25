@@ -14,10 +14,8 @@ export function mountCourseGrid(containerElement, coursesData) {
 
     if (!coursesData || coursesData.length === 0) {
         const emptyState = document.createElement('div');
+        emptyState.className = 'course-progress-grid__empty';
         emptyState.textContent = 'No courses found.';
-        emptyState.style.padding = '40px';
-        emptyState.style.textAlign = 'center';
-        emptyState.style.color = '#6b7280';
         containerElement.appendChild(emptyState);
         return;
     }
