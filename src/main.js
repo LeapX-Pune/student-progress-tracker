@@ -199,6 +199,8 @@ async function init() {
     wireTooltips();
     wireAppInteractions();
 
+    createIcons({ icons });
+
     const spinner = createLoadingSpinner({ size: 'lg', label: 'Loading application...' });
     spinner.style.cssText =
         'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;';

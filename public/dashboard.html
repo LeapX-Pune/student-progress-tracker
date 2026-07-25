@@ -12,7 +12,19 @@
     <!-- Dark mode: apply class before paint to avoid flash -->
     <script>
         if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark');
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <script>
+        function applyTheme() {
+            var isDark = localStorage.getItem('theme') === 'dark' || document.documentElement.classList.contains('dark');
+            if (isDark) document.body.classList.add('dark');
+            else document.body.classList.remove('dark');
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', applyTheme);
+        } else {
+            applyTheme();
         }
     </script>
     <!-- Link the JS file copied from src/dashboard -->
