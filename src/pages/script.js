@@ -265,6 +265,174 @@
             return;
         }
 
+        if (routeKey === 'grades') {
+            pageContent.innerHTML = `
+        <div class="grades-dashboard">
+            <header class="grades-header">
+                <h1>Grades</h1>
+                <p>Visual representation of academic statistics and performance metrics.</p>
+            </header>
+
+            <div class="charts-grid">
+
+                <article class="chart-card">
+                    <h3 class="chart-title">Project Progress</h3>
+                    <p class="chart-subtitle">Overall completion status of active projects.</p>
+                    <div class="chart-container">
+                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
+                        <div class="loading-state">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-subtitle"></div>
+                            <div class="skeleton skeleton-chart"></div>
+                            <div class="skeleton skeleton-legend"></div>
+                        </div>
+                        <div class="error-state">
+                            <span class="state-icon">&#9888;&#65039;</span>
+                            <h4>Failed to Load Chart</h4>
+                            <p>Something went wrong while fetching the data.</p>
+                            <button class="retry-btn">Retry</button>
+                        </div>
+                        <div class="empty-state">
+                            <span class="state-icon">&#128202;</span>
+                            <h4>No Data Available</h4>
+                            <p>There is no data to display for this chart yet.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <h3 class="chart-title">Task Distribution</h3>
+                    <p class="chart-subtitle">Tasks categorized by current workflow stage.</p>
+                    <div class="chart-container">
+                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
+                        <div class="loading-state">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-subtitle"></div>
+                            <div class="skeleton skeleton-chart"></div>
+                            <div class="skeleton skeleton-legend"></div>
+                        </div>
+                        <div class="error-state">
+                            <span class="state-icon">&#9888;&#65039;</span>
+                            <h4>Failed to Load Chart</h4>
+                            <p>Something went wrong while fetching the data.</p>
+                            <button class="retry-btn">Retry</button>
+                        </div>
+                        <div class="empty-state">
+                            <span class="state-icon">&#128202;</span>
+                            <h4>No Data Available</h4>
+                            <p>There is no data to display for this chart yet.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <h3 class="chart-title">Monthly Activity</h3>
+                    <p class="chart-subtitle">Team productivity over recent months.</p>
+                    <div class="chart-container">
+                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
+                        <div class="loading-state">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-subtitle"></div>
+                            <div class="skeleton skeleton-chart"></div>
+                            <div class="skeleton skeleton-legend"></div>
+                        </div>
+                        <div class="error-state">
+                            <span class="state-icon">&#9888;&#65039;</span>
+                            <h4>Failed to Load Chart</h4>
+                            <p>Something went wrong while fetching the data.</p>
+                            <button class="retry-btn">Retry</button>
+                        </div>
+                        <div class="empty-state">
+                            <span class="state-icon">&#128202;</span>
+                            <h4>No Data Available</h4>
+                            <p>There is no data to display for this chart yet.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <h3 class="chart-title">User Growth</h3>
+                    <p class="chart-subtitle">Growth of registered users over time.</p>
+                    <div class="chart-container">
+                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
+                        <div class="loading-state">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-subtitle"></div>
+                            <div class="skeleton skeleton-chart"></div>
+                            <div class="skeleton skeleton-legend"></div>
+                        </div>
+                        <div class="error-state">
+                            <span class="state-icon">&#9888;&#65039;</span>
+                            <h4>Failed to Load Chart</h4>
+                            <p>Something went wrong while fetching the data.</p>
+                            <button class="retry-btn">Retry</button>
+                        </div>
+                        <div class="empty-state">
+                            <span class="state-icon">&#128202;</span>
+                            <h4>No Data Available</h4>
+                            <p>There is no data to display for this chart yet.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <h3 class="chart-title">Revenue Overview</h3>
+                    <p class="chart-subtitle">Monthly revenue generated from all services.</p>
+                    <div class="chart-container">
+                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
+                        <div class="loading-state">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-subtitle"></div>
+                            <div class="skeleton skeleton-chart"></div>
+                            <div class="skeleton skeleton-legend"></div>
+                        </div>
+                        <div class="error-state">
+                            <span class="state-icon">&#9888;&#65039;</span>
+                            <h4>Failed to Load Chart</h4>
+                            <p>Something went wrong while fetching the data.</p>
+                            <button class="retry-btn">Retry</button>
+                        </div>
+                        <div class="empty-state">
+                            <span class="state-icon">&#128202;</span>
+                            <h4>No Data Available</h4>
+                            <p>There is no data to display for this chart yet.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <h3 class="chart-title">Performance Comparison</h3>
+                    <p class="chart-subtitle">Comparison of key business metrics.</p>
+                    <div class="chart-container">
+                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
+                        <div class="loading-state">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-subtitle"></div>
+                            <div class="skeleton skeleton-chart"></div>
+                            <div class="skeleton skeleton-legend"></div>
+                        </div>
+                        <div class="error-state">
+                            <span class="state-icon">&#9888;&#65039;</span>
+                            <h4>Failed to Load Chart</h4>
+                            <p>Something went wrong while fetching the data.</p>
+                            <button class="retry-btn">Retry</button>
+                        </div>
+                        <div class="empty-state">
+                            <span class="state-icon">&#128202;</span>
+                            <h4>No Data Available</h4>
+                            <p>There is no data to display for this chart yet.</p>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+        `;
+
+            initGradesPage();
+            return;
+        }
+
         if (routeKey === 'students') {
             pageContent.innerHTML = `
                 <iframe src="dashboard.html" style="width: 100%; height: calc(100vh - 140px); border: none; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); background: transparent;" title="Student Dashboard"></iframe>
@@ -527,8 +695,68 @@
     }
 
     /* ------------------------------------------------------------------------
+     Grades Page — Chart states & initialization
+   ------------------------------------------------------------------------ */
+
+    /**
+     *
+     */
+    function showLoading(container) {
+        const ls = container.querySelector('.loading-state');
+        const es = container.querySelector('.error-state');
+        const ems = container.querySelector('.empty-state');
+        const ph = container.querySelector('.chart-placeholder-text');
+        if (ls) ls.style.display = 'flex';
+        if (es) es.style.display = 'none';
+        if (ems) ems.style.display = 'none';
+        if (ph) ph.style.display = 'none';
+    }
+
+    /**
+     *
+     */
+    function showChart(container) {
+        const ls = container.querySelector('.loading-state');
+        const es = container.querySelector('.error-state');
+        const ems = container.querySelector('.empty-state');
+        const ph = container.querySelector('.chart-placeholder-text');
+        if (ls) ls.style.display = 'none';
+        if (es) es.style.display = 'none';
+        if (ems) ems.style.display = 'none';
+        if (ph) ph.style.display = 'flex';
+    }
+
+    /**
+     *
+     */
+    function initGradesPage() {
+        const containers = document.querySelectorAll('.chart-container');
+        if (!containers.length) return;
+
+        containers.forEach(container => {
+            showLoading(container);
+            setTimeout(() => {
+                showChart(container);
+            }, 2500);
+        });
+
+        document.querySelectorAll('.retry-btn').forEach(btn => {
+            /**
+             *
+             */
+            btn.onclick = function () {
+                const c = this.closest('.chart-container');
+                showLoading(c);
+                setTimeout(() => {
+                    showChart(c);
+                }, 2000);
+            };
+        });
+    }
+
+    /* ------------------------------------------------------------------------
      Init
-  ------------------------------------------------------------------------ */
+   ------------------------------------------------------------------------ */
 
     /**
      *
