@@ -9,7 +9,7 @@
  *
  * ─── Usage ────────────────────────────────────────────────────────────────────
  *
- *   const guard = createAuthGuard(pageContainer, '/dashboard');
+ *   const guard = createAuthGuard(pageContainer, '/overview');
  *
  *   // Call render() after calling AuthContext.restoreSession():
  *   await AuthContext.restoreSession();
@@ -40,7 +40,7 @@ import { buildLoginRedirectUrl, sanitizePath } from '../../utils/authHelpers.js'
  * @returns {{ render: function, watch: function, unwatch: function }}
  *
  * @example
- * const guard = createAuthGuard(document.getElementById('main'), '/dashboard');
+ * const guard = createAuthGuard(document.getElementById('main'), '/overview');
  * await AuthContext.restoreSession();
  * guard.watch(); // starts reacting to auth changes
  */

@@ -41,7 +41,7 @@ export function createCheckbox({
     onChange,
 } = {}) {
     const wrapper = document.createElement('div');
-    wrapper.className = `checkbox${className ? ` ${className}` : ''}`;
+    wrapper.className = `flex items-center gap-2 mt-4${className ? ` ${className}` : ''}`;
 
     const input = document.createElement('input');
     input.type = 'checkbox';
@@ -49,7 +49,8 @@ export function createCheckbox({
     input.name = name;
     input.checked = checked;
     input.disabled = disabled;
-    input.className = 'checkbox__input';
+    input.className =
+        'w-4 h-4 text-primary bg-surface border-outline-variant rounded focus:ring-primary focus:ring-2';
 
     if (typeof onChange === 'function') {
         input.addEventListener('change', onChange);
@@ -57,7 +58,7 @@ export function createCheckbox({
 
     const labelEl = document.createElement('label');
     labelEl.htmlFor = id;
-    labelEl.className = 'checkbox__label';
+    labelEl.className = 'font-label-sm text-label-sm text-on-surface select-none cursor-pointer';
     labelEl.textContent = label ?? '';
 
     wrapper.appendChild(input);

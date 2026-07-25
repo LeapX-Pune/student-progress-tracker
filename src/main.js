@@ -23,6 +23,12 @@ function handleRouteMount(route) {
         activePageHandle = null;
     }
 
+    const { isAuthenticated } = AuthContext.getState();
+    if (!isAuthenticated && route !== 'login') {
+        window.location.hash = '#/login';
+        return;
+    }
+
     if (route === 'login') {
         if (appShell) appShell.classList.add('is-auth-view');
         if (pageContent) {
@@ -62,6 +68,14 @@ async function init() {
     });
 
     handleRouteMount(currentHash || (isAuthenticated ? 'overview' : 'login'));
+
+    const signOutBtn = document.querySelector('.profile-dropdown-item--danger');
+    if (signOutBtn) {
+        signOutBtn.addEventListener('click', () => {
+            AuthContext.logout();
+            window.location.hash = '#/login';
+        });
+    }
 
     const app = document.getElementById('app');
     if (app) {

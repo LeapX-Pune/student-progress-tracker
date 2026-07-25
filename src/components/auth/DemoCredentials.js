@@ -30,34 +30,35 @@ import { AUTH_CONSTANTS } from '../../utils/constants.js';
  */
 export function createDemoCredentials({ onFill } = {}) {
     const block = document.createElement('div');
-    block.className = 'demo-credentials';
+    block.className =
+        'p-3 bg-surface-container-low border border-outline-variant rounded-lg text-left';
     block.setAttribute('role', 'note');
     block.setAttribute('aria-label', 'Demo login credentials');
 
     const heading = document.createElement('p');
-    heading.className = 'demo-credentials__heading';
+    heading.className = 'font-label-sm text-label-sm text-primary mb-2 font-medium';
     heading.textContent = 'Demo credentials';
     block.appendChild(heading);
 
     // Email row
     const emailRow = document.createElement('p');
-    emailRow.className = 'demo-credentials__row';
-    emailRow.innerHTML = `<span class="demo-credentials__key">Email:</span>
-      <code class="demo-credentials__value">${AUTH_CONSTANTS.DEMO_EMAIL}</code>`;
+    emailRow.className = 'font-body-sm text-body-sm text-on-surface-variant mb-1';
+    emailRow.innerHTML = `<span>Email:</span>
+      <code class="ml-1 font-mono text-on-surface bg-surface-container px-1 py-0.5 rounded">${AUTH_CONSTANTS.DEMO_EMAIL}</code>`;
     block.appendChild(emailRow);
 
     // Password row
     const passRow = document.createElement('p');
-    passRow.className = 'demo-credentials__row';
-    passRow.innerHTML = `<span class="demo-credentials__key">Password:</span>
-      <code class="demo-credentials__value">${AUTH_CONSTANTS.DEMO_PASSWORD}</code>`;
+    passRow.className = 'font-body-sm text-body-sm text-on-surface-variant mb-2';
+    passRow.innerHTML = `<span>Password:</span>
+      <code class="ml-1 font-mono text-on-surface bg-surface-container px-1 py-0.5 rounded">${AUTH_CONSTANTS.DEMO_PASSWORD}</code>`;
     block.appendChild(passRow);
 
     // Auto-fill button (only rendered when a handler is provided)
     if (typeof onFill === 'function') {
         const fillBtn = document.createElement('button');
         fillBtn.type = 'button';
-        fillBtn.className = 'demo-credentials__fill-btn';
+        fillBtn.className = 'text-xs font-medium text-primary hover:underline focus:outline-none';
         fillBtn.textContent = 'Use demo credentials';
         fillBtn.addEventListener('click', () => {
             onFill({ email: AUTH_CONSTANTS.DEMO_EMAIL, password: AUTH_CONSTANTS.DEMO_PASSWORD });

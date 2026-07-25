@@ -17,7 +17,7 @@
 /** Hash-router path constants used across the application. */
 export const ROUTES = /** @type {const} */ ({
     LOGIN: '/login',
-    DASHBOARD: '/dashboard',
+    DASHBOARD: '/overview',
     NOT_FOUND: '/404',
 });
 

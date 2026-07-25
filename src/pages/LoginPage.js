@@ -10,13 +10,14 @@
  *
  * Responsibilities:
  *   - Set `document.title` on mount
- *   - Redirect to /dashboard if the user is already authenticated
+ *   - Redirect to /overview if the user is already authenticated
  *   - Compose LoginForm with a navigation callback
  *   - Clean up subscriptions and child components on destroy
  *
  * @module pages/LoginPage
  */
 
+import heroIllustrationUrl from '../assets/auth/hero-illustration.jpg';
 import { createLoginForm } from '../components/auth/LoginForm.js';
 import AuthContext from '../context/AuthContext.js';
 
@@ -42,7 +43,7 @@ export function createLoginPage(container) {
     const { isAuthenticated, isLoading } = AuthContext.getState();
 
     if (!isLoading && isAuthenticated) {
-        window.location.hash = '/dashboard';
+        window.location.hash = '/overview';
         return {
             /**
              * No-op destroy handle when user is already authenticated.
@@ -58,156 +59,106 @@ export function createLoginPage(container) {
 
     // ── Build page wrapper shell ──────────────────────────────────────────────
     const pageWrapper = document.createElement('div');
-    pageWrapper.className = 'auth-page-wrapper';
     pageWrapper.id = 'login-page';
+    pageWrapper.style.cssText =
+        'width: 100%; height: 100%; display: flex; flex-direction: column; background-color: var(--surface); color: var(--on-surface); font-family: "Inter", sans-serif;';
 
-    const mainContainer = document.createElement('main');
-    mainContainer.className = 'auth-main-container';
+    // Add tailwind outer classes
+    pageWrapper.className =
+        'bg-surface text-on-surface font-body-md antialiased min-h-screen flex flex-col selection:bg-primary-fixed selection:text-on-primary-fixed';
 
-    // ── Left Showcase Panel (55% desktop) ─────────────────────────────────────
-    const showcasePanel = document.createElement('section');
-    showcasePanel.className = 'auth-showcase-panel';
-
-    const showcaseInner = document.createElement('div');
-    showcaseInner.className = 'auth-showcase-inner fade-in-up';
-
-    // Hero Illustration
-    const heroWrapper = document.createElement('div');
-    heroWrapper.className = 'auth-hero-illustration-wrapper';
-
-    const heroImg = document.createElement('img');
-    heroImg.src = '/src/assets/auth/hero-illustration.jpg';
-    heroImg.alt = 'The Reality Student Progress Illustration';
-    heroImg.className = 'auth-hero-illustration';
-    /**
-     * Fallback if illustration is unreadable.
-     */
-    heroImg.onerror = () => {
-        heroImg.style.display = 'none';
-    };
-    heroWrapper.appendChild(heroImg);
-
-    // Hero Title & Subtitle
-    const heroTextGroup = document.createElement('div');
-    heroTextGroup.style.cssText = 'text-align: center; margin-bottom: 2rem;';
-    heroTextGroup.className = 'fade-in-up delay-100';
-
-    const heroTitle = document.createElement('h1');
-    heroTitle.className = 'auth-showcase-title';
-    heroTitle.textContent = 'Student Progress Tracker';
-
-    const heroSubtitle = document.createElement('p');
-    heroSubtitle.className = 'auth-showcase-subtitle';
-    heroSubtitle.textContent = 'Track Learning. Measure Growth. Empower Education.';
-
-    heroTextGroup.appendChild(heroTitle);
-    heroTextGroup.appendChild(heroSubtitle);
-
-    // 4 Key Feature Cards
-    const featuresGrid = document.createElement('div');
-    featuresGrid.className = 'auth-features-grid fade-in-up delay-200';
-
-    const featuresData = [
-        {
-            icon: 'monitoring',
-            variant: 'primary',
-            title: 'Performance Analytics',
-            desc: 'Deep insights into student grades and trends.',
-        },
-        {
-            icon: 'psychology',
-            variant: 'secondary',
-            title: 'Student Tracking',
-            desc: 'Monitor individual progress across all subjects.',
-        },
-        {
-            icon: 'assignment',
-            variant: 'tertiary',
-            title: 'Assignment Management',
-            desc: 'Streamlined submission and grading workflow.',
-        },
-        {
-            icon: 'notifications_active',
-            variant: 'error',
-            title: 'Real-time Alerts',
-            desc: 'Instant notifications for deadlines and updates.',
-        },
-    ];
-
-    featuresData.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'auth-feature-card';
-
-        const iconBox = document.createElement('div');
-        iconBox.className = `auth-feature-icon-box auth-feature-icon-box--${item.variant}`;
-        iconBox.innerHTML = `<span class="material-symbols-outlined text-[20px]">${item.icon}</span>`;
-
-        const content = document.createElement('div');
-
-        const cardTitle = document.createElement('h3');
-        cardTitle.className = 'auth-feature-card-title';
-        cardTitle.textContent = item.title;
-
-        const cardDesc = document.createElement('p');
-        cardDesc.className = 'auth-feature-card-desc';
-        cardDesc.textContent = item.desc;
-
-        content.appendChild(cardTitle);
-        content.appendChild(cardDesc);
-
-        card.appendChild(iconBox);
-        card.appendChild(content);
-
-        featuresGrid.appendChild(card);
-    });
-
-    showcaseInner.appendChild(heroWrapper);
-    showcaseInner.appendChild(heroTextGroup);
-    showcaseInner.appendChild(featuresGrid);
-
-    showcasePanel.appendChild(showcaseInner);
-
-    // Background Glow Accents
-    const glow1 = document.createElement('div');
-    glow1.className = 'auth-glow-accent-1';
-    const glow2 = document.createElement('div');
-    glow2.className = 'auth-glow-accent-2';
-
-    showcasePanel.appendChild(glow1);
-    showcasePanel.appendChild(glow2);
-
-    // ── Right Form Panel (45% desktop) ────────────────────────────────────────
-    const formPanel = document.createElement('section');
-    formPanel.className = 'auth-form-panel';
-
-    const formMountContainer = document.createElement('div');
-    formMountContainer.style.cssText = 'width: 100%; display: flex; justify-content: center;';
-
-    formPanel.appendChild(formMountContainer);
-
-    mainContainer.appendChild(showcasePanel);
-    mainContainer.appendChild(formPanel);
-    pageWrapper.appendChild(mainContainer);
-
-    // ── Footer Section ────────────────────────────────────────────────────────
-    const footer = document.createElement('footer');
-    footer.className = 'auth-footer';
-
-    footer.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span class="auth-footer-brand">The Reality</span>
-            <span class="auth-footer-copy">© 2024 The Reality Academy. All rights reserved.</span>
+    pageWrapper.innerHTML = `
+  <main class="flex-grow flex w-full">
+    <section class="hidden lg:flex w-[55%] flex-col relative overflow-hidden bg-surface-container-lowest border-r border-outline-variant p-lg">
+      <div class="flex-grow flex flex-col justify-center max-w-2xl mx-auto w-full z-10 fade-in-up">
+        
+        <!-- Hero Branding Illustration -->
+        <div class="mb-[60px] w-full flex justify-center h-[45vh] items-center relative">
+          <img 
+            alt="The Reality Student Progress Illustration" 
+            class="max-h-full object-contain drop-shadow-sm mix-blend-multiply" 
+            src="${heroIllustrationUrl}"
+          />
         </div>
-        <nav class="auth-footer-links">
-            <a class="auth-footer-link" href="#">Privacy Policy</a>
-            <a class="auth-footer-link" href="#">Terms of Service</a>
-            <a class="auth-footer-link" href="#">Help Center</a>
-            <a class="auth-footer-link" href="#">Contact</a>
-        </nav>
+
+        <!-- Hero Title & Subtitle -->
+        <div class="text-center mb-[60px] fade-in-up delay-100">
+          <h1 class="font-display-lg text-[40px] leading-[48px] text-primary mb-sm">Student Progress Tracker</h1>
+          <p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg mx-auto">Track Learning. Measure Growth. Empower Education.</p>
+        </div>
+
+        <!-- Key Feature Highlights Grid (2 Columns) -->
+        <div class="grid grid-cols-2 gap-[20px] fade-in-up delay-200">
+          
+          <div class="bg-surface-container-low p-[20px] rounded-2xl border border-outline-variant/50 hover:border-primary/20 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex items-start gap-3 shadow-sm">
+            <div class="p-2 bg-primary-fixed/30 rounded-lg text-primary-container shrink-0 mt-1">
+              <span class="material-symbols-outlined text-[18px]">monitoring</span>
+            </div>
+            <div>
+              <h3 class="font-label-sm text-label-sm text-on-surface mb-1">Performance Analytics</h3>
+              <p class="text-[13px] text-on-surface-variant leading-tight">Deep insights into student grades and trends.</p>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-low p-[20px] rounded-2xl border border-outline-variant/50 hover:border-primary/20 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex items-start gap-3 shadow-sm">
+            <div class="p-2 bg-secondary-fixed/30 rounded-lg text-on-secondary-container shrink-0 mt-1">
+              <span class="material-symbols-outlined text-[18px]">psychology</span>
+            </div>
+            <div>
+              <h3 class="font-label-sm text-label-sm text-on-surface mb-1">Student Tracking</h3>
+              <p class="text-[13px] text-on-surface-variant leading-tight">Monitor individual progress across all subjects.</p>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-low p-[20px] rounded-2xl border border-outline-variant/50 hover:border-primary/20 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex items-start gap-3 shadow-sm">
+            <div class="p-2 bg-tertiary-fixed/30 rounded-lg text-on-tertiary-container shrink-0 mt-1">
+              <span class="material-symbols-outlined text-[18px]">assignment</span>
+            </div>
+            <div>
+              <h3 class="font-label-sm text-label-sm text-on-surface mb-1">Assignment Management</h3>
+              <p class="text-[13px] text-on-surface-variant leading-tight">Streamlined submission and grading workflow.</p>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-low p-[20px] rounded-2xl border border-outline-variant/50 hover:border-primary/20 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex items-start gap-3 shadow-sm">
+            <div class="p-2 bg-error-container/30 rounded-lg text-on-error-container shrink-0 mt-1">
+              <span class="material-symbols-outlined text-[18px]">notifications_active</span>
+            </div>
+            <div>
+              <h3 class="font-label-sm text-label-sm text-on-surface mb-1">Real-time Alerts</h3>
+              <p class="text-[13px] text-on-surface-variant leading-tight">Instant notifications for deadlines and updates.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="absolute top-0 right-0 w-96 h-96 bg-primary-fixed/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+      <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary-fixed/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 pointer-events-none"></div>
+    </section>
+
+    <!-- RIGHT AUTHENTICATION PANEL -->
+    <section id="form-mount-container" class="w-full lg:w-[45%] flex items-center justify-center p-[20px] sm:p-lg bg-surface relative">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-fixed/20 via-surface to-surface lg:hidden z-0 pointer-events-none"></div>
+    </section>
+  </main>
+
+  <footer class="bg-surface-container-lowest border-t border-outline-variant w-full py-md px-gutter flex flex-col md:flex-row justify-between items-center z-20">
+    <div class="flex items-center gap-2 mb-4 md:mb-0">
+      <span class="text-label-sm font-bold text-primary">The Reality</span>
+      <span class="font-label-xs text-label-xs text-on-surface-variant">© 2024 The Reality Academy. All rights reserved.</span>
+    </div>
+    <nav class="flex gap-[20px]">
+      <a class="font-label-xs text-label-xs text-on-surface-variant hover:underline transition-all opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+      <a class="font-label-xs text-label-xs text-on-surface-variant hover:underline transition-all opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+      <a class="font-label-xs text-label-xs text-on-surface-variant hover:underline transition-all opacity-80 hover:opacity-100" href="#">Help Center</a>
+      <a class="font-label-xs text-label-xs text-on-surface-variant hover:underline transition-all opacity-80 hover:opacity-100" href="#">Contact</a>
+    </nav>
+  </footer>
     `;
 
-    pageWrapper.appendChild(footer);
     container.appendChild(pageWrapper);
+    const formMountContainer = pageWrapper.querySelector('#form-mount-container');
 
     // ── Mount LoginForm into form panel ──────────────────────────────────────
     const loginFormHandle = createLoginForm(formMountContainer, {
@@ -225,7 +176,7 @@ export function createLoginPage(container) {
     // ── Subscribe to AuthContext to handle mid-session auth changes ───────────
     const unsubscribe = AuthContext.subscribe(({ isAuthenticated: authed }) => {
         if (authed) {
-            window.location.hash = '/dashboard';
+            window.location.hash = '/overview';
         }
     });
 

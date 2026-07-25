@@ -1,4 +1,4 @@
-import { build } from 'esbuild';
+import { context } from 'esbuild';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
@@ -23,7 +23,7 @@ const mockApi = spawn(
 );
 
 // esbuild watch mode
-const ctx = await build({
+const ctx = await context({
     entryPoints: ['src/main.js'],
     bundle: true,
     outfile: 'public/main.js',
@@ -31,7 +31,6 @@ const ctx = await build({
     target: 'es2022',
     sourcemap: 'inline',
     splitting: false,
-    outdir: 'public',
     publicPath: '/',
     loader: {
         '.css': 'css',
@@ -44,14 +43,35 @@ const ctx = await build({
     define: {
         'import.meta.env.DEV': 'true',
         'import.meta.env.PROD': 'false',
-        'import.meta.env.VITE_API_URL': '"http://localhost:3001/api"',
+        'import.meta.env.VITE_APP_NAME': '"Student Progress Tracker"',
+        'import.meta.env.VITE_APP_VERSION': '"0.1.0"',
+        'import.meta.env.VITE_APP_ENV': '"development"',
+        'import.meta.env.VITE_API_BASE_URL': '"http://localhost:3001/api"',
+        'import.meta.env.VITE_API_TIMEOUT': '"10000"',
+        'import.meta.env.VITE_API_MOCK_ENABLED': '"true"',
+        'import.meta.env.VITE_AUTH_TOKEN_KEY': '"student_tracker_auth"',
+        'import.meta.env.VITE_AUTH_REDIRECT_KEY': '"student_tracker_redirect"',
+        'import.meta.env.VITE_AUTH_REMEMBER_DAYS': '"30"',
+        'import.meta.env.VITE_SESSION_TIMEOUT_MINUTES': '"60"',
+        'import.meta.env.VITE_ENABLE_MOCK_API': '"true"',
+        'import.meta.env.VITE_ENABLE_PWA': '"false"',
+        'import.meta.env.VITE_ENABLE_ANALYTICS': '"false"',
+        'import.meta.env.VITE_ENABLE_NOTIFICATIONS': '"true"',
+        'import.meta.env.VITE_CACHE_TTL_SECONDS': '"300"',
+        'import.meta.env.VITE_CHART_ANIMATION_DURATION': '"750"',
+        'import.meta.env.VITE_CHART_RESPONSIVE': '"true"',
     },
-    watch: {
-        onRebuild(error) {
-            if (error) console.error('Rebuild failed:', error);
-            else console.log('Rebuild complete');
+    plugins: [
+        {
+            name: 'watch-plugin',
+            setup(build) {
+                build.onEnd(result => {
+                    if (result.errors.length > 0) console.error('Rebuild failed:', result.errors);
+                    else console.log('Rebuild complete');
+                });
+            },
         },
-    },
+    ],
 });
 
 await ctx.watch();

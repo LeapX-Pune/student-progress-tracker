@@ -92,9 +92,10 @@ function delay(ms) {
 /**
  *
  */
-async function handleLogin(url, options) {
+async function handleLogin(request) {
     await delay(300);
-    const body = JSON.parse(options.body || '{}');
+    const bodyText = await request.text();
+    const body = JSON.parse(bodyText || '{}');
 
     if (body.email === 'student@demo.com' && body.password === 'demo123') {
         return new Response(

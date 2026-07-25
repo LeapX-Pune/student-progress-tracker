@@ -20,7 +20,7 @@ import { ROUTES } from '../utils/constants.js';
  * the login page with the intended path saved in a query parameter.
  *
  * @param {Object} context - The routing context
- * @param {string} context.path - The target path (e.g. '/dashboard')
+ * @param {string} context.path - The target path (e.g. '/overview')
  * @returns {{ redirect: string, params: { redirect: string } } | null}
  *   Redirect descriptor if unauthenticated, null if allowed
  */
@@ -43,7 +43,7 @@ export function requireAuth(context) {
  *
  * @param {Object} _context - The routing context
  * @returns {{ redirect: string } | null}
- *   Redirect to dashboard if already authenticated, null if allowed
+ *   Redirect to overview if already authenticated, null if allowed
  */
 export function redirectIfAuthenticated(_context) {
     const { isAuthenticated } = AuthContext.getState();
