@@ -389,6 +389,7 @@
             `;
             return;
         }
+
         pageContent.innerHTML = `
 
         <div class="route-placeholder">
@@ -419,6 +420,7 @@
         }
 
         toggle.checked = document.body.classList.contains('dark');
+
         toggle.addEventListener('change', () => {
             if (toggle.checked) {
                 document.body.classList.add('dark');
@@ -471,6 +473,9 @@
                 window._showErrorBoundary({
                     title: 'Page Render Error',
                     message: err.message || 'Failed to render this page.',
+                    /**
+                     *
+                     */
                     onRetry: () => handleRouteChange(pushState),
                 });
             }
