@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Profile - Dashboard</title>
-    <!-- Link the CSS file from src/dashboard -->
-    <link rel="stylesheet" href="../src/dashboard/dashboard.css">
+    <!-- Link the CSS file copied from src/dashboard -->
+    <link rel="stylesheet" href="dashboard.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Link the JS file from src/dashboard -->
+    <!-- Dark mode: apply class before paint to avoid flash -->
     <script>
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark');
         }
     </script>
-    <script src="../src/dashboard/dashboard.js" defer></script>
+    <!-- Link the JS file copied from src/dashboard -->
+    <script src="dashboard.js" defer></script>
 </head>
 <body>
     <div class="dashboard-wrapper">

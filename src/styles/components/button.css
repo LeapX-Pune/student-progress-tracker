@@ -41,7 +41,7 @@
 }
 
 .btn--secondary {
-    background: white;
+    background: var(--surface-card);
     color: var(--color-gray-700);
     border-color: var(--color-gray-300);
 }
