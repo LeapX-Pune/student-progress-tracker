@@ -433,6 +433,12 @@
             return;
         }
 
+        if (routeKey === 'students') {
+            pageContent.innerHTML = `
+                <iframe src="dashboard.html" style="width: 100%; height: calc(100vh - 140px); border: none; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); background: transparent;" title="Student Dashboard"></iframe>
+            `;
+            return;
+        }
         pageContent.innerHTML = `
 
         <div class="route-placeholder">
@@ -463,7 +469,6 @@
         }
 
         toggle.checked = document.body.classList.contains('dark');
-
         toggle.addEventListener('change', () => {
             if (toggle.checked) {
                 document.body.classList.add('dark');
@@ -516,9 +521,6 @@
                 window._showErrorBoundary({
                     title: 'Page Render Error',
                     message: err.message || 'Failed to render this page.',
-                    /**
-                     *
-                     */
                     onRetry: () => handleRouteChange(pushState),
                 });
             }
