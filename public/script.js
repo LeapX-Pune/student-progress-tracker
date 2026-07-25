@@ -276,7 +276,7 @@
             <div class="charts-grid">
 
                 <article class="chart-card">
-                    <h3 class="chart-title">Quiz scores</h3>
+                    <h3 class="chart-title">Project Progress</h3>
                     <p class="chart-subtitle">Overall completion status of active projects.</p>
                     <div class="chart-container">
                         <div class="chart-placeholder-text">Chart.js charts displayed here</div>
@@ -301,7 +301,7 @@
                 </article>
 
                 <article class="chart-card">
-                    <h3 class="chart-title">Assignment performance</h3>
+                    <h3 class="chart-title">Task Distribution</h3>
                     <p class="chart-subtitle">Tasks categorized by current workflow stage.</p>
                     <div class="chart-container">
                         <div class="chart-placeholder-text">Chart.js charts displayed here</div>
@@ -326,7 +326,7 @@
                 </article>
 
                 <article class="chart-card">
-                    <h3 class="chart-title">Weekly progress</h3>
+                    <h3 class="chart-title">Monthly Activity</h3>
                     <p class="chart-subtitle">Team productivity over recent months.</p>
                     <div class="chart-container">
                         <div class="chart-placeholder-text">Chart.js charts displayed here</div>
@@ -351,7 +351,7 @@
                 </article>
 
                 <article class="chart-card">
-                    <h3 class="chart-title">Attendance percentage</h3>
+                    <h3 class="chart-title">User Growth</h3>
                     <p class="chart-subtitle">Growth of registered users over time.</p>
                     <div class="chart-container">
                         <div class="chart-placeholder-text">Chart.js charts displayed here</div>
@@ -375,7 +375,55 @@
                     </div>
                 </article>
 
-             
+                <article class="chart-card">
+                    <h3 class="chart-title">Revenue Overview</h3>
+                    <p class="chart-subtitle">Monthly revenue generated from all services.</p>
+                    <div class="chart-container">
+                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
+                        <div class="loading-state">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-subtitle"></div>
+                            <div class="skeleton skeleton-chart"></div>
+                            <div class="skeleton skeleton-legend"></div>
+                        </div>
+                        <div class="error-state">
+                            <span class="state-icon">&#9888;&#65039;</span>
+                            <h4>Failed to Load Chart</h4>
+                            <p>Something went wrong while fetching the data.</p>
+                            <button class="retry-btn">Retry</button>
+                        </div>
+                        <div class="empty-state">
+                            <span class="state-icon">&#128202;</span>
+                            <h4>No Data Available</h4>
+                            <p>There is no data to display for this chart yet.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <h3 class="chart-title">Performance Comparison</h3>
+                    <p class="chart-subtitle">Comparison of key business metrics.</p>
+                    <div class="chart-container">
+                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
+                        <div class="loading-state">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-subtitle"></div>
+                            <div class="skeleton skeleton-chart"></div>
+                            <div class="skeleton skeleton-legend"></div>
+                        </div>
+                        <div class="error-state">
+                            <span class="state-icon">&#9888;&#65039;</span>
+                            <h4>Failed to Load Chart</h4>
+                            <p>Something went wrong while fetching the data.</p>
+                            <button class="retry-btn">Retry</button>
+                        </div>
+                        <div class="empty-state">
+                            <span class="state-icon">&#128202;</span>
+                            <h4>No Data Available</h4>
+                            <p>There is no data to display for this chart yet.</p>
+                        </div>
+                    </div>
+                </article>
 
             </div>
         </div>
@@ -391,6 +439,7 @@
             `;
             return;
         }
+
         pageContent.innerHTML = `
 
         <div class="route-placeholder">
@@ -421,6 +470,7 @@
         }
 
         toggle.checked = document.body.classList.contains('dark');
+
         toggle.addEventListener('change', () => {
             if (toggle.checked) {
                 document.body.classList.add('dark');
@@ -473,6 +523,9 @@
                 window._showErrorBoundary({
                     title: 'Page Render Error',
                     message: err.message || 'Failed to render this page.',
+                    /**
+                     *
+                     */
                     onRetry: () => handleRouteChange(pushState),
                 });
             }

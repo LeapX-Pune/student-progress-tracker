@@ -19,8 +19,6 @@ function copyAsset(src, dest) {
 }
 
 // Copy standalone source files referenced by index.html for dev server
-const srcDir = resolve(rootDir, 'src');
-const publicDir = resolve(rootDir, 'public');
 copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
 copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(publicDir, 'script.js'));
 
@@ -80,8 +78,8 @@ const ctx = await context({
         'import.meta.env.VITE_AUTH_TOKEN_KEY': '"student_tracker_auth"',
         'import.meta.env.VITE_AUTH_REDIRECT_KEY': '"student_tracker_redirect"',
         'import.meta.env.VITE_AUTH_REMEMBER_DAYS': '30',
-        'import.meta.env.VITE_ENABLE_MOCK_API': 'true',
-        'import.meta.env.VITE_API_MOCK_ENABLED': 'true',
+        'import.meta.env.VITE_ENABLE_MOCK_API': '"false"',
+        'import.meta.env.VITE_API_MOCK_ENABLED': '"false"',
         'import.meta.env.VITE_ENABLE_PWA': 'false',
         'import.meta.env.VITE_ENABLE_ANALYTICS': 'false',
         'import.meta.env.VITE_ENABLE_NOTIFICATIONS': 'true',
