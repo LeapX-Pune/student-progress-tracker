@@ -20,7 +20,7 @@
 }
 
 .modal {
-    background: white;
+    background: var(--surface-card);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-xl);
     width: 100%;

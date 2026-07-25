@@ -241,6 +241,34 @@ svg {
     flex-shrink: 0;
 }
 
+svg.lucide {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-icon svg,
+.icon-button svg,
+.menu-toggle svg,
+.sidebar-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+.brand-glyph svg,
+.collapse-toggle svg {
+    width: 18px;
+    height: 18px;
+}
+
+.search-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.profile-chevron {
+    width: 16px;
+    height: 16px;
+}
 :focus-visible {
     outline: none;
     box-shadow: var(--shadow-focus);
@@ -1046,6 +1074,7 @@ svg {
 
     .app-shell.is-drawer-open .sidebar {
         transform: translateX(0);
+        z-index: 50;
     }
 
     .app-shell.is-collapsed .sidebar {
@@ -1081,7 +1110,6 @@ svg {
     .main-column {
         padding-left: var(--space-2);
     }
-
     .breadcrumb-current {
         font-size: var(--text-md);
     }

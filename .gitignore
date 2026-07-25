@@ -1,6 +1,7 @@
 # Operating System Files
 .DS_Store
 .Trash
+MY_WORK_PLAN_7DAYS.md
 
 # IDE & Editor Files
 *.swp
@@ -37,8 +38,7 @@ project-docs/
 .opencode/
 SKILL.md
 skills-lock.json
-graphify-out
-
+graphify-out/
 PRD.pdf
 task.md
 to-do.csv
