@@ -509,3 +509,142 @@ body {
         grid-template-columns: 1fr 1fr;
     }
 }
+
+/* Responsive adjustments for mobile and tablets */
+@media (max-width: 768px) {
+    .dashboard-wrapper {
+        padding: 0.75rem;
+    }
+
+    .top-navbar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+        margin-bottom: 1.5rem;
+    }
+
+    .nav-center {
+        width: 100%;
+        justify-content: space-between;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 0.25rem;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-pill {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+
+    .dashboard-body {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .sidebar-menu {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        border-radius: var(--radius-lg);
+        padding: 0.5rem;
+    }
+
+    .sidebar-item {
+        width: auto;
+        height: auto;
+        padding: 0.5rem;
+    }
+
+    .dashboard-title {
+        font-size: 1.75rem;
+        margin-bottom: 1.25rem;
+        text-align: center;
+    }
+
+    /* Wrap stats container on mobile */
+    .profile-stats-container {
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
+        margin-left: 0;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+}
+
+/* ==========================================================================
+   DARK MODE COMPATIBILITY
+   ========================================================================== */
+
+body.dark {
+    --bg-gradient: radial-gradient(circle at 5% 5%, #1e1b4b 0%, #0f172a 50%, #020617 100%);
+    --bg-card: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-color: rgba(51, 65, 85, 0.8);
+    --shadow-premium: 0 12px 32px -4px rgba(0, 0, 0, 0.3), 0 4px 12px -2px rgba(0, 0, 0, 0.2);
+
+    /* Dark theme colors for cards */
+    --color-dark: #f8fafc;
+    --color-purple-card: #2e2a52;
+    --color-blue-card: #1e3a8a;
+    --color-green-card: #064e3b;
+}
+
+/* Card details and elements in dark mode */
+body.dark .nav-center,
+body.dark .sidebar-menu {
+    background-color: rgba(30, 41, 59, 0.7);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .nav-pill:hover,
+body.dark .sidebar-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark .nav-pill.active,
+body.dark .sidebar-item.active {
+    background-color: #3b82f6;
+    color: #ffffff;
+}
+
+body.dark .search-btn-embed {
+    background-color: #3b82f6;
+}
+
+body.dark .course-desc {
+    color: #cbd5e1;
+}
+
+body.dark .course-date-badge {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+}
+
+body.dark .placeholder-content {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.8));
+    border-color: rgba(51, 65, 85, 0.8);
+}
+
+body.dark .stat-streak {
+    background-color: #2c1b10;
+    color: #fdba74;
+    border-color: #431407;
+}
+
+body.dark .stat-active {
+    background-color: #062f22;
+    color: #86efac;
+    border-color: #052e16;
+}
+
+body.dark .progress-ring-circle-bg {
+    stroke: rgba(51, 65, 85, 0.8);
+}
+
+body.dark .logo-box {
+    background-color: #3b82f6;
+}
