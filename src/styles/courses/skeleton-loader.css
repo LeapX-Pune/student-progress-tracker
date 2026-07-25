@@ -1,19 +1,83 @@
-/**
- * ----------------------------------------------------
- * SkeletonLoader Styles
- * ----------------------------------------------------
- *
- * Purpose:
- * Styles for the SkeletonLoader component.
- *
- * Responsibilities:
- * - Define visual appearance
- * - Handle responsive layouts
- *
- * Dependencies:
- * None
- *
- * TODO:
- * - Add CSS variables mapping
- * - Implement styling rules
- */
+/* Skeleton loader shimmer for course cards */
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton-card {
+    background-color: var(--surface-card, #1e293b);
+    border-radius: var(--radius-xl, 20px);
+    border: 1px solid var(--border-default, #334155);
+    box-shadow: var(--shadow-md, 0 8px 24px rgba(0, 0, 0, 0.2));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.skeleton-bone {
+    background: linear-gradient(
+        90deg,
+        var(--surface-sunken, #192233) 25%,
+        var(--border-subtle, #253244) 50%,
+        var(--surface-sunken, #192233) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius: var(--radius-md, 10px);
+}
+
+.skeleton-card__thumbnail {
+    margin: 1.5rem 1.5rem 0 1.5rem;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-lg, 14px);
+}
+
+.skeleton-card__content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.skeleton-card__title {
+    height: 1.25rem;
+    width: 75%;
+}
+
+.skeleton-card__subtitle {
+    height: 0.875rem;
+    width: 50%;
+}
+
+.skeleton-card__badge {
+    height: 1.5rem;
+    width: 5.5rem;
+}
+
+.skeleton-card__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.skeleton-card__label {
+    height: 0.85rem;
+    width: 4rem;
+}
+
+.skeleton-card__value {
+    height: 0.85rem;
+    width: 3rem;
+}
+
+.skeleton-card__bar {
+    height: 6px;
+    width: 100%;
+    border-radius: 9999px;
+    margin-top: 0.5rem;
+}
