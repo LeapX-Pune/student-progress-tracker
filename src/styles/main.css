@@ -12,6 +12,14 @@
 @import './components/image-loader.css';
 @import './components/lazy-loader.css';
 
+/* Course Progress Modules */
+@import './courses/course-grid.css';
+@import './courses/course-card.css';
+@import './courses/progress-bar.css';
+@import './courses/status-badge.css';
+@import './courses/skeleton-loader.css';
+@import './courses/course-thumbnail.css';
+
 :root {
     --color-primary: #4f46e5;
     --color-primary-hover: #4338ca;

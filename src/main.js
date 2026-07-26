@@ -8,6 +8,7 @@ import { removeSkeletons } from './components/SkeletonLoader.js';
 import { showError, showInfo } from './components/Toast.js';
 import { createTooltip } from './components/Tooltip.js';
 import AuthContext from './context/AuthContext.js';
+import { initCoursesPage } from './pages/CoursesPage.js';
 import { createLoginPage } from './pages/LoginPage.js';
 import { initApi } from './services/api.js';
 import { initMotionPreferences } from './utils/animations.js';
@@ -204,6 +205,8 @@ async function init() {
     spinner.style.cssText =
         'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;';
     document.body.appendChild(spinner);
+
+    initCoursesPage();
 
     await AuthContext.restoreSession();
     await initApi();

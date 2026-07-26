@@ -38,7 +38,11 @@ export class ApiService {
      *
      */
     constructor(baseUrl = '') {
-        this.baseUrl = baseUrl || (window.CONFIG && window.CONFIG.API_BASE_URL) || '/api';
+        this.baseUrl =
+            baseUrl ||
+            (window.CONFIG && window.CONFIG.API_BASE_URL) ||
+            getConfig().apiBaseUrl ||
+            '/api';
 
         this.pendingRequests = new Map();
         this.timeoutMs = 10000;
@@ -72,8 +76,9 @@ export class ApiService {
         if (!response.ok) {
             const error = new Error(`HTTP ${response.status}`);
             error.status = response.status;
+            const clonedResponse = response.clone();
             try {
-                const errorData = await response.json();
+                const errorData = await clonedResponse.json();
                 error.message = errorData.message || error.message;
                 error.data = errorData;
             } catch (_e) {
@@ -93,9 +98,11 @@ export class ApiService {
 
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
-            return response.json();
+            const data = await response.json();
+            return data;
         }
-        return response.text();
+        const text = await response.text();
+        return text;
     }
 
     /**
@@ -252,3 +259,21 @@ export class ApiService {
 }
 
 export const api = new ApiService();
+
+/**
+ * Fetches all courses for a given student.
+ *
+ * @param {string} studentId - The ID of the student.
+ * @returns {Promise<Array>} The student's courses.
+ */
+export async function getCourses(studentId) {
+    try {
+        const { API_ENDPOINTS } = await import('../utils/constants.js');
+        return await api.get(API_ENDPOINTS.STUDENT_COURSES(studentId));
+    } catch (err) {
+        throw {
+            code: err.code || 'UNKNOWN',
+            message: err.message || 'Failed to fetch courses',
+        };
+    }
+}

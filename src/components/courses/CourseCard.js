@@ -80,7 +80,7 @@ export function createCourseCard(course) {
 
     if (course.status === 'completed') {
         nextValue.textContent = '-';
-        nextValue.style.color = '#9ca3af'; // Gray out the dash for completed
+        nextValue.classList.add('course-card__detail-value--muted');
     } else if (course.nextModule) {
         nextValue.textContent = course.nextModule;
     } else {

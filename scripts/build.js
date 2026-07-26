@@ -78,7 +78,3 @@ if (existsSync(resolve(publicDir, 'attendance.js'))) {
 copyFileSync(resolve(publicDir, 'dashboard.html'), resolve(distDir, 'dashboard.html'));
 copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(distDir, 'dashboard.css'));
 copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.js'), resolve(distDir, 'dashboard.js'));
-copyFileSync(
-    resolve(publicDir, 'course-progress-demo.html'),
-    resolve(distDir, 'course-progress-demo.html')
-);
