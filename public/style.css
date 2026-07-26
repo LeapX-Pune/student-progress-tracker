@@ -39,10 +39,10 @@
     --success: #16a34a;
     --success-soft: #dcfce7;
 
-    --warning: #d97706;
+    --warning: #f59e0b;
     --warning-soft: #fef3c7;
 
-    --danger: #dc2626;
+    --danger: #ef4444;
     --danger-soft: #fee2e2;
 
     --info: #0891b2;
@@ -123,27 +123,16 @@
     --sidebar-width: 264px;
     --sidebar-width-collapsed: 76px;
     --header-height: 64px;
-}
-/* ==========================
-   LIGHT THEME (DEFAULT)
-========================== */
 
-:root {
+    /* Light theme aliases (used by dashboard components) */
     --bg: #f5f7fb;
     --surface: #ffffff;
     --surface-2: #eef2f7;
-
     --text: #1e293b;
     --text-light: #64748b;
-
     --border: #dbe3ec;
-
     --primary: #2563eb;
     --primary-light: #60a5fa;
-
-    --success: #16a34a;
-    --warning: #f59e0b;
-    --danger: #ef4444;
 }
 /* ==========================
       DARK THEME
@@ -1236,6 +1225,214 @@ svg.lucide {
 
 .switch input:focus-visible + .slider {
     box-shadow: var(--shadow-focus);
+}
+
+/* ==========================================================================
+   ATTENDANCE PAGE — added by attendance module
+   ========================================================================== */
+
+.attendance-page {
+    max-width: 1200px;
+}
+
+.attendance-page .page-header {
+    margin-bottom: var(--space-8);
+}
+
+.attendance-page .page-header h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    margin: 0 0 var(--space-1);
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+.attendance-page .page-header p {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+}
+
+.stat-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    transition:
+        box-shadow var(--duration-base) var(--ease-out),
+        transform var(--duration-base) var(--ease-out);
+}
+
+.stat-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.stat-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.stat-card-label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-tertiary);
+}
+
+.stat-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-sm);
+    color: var(--accent-600);
+    background: var(--accent-50);
+}
+
+.stat-card-value {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+    line-height: 1;
+}
+
+.charts-row {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+}
+
+.charts-row .chart-card {
+    max-width: 400px;
+    width: 100%;
+}
+
+.chart-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+}
+
+.chart-card-header {
+    margin-bottom: var(--space-4);
+}
+
+.chart-card-title {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.chart-card-subtitle {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+    margin-top: 2px;
+}
+
+.donut-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 280px;
+    justify-content: center;
+}
+
+.donut-container canvas {
+    max-width: 180px;
+    max-height: 180px;
+}
+
+.donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    width: 100%;
+    max-width: 220px;
+}
+
+.donut-legend-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--text-sm);
+}
+
+.donut-legend-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.donut-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.donut-legend-label {
+    color: var(--text-secondary);
+}
+.donut-legend-value {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+@media (max-width: 960px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .donut-container {
+        height: 240px;
+    }
+}
+
+@media (max-width: 640px) {
+    .stats-grid {
+        gap: var(--space-3);
+    }
+    .stat-card {
+        padding: var(--space-4);
+    }
+    .stat-card-value {
+        font-size: 1.5rem;
+    }
+    .chart-card {
+        padding: var(--space-4);
+    }
+    .donut-container {
+        height: 220px;
+    }
+    .donut-container canvas {
+        max-width: 150px;
+        max-height: 150px;
+    }
+}
+
+@media (max-width: 420px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ==========================================================================
