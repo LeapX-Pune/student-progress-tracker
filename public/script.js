@@ -473,9 +473,6 @@
                 window._showErrorBoundary({
                     title: 'Page Render Error',
                     message: err.message || 'Failed to render this page.',
-                    /**
-                     *
-                     */
                     onRetry: () => handleRouteChange(pushState),
                 });
             }
