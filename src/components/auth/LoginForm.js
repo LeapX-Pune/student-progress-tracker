@@ -150,22 +150,7 @@ export function createLoginForm(container, { onSuccess } = {}) {
 
     const submitBtn = cardEl.querySelector('#submit-btn');
 
-    // Mount dynamically created components
-    const roleSelector = createRoleSelector({
-        initialRole: 'student',
-        /**
-         *
-         */
-        onChange: role => {
-            console.log(`[LoginForm] Selected role changed to: ${role}`);
-        },
-    });
-    cardEl.querySelector('#role-selector-mount').appendChild(roleSelector.element);
-
-    const rememberMe = createRememberMe({ checked: false });
-    cardEl.querySelector('#remember-me-mount').appendChild(rememberMe.wrapper);
-
-    // Reattach Input Event Listeners
+    // ── Event Listeners & Actions ───────────────────────────────────────────
     emailInput.addEventListener('input', () => {
         emailErrorSpan.textContent = '';
         clearBannerError();
@@ -196,30 +181,49 @@ export function createLoginForm(container, { onSuccess } = {}) {
         confirmPasswordErrorSpan.textContent = '';
     });
 
-    // ── 6. Social Authentication (Google OAuth Button) ─────────────────────
     const googleBtn = cardEl.querySelector('#google-btn');
     googleBtn.addEventListener('click', () => {
         window.alert('Google OAuth login is currently configured for demonstration purposes.');
     });
 
-    // ── 7. Auth Mode Switcher (Login vs Sign Up Toggle) ────────────────────
     const toggleText = cardEl.querySelector('#toggle-text');
     const toggleModeBtn = cardEl.querySelector('#toggle-mode-btn');
 
     // ── 8. Demo Credentials Panel (For quick testing) ──────────────────────
     const demoBlock = createDemoCredentials({
+        initialRole: 'student',
         /**
          * Fills email and password inputs with demo credentials.
          */
-        onFill: ({ email, password }) => {
+        onFill: ({ email, password, role }) => {
             emailInput.value = email;
             passwordInput.value = password;
+            if (role && typeof roleSelector.setRole === 'function') {
+                roleSelector.setRole(role);
+            }
             emailErrorSpan.textContent = '';
             passwordErrorSpan.textContent = '';
             clearBannerError();
         },
     });
     cardEl.querySelector('#demo-mount').appendChild(demoBlock);
+
+    // Mount role selector component
+    const roleSelector = createRoleSelector({
+        initialRole: 'student',
+        /**
+         *
+         */
+        onChange: role => {
+            if (typeof demoBlock.setRole === 'function') {
+                demoBlock.setRole(role);
+            }
+        },
+    });
+    cardEl.querySelector('#role-selector-mount').appendChild(roleSelector.element);
+
+    const rememberMe = createRememberMe({ checked: false });
+    cardEl.querySelector('#remember-me-mount').appendChild(rememberMe.wrapper);
 
     // ── Mount into container ────────────────────────────────────────────────
     container.appendChild(cardEl);
