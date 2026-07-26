@@ -26,3 +26,71 @@
     border-radius: 0 !important;
     height: 100% !important;
 }
+
+/* Role Badges */
+.role-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-transform: capitalize;
+    width: fit-content;
+}
+
+.role-badge--student {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+.role-badge--teacher {
+    background-color: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+
+/* Avatar Rings */
+.avatar-ring--student {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+    border-radius: 50%;
+}
+
+.avatar-ring--teacher {
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4);
+    border-radius: 50%;
+}
+
+/* Status Indicator */
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #059669;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #10b981;
+    display: inline-block;
+}
+
+/* Profile Dropdown Extended Info Card */
+.profile-summary-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+}
+
+.profile-summary-details {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 6px;
+    line-height: 1.4;
+}

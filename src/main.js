@@ -1,4 +1,5 @@
 import './styles/main.css';
+import { initUserProfileHeader, updateWelcomeHeader } from './components/auth/UserProfileHeader.js';
 import AuthContext from './context/AuthContext.js';
 import createLoginPage from './pages/LoginPage.js';
 import { initApi } from './services/api.js';
@@ -23,7 +24,7 @@ function handleRouteMount(route) {
         activePageHandle = null;
     }
 
-    const { isAuthenticated } = AuthContext.getState();
+    const { isAuthenticated, user } = AuthContext.getState();
     if (!isAuthenticated && route !== 'login') {
         window.location.hash = '#/login';
         return;
@@ -37,6 +38,9 @@ function handleRouteMount(route) {
         }
     } else {
         if (appShell) appShell.classList.remove('is-auth-view');
+        if (user) {
+            updateWelcomeHeader(user);
+        }
     }
 }
 
@@ -52,6 +56,7 @@ async function init() {
 
     await initApi();
     await AuthContext.restoreSession();
+    initUserProfileHeader();
 
     const { isAuthenticated } = AuthContext.getState();
     const currentHash = window.location.hash.replace(/^#\/?/, '').split('?')[0].trim();
