@@ -158,6 +158,11 @@ export class ApiService {
 
         // Timeout handling
         const controller = new AbortController();
+
+        // Link external signal if provided (API-016 Cancel requests on unmount)
+        if (otherOptions.signal) {
+            otherOptions.signal.addEventListener('abort', () => controller.abort());
+        }
         fetchOptions.signal = controller.signal;
 
         const timeoutPromise = new Promise((_resolve, reject) => {

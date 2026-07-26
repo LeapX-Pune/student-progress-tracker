@@ -15,6 +15,17 @@ export function useApi(apiFunc) {
     let error = null;
     let isLoading = false;
     let subscribers = [];
+    let abortController = null;
+
+    /**
+     * Cancels any ongoing request.
+     */
+    const cancel = () => {
+        if (abortController) {
+            abortController.abort();
+            abortController = null;
+        }
+    };
 
     /**
      * Notifies all subscribers of the current state.
@@ -30,13 +41,24 @@ export function useApi(apiFunc) {
      * @returns {Promise<{data: any, error: any}>} The result of the API call.
      */
     const execute = async (...args) => {
+        // Cancel previous request if still ongoing
+        cancel();
+
+        abortController = new AbortController();
+        const signal = abortController.signal;
+
         isLoading = true;
         error = null;
         notify();
 
         try {
-            data = await apiFunc(...args);
+            // Pass the signal as part of an options object to the apiFunc
+            // Assumes the underlying API function supports receiving options.
+            data = await apiFunc(...args, { signal });
         } catch (err) {
+            if (err.name === 'AbortError' || err.message === 'Request cancelled') {
+                return { data, error }; // Ignore cancellation errors
+            }
             error = err;
         } finally {
             isLoading = false;
@@ -67,9 +89,13 @@ export function useApi(apiFunc) {
             fn({ data, error, isLoading });
             return () => {
                 subscribers = subscribers.filter(s => s !== fn);
+                if (subscribers.length === 0) {
+                    cancel(); // Auto-cancel on unmount
+                }
             };
         },
         execute,
+        cancel,
         reset,
         /**
          * Gets the current state snapshot.
