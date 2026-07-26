@@ -11,7 +11,7 @@ const DEFAULTS = {
     AUTH_TOKEN_KEY: 'student_tracker_auth',
     AUTH_REDIRECT_KEY: 'student_tracker_redirect',
     AUTH_REMEMBER_DAYS: 30,
-    ENABLE_MOCK_API: false, // Default to false to use json-server (db.json)
+    ENABLE_MOCK_API: true,
     ENABLE_PWA: false,
     ENABLE_ANALYTICS: false,
     CHART_ANIMATION_DURATION: 750,

@@ -24,7 +24,7 @@ const config = {
     apiBaseUrl: e('VITE_API_BASE_URL', 'http://localhost:3001/api'),
     apiMockEnabled: (() => {
         const val = e('VITE_ENABLE_MOCK_API', void 0);
-        if (val === void 0) return false; // Default to false to use json-server (db.json)
+        if (val === void 0) return true;
         return val === true || val === 'true';
     })(),
     authTokenKey: e('VITE_AUTH_TOKEN_KEY', 'auth_token'),

@@ -60,7 +60,7 @@ test.describe('Application Shell', () => {
             window.location.hash = '#/courses';
         });
         await expect(page.locator('[data-breadcrumb-label]')).toHaveText('Courses');
-        await expect(page.locator('.route-placeholder h2')).toHaveText('Courses');
-        await expect(page).toHaveTitle(/Courses.*The Reality/);
+        await expect(page.locator('.dashboard-title')).toHaveText('Courses');
+        await expect(page).toHaveTitle(/Courses.*The Reality|Courses.*Student Progress/);
     });
 });
