@@ -5,6 +5,7 @@ import createLoginPage from './pages/LoginPage.js';
 import { initApi } from './services/api.js';
 import { initMotionPreferences } from './utils/animations.js';
 import { initScrollRestoration, updateDocumentTitle } from './utils/router.js';
+import { initTheme } from './utils/theme.js';
 
 /** @type {{ destroy: function }|null} Active page handle for cleanup */
 let activePageHandle = null;
@@ -42,6 +43,14 @@ function handleRouteMount(route) {
             updateWelcomeHeader(user);
         }
     }
+
+    if (
+        typeof window !== 'undefined' &&
+        window.lucide &&
+        typeof window.lucide.createIcons === 'function'
+    ) {
+        window.lucide.createIcons();
+    }
 }
 
 /**
@@ -50,6 +59,7 @@ function handleRouteMount(route) {
  * @returns {Promise<void>}
  */
 async function init() {
+    initTheme();
     initMotionPreferences();
     initScrollRestoration();
     updateDocumentTitle();

@@ -241,6 +241,21 @@ svg {
     flex-shrink: 0;
 }
 
+svg.lucide,
+.lucide,
+svg[data-lucide],
+[data-lucide] svg {
+    display: block !important;
+    flex-shrink: 0 !important;
+    stroke: currentColor !important;
+    fill: none !important;
+    stroke-width: 2px !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
 :focus-visible {
     outline: none;
     box-shadow: var(--shadow-focus);
@@ -335,6 +350,13 @@ svg {
     color: var(--text-on-accent);
 }
 
+.brand-glyph svg,
+.brand-glyph [data-lucide] {
+    width: 18px;
+    height: 18px;
+    color: var(--text-on-accent);
+}
+
 .brand-name {
     white-space: nowrap;
 }
@@ -413,7 +435,16 @@ svg {
     justify-content: center;
     flex-shrink: 0;
     color: currentColor;
-    opacity: 0.85;
+    opacity: 1 !important;
+}
+
+.nav-icon svg,
+.nav-icon [data-lucide],
+.nav-link svg,
+.nav-link [data-lucide] {
+    width: 20px !important;
+    height: 20px !important;
+    color: inherit;
 }
 
 .nav-link:hover {
@@ -424,8 +455,12 @@ svg {
     color: var(--accent-600);
 }
 
+body.dark .nav-link.is-active {
+    color: var(--accent-400);
+}
+
 .nav-link.is-active .nav-icon {
-    opacity: 1;
+    opacity: 1 !important;
 }
 
 /* Sliding highlight pill — signature interaction, positioned via JS */
@@ -598,6 +633,13 @@ svg {
     flex-shrink: 0;
 }
 
+.menu-toggle svg,
+.menu-toggle [data-lucide] {
+    width: 20px;
+    height: 20px;
+    color: inherit;
+}
+
 .menu-toggle:hover {
     background: var(--surface-hover);
     color: var(--text-primary);
@@ -669,8 +711,17 @@ svg {
 }
 
 .search-icon {
-    color: var(--text-tertiary);
+    color: var(--text-secondary);
+    width: 18px;
+    height: 18px;
     flex-shrink: 0;
+}
+
+.search-icon svg,
+.search-icon [data-lucide] {
+    width: 18px;
+    height: 18px;
+    color: inherit;
 }
 
 .search-field input {
@@ -723,6 +774,13 @@ svg {
         background var(--duration-fast) var(--ease-out),
         color var(--duration-fast) var(--ease-out),
         transform var(--duration-fast) var(--ease-out);
+}
+
+.icon-button svg,
+.icon-button [data-lucide] {
+    width: 20px;
+    height: 20px;
+    color: inherit;
 }
 
 .icon-button:hover {
@@ -866,8 +924,18 @@ svg {
 }
 
 .profile-chevron {
-    color: var(--text-tertiary);
+    color: var(--text-secondary);
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
     transition: transform var(--duration-base) var(--ease-out);
+}
+
+.profile-chevron svg,
+.profile-chevron [data-lucide] {
+    width: 16px;
+    height: 16px;
+    color: inherit;
 }
 
 .profile-trigger[aria-expanded='true'] .profile-chevron {

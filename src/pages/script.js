@@ -291,20 +291,19 @@
 
         if (!toggle) return;
 
-        if (localStorage.getItem('theme') === 'dark') {
+        const isDark =
+            document.body.classList.contains('dark') || localStorage.getItem('theme') === 'dark';
+        toggle.checked = isDark;
+        if (isDark) {
             document.body.classList.add('dark');
-
-            toggle.checked = true;
         }
 
         toggle.addEventListener('change', () => {
             if (toggle.checked) {
                 document.body.classList.add('dark');
-
                 localStorage.setItem('theme', 'dark');
             } else {
                 document.body.classList.remove('dark');
-
                 localStorage.setItem('theme', 'light');
             }
         });

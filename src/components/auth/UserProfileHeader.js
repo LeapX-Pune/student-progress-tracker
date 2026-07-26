@@ -79,18 +79,26 @@ export function updateUserProfileHeader(user) {
 
         summaryHeader.innerHTML = `
             <div class="flex items-center justify-between gap-2 mb-1">
-              <span class="font-bold text-sm text-[#0F172A] truncate">${user.name}</span>
+              <span class="profile-summary-name truncate">${user.name}</span>
               ${getRoleBadgeHtml(user.role ?? 'student')}
             </div>
-            <div class="text-xs text-[#64748B] truncate mb-1.5">${user.email}</div>
-            <div class="flex items-center justify-between text-xs pt-1 border-t border-[#E2E8F0]">
+            <div class="profile-summary-email truncate">${user.email}</div>
+            <div class="flex items-center justify-between text-xs pt-1 border-t border-[var(--border-subtle)]">
               <span class="status-indicator">
                 <span class="status-dot"></span> ${(user.status ?? 'active').charAt(0).toUpperCase() + (user.status ?? 'active').slice(1)}
               </span>
-              <span class="text-[11px] font-mono text-[#475569]">${idLine}</span>
+              <span class="text-[11px] font-mono text-[var(--text-tertiary)]">${idLine}</span>
             </div>
             <div class="profile-summary-details font-medium">${detailsLine}</div>
         `;
+    }
+
+    if (
+        typeof window !== 'undefined' &&
+        window.lucide &&
+        typeof window.lucide.createIcons === 'function'
+    ) {
+        window.lucide.createIcons();
     }
 }
 

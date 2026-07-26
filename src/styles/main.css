@@ -64,8 +64,8 @@
 body {
     margin: 0;
     font-family: var(--font-sans);
-    color: var(--color-gray-900);
-    background: var(--color-gray-50);
+    color: var(--text-primary, var(--color-gray-900));
+    background: var(--surface-page, var(--color-gray-50));
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
 }
@@ -77,8 +77,8 @@ body {
 }
 
 header {
-    background: white;
-    border-bottom: 1px solid var(--color-gray-200);
+    background: var(--surface-header, white);
+    border-bottom: 1px solid var(--border-subtle, var(--color-gray-200));
     padding: 1rem 2rem;
     box-shadow: var(--shadow-sm);
 }
@@ -87,7 +87,7 @@ header h1 {
     margin: 0;
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--color-gray-900);
+    color: var(--text-primary, var(--color-gray-900));
 }
 
 main {
