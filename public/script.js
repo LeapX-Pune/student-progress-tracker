@@ -270,14 +270,14 @@
         <div class="grades-dashboard">
             <header class="grades-header">
                 <h1>Grades</h1>
-                <p>Visual representation of academic statistics and performance metrics.</p>
+                <p>Track your academic performance across quizzes, assignments, weekly progress, and attendance.</p>
             </header>
 
             <div class="charts-grid">
 
                 <article class="chart-card">
-                    <h3 class="chart-title">Project Progress</h3>
-                    <p class="chart-subtitle">Overall completion status of active projects.</p>
+                    <h3 class="chart-title">Quiz Scores</h3>
+                    <p class="chart-subtitle">Your scores across all quizzes taken.</p>
                     <div class="chart-container">
                         <div class="chart-placeholder-text">Chart.js charts displayed here</div>
                         <div class="loading-state">
@@ -289,20 +289,20 @@
                         <div class="error-state">
                             <span class="state-icon">&#9888;&#65039;</span>
                             <h4>Failed to Load Chart</h4>
-                            <p>Something went wrong while fetching the data.</p>
+                            <p>Something went wrong while fetching quiz scores.</p>
                             <button class="retry-btn">Retry</button>
                         </div>
                         <div class="empty-state">
                             <span class="state-icon">&#128202;</span>
-                            <h4>No Data Available</h4>
-                            <p>There is no data to display for this chart yet.</p>
+                            <h4>No Quiz Data</h4>
+                            <p>You haven't taken any quizzes yet.</p>
                         </div>
                     </div>
                 </article>
 
                 <article class="chart-card">
-                    <h3 class="chart-title">Task Distribution</h3>
-                    <p class="chart-subtitle">Tasks categorized by current workflow stage.</p>
+                    <h3 class="chart-title">Assignment Performance</h3>
+                    <p class="chart-subtitle">Grades earned on submitted assignments.</p>
                     <div class="chart-container">
                         <div class="chart-placeholder-text">Chart.js charts displayed here</div>
                         <div class="loading-state">
@@ -314,20 +314,20 @@
                         <div class="error-state">
                             <span class="state-icon">&#9888;&#65039;</span>
                             <h4>Failed to Load Chart</h4>
-                            <p>Something went wrong while fetching the data.</p>
+                            <p>Something went wrong while fetching assignment data.</p>
                             <button class="retry-btn">Retry</button>
                         </div>
                         <div class="empty-state">
                             <span class="state-icon">&#128202;</span>
-                            <h4>No Data Available</h4>
-                            <p>There is no data to display for this chart yet.</p>
+                            <h4>No Assignments</h4>
+                            <p>No assignment submissions found yet.</p>
                         </div>
                     </div>
                 </article>
 
                 <article class="chart-card">
-                    <h3 class="chart-title">Monthly Activity</h3>
-                    <p class="chart-subtitle">Team productivity over recent months.</p>
+                    <h3 class="chart-title">Weekly Progress</h3>
+                    <p class="chart-subtitle">Your learning progress tracked week by week.</p>
                     <div class="chart-container">
                         <div class="chart-placeholder-text">Chart.js charts displayed here</div>
                         <div class="loading-state">
@@ -339,20 +339,20 @@
                         <div class="error-state">
                             <span class="state-icon">&#9888;&#65039;</span>
                             <h4>Failed to Load Chart</h4>
-                            <p>Something went wrong while fetching the data.</p>
+                            <p>Something went wrong while fetching weekly progress.</p>
                             <button class="retry-btn">Retry</button>
                         </div>
                         <div class="empty-state">
                             <span class="state-icon">&#128202;</span>
-                            <h4>No Data Available</h4>
-                            <p>There is no data to display for this chart yet.</p>
+                            <h4>No Progress Data</h4>
+                            <p>Weekly progress will appear here once you start.</p>
                         </div>
                     </div>
                 </article>
 
                 <article class="chart-card">
-                    <h3 class="chart-title">User Growth</h3>
-                    <p class="chart-subtitle">Growth of registered users over time.</p>
+                    <h3 class="chart-title">Attendance Percentage</h3>
+                    <p class="chart-subtitle">Your attendance rate across all sessions.</p>
                     <div class="chart-container">
                         <div class="chart-placeholder-text">Chart.js charts displayed here</div>
                         <div class="loading-state">
@@ -364,63 +364,13 @@
                         <div class="error-state">
                             <span class="state-icon">&#9888;&#65039;</span>
                             <h4>Failed to Load Chart</h4>
-                            <p>Something went wrong while fetching the data.</p>
+                            <p>Something went wrong while fetching attendance data.</p>
                             <button class="retry-btn">Retry</button>
                         </div>
                         <div class="empty-state">
                             <span class="state-icon">&#128202;</span>
-                            <h4>No Data Available</h4>
-                            <p>There is no data to display for this chart yet.</p>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="chart-card">
-                    <h3 class="chart-title">Revenue Overview</h3>
-                    <p class="chart-subtitle">Monthly revenue generated from all services.</p>
-                    <div class="chart-container">
-                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
-                        <div class="loading-state">
-                            <div class="skeleton skeleton-title"></div>
-                            <div class="skeleton skeleton-subtitle"></div>
-                            <div class="skeleton skeleton-chart"></div>
-                            <div class="skeleton skeleton-legend"></div>
-                        </div>
-                        <div class="error-state">
-                            <span class="state-icon">&#9888;&#65039;</span>
-                            <h4>Failed to Load Chart</h4>
-                            <p>Something went wrong while fetching the data.</p>
-                            <button class="retry-btn">Retry</button>
-                        </div>
-                        <div class="empty-state">
-                            <span class="state-icon">&#128202;</span>
-                            <h4>No Data Available</h4>
-                            <p>There is no data to display for this chart yet.</p>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="chart-card">
-                    <h3 class="chart-title">Performance Comparison</h3>
-                    <p class="chart-subtitle">Comparison of key business metrics.</p>
-                    <div class="chart-container">
-                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
-                        <div class="loading-state">
-                            <div class="skeleton skeleton-title"></div>
-                            <div class="skeleton skeleton-subtitle"></div>
-                            <div class="skeleton skeleton-chart"></div>
-                            <div class="skeleton skeleton-legend"></div>
-                        </div>
-                        <div class="error-state">
-                            <span class="state-icon">&#9888;&#65039;</span>
-                            <h4>Failed to Load Chart</h4>
-                            <p>Something went wrong while fetching the data.</p>
-                            <button class="retry-btn">Retry</button>
-                        </div>
-                        <div class="empty-state">
-                            <span class="state-icon">&#128202;</span>
-                            <h4>No Data Available</h4>
-                            <p>There is no data to display for this chart yet.</p>
+                            <h4>No Attendance Data</h4>
+                            <p>Attendance records will show up here.</p>
                         </div>
                     </div>
                 </article>
@@ -523,9 +473,6 @@
                 window._showErrorBoundary({
                     title: 'Page Render Error',
                     message: err.message || 'Failed to render this page.',
-                    /**
-                     *
-                     */
                     onRetry: () => handleRouteChange(pushState),
                 });
             }

@@ -29,6 +29,8 @@
     </script>
     <!-- Link the JS file copied from src/dashboard -->
     <script src="dashboard.js" defer></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="dashboard-wrapper">
@@ -217,15 +219,8 @@
                                 </button>
                             </div>
                             
-                            <div class="placeholder-content">
-                                <div style="text-align: center;">
-                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 0.5rem; color: var(--text-secondary); opacity: 0.6;">
-                                        <line x1="18" y1="20" x2="18" y2="10"></line>
-                                        <line x1="12" y1="20" x2="12" y2="4"></line>
-                                        <line x1="6" y1="20" x2="6" y2="14"></line>
-                                    </svg>
-                                    <p>Performance details will be shown here.</p>
-                                </div>
+                            <div class="chart-container-line">
+                                <canvas id="weeklyProgressChart"></canvas>
                             </div>
                         </section>
                         
@@ -240,8 +235,8 @@
                                         <p class="card-subtitle">Check and complete tasks</p>
                                     </div>
                                 </div>
-                                <div class="placeholder-content" style="min-height: 150px;">
-                                    <p>No homework due today.</p>
+                                <div class="chart-container-bar">
+                                    <canvas id="quizChart"></canvas>
                                 </div>
                             </section>
                             
@@ -252,8 +247,8 @@
                                         <p class="card-subtitle">See how you rank among friends</p>
                                     </div>
                                 </div>
-                                <div class="placeholder-content" style="min-height: 150px;">
-                                    <p>Scores will load soon.</p>
+                                <div class="chart-container-doughnut">
+                                    <canvas id="gradeChart"></canvas>
                                 </div>
                             </section>
                         </div>
@@ -263,5 +258,6 @@
             </main>
         </div>
     </div>
+    <script src="assets/chart_script.js"></script>
 </body>
 </html>

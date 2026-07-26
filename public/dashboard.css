@@ -509,3 +509,40 @@ body {
         grid-template-columns: 1fr 1fr;
     }
 }
+
+/* ========================= */
+/* Chart container sizing    */
+/* ========================= */
+
+/* Line chart (Weekly Progress) — full-width card */
+.chart-container-line {
+    width: 100%;
+    height: 280px;
+}
+
+.chart-container-line canvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* Bar chart (Quiz Scores) — half-width stats card */
+.chart-container-bar {
+    width: 100%;
+    height: 200px;
+}
+
+.chart-container-bar canvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* Doughnut chart (Grade Distribution) — half-width stats card */
+.chart-container-doughnut {
+    width: 100%;
+    height: 220px;
+}
+
+.chart-container-doughnut canvas {
+    width: 100%;
+    height: 100%;
+}
