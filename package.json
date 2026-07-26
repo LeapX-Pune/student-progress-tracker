@@ -65,5 +65,8 @@
     "last 2 Firefox versions",
     "last 2 Safari versions",
     "last 2 Edge versions"
-  ]
+  ],
+  "dependencies": {
+    "lucide": "^1.26.0"
+  }
 }

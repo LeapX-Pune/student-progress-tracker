@@ -1,4 +1,4 @@
-import { getConfig } from '../utils/env.js';
+import { getConfig, isDevelopment } from '../utils/env.js';
 import { normalizeApiError } from '../utils/errors.js';
 import { getAuthToken } from './authStorage.js';
 
@@ -8,11 +8,15 @@ let mockHandlers = null;
  *
  */
 export async function initApi() {
-    const config = getConfig();
+    try {
+        const config = getConfig();
 
-    if (config.apiMockEnabled) {
-        const { setupMockServer } = await import('./mock.js');
-        mockHandlers = setupMockServer();
+        if (config.apiMockEnabled) {
+            const { setupMockServer } = await import('./mock.js');
+            mockHandlers = setupMockServer();
+        }
+    } catch (err) {
+        console.warn('[API] Failed to initialize mock server:', err);
     }
 }
 
@@ -34,7 +38,11 @@ export class ApiService {
      *
      */
     constructor(baseUrl = '') {
-        this.baseUrl = baseUrl || (window.CONFIG && window.CONFIG.API_BASE_URL) || '/api';
+        this.baseUrl =
+            baseUrl ||
+            (window.CONFIG && window.CONFIG.API_BASE_URL) ||
+            getConfig().apiBaseUrl ||
+            '/api';
 
         this.pendingRequests = new Map();
         this.timeoutMs = 10000;
@@ -68,8 +76,9 @@ export class ApiService {
         if (!response.ok) {
             const error = new Error(`HTTP ${response.status}`);
             error.status = response.status;
+            const clonedResponse = response.clone();
             try {
-                const errorData = await response.json();
+                const errorData = await clonedResponse.json();
                 error.message = errorData.message || error.message;
                 error.data = errorData;
             } catch (_e) {
@@ -89,9 +98,11 @@ export class ApiService {
 
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
-            return response.json();
+            const data = await response.json();
+            return data;
         }
-        return response.text();
+        const text = await response.text();
+        return text;
     }
 
     /**
@@ -129,14 +140,29 @@ export class ApiService {
         // Check deduplication
         const requestKey = !skipDedup && this._getRequestKey(method, url, body);
         if (requestKey && this.pendingRequests.has(requestKey)) {
+            if (isDevelopment())
+                console.log(`[API Dedup] Returning existing request for ${method} ${url}`);
             return this.pendingRequests.get(requestKey);
         }
+
+        if (isDevelopment()) {
+            console.log(`[API Request] ${method} ${url}`, {
+                body: body ? JSON.parse(body) : null,
+                ...otherOptions,
+            });
+        }
+        const requestStartTime = Date.now();
 
         // 1. Run request interceptor
         const fetchOptions = this._requestInterceptor({ method, body, ...otherOptions }, endpoint);
 
         // Timeout handling
         const controller = new AbortController();
+
+        // Link external signal if provided (API-016 Cancel requests on unmount)
+        if (otherOptions.signal) {
+            otherOptions.signal.addEventListener('abort', () => controller.abort());
+        }
         fetchOptions.signal = controller.signal;
 
         let timeoutId;
@@ -155,6 +181,10 @@ export class ApiService {
             })
             .catch(error => {
                 if (requestKey) this.pendingRequests.delete(requestKey);
+                console.error(
+                    `[API Error] ${method} ${url} failed after ${Date.now() - requestStartTime}ms`,
+                    error
+                );
 
                 // Handle abort specifically
                 if (error.name === 'AbortError') {
@@ -253,6 +283,42 @@ export class ApiService {
     delete(endpoint, options = {}) {
         return this.request(endpoint, { method: 'DELETE', ...options });
     }
+    /**
+     * Executes multiple requests concurrently.
+     * @param {Array<{endpoint: string, options: Object}>} requests - Array of request configs.
+     * @returns {Promise<Array<any>>} Array of responses in the same order.
+     */
+    async batch(requests) {
+        if (!Array.isArray(requests)) {
+            throw new Error('batch() expects an array of requests');
+        }
+        return Promise.all(
+            requests.map(req => {
+                if (typeof req === 'string') {
+                    return this.get(req);
+                }
+                return this.request(req.endpoint, req.options || {});
+            })
+        );
+    }
 }
 
 export const api = new ApiService();
+
+/**
+ * Fetches all courses for a given student.
+ *
+ * @param {string} studentId - The ID of the student.
+ * @returns {Promise<Array>} The student's courses.
+ */
+export async function getCourses(studentId) {
+    try {
+        const { API_ENDPOINTS } = await import('../utils/constants.js');
+        return await api.get(API_ENDPOINTS.STUDENT_COURSES(studentId));
+    } catch (err) {
+        throw {
+            code: err.code || 'UNKNOWN',
+            message: err.message || 'Failed to fetch courses',
+        };
+    }
+}

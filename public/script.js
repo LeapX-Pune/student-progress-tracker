@@ -266,6 +266,131 @@
             return;
         }
 
+        if (routeKey === 'grades') {
+            pageContent.innerHTML = `
+        <div class="grades-dashboard">
+            <header class="grades-header">
+                <h1>Grades</h1>
+                <p>Track your academic performance across quizzes, assignments, weekly progress, and attendance.</p>
+            </header>
+
+            <div class="charts-grid">
+
+                <article class="chart-card">
+                    <h3 class="chart-title">Quiz Scores</h3>
+                    <p class="chart-subtitle">Your scores across all quizzes taken.</p>
+                    <div class="chart-container">
+                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
+                        <div class="loading-state">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-subtitle"></div>
+                            <div class="skeleton skeleton-chart"></div>
+                            <div class="skeleton skeleton-legend"></div>
+                        </div>
+                        <div class="error-state">
+                            <span class="state-icon">&#9888;&#65039;</span>
+                            <h4>Failed to Load Chart</h4>
+                            <p>Something went wrong while fetching quiz scores.</p>
+                            <button class="retry-btn">Retry</button>
+                        </div>
+                        <div class="empty-state">
+                            <span class="state-icon">&#128202;</span>
+                            <h4>No Quiz Data</h4>
+                            <p>You haven't taken any quizzes yet.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <h3 class="chart-title">Assignment Performance</h3>
+                    <p class="chart-subtitle">Grades earned on submitted assignments.</p>
+                    <div class="chart-container">
+                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
+                        <div class="loading-state">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-subtitle"></div>
+                            <div class="skeleton skeleton-chart"></div>
+                            <div class="skeleton skeleton-legend"></div>
+                        </div>
+                        <div class="error-state">
+                            <span class="state-icon">&#9888;&#65039;</span>
+                            <h4>Failed to Load Chart</h4>
+                            <p>Something went wrong while fetching assignment data.</p>
+                            <button class="retry-btn">Retry</button>
+                        </div>
+                        <div class="empty-state">
+                            <span class="state-icon">&#128202;</span>
+                            <h4>No Assignments</h4>
+                            <p>No assignment submissions found yet.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <h3 class="chart-title">Weekly Progress</h3>
+                    <p class="chart-subtitle">Your learning progress tracked week by week.</p>
+                    <div class="chart-container">
+                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
+                        <div class="loading-state">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-subtitle"></div>
+                            <div class="skeleton skeleton-chart"></div>
+                            <div class="skeleton skeleton-legend"></div>
+                        </div>
+                        <div class="error-state">
+                            <span class="state-icon">&#9888;&#65039;</span>
+                            <h4>Failed to Load Chart</h4>
+                            <p>Something went wrong while fetching weekly progress.</p>
+                            <button class="retry-btn">Retry</button>
+                        </div>
+                        <div class="empty-state">
+                            <span class="state-icon">&#128202;</span>
+                            <h4>No Progress Data</h4>
+                            <p>Weekly progress will appear here once you start.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="chart-card">
+                    <h3 class="chart-title">Attendance Percentage</h3>
+                    <p class="chart-subtitle">Your attendance rate across all sessions.</p>
+                    <div class="chart-container">
+                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
+                        <div class="loading-state">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-subtitle"></div>
+                            <div class="skeleton skeleton-chart"></div>
+                            <div class="skeleton skeleton-legend"></div>
+                        </div>
+                        <div class="error-state">
+                            <span class="state-icon">&#9888;&#65039;</span>
+                            <h4>Failed to Load Chart</h4>
+                            <p>Something went wrong while fetching attendance data.</p>
+                            <button class="retry-btn">Retry</button>
+                        </div>
+                        <div class="empty-state">
+                            <span class="state-icon">&#128202;</span>
+                            <h4>No Attendance Data</h4>
+                            <p>Attendance records will show up here.</p>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+        `;
+
+            initGradesPage();
+            return;
+        }
+
+        if (routeKey === 'students') {
+            pageContent.innerHTML = `
+                <iframe src="dashboard.html" style="width: 100%; height: calc(100vh - 140px); border: none; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); background: transparent;" title="Student Dashboard"></iframe>
+            `;
+            return;
+        }
+
         pageContent.innerHTML = `
 
         <div class="route-placeholder">
@@ -291,20 +416,24 @@
 
         if (!toggle) return;
 
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark');
+        const isDark =
+            document.body.classList.contains('dark') ||
+            localStorage.getItem('theme') === 'dark' ||
+            !localStorage.getItem('theme');
 
-            toggle.checked = true;
+        toggle.checked = isDark;
+        if (isDark) {
+            document.body.classList.add('dark');
         }
+
+        toggle.checked = document.body.classList.contains('dark');
 
         toggle.addEventListener('change', () => {
             if (toggle.checked) {
                 document.body.classList.add('dark');
-
                 localStorage.setItem('theme', 'dark');
             } else {
                 document.body.classList.remove('dark');
-
                 localStorage.setItem('theme', 'light');
             }
         });
@@ -340,7 +469,22 @@
         document.title = ROUTES[routeKey] + ' \u2014 The Reality';
 
         playPageTransition();
-        renderPlaceholder(routeKey);
+
+        try {
+            renderPlaceholder(routeKey);
+        } catch (err) {
+            console.error('Route render error:', err);
+            if (typeof window._showErrorBoundary === 'function') {
+                window._showErrorBoundary({
+                    title: 'Page Render Error',
+                    message: err.message || 'Failed to render this page.',
+                    /**
+                     *
+                     */
+                    onRetry: () => handleRouteChange(pushState),
+                });
+            }
+        }
 
         let event;
         if (typeof window.CustomEvent === 'function') {
@@ -506,8 +650,68 @@
     }
 
     /* ------------------------------------------------------------------------
+     Grades Page — Chart states & initialization
+   ------------------------------------------------------------------------ */
+
+    /**
+     *
+     */
+    function showLoading(container) {
+        const ls = container.querySelector('.loading-state');
+        const es = container.querySelector('.error-state');
+        const ems = container.querySelector('.empty-state');
+        const ph = container.querySelector('.chart-placeholder-text');
+        if (ls) ls.style.display = 'flex';
+        if (es) es.style.display = 'none';
+        if (ems) ems.style.display = 'none';
+        if (ph) ph.style.display = 'none';
+    }
+
+    /**
+     *
+     */
+    function showChart(container) {
+        const ls = container.querySelector('.loading-state');
+        const es = container.querySelector('.error-state');
+        const ems = container.querySelector('.empty-state');
+        const ph = container.querySelector('.chart-placeholder-text');
+        if (ls) ls.style.display = 'none';
+        if (es) es.style.display = 'none';
+        if (ems) ems.style.display = 'none';
+        if (ph) ph.style.display = 'flex';
+    }
+
+    /**
+     *
+     */
+    function initGradesPage() {
+        const containers = document.querySelectorAll('.chart-container');
+        if (!containers.length) return;
+
+        containers.forEach(container => {
+            showLoading(container);
+            setTimeout(() => {
+                showChart(container);
+            }, 2500);
+        });
+
+        document.querySelectorAll('.retry-btn').forEach(btn => {
+            /**
+             *
+             */
+            btn.onclick = function () {
+                const c = this.closest('.chart-container');
+                showLoading(c);
+                setTimeout(() => {
+                    showChart(c);
+                }, 2000);
+            };
+        });
+    }
+
+    /* ------------------------------------------------------------------------
      Init
-  ------------------------------------------------------------------------ */
+   ------------------------------------------------------------------------ */
 
     /**
      *

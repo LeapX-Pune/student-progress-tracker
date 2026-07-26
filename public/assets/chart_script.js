@@ -39,9 +39,6 @@ const quizConfig = {
 
             tooltip: {
                 callbacks: {
-                    /**
-                     *
-                     */
                     label(context) {
                         return `Score: ${context.raw}%`;
                     },
@@ -56,9 +53,6 @@ const quizConfig = {
 
                 ticks: {
                     font: { size: 11 },
-                    /**
-                     *
-                     */
                     callback(value) {
                         return value + '%';
                     },
@@ -85,7 +79,9 @@ const quizConfig = {
 };
 
 const quizCtx = document.getElementById('quizChart');
-new Chart(quizCtx, quizConfig);
+if (quizCtx) {
+    new Chart(quizCtx, quizConfig);
+}
 
 // =========================
 // Day 3 - Grade Distribution Doughnut Chart
@@ -145,9 +141,6 @@ const gradeConfig = {
 
             tooltip: {
                 callbacks: {
-                    /**
-                     *
-                     */
                     label(context) {
                         const total = context.dataset.data.reduce((a, b) => a + b, 0);
                         const percentage = ((context.raw / total) * 100).toFixed(1);
@@ -161,7 +154,9 @@ const gradeConfig = {
 };
 
 const gradeCtx = document.getElementById('gradeChart');
-new Chart(gradeCtx, gradeConfig);
+if (gradeCtx) {
+    new Chart(gradeCtx, gradeConfig);
+}
 
 // =========================
 // Day 4 - Weekly Progress Line Chart
@@ -252,9 +247,6 @@ const weeklyProgressConfig = {
                 padding: 12,
 
                 callbacks: {
-                    /**
-                     *
-                     */
                     label(context) {
                         return `${context.dataset.label}: ${context.parsed.y}%`;
                     },
@@ -296,5 +288,6 @@ const weeklyProgressConfig = {
 };
 
 const weeklyProgressCtx = document.getElementById('weeklyProgressChart');
-
-new Chart(weeklyProgressCtx, weeklyProgressConfig);
+if (weeklyProgressCtx) {
+    new Chart(weeklyProgressCtx, weeklyProgressConfig);
+}

@@ -1,11 +1,26 @@
 import { context } from 'esbuild';
+import { copyFileSync, existsSync, mkdirSync } from 'fs';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const rootDir = resolve(__dirname, '..');
+const publicDir = resolve(rootDir, 'public');
+const srcDir = resolve(rootDir, 'src');
+
+function copyAsset(src, dest) {
+    if (existsSync(src)) {
+        copyFileSync(src, dest);
+        console.log(`Copied ${src} -> ${dest}`);
+    } else {
+        console.warn(`Warning: ${src} not found, skipping`);
+    }
+}
+
+// Copy standalone source files referenced by index.html for dev server
+copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
+copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(publicDir, 'script.js'));
 
 // Start JSON Server mock API
 const mockApi = spawn(
@@ -21,6 +36,17 @@ const mockApi = spawn(
     ],
     { cwd: rootDir, stdio: 'inherit', shell: true }
 );
+
+// Ensure public dir exists
+if (!existsSync(publicDir)) mkdirSync(publicDir, { recursive: true });
+
+// Copy assets needed by index.html
+copyAsset(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
+copyAsset(resolve(srcDir, 'pages', 'script.js'), resolve(publicDir, 'script.js'));
+
+// Copy assets needed by standalone HTML pages
+copyAsset(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(publicDir, 'dashboard.css'));
+copyAsset(resolve(srcDir, 'dashboard', 'dashboard.js'), resolve(publicDir, 'dashboard.js'));
 
 // esbuild watch mode
 const ctx = await context({
@@ -43,10 +69,11 @@ const ctx = await context({
     define: {
         'import.meta.env.DEV': 'true',
         'import.meta.env.PROD': 'false',
+        'import.meta.env.VITE_API_URL': '"http://localhost:3001/api"',
+        'import.meta.env.VITE_API_BASE_URL': '"http://localhost:3001/api"',
         'import.meta.env.VITE_APP_NAME': '"Student Progress Tracker"',
         'import.meta.env.VITE_APP_VERSION': '"0.1.0"',
         'import.meta.env.VITE_APP_ENV': '"development"',
-        'import.meta.env.VITE_API_BASE_URL': '"http://localhost:3001/api"',
         'import.meta.env.VITE_API_TIMEOUT': '"10000"',
         'import.meta.env.VITE_API_MOCK_ENABLED': '"true"',
         'import.meta.env.VITE_AUTH_TOKEN_KEY': '"student_tracker_auth"',

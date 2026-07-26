@@ -10,6 +10,17 @@
 @import './components/tooltip.css';
 @import './components/animations.css';
 @import './components/accessibility.css';
+@import './components/login.css';
+@import './components/image-loader.css';
+@import './components/lazy-loader.css';
+
+/* Course Progress Modules */
+@import './courses/course-grid.css';
+@import './courses/course-card.css';
+@import './courses/progress-bar.css';
+@import './courses/status-badge.css';
+@import './courses/skeleton-loader.css';
+@import './courses/course-thumbnail.css';
 
 :root {
     --color-primary: #4f46e5;
@@ -64,38 +75,10 @@
 body {
     margin: 0;
     font-family: var(--font-sans);
-    color: var(--text-primary, var(--color-gray-900));
-    background: var(--surface-page, var(--color-gray-50));
+    color: var(--text-primary);
+    background: var(--surface-page);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-}
-
-#app {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-header {
-    background: var(--surface-header, white);
-    border-bottom: 1px solid var(--border-subtle, var(--color-gray-200));
-    padding: 1rem 2rem;
-    box-shadow: var(--shadow-sm);
-}
-
-header h1 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-primary, var(--color-gray-900));
-}
-
-main {
-    flex: 1;
-    padding: 2rem;
-    max-width: 1200px;
-    width: 100%;
-    margin: 0 auto;
 }
 
 .skip-link {
@@ -112,4 +95,32 @@ main {
 
 .skip-link:focus {
     top: 0;
+}
+
+/* ==========================
+   DARK THEME OVERRIDES
+   ========================== */
+
+body.dark {
+    --color-gray-50: #1e293b;
+    --color-gray-100: #253244;
+    --color-gray-200: #334155;
+    --color-gray-300: #475569;
+    --color-gray-400: #64748b;
+    --color-gray-500: #94a3b8;
+    --color-gray-600: #cbd5e1;
+    --color-gray-700: #e2e8f0;
+    --color-gray-800: #f1f5f9;
+    --color-gray-900: #f8fafc;
+
+    --color-primary-light: #312e81;
+    --color-success-light: #064e3b;
+    --color-warning-light: #78350f;
+    --color-error-light: #7f1d1d;
+    --color-info-light: #0c4a6e;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
 }

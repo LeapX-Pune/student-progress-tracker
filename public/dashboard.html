@@ -4,13 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Profile - Dashboard</title>
-    <!-- Link the CSS file from src/dashboard -->
-    <link rel="stylesheet" href="../src/dashboard/dashboard.css">
+    <!-- Link the CSS file copied from src/dashboard -->
+    <link rel="stylesheet" href="dashboard.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Link the JS file from src/dashboard -->
-    <script src="../src/dashboard/dashboard.js" defer></script>
+    <!-- Dark mode: apply class before paint to avoid flash -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <script>
+        function applyTheme() {
+            var isDark = localStorage.getItem('theme') === 'dark' || document.documentElement.classList.contains('dark');
+            if (isDark) document.body.classList.add('dark');
+            else document.body.classList.remove('dark');
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', applyTheme);
+        } else {
+            applyTheme();
+        }
+    </script>
+    <!-- Link the JS file copied from src/dashboard -->
+    <script src="dashboard.js" defer></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="dashboard-wrapper">
@@ -32,26 +52,6 @@
                 <a href="#" class="nav-pill">Speaking</a>
                 <a href="#" class="nav-pill">Progress</a>
                 <a href="#" class="nav-pill">Courses</a>
-            </div>
-            
-            <div class="nav-right">
-                <button class="nav-icon-btn" aria-label="Search">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    
-                </button>
-                <button class="nav-icon-btn" aria-label="Notifications">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                    </svg>
-                    <span class="badge-dot"></span>
-                </button>
-                <button class="nav-icon-btn user-avatar-btn" aria-label="Profile User Menu">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="User Avatar">
-                </button>
             </div>
         </nav>
         
@@ -106,7 +106,6 @@
                     <!-- Left Column: Courses Search & List -->
                     <div class="grid-column">
                        
-                        <!--
                         <section class="premium-card">
                             <div class="card-header">
                                 <div>
@@ -168,7 +167,6 @@
                                 </div>
                             </div>
                         </section>
-                        -->
                         
                     </div>
                     
@@ -221,15 +219,8 @@
                                 </button>
                             </div>
                             
-                            <div class="placeholder-content">
-                                <div style="text-align: center;">
-                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 0.5rem; color: var(--text-secondary); opacity: 0.6;">
-                                        <line x1="18" y1="20" x2="18" y2="10"></line>
-                                        <line x1="12" y1="20" x2="12" y2="4"></line>
-                                        <line x1="6" y1="20" x2="6" y2="14"></line>
-                                    </svg>
-                                    <p>Performance details will be shown here.</p>
-                                </div>
+                            <div class="chart-container-line">
+                                <canvas id="weeklyProgressChart"></canvas>
                             </div>
                         </section>
                         
@@ -244,8 +235,8 @@
                                         <p class="card-subtitle">Check and complete tasks</p>
                                     </div>
                                 </div>
-                                <div class="placeholder-content" style="min-height: 150px;">
-                                    <p>No homework due today.</p>
+                                <div class="chart-container-bar">
+                                    <canvas id="quizChart"></canvas>
                                 </div>
                             </section>
                             
@@ -256,8 +247,8 @@
                                         <p class="card-subtitle">See how you rank among friends</p>
                                     </div>
                                 </div>
-                                <div class="placeholder-content" style="min-height: 150px;">
-                                    <p>Scores will load soon.</p>
+                                <div class="chart-container-doughnut">
+                                    <canvas id="gradeChart"></canvas>
                                 </div>
                             </section>
                         </div>
@@ -267,5 +258,6 @@
             </main>
         </div>
     </div>
+    <script src="assets/chart_script.js"></script>
 </body>
 </html>
