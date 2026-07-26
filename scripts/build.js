@@ -36,6 +36,8 @@ await build({
         'import.meta.env.DEV': 'false',
         'import.meta.env.PROD': 'true',
         'import.meta.env.VITE_API_URL': '"https://api.example.com/api"',
+        'import.meta.env.VITE_ENABLE_MOCK_API': '"false"',
+        'import.meta.env.VITE_API_MOCK_ENABLED': '"false"',
     },
     treeShaking: true,
     legalComments: 'none',
@@ -72,6 +74,11 @@ copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(distDir, 'script.js'
 // Copy standalone JS files from public root
 if (existsSync(resolve(publicDir, 'attendance.js'))) {
     copyFileSync(resolve(publicDir, 'attendance.js'), resolve(distDir, 'attendance.js'));
+}
+
+// Copy deployment config (SPA fallback, redirects)
+if (existsSync(resolve(publicDir, '_redirects'))) {
+    copyFileSync(resolve(publicDir, '_redirects'), resolve(distDir, '_redirects'));
 }
 
 // Copy assets for standalone HTML pages
