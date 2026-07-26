@@ -1,4 +1,4 @@
-import { getConfig } from '../utils/env.js';
+import { getConfig, isDevelopment } from '../utils/env.js';
 import { normalizeApiError } from '../utils/errors.js';
 import { getAuthToken } from './authStorage.js';
 
@@ -140,8 +140,18 @@ export class ApiService {
         // Check deduplication
         const requestKey = !skipDedup && this._getRequestKey(method, url, body);
         if (requestKey && this.pendingRequests.has(requestKey)) {
+            if (isDevelopment())
+                console.log(`[API Dedup] Returning existing request for ${method} ${url}`);
             return this.pendingRequests.get(requestKey);
         }
+
+        if (isDevelopment()) {
+            console.log(`[API Request] ${method} ${url}`, {
+                body: body ? JSON.parse(body) : null,
+                ...otherOptions,
+            });
+        }
+        const requestStartTime = Date.now();
 
         // 1. Run request interceptor
         const fetchOptions = this._requestInterceptor({ method, body, ...otherOptions }, endpoint);
@@ -161,10 +171,21 @@ export class ApiService {
         const fetchPromise = fetch(url, fetchOptions)
             .then(async response => {
                 if (requestKey) this.pendingRequests.delete(requestKey);
+                if (isDevelopment()) {
+                    console.log(
+                        `[API Response] ${method} ${url} (${response.status}) took ${Date.now() - requestStartTime}ms`
+                    );
+                }
                 return await this._responseInterceptor(response);
             })
             .catch(error => {
                 if (requestKey) this.pendingRequests.delete(requestKey);
+                if (isDevelopment()) {
+                    console.error(
+                        `[API Error] ${method} ${url} failed after ${Date.now() - requestStartTime}ms`,
+                        error
+                    );
+                }
 
                 // Handle abort specifically
                 if (error.name === 'AbortError') {
