@@ -31,35 +31,39 @@ import { AUTH_CONSTANTS } from '../../utils/constants.js';
 export function createDemoCredentials({ onFill } = {}) {
     const block = document.createElement('div');
     block.className =
-        'p-3 bg-surface-container-low border border-outline-variant rounded-lg text-left';
+        'p-4.5 sm:p-5 bg-[#F1F5F9] border border-[#CBD5E1] rounded-xl text-left shadow-xs';
     block.setAttribute('role', 'note');
     block.setAttribute('aria-label', 'Demo login credentials');
 
     const heading = document.createElement('p');
-    heading.className = 'font-label-sm text-label-sm text-primary mb-2 font-medium';
-    heading.textContent = 'Demo credentials';
+    heading.className =
+        'text-xs text-[#334155] mb-2.5 font-bold uppercase tracking-wider flex items-center gap-1.5';
+    heading.innerHTML =
+        '<span class="material-symbols-outlined text-[16px] text-primary">info</span> <span>Demo credentials</span>';
     block.appendChild(heading);
 
     // Email row
     const emailRow = document.createElement('p');
-    emailRow.className = 'font-body-sm text-body-sm text-on-surface-variant mb-1';
-    emailRow.innerHTML = `<span>Email:</span>
-      <code class="ml-1 font-mono text-on-surface bg-surface-container px-1 py-0.5 rounded">${AUTH_CONSTANTS.DEMO_EMAIL}</code>`;
+    emailRow.className = 'text-[12px] leading-[1.5] text-[#475569] mb-1.5 flex items-center';
+    emailRow.innerHTML = `<span class="w-20 font-medium">Email:</span>
+      <code class="font-mono text-[#0F172A] bg-white border border-[#CBD5E1] px-2 py-0.5 rounded text-[12px] shadow-xs">${AUTH_CONSTANTS.DEMO_EMAIL}</code>`;
     block.appendChild(emailRow);
 
     // Password row
     const passRow = document.createElement('p');
-    passRow.className = 'font-body-sm text-body-sm text-on-surface-variant mb-2';
-    passRow.innerHTML = `<span>Password:</span>
-      <code class="ml-1 font-mono text-on-surface bg-surface-container px-1 py-0.5 rounded">${AUTH_CONSTANTS.DEMO_PASSWORD}</code>`;
+    passRow.className = 'text-[12px] leading-[1.5] text-[#475569] mb-3 flex items-center';
+    passRow.innerHTML = `<span class="w-20 font-medium">Password:</span>
+      <code class="font-mono text-[#0F172A] bg-white border border-[#CBD5E1] px-2 py-0.5 rounded text-[12px] shadow-xs">${AUTH_CONSTANTS.DEMO_PASSWORD}</code>`;
     block.appendChild(passRow);
 
     // Auto-fill button (only rendered when a handler is provided)
     if (typeof onFill === 'function') {
         const fillBtn = document.createElement('button');
         fillBtn.type = 'button';
-        fillBtn.className = 'text-xs font-medium text-primary hover:underline focus:outline-none';
-        fillBtn.textContent = 'Use demo credentials';
+        fillBtn.className =
+            'text-[12px] font-semibold text-primary hover:underline inline-flex items-center gap-1 focus:outline-none';
+        fillBtn.innerHTML =
+            '<span>Use demo credentials</span> <span class="material-symbols-outlined text-[14px]">arrow_forward</span>';
         fillBtn.addEventListener('click', () => {
             onFill({ email: AUTH_CONSTANTS.DEMO_EMAIL, password: AUTH_CONSTANTS.DEMO_PASSWORD });
         });

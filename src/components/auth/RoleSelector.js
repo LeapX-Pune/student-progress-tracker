@@ -19,13 +19,14 @@ export function createRoleSelector({ initialRole = 'student', onChange } = {}) {
     let currentRole = initialRole;
 
     const baseTabClasses =
-        'flex-1 py-2 px-4 rounded-md font-label-sm text-label-sm text-center transition-all';
-    const activeTabClasses = 'bg-surface shadow-sm border border-outline-variant/30 text-primary';
-    const inactiveTabClasses = 'text-on-surface-variant hover:text-on-surface';
+        'flex-1 py-2 px-4 rounded-lg text-sm font-semibold text-center transition-all duration-200 cursor-pointer select-none';
+    const activeTabClasses = 'bg-white shadow-md border border-[#CBD5E1] text-primary font-bold';
+    const inactiveTabClasses =
+        'text-[#64748B] hover:text-[#0F172A] font-medium opacity-80 hover:opacity-100';
 
     const container = document.createElement('div');
     container.className =
-        'flex p-1 bg-surface-container-low rounded-lg mb-lg border border-outline-variant/50 shadow-sm';
+        'flex p-1 bg-[#E2E8F0] rounded-xl mb-4 border border-[#CBD5E1] shadow-inner';
     container.id = 'role-selector';
     container.setAttribute('role', 'tablist');
 

@@ -41,7 +41,7 @@ export function createCheckbox({
     onChange,
 } = {}) {
     const wrapper = document.createElement('div');
-    wrapper.className = `flex items-center gap-2 mt-4${className ? ` ${className}` : ''}`;
+    wrapper.className = `flex items-center gap-2 my-3${className ? ` ${className}` : ''}`;
 
     const input = document.createElement('input');
     input.type = 'checkbox';
@@ -49,8 +49,12 @@ export function createCheckbox({
     input.name = name;
     input.checked = checked;
     input.disabled = disabled;
+    input.setAttribute('width', '16');
+    input.setAttribute('height', '16');
+    input.style.cssText =
+        'width: 16px !important; height: 16px !important; min-width: 16px !important; min-height: 16px !important; max-width: 16px !important; max-height: 16px !important; cursor: pointer; margin: 0; shrink: 0;';
     input.className =
-        'w-4 h-4 text-primary bg-surface border-outline-variant rounded focus:ring-primary focus:ring-2';
+        'w-4 h-4 text-primary bg-surface border-outline-variant rounded focus:ring-primary focus:ring-2 cursor-pointer shrink-0';
 
     if (typeof onChange === 'function') {
         input.addEventListener('change', onChange);
@@ -58,7 +62,8 @@ export function createCheckbox({
 
     const labelEl = document.createElement('label');
     labelEl.htmlFor = id;
-    labelEl.className = 'font-label-sm text-label-sm text-on-surface select-none cursor-pointer';
+    labelEl.className =
+        'font-label-sm text-xs font-medium text-on-surface select-none cursor-pointer leading-none';
     labelEl.textContent = label ?? '';
 
     wrapper.appendChild(input);
