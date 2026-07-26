@@ -12,7 +12,7 @@ import { createLoginPage } from './pages/LoginPage.js';
 import { initApi } from './services/api.js';
 import { initMotionPreferences } from './utils/animations.js';
 import { handleGlobalErrors } from './utils/errors.js';
-import { initScrollRestoration, updateDocumentTitle } from './utils/router.js';
+import { initScrollRestoration } from './utils/router.js';
 
 /**
  *
@@ -190,7 +190,6 @@ function wireAppInteractions() {
 async function init() {
     initMotionPreferences();
     initScrollRestoration();
-    updateDocumentTitle();
     wireGlobalErrorHandler();
     wireNetworkDetection();
     wireErrorBoundary();

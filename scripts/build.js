@@ -69,6 +69,11 @@ const srcDir = resolve(rootDir, 'src');
 copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(distDir, 'style.css'));
 copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(distDir, 'script.js'));
 
+// Copy standalone JS files from public root
+if (existsSync(resolve(publicDir, 'attendance.js'))) {
+    copyFileSync(resolve(publicDir, 'attendance.js'), resolve(distDir, 'attendance.js'));
+}
+
 // Copy assets for standalone HTML pages
 copyFileSync(resolve(publicDir, 'dashboard.html'), resolve(distDir, 'dashboard.html'));
 copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(distDir, 'dashboard.css'));
