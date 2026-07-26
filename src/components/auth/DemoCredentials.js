@@ -38,12 +38,18 @@ export function createDemoCredentials({ initialRole = 'student', onFill } = {}) 
     block.setAttribute('role', 'note');
     block.setAttribute('aria-label', 'Demo login credentials');
 
-    const heading = document.createElement('p');
-    heading.className =
-        'text-xs text-[#334155] mb-2.5 font-bold uppercase tracking-wider flex items-center gap-1.5';
-    heading.innerHTML =
-        '<span class="material-symbols-outlined text-[16px] text-primary">info</span> <span id="demo-title">Demo credentials</span>';
-    block.appendChild(heading);
+    let isOpen = window.innerWidth >= 640;
+
+    const toggleBtn = document.createElement('button');
+    toggleBtn.type = 'button';
+    toggleBtn.className =
+        'w-full text-xs text-[#334155] font-bold uppercase tracking-wider flex items-center gap-1.5 focus:outline-none';
+    toggleBtn.innerHTML =
+        '<span class="material-symbols-outlined text-[16px] text-primary">info</span> <span id="demo-title">Demo credentials</span> <span class="material-symbols-outlined text-[16px] ml-auto transition-transform duration-200" id="demo-chevron">expand_more</span>';
+    block.appendChild(toggleBtn);
+
+    const contentWrapper = document.createElement('div');
+    contentWrapper.id = 'demo-content';
 
     const emailRow = document.createElement('p');
     emailRow.className = 'text-[12px] leading-[1.5] text-[#475569] mb-1.5 flex items-center';
@@ -73,7 +79,7 @@ export function createDemoCredentials({ initialRole = 'student', onFill } = {}) 
         currentRole = role;
         const creds = getCredentialsForRole(role);
         const roleName = role.charAt(0).toUpperCase() + role.slice(1);
-        const titleSpan = heading.querySelector('#demo-title');
+        const titleSpan = toggleBtn.querySelector('#demo-title');
         if (titleSpan) titleSpan.textContent = `Demo ${roleName} credentials`;
 
         emailRow.innerHTML = `<span class="w-20 font-medium">Email:</span>
@@ -85,10 +91,9 @@ export function createDemoCredentials({ initialRole = 'student', onFill } = {}) 
 
     renderRole(initialRole);
 
-    block.appendChild(emailRow);
-    block.appendChild(passRow);
+    contentWrapper.appendChild(emailRow);
+    contentWrapper.appendChild(passRow);
 
-    // Auto-fill button (only rendered when a handler is provided)
     if (typeof onFill === 'function') {
         const fillBtn = document.createElement('button');
         fillBtn.type = 'button';
@@ -100,8 +105,26 @@ export function createDemoCredentials({ initialRole = 'student', onFill } = {}) 
             const creds = getCredentialsForRole(currentRole);
             onFill({ email: creds.email, password: creds.password, role: currentRole });
         });
-        block.appendChild(fillBtn);
+        contentWrapper.appendChild(fillBtn);
     }
+
+    block.appendChild(contentWrapper);
+
+    /**
+     *
+     */
+    function applyState() {
+        contentWrapper.style.display = isOpen ? '' : 'none';
+        const chevron = block.querySelector('#demo-chevron');
+        if (chevron) chevron.style.transform = isOpen ? 'rotate(180deg)' : '';
+    }
+
+    applyState();
+
+    toggleBtn.addEventListener('click', () => {
+        isOpen = !isOpen;
+        applyState();
+    });
 
     block.setRole = renderRole;
     return block;
