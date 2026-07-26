@@ -282,6 +282,24 @@ export class ApiService {
     delete(endpoint, options = {}) {
         return this.request(endpoint, { method: 'DELETE', ...options });
     }
+    /**
+     * Executes multiple requests concurrently.
+     * @param {Array<{endpoint: string, options: Object}>} requests - Array of request configs.
+     * @returns {Promise<Array<any>>} Array of responses in the same order.
+     */
+    async batch(requests) {
+        if (!Array.isArray(requests)) {
+            throw new Error('batch() expects an array of requests');
+        }
+        return Promise.all(
+            requests.map(req => {
+                if (typeof req === 'string') {
+                    return this.get(req);
+                }
+                return this.request(req.endpoint, req.options || {});
+            })
+        );
+    }
 }
 
 export const api = new ApiService();
