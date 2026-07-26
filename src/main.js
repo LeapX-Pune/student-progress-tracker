@@ -206,10 +206,10 @@ async function init() {
         'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;';
     document.body.appendChild(spinner);
 
-    initCoursesPage();
-
     await AuthContext.restoreSession();
     await initApi();
+
+    initCoursesPage();
 
     if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
 
