@@ -19,8 +19,6 @@ function copyAsset(src, dest) {
 }
 
 // Copy standalone source files referenced by index.html for dev server
-const srcDir = resolve(rootDir, 'src');
-const publicDir = resolve(rootDir, 'public');
 copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
 copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(publicDir, 'script.js'));
 
