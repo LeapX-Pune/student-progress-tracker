@@ -96,51 +96,53 @@ built exclusively with vanilla frontend technologies:
 - **Scripting**: Vanilla JavaScript (ES6+ features, native DOM APIs, fetch, and
   modules).
 
-> [!IMPORTANT] **No build tools or frameworks allowed.** This means no React,
-> TypeScript, Vite, Tailwind, Bootstrap, Node.js, npm, package.json, or custom
-> bundlers.
-
 ---
 
 ## 📂 Project Architecture & Directory Structure
 
 ```text
 student-progress-tracker/
-├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   │   ├── bug_report.md
-│   │   └── feature_request.md
-│   └── PULL_REQUEST_TEMPLATE.md
-├── assets/
-│   ├── css/      # Stylesheets (Vanilla CSS files)
-│   ├── js/       # Vanilla JavaScript modules and logic
-│   ├── images/   # Graphic files, avatars, and illustration assets
-│   └── icons/    # Vector icons (SVG formats)
-├── pages/        # Static pages & view templates
-├── data/         # Mock data and static JSON objects
-├── index.html    # Application Entry Point
-├── README.md     # Project Documentation
-├── LICENSE       # Project License
-└── .gitignore    # Ignored files list
+├── .github/workflows/   # CI/CD pipeline workflows
+├── docs/                # Documentation (PRD, API, architecture, guides)
+├── mock-api/            # JSON Server mock data
+├── public/              # Static assets (index.html, _redirects, sw.js)
+├── scripts/             # Build and dev scripts (esbuild)
+├── src/                 # Application source code
+│   ├── components/      # UI component factories
+│   ├── config/          # Environment configuration
+│   ├── context/         # Global state singletons
+│   ├── hooks/           # Reactive subscription hooks
+│   ├── pages/           # Page-level modules
+│   ├── router/          # Route guards
+│   ├── services/        # API, auth, storage, network
+│   ├── styles/          # CSS files (components/, courses/)
+│   └── utils/           # Pure helper functions
+├── tests/               # Unit, integration, E2E tests
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── LICENSE
+└── README.md
 ```
 
 ---
 
 ## ⚙️ How to Run
 
-Since this project uses no bundlers, compilation, or package managers:
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/LeapX-Pune/student-progress-tracker.git
-   cd student-progress-tracker
-   ```
-2. **Launch the application**:
-   - Open the
-     [index.html](file:///Users/devanshmittal/Documents/LeapX_Internship/student-progress-tracker/index.html)
-     file directly in any modern web browser.
-   - Alternatively, use a lightweight local server extension (e.g., _Live
-     Server_ in VS Code) to serve the directory.
+1. **Clone and install**:
+    ```bash
+    git clone https://github.com/LeapX-Pune/student-progress-tracker.git
+    cd student-progress-tracker
+    npm install
+    ```
+2. **Start dev server**:
+    ```bash
+    npm run dev
+    ```
+3. **Build for production**:
+    ```bash
+    npm run build
+    npm run preview
+    ```
 
 ---
 
@@ -155,6 +157,15 @@ For detailed implementation guidance, refer to the committed docs in
 | [`docs/PROJECT_DIVISION_OVERVIEW.md`](./docs/PROJECT_DIVISION_OVERVIEW.md)                                     | High-level overview of all 12 project parts                               |
 | [`docs/FILE_STRUCTURE.md`](./docs/FILE_STRUCTURE.md)                                                           | Complete file tree and folder conventions                                 |
 | [`docs/Student_Progress_Tracking_SaaS_Detailed_PRD.md`](./docs/Student_Progress_Tracking_SaaS_Detailed_PRD.md) | Full PRD with functional and non-functional requirements                  |
+| [`docs/api/endpoints.md`](./docs/api/endpoints.md)                                                             | API endpoint reference                                                    |
+| [`docs/api/auth.md`](./docs/api/auth.md)                                                                       | Authentication flow documentation                                         |
+| [`docs/api/data-models.md`](./docs/api/data-models.md)                                                         | Data model definitions                                                    |
+| [`docs/architecture/overview.md`](./docs/architecture/overview.md)                                             | System architecture overview                                              |
+| [`docs/architecture/adr/`](./docs/architecture/adr)                                                            | Architecture Decision Records                                             |
+| [`docs/guides/getting-started.md`](./docs/guides/getting-started.md)                                           | Developer onboarding guide                                                |
+| [`docs/guides/testing.md`](./docs/guides/testing.md)                                                           | Testing strategies and configuration                                      |
+| [`docs/deployment/vercel.md`](./docs/deployment/vercel.md)                                                     | Vercel deployment guide                                                   |
+| [`docs/references/design-tokens.md`](./docs/references/design-tokens.md)                                       | Colors, typography, spacing tokens                                        |
 
 ---
 

@@ -1,0 +1,32 @@
+name: Deploy Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '24'
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true

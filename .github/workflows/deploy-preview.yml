@@ -1,0 +1,32 @@
+name: Deploy Preview
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+env:
+  NODE_VERSION: '24'
+
+jobs:
+  deploy-preview:
+    name: Deploy Preview
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          destination_dir: preview/pr-${{ github.event.number }}
+          keep_files: true
