@@ -673,7 +673,7 @@
         if (ls) ls.style.display = 'none';
         if (es) es.style.display = 'none';
         if (ems) ems.style.display = 'none';
-        if (ph) ph.style.display = 'flex';
+        if (ph) ph.style.display = 'none';
     }
 
     /**

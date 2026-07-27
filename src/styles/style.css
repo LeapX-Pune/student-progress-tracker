@@ -1495,13 +1495,22 @@ svg.lucide {
     border: 2px dashed var(--border-default);
     border-radius: var(--radius-lg);
     background: var(--surface-sunken);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
     overflow: hidden;
 }
 
+.chart-container canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
 .chart-placeholder-text {
+    position: absolute;
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
