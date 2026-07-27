@@ -18,9 +18,19 @@ import { createUserAvatar } from './UserAvatar.js';
  * @returns {string} Badge HTML string
  */
 export function getRoleBadgeHtml(role) {
+    const isAdministrator = role === 'administrator';
     const isTeacher = role === 'teacher';
-    const roleLabel = isTeacher ? 'Teacher' : 'Student';
-    const badgeClass = isTeacher ? 'role-badge--teacher' : 'role-badge--student';
+    let roleLabel, badgeClass;
+    if (isAdministrator) {
+        roleLabel = 'Administrator';
+        badgeClass = 'role-badge--administrator';
+    } else if (isTeacher) {
+        roleLabel = 'Teacher';
+        badgeClass = 'role-badge--teacher';
+    } else {
+        roleLabel = 'Student';
+        badgeClass = 'role-badge--student';
+    }
     return `<span class="role-badge ${badgeClass}">${roleLabel}</span>`;
 }
 
@@ -37,7 +47,14 @@ export function updateUserProfileHeader(user) {
     if (profileTrigger) {
         // Update or replace avatar wrapper
         const oldAvatar = profileTrigger.querySelector('.avatar, .user-avatar');
-        const roleRing = user.role === 'teacher' ? 'avatar-ring--teacher' : 'avatar-ring--student';
+        let roleRing;
+        if (user.role === 'teacher') {
+            roleRing = 'avatar-ring--teacher';
+        } else if (user.role === 'administrator') {
+            roleRing = 'avatar-ring--administrator';
+        } else {
+            roleRing = 'avatar-ring--student';
+        }
         const newAvatar = createUserAvatar(user, 'sm', roleRing);
 
         if (oldAvatar) {

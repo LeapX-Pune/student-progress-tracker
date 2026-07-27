@@ -215,6 +215,7 @@ const AuthContext = (() => {
                         id: 'mock-001',
                         name: 'Sai Shendge',
                         email: 'sai@example.com',
+                        role: 'administrator',
                     };
                     const mockToken = 'mock-jwt-token-dev';
                     saveAuthToken({
