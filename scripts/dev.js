@@ -1,5 +1,5 @@
 import { context } from 'esbuild';
-import { copyFileSync, existsSync, mkdirSync } from 'fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
@@ -18,9 +18,28 @@ function copyAsset(src, dest) {
     }
 }
 
+function copyDir(src, dest) {
+    if (!existsSync(dest)) mkdirSync(dest, { recursive: true });
+    const entries = readdirSync(src);
+    for (const file of entries) {
+        const srcFile = resolve(src, file);
+        const destFile = resolve(dest, file);
+        if (statSync(srcFile).isDirectory()) {
+            copyDir(srcFile, destFile);
+        } else {
+            copyFileSync(srcFile, destFile);
+        }
+    }
+}
+
 // Copy standalone source files referenced by index.html for dev server
 copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
 copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(publicDir, 'script.js'));
+
+// Copy auth assets (SVG, images) from src/assets to public/assets for dev server
+if (existsSync(resolve(srcDir, 'assets'))) {
+    copyDir(resolve(srcDir, 'assets'), resolve(publicDir, 'assets'));
+}
 
 // Start JSON Server mock API
 const mockApi = spawn(

@@ -206,8 +206,8 @@ async function init() {
         'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;';
     document.body.appendChild(spinner);
     wireLoadingStates();
-    await AuthContext.restoreSession();
     await initApi();
+    await AuthContext.restoreSession();
     wireAuth();
     const { isAuthenticated } = AuthContext.getState();
     const currentHash = window.location.hash.replace(/^#\/?/, '').split('?')[0].trim();

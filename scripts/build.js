@@ -83,8 +83,11 @@ if (existsSync(resolve(publicDir, 'assets'))) {
     copyDir(resolve(publicDir, 'assets'), resolve(distDir, 'assets'));
 }
 
-// Copy standalone source files referenced by index.html
+// Copy auth assets (SVG, images) from src/assets to dist/assets
 const srcDir = resolve(rootDir, 'src');
+if (existsSync(resolve(srcDir, 'assets'))) {
+    copyDir(resolve(srcDir, 'assets'), resolve(distDir, 'assets'));
+}
 copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(distDir, 'style.css'));
 copyFileSync(resolve(publicDir, 'script.js'), resolve(distDir, 'script.js'));
 
