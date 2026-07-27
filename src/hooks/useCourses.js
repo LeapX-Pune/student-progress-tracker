@@ -26,15 +26,9 @@ export function useCourses({ onLoading, onSuccess, onError }) {
         if (onLoading) onLoading();
 
         try {
-            console.log('[useCourses] Fetching courses for student:', studentId);
             const data = await getCourses(studentId);
-            console.log('[useCourses] API Response data:', data);
-            if (onSuccess) {
-                console.log('[useCourses] Calling onSuccess with hook response data');
-                onSuccess(data);
-            }
+            if (onSuccess) onSuccess(data);
         } catch (error) {
-            console.error('[useCourses] Error fetching courses:', error);
             if (onError) onError(error);
         }
     };

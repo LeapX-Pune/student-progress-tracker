@@ -4,7 +4,6 @@ import { createCourseCard } from './CourseCard.js';
  *
  */
 export function mountCourseGrid(containerElement, coursesData) {
-    console.log('[CourseGrid] Received coursesData props:', coursesData);
     if (!containerElement) return;
 
     // Clear existing content
