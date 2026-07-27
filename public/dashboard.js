@@ -205,6 +205,13 @@ function renderCourses(courses) {
                     ? Math.round((course.completedModules / course.totalModules) * 100)
                     : 0;
 
+            const nextModuleHtml = course.nextModule
+                ? `<div class="course-next-module" style="font-size: 0.8rem; margin-bottom: 0.75rem; padding: 0.4rem 0.5rem; background: rgba(255,255,255,0.6); border-radius: 6px; border-left: 3px solid #3b82f6; transition: background 0.3s ease;">
+                    <span style="color: var(--text-secondary); font-weight: 500;">Next:</span>
+                    <span style="font-weight: 600; color: var(--text-primary); margin-left: 0.25rem;">${course.nextModule}</span>
+                </div>`
+                : '';
+
             return `
             <div class="course-item-box ${colorClass}" style="margin-bottom: 1.25rem;">
                 <div class="course-header-row" style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
@@ -228,14 +235,7 @@ function renderCourses(courses) {
                     </div>
                 </div>
 
-                ${
-                    course.nextModule
-                        ? `<div class="course-next-module" style="font-size: 0.8rem; margin-bottom: 0.75rem; padding: 0.4rem 0.5rem; background: rgba(255,255,255,0.6); border-radius: 6px; border-left: 3px solid #3b82f6; transition: background 0.3s ease;">
-    <span style="color: var(--text-secondary); font-weight: 500;">Next:</span>
-    <span style="font-weight: 600; color: var(--text-primary); margin-left: 0.25rem;">${course.nextModule}</span>
-</div>`
-                        : ''
-                }
+                ${nextModuleHtml}
 
                 <div class="course-progress-section" style="margin-top: 0.5rem;">
                     <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.25rem;">

@@ -21,9 +21,10 @@ const DEFAULTS = {
 /**
  *
  */
-function getEnv(key, defaultValue) {
+function getEnv(keyOrValue, defaultValue) {
     const env = typeof import.meta !== 'undefined' && import.meta.env;
-    const value = env ? env[key] : undefined;
+    const value =
+        typeof keyOrValue === 'string' && env && keyOrValue in env ? env[keyOrValue] : keyOrValue;
     if (value === undefined || value === '') return defaultValue;
     if (value === 'true') return true;
     if (value === 'false') return false;
@@ -32,21 +33,24 @@ function getEnv(key, defaultValue) {
 }
 
 export const ENV = {
-    APP_NAME: getEnv('VITE_APP_NAME', DEFAULTS.APP_NAME),
-    APP_VERSION: getEnv('VITE_APP_VERSION', DEFAULTS.APP_VERSION),
-    API_BASE_URL: getEnv('VITE_API_BASE_URL', DEFAULTS.API_BASE_URL),
-    API_TIMEOUT: getEnv('VITE_API_TIMEOUT', DEFAULTS.API_TIMEOUT),
-    AUTH_TOKEN_KEY: getEnv('VITE_AUTH_TOKEN_KEY', DEFAULTS.AUTH_TOKEN_KEY),
-    AUTH_REDIRECT_KEY: getEnv('VITE_AUTH_REDIRECT_KEY', DEFAULTS.AUTH_REDIRECT_KEY),
-    AUTH_REMEMBER_DAYS: getEnv('VITE_AUTH_REMEMBER_DAYS', DEFAULTS.AUTH_REMEMBER_DAYS),
-    ENABLE_MOCK_API: getEnv('VITE_ENABLE_MOCK_API', DEFAULTS.ENABLE_MOCK_API),
-    ENABLE_PWA: getEnv('VITE_ENABLE_PWA', DEFAULTS.ENABLE_PWA),
-    ENABLE_ANALYTICS: getEnv('VITE_ENABLE_ANALYTICS', DEFAULTS.ENABLE_ANALYTICS),
+    APP_NAME: getEnv(import.meta.env.VITE_APP_NAME, DEFAULTS.APP_NAME),
+    APP_VERSION: getEnv(import.meta.env.VITE_APP_VERSION, DEFAULTS.APP_VERSION),
+    API_BASE_URL: getEnv(import.meta.env.VITE_API_BASE_URL, DEFAULTS.API_BASE_URL),
+    API_TIMEOUT: getEnv(import.meta.env.VITE_API_TIMEOUT, DEFAULTS.API_TIMEOUT),
+    AUTH_TOKEN_KEY: getEnv(import.meta.env.VITE_AUTH_TOKEN_KEY, DEFAULTS.AUTH_TOKEN_KEY),
+    AUTH_REDIRECT_KEY: getEnv(import.meta.env.VITE_AUTH_REDIRECT_KEY, DEFAULTS.AUTH_REDIRECT_KEY),
+    AUTH_REMEMBER_DAYS: getEnv(
+        import.meta.env.VITE_AUTH_REMEMBER_DAYS,
+        DEFAULTS.AUTH_REMEMBER_DAYS
+    ),
+    ENABLE_MOCK_API: getEnv(import.meta.env.VITE_ENABLE_MOCK_API, DEFAULTS.ENABLE_MOCK_API),
+    ENABLE_PWA: getEnv(import.meta.env.VITE_ENABLE_PWA, DEFAULTS.ENABLE_PWA),
+    ENABLE_ANALYTICS: getEnv(import.meta.env.VITE_ENABLE_ANALYTICS, DEFAULTS.ENABLE_ANALYTICS),
     CHART_ANIMATION_DURATION: getEnv(
-        'VITE_CHART_ANIMATION_DURATION',
+        import.meta.env.VITE_CHART_ANIMATION_DURATION,
         DEFAULTS.CHART_ANIMATION_DURATION
     ),
-    CHART_RESPONSIVE: getEnv('VITE_CHART_RESPONSIVE', DEFAULTS.CHART_RESPONSIVE),
+    CHART_RESPONSIVE: getEnv(import.meta.env.VITE_CHART_RESPONSIVE, DEFAULTS.CHART_RESPONSIVE),
 };
 
 if (!ENV.API_BASE_URL) {

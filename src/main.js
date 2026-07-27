@@ -7,17 +7,29 @@ import { createModal } from './components/Modal.js';
 import { removeSkeletons } from './components/SkeletonLoader.js';
 import { showError, showInfo } from './components/Toast.js';
 import { createTooltip } from './components/Tooltip.js';
+import { initUserProfileHeader, updateWelcomeHeader } from './components/auth/UserProfileHeader.js';
 import AuthContext from './context/AuthContext.js';
 import { initCoursesPage } from './pages/CoursesPage.js';
-import { createLoginPage } from './pages/LoginPage.js';
+import createLoginPage from './pages/LoginPage.js';
 import { initApi } from './services/api.js';
 import { initMotionPreferences } from './utils/animations.js';
 import { handleGlobalErrors } from './utils/errors.js';
 import { initScrollRestoration } from './utils/router.js';
+import { initTheme } from './utils/theme.js';
 
-/**
- *
- */
+// Legacy lucide bridge for handleRouteMount outside conflict area
+if (typeof window !== 'undefined') {
+    window.lucide = {
+        /**
+         *
+         */
+        createIcons: () => createIcons({ icons }),
+    };
+}
+
+let activePageHandle = null;
+
+/** */
 function wireGlobalErrorHandler() {
     handleGlobalErrors(error => {
         const message = error?.message || error?.reason?.message || 'An unexpected error occurred.';
@@ -56,56 +68,10 @@ function wireErrorBoundary() {
     };
 }
 
-let loginPageInstance = null;
-
 /**
  *
  */
-function showLoginView() {
-    if (loginPageInstance) return;
-    const authRoot = document.getElementById('auth-root');
-    if (!authRoot) return;
-    const appShell = document.querySelector('.app-shell');
-    if (appShell) appShell.style.display = 'none';
-    authRoot.style.display = '';
-    loginPageInstance = createLoginPage(authRoot);
-}
-
-/**
- *
- */
-function showAppView() {
-    if (loginPageInstance) {
-        loginPageInstance.destroy();
-        loginPageInstance = null;
-    }
-    const authRoot = document.getElementById('auth-root');
-    if (authRoot) authRoot.style.display = 'none';
-    const appShell = document.querySelector('.app-shell');
-    if (appShell) {
-        appShell.style.display = '';
-        createIcons({ icons });
-    }
-}
-
-/**
- *
- */
-function wireAuth() {
-    AuthContext.subscribe(({ isAuthenticated, isLoading }) => {
-        if (isLoading) return;
-        if (isAuthenticated) showAppView();
-        else showLoginView();
-    });
-
-    const signOutBtn = document.querySelector('.profile-dropdown-item--danger');
-    if (signOutBtn) {
-        signOutBtn.addEventListener('click', () => {
-            AuthContext.logout();
-            showInfo('Signed Out', 'You have been signed out successfully.');
-        });
-    }
-}
+function wireAuth() {}
 
 /**
  *
@@ -188,35 +154,88 @@ function wireAppInteractions() {
 /**
  *
  */
+function handleRouteMount(route) {
+    const pageContent = document.querySelector('[data-page-content]');
+    const appShell = document.querySelector('.app-shell');
+
+    if (activePageHandle && typeof activePageHandle.destroy === 'function') {
+        activePageHandle.destroy();
+        activePageHandle = null;
+    }
+
+    const { isAuthenticated, user } = AuthContext.getState();
+    if (!isAuthenticated && route !== 'login') {
+        window.location.hash = '#/login';
+        return;
+    }
+
+    if (route === 'login') {
+        if (appShell) appShell.classList.add('is-auth-view');
+        if (pageContent) {
+            pageContent.innerHTML = '';
+            activePageHandle = createLoginPage(pageContent);
+        }
+    } else {
+        if (appShell) appShell.classList.remove('is-auth-view');
+        if (user) {
+            updateWelcomeHeader(user);
+        }
+    }
+
+    if (
+        typeof window !== 'undefined' &&
+        window.lucide &&
+        typeof window.lucide.createIcons === 'function'
+    ) {
+        window.lucide.createIcons();
+    }
+}
+
+/**
+ *
+ */
 async function init() {
+    initTheme();
     initMotionPreferences();
     initScrollRestoration();
     wireGlobalErrorHandler();
-    wireNetworkDetection();
     wireErrorBoundary();
-    wireAuth();
-    wireLoadingStates();
-    wireTooltips();
-    wireAppInteractions();
-
-    createIcons({ icons });
-
+    wireNetworkDetection();
     const spinner = createLoadingSpinner({ size: 'lg', label: 'Loading application...' });
     spinner.style.cssText =
         'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;';
     document.body.appendChild(spinner);
-
+    wireLoadingStates();
     await AuthContext.restoreSession();
     await initApi();
-
+    wireAuth();
+    const { isAuthenticated } = AuthContext.getState();
+    const currentHash = window.location.hash.replace(/^#\/?/, '').split('?')[0].trim();
+    if (!isAuthenticated && currentHash !== 'login') {
+        window.location.hash = '#/login';
+    } else if (isAuthenticated && (currentHash === 'login' || !currentHash)) {
+        window.location.hash = '#/overview';
+    }
+    document.addEventListener('pathway:route', event => {
+        const routeKey = event.detail?.route;
+        handleRouteMount(routeKey);
+    });
+    handleRouteMount(currentHash || (isAuthenticated ? 'overview' : 'login'));
     initCoursesPage();
-
+    initUserProfileHeader();
+    const signOutBtn = document.querySelector('.profile-dropdown-item--danger');
+    if (signOutBtn) {
+        signOutBtn.addEventListener('click', () => {
+            AuthContext.logout();
+            window.location.hash = '#/login';
+        });
+    }
+    createIcons({ icons });
+    wireTooltips();
+    wireAppInteractions();
     if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
-
     const app = document.querySelector('.app-shell');
     if (app) app.classList.add('app--ready');
-
-    createIcons({ icons });
 }
 
 if (document.readyState === 'loading') {
