@@ -230,12 +230,10 @@ function renderCourses(courses) {
 
                 ${
                     course.nextModule
-                        ? `
-                <div class="course-next-module" style="font-size: 0.8rem; margin-bottom: 0.75rem; padding: 0.4rem 0.5rem; background: rgba(255,255,255,0.6); border-radius: 6px; border-left: 3px solid #3b82f6; transition: background 0.3s ease;">
-                    <span style="color: var(--text-secondary); font-weight: 500;">Next:</span>
-                    <span style="font-weight: 600; color: var(--text-primary); margin-left: 0.25rem;">${course.nextModule}</span>
-                </div>
-                `
+                        ? `<div class="course-next-module" style="font-size: 0.8rem; margin-bottom: 0.75rem; padding: 0.4rem 0.5rem; background: rgba(255,255,255,0.6); border-radius: 6px; border-left: 3px solid #3b82f6; transition: background 0.3s ease;">
+    <span style="color: var(--text-secondary); font-weight: 500;">Next:</span>
+    <span style="font-weight: 600; color: var(--text-primary); margin-left: 0.25rem;">${course.nextModule}</span>
+</div>`
                         : ''
                 }
 

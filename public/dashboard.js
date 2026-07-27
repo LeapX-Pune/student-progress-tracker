@@ -1,6 +1,9 @@
 /* global DOMParser */
 
 // Dashboard theme and live data synchronization
+/**
+ *
+ */
 function applyTheme() {
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark');
@@ -13,6 +16,9 @@ function applyTheme() {
 applyTheme();
 
 // Helper to format date
+/**
+ *
+ */
 function formatDate(dateString) {
     if (!dateString) return 'N/A';
     try {
@@ -28,6 +34,9 @@ function formatDate(dateString) {
 }
 
 // Helper to get grade letters
+/**
+ *
+ */
 function getGradeLetter(grade) {
     if (grade >= 90) return 'A';
     if (grade >= 85) return 'B+';
@@ -88,6 +97,9 @@ const DEFAULT_MOCK_COURSES = [
     },
 ];
 
+/**
+ *
+ */
 async function loadStudentData() {
     // Determine active student
     let studentId = 'stu_001'; // Default fallback
@@ -166,6 +178,9 @@ async function loadStudentData() {
     }
 }
 
+/**
+ *
+ */
 function renderCourses(courses) {
     const listContainer = document.querySelector('.course-list-container');
     if (!listContainer) return;
@@ -215,12 +230,10 @@ function renderCourses(courses) {
 
                 ${
                     course.nextModule
-                        ? `
-                <div class="course-next-module" style="font-size: 0.8rem; margin-bottom: 0.75rem; padding: 0.4rem 0.5rem; background: rgba(255,255,255,0.6); border-radius: 6px; border-left: 3px solid #3b82f6; transition: background 0.3s ease;">
-                    <span style="color: var(--text-secondary); font-weight: 500;">Next:</span>
-                    <span style="font-weight: 600; color: var(--text-primary); margin-left: 0.25rem;">${course.nextModule}</span>
-                </div>
-                `
+                        ? `<div class="course-next-module" style="font-size: 0.8rem; margin-bottom: 0.75rem; padding: 0.4rem 0.5rem; background: rgba(255,255,255,0.6); border-radius: 6px; border-left: 3px solid #3b82f6; transition: background 0.3s ease;">
+    <span style="color: var(--text-secondary); font-weight: 500;">Next:</span>
+    <span style="font-weight: 600; color: var(--text-primary); margin-left: 0.25rem;">${course.nextModule}</span>
+</div>`
                         : ''
                 }
 
@@ -239,6 +252,9 @@ function renderCourses(courses) {
         .join('');
 }
 
+/**
+ *
+ */
 async function updateLiveAttendance() {
     try {
         const response = await fetch('index.html');
