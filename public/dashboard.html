@@ -37,7 +37,7 @@
         <!-- Top Navbar -->
         <nav class="top-navbar">
             <div class="nav-left">
-                <div class="logo-box" onclick="window.location.href='index.html'" title="Back to Home">
+                <div class="logo-box" >
                     <!-- Geometric logo shape similar to design -->
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="18" height="18" rx="5" ry="5"></rect>
@@ -49,7 +49,7 @@
             
             <div class="nav-center">
                 <a href="#" class="nav-pill active">Dashboard</a>
-                <a href="#" class="nav-pill">Speaking</a>
+                <a href="#" class="nav-pill">Profile</a>
                 <a href="#" class="nav-pill">Progress</a>
                 <a href="#" class="nav-pill">Courses</a>
             </div>
@@ -132,38 +132,40 @@
                                 </button>
                             </div>
                             
-                            <div class="course-item-box purple">
-                                <h3 class="course-title-sub">Speak with Confidence</h3>
-                                <p class="course-desc">Learn how to speak English clearly and confidently in everyday situations.</p>
-                                <div class="course-footer">
-                                    <span class="course-date-badge">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                                        </svg>
-                                        27 Apr 2025
-                                    </span>
-                                    <div class="student-meta" style="margin-bottom: 0;">
-                                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=32&q=80" style="width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid #ffffff;" alt="Avatar">
+                            <div class="course-list-container">
+                                <div class="course-item-box purple">
+                                    <h3 class="course-title-sub">Speak with Confidence</h3>
+                                    <p class="course-desc">Learn how to speak English clearly and confidently in everyday situations.</p>
+                                    <div class="course-footer">
+                                        <span class="course-date-badge">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                                            </svg>
+                                            27 Apr 2025
+                                        </span>
+                                        <div class="student-meta" style="margin-bottom: 0;">
+                                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=32&q=80" style="width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid #ffffff;" alt="Avatar">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div class="course-item-box blue">
-                                <h3 class="course-title-sub">Master the Basics</h3>
-                                <p class="course-desc">Build a strong foundation with essential grammar and vocabulary.</p>
-                                <div class="course-footer">
-                                    <span class="course-date-badge">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                                        </svg>
-                                        30 Apr 2025
-                                    </span>
+                                
+                                <div class="course-item-box blue">
+                                    <h3 class="course-title-sub">Master the Basics</h3>
+                                    <p class="course-desc">Build a strong foundation with essential grammar and vocabulary.</p>
+                                    <div class="course-footer">
+                                        <span class="course-date-badge">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                                            </svg>
+                                            30 Apr 2025
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -176,14 +178,14 @@
                         <article class="premium-card" style="padding: 1.5rem;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                                 <h2 class="card-title">Student Profile</h2>
-                                <span class="meta-badge meta-id" style="margin: 0;">PWIOI-SOT-2025-29-0035</span>
+                                <span class="meta-badge meta-id" id="studentId" style="margin: 0;">PWIOI-SOT-2025-29-0035</span>
                             </div>
                             <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
-                                <img class="student-avatar" src="https://plus.unsplash.com/premium_vector-1727956885098-4bf2c2be130a?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Rehan Azim">
+                                <img class="student-avatar" id="studentAvatar" src="https://plus.unsplash.com/premium_vector-1727956885098-4bf2c2be130a?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Rehan Azim">
                                 <div>
-                                    <h3 style="font-size: 1.25rem; font-weight: 700;">Rehan Azim</h3>
-                                    <p style="color: var(--text-secondary); font-size: 0.875rem;">rehan@student.edu</p>
-                                    <span style="font-size: 0.75rem; color: var(--text-secondary);">Student since Aug 24, 2025</span>
+                                    <h3 id="studentName" style="font-size: 1.25rem; font-weight: 700;">Rehan Azim</h3>
+                                    <p id="studentEmail" style="color: var(--text-secondary); font-size: 0.875rem;">rehan@student.edu</p>
+                                    <span id="studentSince" style="font-size: 0.75rem; color: var(--text-secondary);">Student since Aug 24, 2025</span>
                                 </div>
                                 <div class="profile-stats-container">
                                     <div class="progress-ring">
