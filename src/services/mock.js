@@ -1,4 +1,86 @@
-import dbData from '../../mock-api/db.json';
+const mockStudent = {
+    id: 'stu_001',
+    name: 'Alex Johnson',
+    email: 'student@demo.com',
+    avatarUrl: 'https://i.pravatar.cc/150?u=stu_001',
+    studentId: 'STU-2024-001',
+    enrolledAt: '2024-03-20T10:30:00.000Z',
+    currentStreak: 5,
+    lastActiveAt: '2024-03-20T10:30:00.000Z',
+};
+
+const mockCourses = [
+    {
+        id: 'crs_001',
+        studentId: 'stu_001',
+        title: 'Advanced Mathematics',
+        instructor: 'Dr. Smith',
+        thumbnailUrl: 'https://picsum.photos/seed/math/400/225',
+        description: 'Advanced topics in calculus, linear algebra, and statistics',
+        totalModules: 12,
+        completedModules: 8,
+        status: 'in-progress',
+        currentGrade: 88,
+        term: 'Spring 2024',
+        lastAccessedAt: '2024-03-19T14:30:00.000Z',
+        nextModule: 'Module 9: Differential Equations',
+    },
+    {
+        id: 'crs_002',
+        studentId: 'stu_001',
+        title: 'Computer Science Fundamentals',
+        instructor: 'Prof. Davis',
+        thumbnailUrl: 'https://picsum.photos/seed/cs/400/225',
+        description: 'Data structures, algorithms, and software design patterns',
+        totalModules: 10,
+        completedModules: 10,
+        status: 'completed',
+        currentGrade: 94,
+        term: 'Spring 2024',
+        lastAccessedAt: '2024-03-18T09:15:00.000Z',
+        nextModule: null,
+    },
+    {
+        id: 'crs_003',
+        studentId: 'stu_001',
+        title: 'Physics II: Electromagnetism',
+        instructor: 'Dr. Wilson',
+        thumbnailUrl: 'https://picsum.photos/seed/physics/400/225',
+        description: 'Electromagnetic theory, circuits, and wave propagation',
+        totalModules: 14,
+        completedModules: 5,
+        status: 'in-progress',
+        currentGrade: 76,
+        term: 'Spring 2024',
+        lastAccessedAt: '2024-03-17T11:00:00.000Z',
+        nextModule: 'Module 6: Electric Potential',
+    },
+];
+
+const mockGrades = {
+    quizScores: [
+        { label: 'Quiz 1', score: 85, maxScore: 100 },
+        { label: 'Quiz 2', score: 92, maxScore: 100 },
+        { label: 'Quiz 3', score: 78, maxScore: 100 },
+        { label: 'Quiz 4', score: 95, maxScore: 100 },
+        { label: 'Quiz 5', score: 88, maxScore: 100 },
+    ],
+    gradeDistribution: [
+        { label: 'A', percentage: 25 },
+        { label: 'B', percentage: 40 },
+        { label: 'C', percentage: 20 },
+        { label: 'D', percentage: 10 },
+        { label: 'F', percentage: 5 },
+    ],
+    weeklyProgress: [
+        { week: 'Week 1', completed: 3, total: 3 },
+        { week: 'Week 2', completed: 2, total: 3 },
+        { week: 'Week 3', completed: 3, total: 3 },
+        { week: 'Week 4', completed: 1, total: 3 },
+        { week: 'Week 5', completed: 3, total: 3 },
+        { week: 'Week 6', completed: 2, total: 3 },
+    ],
+};
 
 /**
  *
@@ -10,9 +92,9 @@ function delay(ms) {
 /**
  *
  */
-async function handleLogin(url, options) {
+async function handleLogin(request) {
     await delay(300);
-    const body = JSON.parse(options.body || '{}');
+    const body = await request.json().catch(() => ({}));
 
     if (body.email === 'student@demo.com' && body.password === 'demo123') {
         return new Response(
@@ -44,10 +126,8 @@ async function handleGetStudent(request) {
     const url = new URL(request.url);
     const id = url.pathname.split('/').pop();
 
-    const student = dbData.students.find(s => s.id === id);
-
-    if (student) {
-        return new Response(JSON.stringify(student), {
+    if (id === mockStudent.id) {
+        return new Response(JSON.stringify(mockStudent), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
@@ -67,7 +147,7 @@ async function handleGetCourses(request) {
     const url = new URL(request.url);
     const id = url.pathname.split('/')[3];
 
-    const courses = dbData.courses.filter(c => c.studentId === id);
+    const courses = mockCourses.filter(c => c.studentId === id);
 
     if (courses.length > 0) {
         return new Response(JSON.stringify(courses), {
@@ -85,17 +165,13 @@ async function handleGetCourses(request) {
 /**
  *
  */
-async function handleGetGrades(request) {
+async function handleGetGrades() {
     await delay(200);
-    const url = new URL(request.url);
-    const id = url.pathname.split('/')[3];
 
-    // For simplicity, returning the grades data regardless of student ID
-    // (In a real app, you'd filter by studentId)
     const gradesData = {
-        quizScores: dbData.quizScores.filter(q => q.studentId === id),
-        gradeDistribution: dbData.gradeDistribution,
-        weeklyProgress: dbData.weeklyProgress,
+        quizScores: mockGrades.quizScores,
+        gradeDistribution: mockGrades.gradeDistribution,
+        weeklyProgress: mockGrades.weeklyProgress,
     };
 
     return new Response(JSON.stringify(gradesData), {
@@ -112,7 +188,7 @@ async function handleGetCourse(request) {
     const url = new URL(request.url);
     const id = url.pathname.split('/').pop();
 
-    const course = dbData.courses.find(c => c.id === id);
+    const course = mockCourses.find(c => c.id === id);
     if (course) {
         return new Response(JSON.stringify(course), {
             status: 200,
@@ -134,7 +210,7 @@ async function handleGetCourseProgress(request) {
     const url = new URL(request.url);
     const id = url.pathname.split('/')[3];
 
-    const course = dbData.courses.find(c => c.id === id);
+    const course = mockCourses.find(c => c.id === id);
     if (course) {
         return new Response(
             JSON.stringify({
