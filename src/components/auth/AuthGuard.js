@@ -9,7 +9,7 @@
  *
  * ─── Usage ────────────────────────────────────────────────────────────────────
  *
- *   const guard = createAuthGuard(pageContainer, '/overview');
+ *   const guard = createAuthGuard(pageContainer, '/dashboard');
  *
  *   // Call render() after calling AuthContext.restoreSession():
  *   await AuthContext.restoreSession();
@@ -18,6 +18,11 @@
  *   // Or subscribe so it re-evaluates on every auth change:
  *   guard.watch();     // starts watching
  *   guard.unwatch();   // stops watching (call on page destroy)
+ *
+ * ─── Router dependency ────────────────────────────────────────────────────────
+ *   TODO (Part 4 — Routing):
+ *     Replace the `window.location.hash = …` fallback used here with the
+ *     proper `router.navigate()` call once the SPA router is implemented.
  *
  * @module components/auth/AuthGuard
  */
@@ -35,7 +40,7 @@ import { buildLoginRedirectUrl, sanitizePath } from '../../utils/authHelpers.js'
  * @returns {{ render: function, watch: function, unwatch: function }}
  *
  * @example
- * const guard = createAuthGuard(document.getElementById('main'), '/overview');
+ * const guard = createAuthGuard(document.getElementById('main'), '/dashboard');
  * await AuthContext.restoreSession();
  * guard.watch(); // starts reacting to auth changes
  */
@@ -71,6 +76,12 @@ export function createAuthGuard(container, currentPath = '/') {
         const safePath = sanitizePath(currentPath) || '/';
         saveRedirectPath(safePath);
 
+        // TODO (Part 4 — Routing):
+        //   Replace the hash-based redirect below with:
+        //     router.navigate(buildLoginRedirectUrl(safePath));
+        //
+        //   Until the router exists, use hash-based navigation as a fallback
+        //   so the guard is functional in development without the router.
         const loginUrl = buildLoginRedirectUrl(safePath);
         window.location.hash = loginUrl;
     }

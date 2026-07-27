@@ -350,13 +350,6 @@ svg.lucide {
     color: var(--text-on-accent);
 }
 
-.brand-glyph svg,
-.brand-glyph [data-lucide] {
-    width: 18px;
-    height: 18px;
-    color: var(--text-on-accent);
-}
-
 .brand-name {
     white-space: nowrap;
 }
@@ -435,16 +428,7 @@ svg.lucide {
     justify-content: center;
     flex-shrink: 0;
     color: currentColor;
-    opacity: 1 !important;
-}
-
-.nav-icon svg,
-.nav-icon [data-lucide],
-.nav-link svg,
-.nav-link [data-lucide] {
-    width: 20px !important;
-    height: 20px !important;
-    color: inherit;
+    opacity: 0.85;
 }
 
 .nav-link:hover {
@@ -455,12 +439,8 @@ svg.lucide {
     color: var(--accent-600);
 }
 
-body.dark .nav-link.is-active {
-    color: var(--accent-400);
-}
-
 .nav-link.is-active .nav-icon {
-    opacity: 1 !important;
+    opacity: 1;
 }
 
 /* Sliding highlight pill — signature interaction, positioned via JS */
@@ -631,13 +611,6 @@ body.dark .nav-link.is-active {
     flex-shrink: 0;
 }
 
-.menu-toggle svg,
-.menu-toggle [data-lucide] {
-    width: 20px;
-    height: 20px;
-    color: inherit;
-}
-
 .menu-toggle:hover {
     background: var(--surface-hover);
     color: var(--text-primary);
@@ -709,17 +682,8 @@ body.dark .nav-link.is-active {
 }
 
 .search-icon {
-    color: var(--text-secondary);
-    width: 18px;
-    height: 18px;
+    color: var(--text-tertiary);
     flex-shrink: 0;
-}
-
-.search-icon svg,
-.search-icon [data-lucide] {
-    width: 18px;
-    height: 18px;
-    color: inherit;
 }
 
 .search-field input {
@@ -772,13 +736,6 @@ body.dark .nav-link.is-active {
         background var(--duration-fast) var(--ease-out),
         color var(--duration-fast) var(--ease-out),
         transform var(--duration-fast) var(--ease-out);
-}
-
-.icon-button svg,
-.icon-button [data-lucide] {
-    width: 20px;
-    height: 20px;
-    color: inherit;
 }
 
 .icon-button:hover {
@@ -922,18 +879,8 @@ body.dark .nav-link.is-active {
 }
 
 .profile-chevron {
-    color: var(--text-secondary);
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
+    color: var(--text-tertiary);
     transition: transform var(--duration-base) var(--ease-out);
-}
-
-.profile-chevron svg,
-.profile-chevron [data-lucide] {
-    width: 16px;
-    height: 16px;
-    color: inherit;
 }
 
 .profile-trigger[aria-expanded='true'] .profile-chevron {
@@ -1548,13 +1495,22 @@ body.dark .nav-link.is-active {
     border: 2px dashed var(--border-default);
     border-radius: var(--radius-lg);
     background: var(--surface-sunken);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
     overflow: hidden;
 }
 
+.chart-container canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
 .chart-placeholder-text {
+    position: absolute;
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;

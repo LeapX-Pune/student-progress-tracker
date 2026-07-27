@@ -171,9 +171,8 @@ export class ApiService {
         }
         fetchOptions.signal = controller.signal;
 
-        let timeoutId;
         const timeoutPromise = new Promise((_resolve, reject) => {
-            timeoutId = setTimeout(() => {
+            setTimeout(() => {
                 controller.abort();
                 reject(new Error('Request timeout'));
             }, this.timeoutMs);
@@ -225,17 +224,8 @@ export class ApiService {
                     );
                 }
 
-                if (
-                    typeof process !== 'undefined' &&
-                    process.env &&
-                    process.env.NODE_ENV !== 'test'
-                ) {
-                    console.error(`API Error on ${endpoint}:`, error);
-                }
+                console.error(`API Error on ${endpoint}:`, error);
                 throw error;
-            })
-            .finally(() => {
-                clearTimeout(timeoutId);
             });
 
         // Race fetch against timeout
@@ -244,7 +234,9 @@ export class ApiService {
         // Store for deduplication
         if (requestKey) {
             this.pendingRequests.set(requestKey, requestPromise);
-            requestPromise.finally(() => this.pendingRequests.delete(requestKey)).catch(() => {});
+            // Ensure we clean up if race resolves before finally block
+            // eslint-disable-next-line promise/catch-or-return
+            requestPromise.finally(() => this.pendingRequests.delete(requestKey));
         }
 
         return requestPromise;
