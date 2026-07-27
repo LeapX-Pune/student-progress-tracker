@@ -48,6 +48,7 @@ export default [
                 IntersectionObserver: 'readonly',
                 customElements: 'readonly',
                 Chart: 'readonly',
+                navigator: 'readonly',
                 import: 'readonly',
                 // node globals
                 process: 'readonly',

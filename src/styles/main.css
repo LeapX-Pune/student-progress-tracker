@@ -11,6 +11,7 @@
 @import './components/login.css';
 @import './components/image-loader.css';
 @import './components/lazy-loader.css';
+@import './components/dropdown.css';
 
 /* Course Progress Modules */
 @import './courses/course-grid.css';
