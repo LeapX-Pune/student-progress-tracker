@@ -54,7 +54,8 @@
     "playwright": "1.61.1",
     "prettier": "3.9.6",
     "serve": "14.2.6",
-    "vitest": "4.1.10"
+    "vitest": "4.1.10",
+    "vitest-axe": "^0.1.0"
   },
   "engines": {
     "node": ">=24.0.0"
