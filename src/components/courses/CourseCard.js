@@ -7,6 +7,7 @@ import { createStatusBadge } from './StatusBadge.js';
  *
  */
 export function createCourseCard(course) {
+    console.log('[CourseCard] Received course props:', course);
     const card = document.createElement('div');
     card.className = 'course-card';
     card.setAttribute('tabindex', '0');
