@@ -1463,6 +1463,11 @@ svg.lucide {
     gap: 25px;
 }
 
+/* Full-width card spanning all columns */
+.chart-card--full {
+    grid-column: 1 / -1;
+}
+
 .chart-card {
     background: var(--surface-card);
     border: 1px solid var(--border-subtle);
