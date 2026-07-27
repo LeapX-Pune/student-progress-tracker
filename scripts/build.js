@@ -46,7 +46,9 @@ await build({
         'import.meta.env.VITE_AUTH_REDIRECT_KEY': '"student_tracker_redirect"',
         'import.meta.env.VITE_AUTH_REMEMBER_DAYS': '"30"',
         'import.meta.env.VITE_SESSION_TIMEOUT_MINUTES': '"60"',
-        'import.meta.env.VITE_ENABLE_MOCK_API': '"false"',
+        'import.meta.env.VITE_ENABLE_MOCK_API': process.env.VITE_ENABLE_MOCK_API
+            ? '"true"'
+            : '"false"',
         'import.meta.env.VITE_ENABLE_PWA': '"true"',
         'import.meta.env.VITE_ENABLE_ANALYTICS': '"true"',
         'import.meta.env.VITE_ENABLE_NOTIFICATIONS': '"true"',
