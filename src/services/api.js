@@ -325,10 +325,8 @@ export const api = new ApiService();
  * @returns {Promise<Array>} The student's courses.
  */
 export async function getCourses(studentId) {
-    console.log('[API] getCourses called with:', studentId);
     try {
         const result = await api.get(API_ENDPOINTS.STUDENT_COURSES(studentId));
-        console.log('[API] getCourses result:', result);
         return result;
     } catch (err) {
         console.error('[API] getCourses error:', err);
