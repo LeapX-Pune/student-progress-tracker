@@ -730,6 +730,9 @@
                                 font: { size: 11 } /**
                                  *
                                  */,
+                                /**
+                                 *
+                                 */
                                 callback: v => v + '%',
                             },
                             title: { display: false },
