@@ -1,23 +1,10 @@
 /**
- * @fileoverview LoginForm — Login Form Component — Part 3.
+ * @fileoverview LoginForm — Integrated Authentication Form Component.
  *
- * Renders the complete login form: email input, password input, "Remember me"
- * checkbox, demo credentials hint, and submit button.  Handles client-side
- * validation, async submission, and error display.
- *
- * ─── Data flow ───────────────────────────────────────────────────────────────
- *   User fills form
- *     → client-side validation (validateLoginForm)
- *     → AuthContext.login(credentials)            ← state management layer
- *       → authApi.login(credentials)              ← HTTP layer
- *         → authStorage.saveAuthToken(…)          ← storage layer
- *     → success → onSuccess callback → caller navigates
- *     → failure → inline error displayed in form
- *
- * ─── Navigation ──────────────────────────────────────────────────────────────
- *   This component intentionally does NOT call router.navigate() directly.
- *   After a successful login it calls `opts.onSuccess(user, destination)`.
- *   The page that mounts this form (LoginPage) is responsible for routing.
+ * Combines the Login UI design (Material 3 Academic Precision), role selector,
+ * mode toggle (Login vs Sign Up), password visibility mask toggle, Google OAuth UI,
+ * and demo credentials hint while connecting cleanly to AuthContext, authApi,
+ * authStorage, and validation utilities.
  *
  * @module components/auth/LoginForm
  */
@@ -25,148 +12,291 @@
 import AuthContext from '../../context/AuthContext.js';
 import { getRedirectPath } from '../../services/authStorage.js';
 import { validateLoginForm } from '../../utils/validation.js';
-import { createButton, setButtonLoading } from '../ui/Button.js';
-import { createInput } from '../ui/Input.js';
 import { createDemoCredentials } from './DemoCredentials.js';
 import { createRememberMe } from './RememberMe.js';
-
-// ─── Factory ──────────────────────────────────────────────────────────────────
+import { createRoleSelector } from './RoleSelector.js';
 
 /**
- * Creates the login form element and mounts it into the supplied container.
+ * Creates the login form card element and mounts it into the supplied container.
  *
  * @param {HTMLElement} container        - The DOM element to mount the form into
  * @param {Object}      [opts={}]        - Options
- * @param {function}    [opts.onSuccess] - Called with `(user, redirectPath)` after
- *                                         a successful login. Use this to navigate.
- * @returns {{ destroy: function }} Cleanup handle — call `destroy()` on page unmount
- *
- * @example
- * const form = createLoginForm(document.getElementById('login-container'), {
- *   onSuccess: (user, path) => {
- *     window.location.hash = path;
- *   },
- * });
- * // On page destroy:
- * form.destroy();
+ * @param {function}    [opts.onSuccess] - Called with `(user, redirectPath)` after successful login.
+ * @returns {{ destroy: function }} Cleanup handle
  */
 export function createLoginForm(container, { onSuccess } = {}) {
-    // ── Build DOM ──────────────────────────────────────────────────────────────
+    let isLoginMode = true;
 
-    const formEl = document.createElement('form');
-    formEl.id = 'login-form';
-    formEl.className = 'login-form';
-    formEl.setAttribute('novalidate', ''); // use custom validation messages
+    // ── Outer Card Wrapper ──────────────────────────────────────────────────
+    const cardEl = document.createElement('div');
+    cardEl.className = 'login-form-card slide-in-right delay-200';
 
-    // ── Form title ─────────────────────────────────────────────────────────────
-    const title = document.createElement('h1');
-    title.className = 'login-form__title';
-    title.textContent = 'Sign in';
-    formEl.appendChild(title);
+    cardEl.innerHTML = `
+        <!-- Brand Header (Logo Icon, Title & Subtitle toggled via JS) -->
+        <div class="text-center mb-3 lg:mb-4 flex flex-col items-center pt-1">
+          <div class="inline-flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 bg-primary rounded-xl mb-2 sm:mb-3 shadow-sm shrink-0">
+            <span class="material-symbols-outlined text-on-primary text-[22px] sm:text-[26px]">school</span>
+          </div>
+          <h2 class="font-headline-md text-lg sm:text-[20px] font-bold text-primary mb-1" id="auth-title">Welcome back</h2>
+          <p class="font-body-md text-xs sm:text-sm text-on-surface-variant" id="auth-subtitle">Log in to your The Reality account.</p>
+        </div>
 
-    const subtitle = document.createElement('p');
-    subtitle.className = 'login-form__subtitle';
-    subtitle.textContent = 'Access your Student Progress Dashboard';
-    formEl.appendChild(subtitle);
+        <div id="role-selector-mount" class="mb-2 sm:mb-3"></div>
+        
+        <!-- Top Error Banner -->
+        <div id="error-banner" role="alert" aria-live="assertive" style="background-color: var(--error-container); color: var(--on-error-container); padding: 0.625rem 0.875rem; border-radius: 0.5rem; margin-bottom: 0.875rem; font-size: 0.8125rem; display: none;"></div>
 
-    // ── Error banner (top-level, shown for network / auth errors) ─────────────
-    const errorBanner = document.createElement('div');
-    errorBanner.className = 'login-form__error-banner';
-    errorBanner.setAttribute('role', 'alert');
-    errorBanner.setAttribute('aria-live', 'assertive');
-    errorBanner.hidden = true;
-    formEl.appendChild(errorBanner);
+        <!-- Primary Auth Form (Dynamic Login / Signup Form) -->
+        <form class="space-y-2.5 sm:space-y-3" id="login-form" novalidate>
+          
+          <!-- Name Input Field (Conditionally rendered: hidden in Login mode, visible in Signup mode) -->
+          <div class="hidden" id="name-field">
+            <label class="block text-sm font-bold text-[#1E293B] mb-1.5" for="name">Full Name</label>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">person</span>
+              <input class="w-full h-10 sm:h-11 pl-10 pr-4 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="name" placeholder="Your Name" type="text"/>
+            </div>
+          </div>
 
-    // ── Email field ────────────────────────────────────────────────────────────
-    const {
-        wrapper: emailWrapper,
-        input: emailInput,
-        setError: setEmailError,
-    } = createInput({
-        id: 'login-email',
-        name: 'email',
-        type: 'email',
-        label: 'Email address',
-        placeholder: 'student@demo.com',
-        required: true,
-        autocomplete: 'email',
-        /**
-         *
-         */
-        onChange: () => setEmailError(null), // clear error on every keystroke
+          <!-- Email Address Input Field -->
+          <div>
+            <label class="block text-sm font-bold text-[#1E293B] mb-1.5" for="email">Email Address</label>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">mail</span>
+              <input class="w-full h-10 sm:h-11 pl-10 pr-4 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="email" placeholder="student@school.edu" required="" type="email" autocomplete="email"/>
+            </div>
+            <span id="email-error" style="color: var(--error); font-size: 0.75rem; margin-top: 0.25rem; display: block;"></span>
+          </div>
+
+          <!-- Password Input Field with Interactive Show/Hide Toggle -->
+          <div>
+            <div class="flex justify-between items-center mb-1.5">
+              <label class="block text-sm font-bold text-[#1E293B]" for="password">Password</label>
+              <a class="text-xs font-semibold text-primary hover:underline transition-colors underline-offset-2" href="#" id="forgot-password-link">Forgot password?</a>
+            </div>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">lock</span>
+              <input class="w-full h-10 sm:h-11 pl-10 pr-12 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="password" placeholder="••••••••" required="" type="password" autocomplete="current-password"/>
+              <button class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center text-[#64748B] hover:text-[#0F172A] transition-colors focus:outline-none" id="toggle-password-btn" type="button" aria-label="Toggle password visibility">
+                <span class="material-symbols-outlined text-[20px]">visibility_off</span>
+              </button>
+            </div>
+            <span id="password-error" style="color: var(--error); font-size: 0.75rem; margin-top: 0.25rem; display: block;"></span>
+          </div>
+
+          <!-- Confirm Password Input Field (Conditionally rendered: hidden in Login mode, visible in Signup mode) -->
+          <div class="hidden" id="confirm-password-field">
+            <label class="block text-sm font-bold text-[#1E293B] mb-1.5" for="confirm-password">Confirm Password</label>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">lock_reset</span>
+              <input class="w-full h-10 sm:h-11 pl-10 pr-12 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="confirm-password" placeholder="••••••••" type="password"/>
+            </div>
+            <span id="confirm-password-error" style="color: var(--error); font-size: 0.75rem; margin-top: 0.25rem; display: block;"></span>
+          </div>
+
+          <div id="remember-me-mount" class="mb-2"></div>
+
+          <!-- Dynamic Form Action Submit Button -->
+          <button class="w-full h-10 sm:h-11 px-6 bg-primary text-on-primary font-semibold text-sm rounded-xl hover:bg-primary/90 transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-md flex items-center justify-center gap-2" id="submit-btn" type="submit">
+            Sign In
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </button>
+        </form>
+
+        <!-- Divider Line -->
+        <div class="flex items-center my-2 sm:my-3">
+          <div class="flex-1 border-t border-outline-variant"></div>
+          <span class="px-3 font-label-xs text-[10px] font-medium tracking-wider text-outline bg-surface-container-lowest">OR CONTINUE WITH</span>
+          <div class="flex-1 border-t border-outline-variant"></div>
+        </div>
+
+        <!-- Auth Mode Toggle Switcher (Switch between Login and Sign Up) -->
+        <div class="text-center font-body-md text-xs text-on-surface-variant mt-1 sm:mt-0" id="mode-switcher">
+          <span id="toggle-text">Don't have an account?</span>
+          <button class="text-primary font-semibold text-xs hover:underline underline-offset-4 ml-1 focus:outline-none transition-all" id="toggle-mode-btn" type="button">Sign up</button>
+        </div>
+
+        <div id="demo-mount" class="mt-2 sm:mt-3"></div>
+    `;
+
+    // ── Queries ──────────────────────────────────────────────────────────────
+    const authTitle = cardEl.querySelector('#auth-title');
+    const authSubtitle = cardEl.querySelector('#auth-subtitle');
+    const errorBanner = cardEl.querySelector('#error-banner');
+    const formEl = cardEl.querySelector('#login-form');
+
+    const nameGroup = cardEl.querySelector('#name-field');
+    const emailInput = cardEl.querySelector('#email');
+    const emailErrorSpan = cardEl.querySelector('#email-error');
+
+    const passwordInput = cardEl.querySelector('#password');
+    const togglePasswordBtn = cardEl.querySelector('#toggle-password-btn');
+    const passwordErrorSpan = cardEl.querySelector('#password-error');
+    const forgotPasswordLink = cardEl.querySelector('#forgot-password-link');
+
+    const confirmPasswordGroup = cardEl.querySelector('#confirm-password-field');
+    const confirmPasswordInput = cardEl.querySelector('#confirm-password');
+    const confirmPasswordErrorSpan = cardEl.querySelector('#confirm-password-error');
+
+    const submitBtn = cardEl.querySelector('#submit-btn');
+
+    // ── Event Listeners & Actions ───────────────────────────────────────────
+    emailInput.addEventListener('input', () => {
+        emailErrorSpan.textContent = '';
+        clearBannerError();
     });
-    formEl.appendChild(emailWrapper);
 
-    // ── Password field ─────────────────────────────────────────────────────────
-    const {
-        wrapper: passwordWrapper,
-        input: passwordInput,
-        setError: setPasswordError,
-    } = createInput({
-        id: 'login-password',
-        name: 'password',
-        type: 'password',
-        label: 'Password',
-        placeholder: '••••••',
-        required: true,
-        autocomplete: 'current-password',
-        /**
-         *
-         */
-        onChange: () => setPasswordError(null),
+    passwordInput.addEventListener('input', () => {
+        passwordErrorSpan.textContent = '';
+        clearBannerError();
     });
-    formEl.appendChild(passwordWrapper);
 
-    // ── Remember me ────────────────────────────────────────────────────────────
-    const rememberMe = createRememberMe({ checked: false });
-    formEl.appendChild(rememberMe.wrapper);
-
-    // ── Submit button ──────────────────────────────────────────────────────────
-    const submitBtn = createButton({
-        id: 'login-submit',
-        label: 'Sign In',
-        variant: 'primary',
-        size: 'lg',
-        type: 'submit',
+    togglePasswordBtn.addEventListener('click', () => {
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        const icon = togglePasswordBtn.querySelector('.material-symbols-outlined');
+        if (icon) {
+            icon.textContent = isPassword ? 'visibility' : 'visibility_off';
+        }
     });
-    submitBtn.className += ' login-form__submit';
-    formEl.appendChild(submitBtn);
 
-    // ── Demo credentials ───────────────────────────────────────────────────────
+    forgotPasswordLink.addEventListener('click', e => {
+        e.preventDefault();
+        window.alert(
+            'Password reset feature: Please contact your school administrator or check your email.'
+        );
+    });
+
+    confirmPasswordInput.addEventListener('input', () => {
+        confirmPasswordErrorSpan.textContent = '';
+    });
+
+    const toggleText = cardEl.querySelector('#toggle-text');
+    const toggleModeBtn = cardEl.querySelector('#toggle-mode-btn');
+
+    // ── 8. Demo Credentials Panel (For quick testing) ──────────────────────
     const demoBlock = createDemoCredentials({
+        initialRole: 'student',
         /**
-         *
+         * Fills email and password inputs with demo credentials.
          */
-        onFill: ({ email, password }) => {
+        onFill: ({ email, password, role }) => {
             emailInput.value = email;
             passwordInput.value = password;
-            setEmailError(null);
-            setPasswordError(null);
+            if (role && typeof roleSelector.setRole === 'function') {
+                roleSelector.setRole(role);
+            }
+            emailErrorSpan.textContent = '';
+            passwordErrorSpan.textContent = '';
+            clearBannerError();
         },
     });
-    formEl.appendChild(demoBlock);
+    cardEl.querySelector('#demo-mount').appendChild(demoBlock);
 
-    // ── Mount into container ───────────────────────────────────────────────────
-    container.appendChild(formEl);
+    // Mount role selector component
+    const roleSelector = createRoleSelector({
+        initialRole: 'student',
+        /**
+         *
+         */
+        onChange: role => {
+            if (typeof demoBlock.setRole === 'function') {
+                demoBlock.setRole(role);
+            }
+        },
+    });
+    cardEl.querySelector('#role-selector-mount').appendChild(roleSelector.element);
 
-    // ── Helpers ────────────────────────────────────────────────────────────────
+    const rememberMe = createRememberMe({ checked: false });
+    cardEl.querySelector('#remember-me-mount').appendChild(rememberMe.wrapper);
 
-    /** Shows the top-level error banner with a message. */
-    function showBannerError(message) {
-        errorBanner.textContent = message;
-        errorBanner.hidden = false;
+    // ── Mount into container ────────────────────────────────────────────────
+    container.appendChild(cardEl);
+
+    // ── Helpers ─────────────────────────────────────────────────────────────
+    /**
+     * Shows error banner with message.
+     *
+     * @param {string} msg
+     */
+    function showBannerError(msg) {
+        errorBanner.textContent = msg;
+        errorBanner.style.display = 'block';
     }
-
-    /** Hides the error banner. */
-    function clearBannerError() {
-        errorBanner.textContent = '';
-        errorBanner.hidden = true;
-    }
-
-    // ── Submit handler ─────────────────────────────────────────────────────────
 
     /**
+     * Clears error banner message.
+     */
+    function clearBannerError() {
+        errorBanner.textContent = '';
+        errorBanner.style.display = 'none';
+    }
+
+    /**
+     * Updates submit button loading state.
      *
+     * @param {boolean} loading
+     */
+    function setSubmitLoading(loading) {
+        submitBtn.disabled = loading;
+        if (loading) {
+            submitBtn.innerHTML =
+                '<span class="material-symbols-outlined animate-spin text-[18px]">progress_activity</span> Processing...';
+        } else {
+            if (isLoginMode) {
+                submitBtn.innerHTML =
+                    'Sign In <span class="material-symbols-outlined text-[18px]">arrow_forward</span>';
+            } else {
+                submitBtn.innerHTML =
+                    'Create Account <span class="material-symbols-outlined text-[18px]">person_add</span>';
+            }
+        }
+    }
+
+    // ── Mode Switch Handler ──────────────────────────────────────────────────
+    toggleModeBtn.addEventListener('click', () => {
+        isLoginMode = !isLoginMode;
+        clearBannerError();
+
+        formEl.style.opacity = '0';
+        formEl.style.transition = 'opacity 0.15s ease-out';
+
+        setTimeout(() => {
+            if (isLoginMode) {
+                authTitle.textContent = 'Welcome back';
+                authSubtitle.textContent = 'Log in to your The Reality account.';
+                submitBtn.innerHTML =
+                    'Sign In <span class="material-symbols-outlined text-[18px]">arrow_forward</span>';
+
+                nameGroup.style.display = 'none';
+                confirmPasswordGroup.style.display = 'none';
+                forgotPasswordLink.style.display = 'inline';
+
+                toggleText.textContent = "Don't have an account?";
+                toggleModeBtn.textContent = 'Sign up';
+            } else {
+                authTitle.textContent = 'Join The Reality';
+                authSubtitle.textContent = 'Create an account to start tracking progress.';
+                submitBtn.innerHTML =
+                    'Create Account <span class="material-symbols-outlined text-[18px]">person_add</span>';
+
+                nameGroup.style.display = 'block';
+                confirmPasswordGroup.style.display = 'block';
+                forgotPasswordLink.style.display = 'none';
+
+                toggleText.textContent = 'Already have an account?';
+                toggleModeBtn.textContent = 'Log in';
+            }
+
+            formEl.style.opacity = '1';
+        }, 150);
+    });
+
+    // ── Submit Handler ───────────────────────────────────────────────────────
+    /**
+     * Form submission handler.
+     *
+     * @param {Event} e
      */
     async function handleSubmit(e) {
         e.preventDefault();
@@ -174,58 +304,65 @@ export function createLoginForm(container, { onSuccess } = {}) {
 
         const email = emailInput.value.trim();
         const password = passwordInput.value;
+        const selectedRole = roleSelector.getSelectedRole();
         const shouldRememberMe = rememberMe.getValue();
 
-        // ── Client-side validation ─────────────────────────────────────────────
+        // Standard validation
         const errors = validateLoginForm({ email, password });
         if (errors) {
-            if (errors.email) setEmailError(errors.email);
-            if (errors.password) setPasswordError(errors.password);
-            // Focus the first field with an error for keyboard users.
+            if (errors.email) emailErrorSpan.textContent = errors.email;
+            if (errors.password) passwordErrorSpan.textContent = errors.password;
             if (errors.email) emailInput.focus();
             else if (errors.password) passwordInput.focus();
-            return; // stop — do not call API with invalid data
+            return;
         }
 
-        // ── Submit ─────────────────────────────────────────────────────────────
-        setButtonLoading(submitBtn, true);
+        // Additional Signup mode validation
+        if (!isLoginMode) {
+            const confirmPassword = confirmPasswordInput.value;
+            if (confirmPassword !== password) {
+                confirmPasswordErrorSpan.textContent = 'Passwords do not match.';
+                confirmPasswordInput.focus();
+                return;
+            }
+        }
+
+        setSubmitLoading(true);
 
         const result = await AuthContext.login({
             email,
             password,
+            role: selectedRole,
             rememberMe: shouldRememberMe,
         });
 
-        setButtonLoading(submitBtn, false);
+        setSubmitLoading(false);
 
         if (result.success) {
-            // Retrieve and clear the saved redirect path (consumed once).
-            const destination = getRedirectPath(); // '/dashboard' if none saved
-
+            const destination = getRedirectPath();
             if (typeof onSuccess === 'function') {
                 onSuccess(result.user, destination);
             }
         } else {
-            // Display the error returned by AuthContext.
-            showBannerError(result.error ?? 'Login failed. Please try again.');
-            emailInput.focus(); // return focus to first field
+            showBannerError(result.error ?? 'Login failed. Please verify your credentials.');
+            emailInput.focus();
         }
     }
 
     formEl.addEventListener('submit', handleSubmit);
 
-    // ── Cleanup ────────────────────────────────────────────────────────────────
-
     return {
         /**
-         * Removes the form from the DOM and cleans up event listeners.
-         * Call when the LoginPage is destroyed.
-         *
-         * @returns {void}
+         * Cleans up event listeners and destroys components.
          */
         destroy() {
             formEl.removeEventListener('submit', handleSubmit);
-            container.removeChild(formEl);
+            roleSelector.destroy();
+            if (container.contains(cardEl)) {
+                container.removeChild(cardEl);
+            }
         },
     };
 }
+
+export default createLoginForm;
