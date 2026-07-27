@@ -648,3 +648,27 @@ body.dark .progress-ring-circle-bg {
 body.dark .logo-box {
     background-color: #3b82f6;
 }
+
+/* Detailed Course Card Badges & Dark Theme tweaks */
+.status-badge-new.completed {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+.status-badge-new.in-progress {
+    background-color: #fef3c7;
+    color: #b45309;
+}
+body.dark .status-badge-new.completed {
+    background-color: #064e3b;
+    color: #86efac;
+}
+body.dark .status-badge-new.in-progress {
+    background-color: #78350f;
+    color: #fde68a;
+}
+body.dark .course-details-grid {
+    background: rgba(15, 23, 42, 0.4) !important;
+}
+body.dark .course-next-module {
+    background: rgba(15, 23, 42, 0.6) !important;
+}

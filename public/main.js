@@ -1,5 +1,5 @@
-var gS = Object.defineProperty;
-var yS = (a, t, e) => () => {
+var qw = Object.defineProperty;
+var k2 = (a, t, e) => () => {
     if (e) throw e[0];
     try {
         return (a && (t = a((a = 0))), t);
@@ -7,15 +7,60 @@ var yS = (a, t, e) => () => {
         throw ((e = [r]), r);
     }
 };
-var y2 = (a, t) => {
-    for (var e in t) gS(a, e, { get: t[e], enumerable: !0 });
+var ra = (a, t) => {
+    for (var e in t) qw(a, e, { get: t[e], enumerable: !0 });
 };
-var YA = {};
-y2(YA, { setupMockServer: () => FS });
+var QA = {};
+ra(QA, {
+    API_ENDPOINTS: () => m2,
+    AUTH_CONSTANTS: () => H,
+    COURSE_STATUS: () => Gw,
+    ERROR_CODES: () => P,
+    ROUTES: () => x2,
+    TOAST_DURATION: () => Ww,
+});
+var x2,
+    m2,
+    H,
+    Gw,
+    Ww,
+    P,
+    B = k2(() => {
+        ((x2 = { LOGIN: '/login', DASHBOARD: '/dashboard', NOT_FOUND: '/404' }),
+            (m2 = {
+                AUTH_LOGIN: '/auth/login',
+                STUDENT: a => `/students/${a}`,
+                STUDENT_COURSES: a => `/students/${a}/courses`,
+                STUDENT_GRADES: a => `/students/${a}/grades`,
+                COURSE: a => `/courses/${a}`,
+                COURSE_PROGRESS: a => `/courses/${a}/progress`,
+            }),
+            (H = {
+                DEMO_EMAIL: 'student@demo.com',
+                DEMO_PASSWORD: 'demo123',
+                TOKEN_EXPIRY_MS: 720 * 60 * 60 * 1e3,
+                MIN_PASSWORD_LENGTH: 6,
+            }),
+            (Gw = {
+                NOT_STARTED: 'not-started',
+                IN_PROGRESS: 'in-progress',
+                COMPLETED: 'completed',
+            }),
+            (Ww = { SUCCESS: 3e3, ERROR: 5e3, WARNING: 4e3, INFO: 4e3 }),
+            (P = {
+                INVALID_CREDENTIALS: 'INVALID_CREDENTIALS',
+                SESSION_EXPIRED: 'SESSION_EXPIRED',
+                NETWORK_ERROR: 'NETWORK_ERROR',
+                VALIDATION_ERROR: 'VALIDATION_ERROR',
+                UNKNOWN: 'UNKNOWN',
+            }));
+    });
+var pw = {};
+ra(pw, { setupMockServer: () => aS });
 function D(a) {
     return new Promise(t => setTimeout(t, a));
 }
-async function PS(a, t) {
+async function Kw(a, t) {
     await D(300);
     let e = JSON.parse(t.body || '{}');
     return e.email === 'student@demo.com' && e.password === 'demo123'
@@ -37,11 +82,11 @@ async function PS(a, t) {
               headers: { 'Content-Type': 'application/json' },
           });
 }
-async function TS(a) {
+async function $w(a) {
     return (
         await D(200),
         new URL(a.url).pathname.split('/').pop() === 'stu_001'
-            ? new Response(JSON.stringify(VS), {
+            ? new Response(JSON.stringify(Zw), {
                   status: 200,
                   headers: { 'Content-Type': 'application/json' },
               })
@@ -51,11 +96,11 @@ async function TS(a) {
               })
     );
 }
-async function BS(a) {
+async function Jw(a) {
     return (
         await D(250),
         new URL(a.url).pathname.split('/')[3] === 'stu_001'
-            ? new Response(JSON.stringify(n2), {
+            ? new Response(JSON.stringify(y2), {
                   status: 200,
                   headers: { 'Content-Type': 'application/json' },
               })
@@ -65,11 +110,11 @@ async function BS(a) {
               })
     );
 }
-async function bS(a) {
+async function jw(a) {
     return (
         await D(200),
         new URL(a.url).pathname.split('/')[3] === 'stu_001'
-            ? new Response(JSON.stringify(kS), {
+            ? new Response(JSON.stringify(Xw), {
                   status: 200,
                   headers: { 'Content-Type': 'application/json' },
               })
@@ -79,10 +124,10 @@ async function bS(a) {
               })
     );
 }
-async function DS(a) {
+async function Qw(a) {
     await D(200);
     let e = new URL(a.url).pathname.split('/').pop(),
-        r = n2.find(d => d.id === e);
+        r = y2.find(o => o.id === e);
     return r
         ? new Response(JSON.stringify(r), {
               status: 200,
@@ -93,10 +138,10 @@ async function DS(a) {
               headers: { 'Content-Type': 'application/json' },
           });
 }
-async function RS(a) {
+async function Yw(a) {
     await D(200);
     let e = new URL(a.url).pathname.split('/')[3],
-        r = n2.find(d => d.id === e);
+        r = y2.find(o => o.id === e);
     return r
         ? new Response(
               JSON.stringify({
@@ -111,37 +156,37 @@ async function RS(a) {
               headers: { 'Content-Type': 'application/json' },
           });
 }
-function FS() {
+function aS() {
     let a = window.fetch;
     return (
         (window.fetch = async (t, e = {}) => {
             let r = typeof t == 'string' ? t : t.url,
-                d = (e.method || 'GET').toUpperCase(),
-                o = `${d}:${new URL(r, window.location.origin).pathname}`,
-                l = QA[o];
-            if (!l) {
-                let c = new URL(r, window.location.origin).pathname;
-                for (let [u, s] of Object.entries(QA)) {
-                    let [h, n] = u.split(':');
-                    if (h !== d) continue;
-                    let f = n.split('/'),
-                        x = c.split('/');
-                    if (f.length !== x.length) continue;
-                    let i = !0;
-                    for (let p = 0; p < f.length; p++)
-                        if (!f[p].startsWith(':') && f[p] !== x[p]) {
-                            i = !1;
+                o = (e.method || 'GET').toUpperCase(),
+                d = `${o}:${new URL(r, window.location.origin).pathname}`,
+                p = dw[d];
+            if (!p) {
+                let l = new URL(r, window.location.origin).pathname;
+                for (let [s, h] of Object.entries(dw)) {
+                    let [u, n] = s.split(':');
+                    if (u !== o) continue;
+                    let c = n.split('/'),
+                        i = l.split('/');
+                    if (c.length !== i.length) continue;
+                    let m = !0;
+                    for (let f = 0; f < c.length; f++)
+                        if (!c[f].startsWith(':') && c[f] !== i[f]) {
+                            m = !1;
                             break;
                         }
-                    if (i) {
-                        l = s;
+                    if (m) {
+                        p = h;
                         break;
                     }
                 }
             }
-            if (l) {
-                let c = new Request(r, e);
-                return l(c);
+            if (p) {
+                let l = new Request(r, e);
+                return p(l);
             }
             return a.call(window, t, e);
         }),
@@ -150,12 +195,12 @@ function FS() {
         }
     );
 }
-var VS,
-    n2,
-    kS,
-    QA,
-    aS = yS(() => {
-        ((VS = {
+var Zw,
+    y2,
+    Xw,
+    dw,
+    lw = k2(() => {
+        ((Zw = {
             id: 'stu_001',
             name: 'Alex Johnson',
             email: 'student@demo.com',
@@ -165,7 +210,7 @@ var VS,
             currentStreak: 5,
             lastActiveAt: '2024-03-20T10:30:00.000Z',
         }),
-            (n2 = [
+            (y2 = [
                 {
                     id: 'crs_001',
                     studentId: 'stu_001',
@@ -212,7 +257,7 @@ var VS,
                     nextModule: 'Module 6: Electric Potential',
                 },
             ]),
-            (kS = {
+            (Xw = {
                 quizScores: [
                     { label: 'Quiz 1', score: 85, maxScore: 100 },
                     { label: 'Quiz 2', score: 92, maxScore: 100 },
@@ -236,16 +281,16 @@ var VS,
                     { week: 'Week 6', completed: 2, total: 3 },
                 ],
             }));
-        QA = {
-            'POST:/api/auth/login': PS,
-            'GET:/api/students/:id': TS,
-            'GET:/api/students/:id/courses': BS,
-            'GET:/api/students/:id/grades': bS,
-            'GET:/api/courses/:id': DS,
-            'GET:/api/courses/:id/progress': RS,
+        dw = {
+            'POST:/api/auth/login': Kw,
+            'GET:/api/students/:id': $w,
+            'GET:/api/students/:id/courses': Jw,
+            'GET:/api/students/:id/grades': jw,
+            'GET:/api/courses/:id': Qw,
+            'GET:/api/courses/:id/progress': Yw,
         };
     });
-var z = {
+var _ = {
     xmlns: 'http://www.w3.org/2000/svg',
     width: 24,
     height: 24,
@@ -256,41 +301,41 @@ var z = {
     'stroke-linecap': 'round',
     'stroke-linejoin': 'round',
 };
-var C2 = ([a, t, e]) => {
+var P2 = ([a, t, e]) => {
         let r = document.createElementNS('http://www.w3.org/2000/svg', a);
         return (
-            Object.keys(t).forEach(d => {
-                r.setAttribute(d, String(t[d]));
+            Object.keys(t).forEach(o => {
+                r.setAttribute(o, String(t[o]));
             }),
             e?.length &&
-                e.forEach(d => {
-                    let o = C2(d);
-                    r.appendChild(o);
+                e.forEach(o => {
+                    let d = P2(o);
+                    r.appendChild(d);
                 }),
             r
         );
     },
-    A2 = (a, t = {}) => {
-        let r = { ...z, ...t };
-        return C2(['svg', r, a]);
+    b2 = (a, t = {}) => {
+        let r = { ..._, ...t };
+        return P2(['svg', r, a]);
     };
-var S2 = a => {
+var T2 = a => {
     for (let t in a) if (t.startsWith('aria-') || t === 'role' || t === 'title') return !0;
     return !1;
 };
-var w2 = (...a) =>
+var B2 = (...a) =>
     a
         .filter((t, e, r) => !!t && t.trim() !== '' && r.indexOf(t) === e)
         .join(' ')
         .trim();
-var H2 = a =>
+var R2 = a =>
     a.replace(/^([A-Z])|[\s-_]+(\w)/g, (t, e, r) => (r ? r.toUpperCase() : e.toLowerCase()));
-var L2 = a => {
-    let t = H2(a);
+var D2 = a => {
+    let t = R2(a);
     return t.charAt(0).toUpperCase() + t.slice(1);
 };
-var CS = a => Array.from(a.attributes).reduce((t, e) => ((t[e.name] = e.value), t), {}),
-    V2 = a =>
+var zw = a => Array.from(a.attributes).reduce((t, e) => ((t[e.name] = e.value), t), {}),
+    E2 = a =>
         typeof a == 'string'
             ? a
             : !a || !a.class
@@ -300,2042 +345,2042 @@ var CS = a => Array.from(a.attributes).reduce((t, e) => ((t[e.name] = e.value), 
                 : a.class && Array.isArray(a.class)
                   ? a.class
                   : '',
-    aa = (a, { nameAttr: t, icons: e, attrs: r }) => {
-        let d = a.getAttribute(t);
-        if (d == null) return;
-        let o = L2(d),
-            l = e[o];
-        if (!l)
+    oa = (a, { nameAttr: t, icons: e, attrs: r }) => {
+        let o = a.getAttribute(t);
+        if (o == null) return;
+        let d = D2(o),
+            p = e[d];
+        if (!p)
             return console.warn(
                 `${a.outerHTML} icon name was not found in the provided icons object.`
             );
-        let c = CS(a),
-            u = S2(c) ? {} : { 'aria-hidden': 'true' },
-            s = { ...z, 'data-lucide': d, ...u, ...r, ...c },
-            h = V2(c),
-            n = V2(r),
-            f = w2('lucide', `lucide-${d}`, ...h, ...n);
-        f && Object.assign(s, { class: f });
-        let x = A2(l, s);
-        return a.parentNode?.replaceChild(x, a);
+        let l = zw(a),
+            s = T2(l) ? {} : { 'aria-hidden': 'true' },
+            h = { ..._, 'data-lucide': o, ...s, ...r, ...l },
+            u = E2(l),
+            n = E2(r),
+            c = B2('lucide', `lucide-${o}`, ...u, ...n);
+        c && Object.assign(h, { class: c });
+        let i = b2(p, h);
+        return a.parentNode?.replaceChild(i, a);
     };
-var A = {};
-y2(A, {
-    AArrowDown: () => k2,
-    AArrowUp: () => P2,
-    ALargeSmall: () => b2,
-    Accessibility: () => T2,
-    Activity: () => B2,
-    ActivitySquare: () => Ut,
-    Ad: () => D2,
-    AirVent: () => R2,
-    Airplay: () => F2,
-    AlarmCheck: () => ea,
-    AlarmClock: () => O2,
-    AlarmClockCheck: () => ea,
-    AlarmClockMinus: () => ta,
-    AlarmClockOff: () => E2,
-    AlarmClockPlus: () => ra,
-    AlarmMinus: () => ta,
-    AlarmPlus: () => ra,
-    AlarmSmoke: () => q2,
-    Album: () => z2,
-    AlertCircle: () => Ba,
-    AlertOctagon: () => it,
-    AlertTriangle: () => Ke,
-    AlignCenter: () => Ie,
-    AlignCenterHorizontal: () => U2,
-    AlignCenterVertical: () => I2,
-    AlignEndHorizontal: () => _2,
-    AlignEndVertical: () => G2,
-    AlignHorizontalDistributeCenter: () => N2,
-    AlignHorizontalDistributeEnd: () => W2,
-    AlignHorizontalDistributeStart: () => Z2,
-    AlignHorizontalJustifyCenter: () => X2,
-    AlignHorizontalJustifyEnd: () => K2,
-    AlignHorizontalJustifyStart: () => J2,
-    AlignHorizontalSpaceAround: () => $2,
-    AlignHorizontalSpaceBetween: () => Q2,
-    AlignJustify: () => Ne,
-    AlignLeft: () => K,
-    AlignRight: () => _e,
-    AlignStartHorizontal: () => j2,
-    AlignStartVertical: () => Y2,
-    AlignVerticalDistributeCenter: () => a0,
-    AlignVerticalDistributeEnd: () => t0,
-    AlignVerticalDistributeStart: () => e0,
-    AlignVerticalJustifyCenter: () => r0,
-    AlignVerticalJustifyEnd: () => o0,
-    AlignVerticalJustifyStart: () => d0,
-    AlignVerticalSpaceAround: () => p0,
-    AlignVerticalSpaceBetween: () => l0,
-    Ambulance: () => s0,
-    Ampersand: () => f0,
-    Ampersands: () => h0,
-    Amphora: () => u0,
-    Anchor: () => c0,
-    Angry: () => n0,
-    Annoyed: () => x0,
-    Antenna: () => i0,
-    Anvil: () => m0,
-    Aperture: () => M0,
-    AppWindow: () => y0,
-    AppWindowMac: () => v0,
-    Apple: () => g0,
-    Archive: () => w0,
-    ArchiveRestore: () => C0,
-    ArchiveX: () => A0,
-    AreaChart: () => va,
-    Armchair: () => S0,
-    ArrowBigDown: () => L0,
-    ArrowBigDownDash: () => H0,
-    ArrowBigLeft: () => k0,
-    ArrowBigLeftDash: () => V0,
-    ArrowBigRight: () => T0,
-    ArrowBigRightDash: () => P0,
-    ArrowBigUp: () => b0,
-    ArrowBigUpDash: () => B0,
-    ArrowDown: () => N0,
-    ArrowDown01: () => D0,
-    ArrowDown10: () => R0,
-    ArrowDownAZ: () => oa,
-    ArrowDownAz: () => oa,
-    ArrowDownCircle: () => ba,
-    ArrowDownFromLine: () => F0,
-    ArrowDownLeft: () => E0,
-    ArrowDownLeftFromCircle: () => Ra,
-    ArrowDownLeftFromSquare: () => Wt,
-    ArrowDownLeftSquare: () => It,
-    ArrowDownNarrowWide: () => O0,
-    ArrowDownRight: () => q0,
-    ArrowDownRightFromCircle: () => Fa,
-    ArrowDownRightFromSquare: () => Zt,
-    ArrowDownRightSquare: () => _t,
-    ArrowDownSquare: () => Nt,
-    ArrowDownToDot: () => U0,
-    ArrowDownToLine: () => z0,
-    ArrowDownUp: () => I0,
-    ArrowDownWideNarrow: () => da,
-    ArrowDownZA: () => pa,
-    ArrowDownZa: () => pa,
-    ArrowLeft: () => Z0,
-    ArrowLeftCircle: () => Da,
-    ArrowLeftFromLine: () => _0,
-    ArrowLeftRight: () => G0,
-    ArrowLeftSquare: () => Gt,
-    ArrowLeftToLine: () => W0,
-    ArrowRight: () => $0,
-    ArrowRightCircle: () => qa,
-    ArrowRightFromLine: () => X0,
-    ArrowRightLeft: () => K0,
-    ArrowRightSquare: () => Jt,
-    ArrowRightToLine: () => J0,
-    ArrowUp: () => pr,
-    ArrowUp01: () => j0,
-    ArrowUp10: () => Q0,
-    ArrowUpAZ: () => la,
-    ArrowUpAz: () => la,
-    ArrowUpCircle: () => za,
-    ArrowUpDown: () => Y0,
-    ArrowUpFromDot: () => ar,
-    ArrowUpFromLine: () => tr,
-    ArrowUpLeft: () => er,
-    ArrowUpLeftFromCircle: () => Ea,
-    ArrowUpLeftFromSquare: () => Xt,
-    ArrowUpLeftSquare: () => $t,
-    ArrowUpNarrowWide: () => sa,
-    ArrowUpRight: () => rr,
-    ArrowUpRightFromCircle: () => Oa,
-    ArrowUpRightFromSquare: () => Kt,
-    ArrowUpRightSquare: () => jt,
-    ArrowUpSquare: () => Qt,
-    ArrowUpToLine: () => or,
-    ArrowUpWideNarrow: () => dr,
-    ArrowUpZA: () => ha,
-    ArrowUpZa: () => ha,
-    ArrowsUpFromLine: () => sr,
-    Asterisk: () => lr,
-    AsteriskSquare: () => Yt,
-    Astroid: () => hr,
-    AtSign: () => fr,
-    Atom: () => ur,
-    AudioLines: () => cr,
-    AudioWaveform: () => ir,
-    Award: () => nr,
-    Axe: () => xr,
-    Axis3D: () => fa,
-    Axis3d: () => fa,
-    Baby: () => Mr,
-    Backpack: () => mr,
-    Badge: () => Dr,
-    BadgeAlert: () => vr,
-    BadgeCent: () => gr,
-    BadgeCheck: () => ua,
-    BadgeDollarSign: () => yr,
-    BadgeEuro: () => Cr,
-    BadgeHelp: () => ca,
-    BadgeIndianRupee: () => Ar,
-    BadgeInfo: () => Sr,
-    BadgeJapaneseYen: () => wr,
-    BadgeMinus: () => Hr,
-    BadgePercent: () => Lr,
-    BadgePlus: () => Vr,
-    BadgePoundSterling: () => kr,
-    BadgeQuestionMark: () => ca,
-    BadgeRussianRuble: () => Pr,
-    BadgeSwissFranc: () => Tr,
-    BadgeTurkishLira: () => Br,
-    BadgeX: () => br,
-    BaggageClaim: () => Rr,
-    Balloon: () => Fr,
-    Ban: () => Er,
-    Banana: () => Or,
-    Bandage: () => qr,
-    Banknote: () => Nr,
-    BanknoteArrowDown: () => zr,
-    BanknoteArrowUp: () => Ur,
-    BanknoteCheck: () => Ir,
-    BanknoteX: () => _r,
-    BarChart: () => La,
-    BarChart2: () => Va,
-    BarChart3: () => wa,
-    BarChart4: () => Sa,
-    BarChartBig: () => Aa,
-    BarChartHorizontal: () => ya,
-    BarChartHorizontalBig: () => ga,
-    Barcode: () => Gr,
-    Barrel: () => Wr,
-    Baseline: () => Zr,
-    Bath: () => Xr,
-    Battery: () => ao,
-    BatteryCharging: () => Kr,
-    BatteryFull: () => Jr,
-    BatteryLow: () => $r,
-    BatteryMedium: () => jr,
-    BatteryPlus: () => Qr,
-    BatteryWarning: () => Yr,
-    Beaker: () => to,
-    Bean: () => ro,
-    BeanOff: () => eo,
-    Bed: () => lo,
-    BedDouble: () => oo,
-    BedSingle: () => po,
-    Beef: () => ho,
-    BeefOff: () => so,
-    Beer: () => uo,
-    BeerOff: () => fo,
-    Bell: () => go,
-    BellCheck: () => no,
-    BellDot: () => co,
-    BellElectric: () => xo,
-    BellMinus: () => io,
-    BellOff: () => mo,
-    BellPlus: () => Mo,
-    BellRing: () => vo,
-    BetweenHorizonalEnd: () => na,
-    BetweenHorizonalStart: () => xa,
-    BetweenHorizontalEnd: () => na,
-    BetweenHorizontalStart: () => xa,
-    BetweenVerticalEnd: () => yo,
-    BetweenVerticalStart: () => Co,
-    BicepsFlexed: () => Ao,
-    Bike: () => So,
-    Binary: () => wo,
-    Binoculars: () => Lo,
-    Biohazard: () => Ho,
-    Bird: () => Vo,
-    Birdhouse: () => ko,
-    Bitcoin: () => Po,
-    Blend: () => To,
-    Blender: () => bo,
-    Blinds: () => Bo,
-    Blocks: () => Do,
-    Bluetooth: () => Oo,
-    BluetoothConnected: () => Ro,
-    BluetoothOff: () => Fo,
-    BluetoothSearching: () => Eo,
-    Bold: () => qo,
-    Bolt: () => zo,
-    Bomb: () => Uo,
-    Bone: () => _o,
-    BoneFracture: () => Io,
-    Book: () => nd,
-    BookA: () => No,
-    BookAlert: () => Go,
-    BookAudio: () => Wo,
-    BookCheck: () => Zo,
-    BookCopy: () => Xo,
-    BookDashed: () => ia,
-    BookDown: () => Ko,
-    BookHeadphones: () => Jo,
-    BookHeart: () => $o,
-    BookImage: () => jo,
-    BookKey: () => Qo,
-    BookLock: () => Yo,
-    BookMarked: () => ad,
-    BookMinus: () => td,
-    BookOpen: () => od,
-    BookOpenCheck: () => ed,
-    BookOpenText: () => rd,
-    BookPlus: () => dd,
-    BookSearch: () => pd,
-    BookTemplate: () => ia,
-    BookText: () => ld,
-    BookType: () => sd,
-    BookUp: () => fd,
-    BookUp2: () => hd,
-    BookUser: () => ud,
-    BookX: () => cd,
-    Bookmark: () => gd,
-    BookmarkCheck: () => xd,
-    BookmarkMinus: () => id,
-    BookmarkOff: () => md,
-    BookmarkPlus: () => Md,
-    BookmarkX: () => vd,
-    BoomBox: () => Cd,
-    Bot: () => Sd,
-    BotMessageSquare: () => yd,
-    BotOff: () => Ad,
-    BottleWine: () => wd,
-    BowArrow: () => Hd,
-    Box: () => Ld,
-    BoxSelect: () => ce,
-    Boxes: () => Vd,
-    Braces: () => ma,
-    Brackets: () => kd,
-    Brain: () => Bd,
-    BrainCircuit: () => Pd,
-    BrainCog: () => Td,
-    BrickWall: () => Dd,
-    BrickWallFire: () => Rd,
-    BrickWallShield: () => bd,
-    Briefcase: () => qd,
-    BriefcaseBusiness: () => Fd,
-    BriefcaseConveyorBelt: () => Ed,
-    BriefcaseMedical: () => Od,
-    BringToFront: () => Id,
-    Broccoli: () => zd,
-    Brush: () => _d,
-    BrushCleaning: () => Ud,
-    Bubbles: () => Nd,
-    Bug: () => Zd,
-    BugOff: () => Gd,
-    BugPlay: () => Wd,
-    Building: () => Kd,
-    Building2: () => Xd,
-    Bus: () => $d,
-    BusFront: () => Jd,
-    Cable: () => Qd,
-    CableCar: () => jd,
-    Cake: () => ap,
-    CakeSlice: () => Yd,
-    Calculator: () => tp,
-    Calendar: () => Ap,
-    Calendar1: () => ep,
-    CalendarArrowDown: () => rp,
-    CalendarArrowUp: () => op,
-    CalendarCheck: () => dp,
-    CalendarCheck2: () => pp,
-    CalendarClock: () => lp,
-    CalendarCog: () => sp,
-    CalendarDays: () => hp,
-    CalendarFold: () => fp,
-    CalendarHeart: () => cp,
-    CalendarMinus: () => np,
-    CalendarMinus2: () => up,
-    CalendarOff: () => xp,
-    CalendarPlus: () => mp,
-    CalendarPlus2: () => ip,
-    CalendarRange: () => Mp,
-    CalendarSearch: () => vp,
-    CalendarSync: () => gp,
-    CalendarX: () => Cp,
-    CalendarX2: () => yp,
-    Calendars: () => Sp,
-    Camera: () => Hp,
-    CameraOff: () => wp,
-    CandlestickChart: () => Ca,
-    Candy: () => Vp,
-    CandyCane: () => Lp,
-    CandyOff: () => kp,
-    Cannabis: () => Pp,
-    CannabisOff: () => Tp,
-    Captions: () => Ma,
-    CaptionsOff: () => Bp,
-    Car: () => Rp,
-    CarFront: () => bp,
-    CarTaxiFront: () => Dp,
-    Caravan: () => Fp,
-    CardSim: () => Ep,
-    Carrot: () => Op,
-    CaseLower: () => qp,
-    CaseSensitive: () => zp,
-    CaseUpper: () => Up,
-    CassetteTape: () => Ip,
-    Cast: () => _p,
-    Castle: () => Np,
-    Cat: () => Gp,
-    Cctv: () => Zp,
-    CctvOff: () => Wp,
-    ChartArea: () => va,
-    ChartBar: () => ya,
-    ChartBarBig: () => ga,
-    ChartBarDecreasing: () => Kp,
-    ChartBarIncreasing: () => Xp,
-    ChartBarStacked: () => Jp,
-    ChartCandlestick: () => Ca,
-    ChartColumn: () => wa,
-    ChartColumnBig: () => Aa,
-    ChartColumnDecreasing: () => $p,
-    ChartColumnIncreasing: () => Sa,
-    ChartColumnStacked: () => jp,
-    ChartGantt: () => Qp,
-    ChartLine: () => Ha,
-    ChartNetwork: () => al,
-    ChartNoAxesColumn: () => Va,
-    ChartNoAxesColumnDecreasing: () => Yp,
-    ChartNoAxesColumnIncreasing: () => La,
-    ChartNoAxesCombined: () => tl,
-    ChartNoAxesGantt: () => ka,
-    ChartPie: () => Pa,
-    ChartScatter: () => Ta,
-    ChartSpline: () => el,
-    Check: () => dl,
-    CheckCheck: () => rl,
-    CheckCircle: () => Ua,
-    CheckCircle2: () => Ia,
-    CheckLine: () => ol,
-    CheckSquare: () => re,
-    CheckSquare2: () => oe,
-    ChefHat: () => pl,
-    Cherry: () => ll,
-    ChessBishop: () => hl,
-    ChessKing: () => sl,
-    ChessKnight: () => fl,
-    ChessPawn: () => ul,
-    ChessQueen: () => cl,
-    ChessRook: () => nl,
-    ChevronDown: () => xl,
-    ChevronDownCircle: () => _a,
-    ChevronDownSquare: () => de,
-    ChevronFirst: () => ml,
-    ChevronLast: () => il,
-    ChevronLeft: () => Ml,
-    ChevronLeftCircle: () => Na,
-    ChevronLeftSquare: () => pe,
-    ChevronRight: () => vl,
-    ChevronRightCircle: () => Ga,
-    ChevronRightSquare: () => le,
-    ChevronUp: () => gl,
-    ChevronUpCircle: () => Wa,
-    ChevronUpSquare: () => se,
-    ChevronsDown: () => yl,
-    ChevronsDownUp: () => Cl,
-    ChevronsLeft: () => wl,
-    ChevronsLeftRight: () => Sl,
-    ChevronsLeftRightEllipsis: () => Al,
-    ChevronsRight: () => Ll,
-    ChevronsRightLeft: () => Hl,
-    ChevronsUp: () => kl,
-    ChevronsUpDown: () => Vl,
-    Church: () => Pl,
-    Cigarette: () => Bl,
-    CigaretteOff: () => Tl,
-    Circle: () => Xl,
-    CircleAlert: () => Ba,
-    CircleArrowDown: () => ba,
-    CircleArrowLeft: () => Da,
-    CircleArrowOutDownLeft: () => Ra,
-    CircleArrowOutDownRight: () => Fa,
-    CircleArrowOutUpLeft: () => Ea,
-    CircleArrowOutUpRight: () => Oa,
-    CircleArrowRight: () => qa,
-    CircleArrowUp: () => za,
-    CircleCheck: () => Ia,
-    CircleCheckBig: () => Ua,
-    CircleChevronDown: () => _a,
-    CircleChevronLeft: () => Na,
-    CircleChevronRight: () => Ga,
-    CircleChevronUp: () => Wa,
-    CircleDashed: () => bl,
-    CircleDivide: () => Za,
-    CircleDollarSign: () => Dl,
-    CircleDot: () => Fl,
-    CircleDotDashed: () => Rl,
-    CircleEllipsis: () => El,
-    CircleEqual: () => Ol,
-    CircleEuro: () => ql,
-    CircleFadingArrowUp: () => zl,
-    CircleFadingPlus: () => Ul,
-    CircleGauge: () => Xa,
-    CircleHelp: () => U,
-    CircleMinus: () => Ka,
-    CircleOff: () => Il,
-    CircleParking: () => $a,
-    CircleParkingOff: () => Ja,
-    CirclePause: () => ja,
-    CirclePercent: () => Qa,
-    CirclePile: () => _l,
-    CirclePlay: () => Ya,
-    CirclePlus: () => a1,
-    CirclePoundSterling: () => Nl,
-    CirclePower: () => t1,
-    CircleQuestionMark: () => U,
-    CircleSlash: () => Gl,
-    CircleSlash2: () => e1,
-    CircleSlashed: () => e1,
-    CircleSmall: () => Wl,
-    CircleStar: () => Zl,
-    CircleStop: () => r1,
-    CircleUser: () => d1,
-    CircleUserRound: () => o1,
-    CircleX: () => p1,
-    CircuitBoard: () => Kl,
-    Citrus: () => Jl,
-    Clapperboard: () => $l,
-    Clipboard: () => ps,
-    ClipboardCheck: () => Ql,
-    ClipboardClock: () => jl,
-    ClipboardCopy: () => Yl,
-    ClipboardEdit: () => s1,
-    ClipboardList: () => as,
-    ClipboardMinus: () => ts,
-    ClipboardPaste: () => es,
-    ClipboardPen: () => s1,
-    ClipboardPenLine: () => l1,
-    ClipboardPlus: () => rs,
-    ClipboardSignature: () => l1,
-    ClipboardType: () => os,
-    ClipboardX: () => ds,
-    Clock: () => Vs,
-    Clock1: () => ls,
-    Clock10: () => ss,
-    Clock11: () => hs,
-    Clock12: () => fs,
-    Clock2: () => us,
-    Clock3: () => cs,
-    Clock4: () => ns,
-    Clock5: () => xs,
-    Clock6: () => is,
-    Clock7: () => ms,
-    Clock8: () => vs,
-    Clock9: () => Ms,
-    ClockAlert: () => gs,
-    ClockArrowDown: () => ys,
-    ClockArrowLeft: () => Cs,
-    ClockArrowRight: () => As,
-    ClockArrowUp: () => Ss,
-    ClockCheck: () => ws,
-    ClockFading: () => Hs,
-    ClockPlus: () => Ls,
-    ClosedCaption: () => ks,
-    Cloud: () => Zs,
-    CloudAlert: () => Ps,
-    CloudBackup: () => Bs,
-    CloudCheck: () => Ts,
-    CloudCog: () => bs,
-    CloudDownload: () => h1,
-    CloudDrizzle: () => Rs,
-    CloudFog: () => Ds,
-    CloudHail: () => Fs,
-    CloudLightning: () => Es,
-    CloudMoon: () => qs,
-    CloudMoonRain: () => Os,
-    CloudOff: () => zs,
-    CloudRain: () => Is,
-    CloudRainWind: () => Us,
-    CloudSnow: () => _s,
-    CloudSun: () => Gs,
-    CloudSunRain: () => Ns,
-    CloudSync: () => Ws,
-    CloudUpload: () => f1,
-    Cloudy: () => Xs,
-    Clover: () => Ks,
-    Club: () => Js,
-    Code: () => $s,
-    Code2: () => u1,
-    CodeSquare: () => he,
-    CodeXml: () => u1,
-    Coffee: () => js,
-    Cog: () => Qs,
-    Coins: () => Ys,
-    Columns: () => c1,
-    Columns2: () => c1,
-    Columns3: () => n1,
+var w = {};
+ra(w, {
+    AArrowDown: () => F2,
+    AArrowUp: () => O2,
+    ALargeSmall: () => U2,
+    Accessibility: () => q2,
+    Activity: () => z2,
+    ActivitySquare: () => G1,
+    Ad: () => _2,
+    AirVent: () => N2,
+    Airplay: () => I2,
+    AlarmCheck: () => pa,
+    AlarmClock: () => W2,
+    AlarmClockCheck: () => pa,
+    AlarmClockMinus: () => da,
+    AlarmClockOff: () => G2,
+    AlarmClockPlus: () => la,
+    AlarmMinus: () => da,
+    AlarmPlus: () => la,
+    AlarmSmoke: () => Z2,
+    Album: () => X2,
+    AlertCircle: () => Ea,
+    AlertOctagon: () => g1,
+    AlertTriangle: () => Qe,
+    AlignCenter: () => We,
+    AlignCenterHorizontal: () => K2,
+    AlignCenterVertical: () => $2,
+    AlignEndHorizontal: () => J2,
+    AlignEndVertical: () => Q2,
+    AlignHorizontalDistributeCenter: () => j2,
+    AlignHorizontalDistributeEnd: () => Y2,
+    AlignHorizontalDistributeStart: () => a0,
+    AlignHorizontalJustifyCenter: () => t0,
+    AlignHorizontalJustifyEnd: () => e0,
+    AlignHorizontalJustifyStart: () => r0,
+    AlignHorizontalSpaceAround: () => o0,
+    AlignHorizontalSpaceBetween: () => p0,
+    AlignJustify: () => Xe,
+    AlignLeft: () => J,
+    AlignRight: () => Ze,
+    AlignStartHorizontal: () => d0,
+    AlignStartVertical: () => l0,
+    AlignVerticalDistributeCenter: () => s0,
+    AlignVerticalDistributeEnd: () => h0,
+    AlignVerticalDistributeStart: () => f0,
+    AlignVerticalJustifyCenter: () => u0,
+    AlignVerticalJustifyEnd: () => c0,
+    AlignVerticalJustifyStart: () => n0,
+    AlignVerticalSpaceAround: () => i0,
+    AlignVerticalSpaceBetween: () => x0,
+    Ambulance: () => m0,
+    Ampersand: () => v0,
+    Ampersands: () => M0,
+    Amphora: () => g0,
+    Anchor: () => y0,
+    Angry: () => C0,
+    Annoyed: () => A0,
+    Antenna: () => w0,
+    Anvil: () => S0,
+    Aperture: () => H0,
+    AppWindow: () => k0,
+    AppWindowMac: () => L0,
+    Apple: () => V0,
+    Archive: () => B0,
+    ArchiveRestore: () => P0,
+    ArchiveX: () => b0,
+    AreaChart: () => Aa,
+    Armchair: () => T0,
+    ArrowBigDown: () => D0,
+    ArrowBigDownDash: () => R0,
+    ArrowBigLeft: () => F0,
+    ArrowBigLeftDash: () => E0,
+    ArrowBigRight: () => q0,
+    ArrowBigRightDash: () => O0,
+    ArrowBigUp: () => U0,
+    ArrowBigUpDash: () => z0,
+    ArrowDown: () => j0,
+    ArrowDown01: () => _0,
+    ArrowDown10: () => N0,
+    ArrowDownAZ: () => sa,
+    ArrowDownAz: () => sa,
+    ArrowDownCircle: () => Fa,
+    ArrowDownFromLine: () => I0,
+    ArrowDownLeft: () => G0,
+    ArrowDownLeftFromCircle: () => qa,
+    ArrowDownLeftFromSquare: () => $1,
+    ArrowDownLeftSquare: () => W1,
+    ArrowDownNarrowWide: () => W0,
+    ArrowDownRight: () => Z0,
+    ArrowDownRightFromCircle: () => za,
+    ArrowDownRightFromSquare: () => J1,
+    ArrowDownRightSquare: () => Z1,
+    ArrowDownSquare: () => X1,
+    ArrowDownToDot: () => K0,
+    ArrowDownToLine: () => X0,
+    ArrowDownUp: () => $0,
+    ArrowDownWideNarrow: () => ha,
+    ArrowDownZA: () => fa,
+    ArrowDownZa: () => fa,
+    ArrowLeft: () => ar,
+    ArrowLeftCircle: () => Oa,
+    ArrowLeftFromLine: () => J0,
+    ArrowLeftRight: () => Q0,
+    ArrowLeftSquare: () => K1,
+    ArrowLeftToLine: () => Y0,
+    ArrowRight: () => or,
+    ArrowRightCircle: () => Na,
+    ArrowRightFromLine: () => tr,
+    ArrowRightLeft: () => er,
+    ArrowRightSquare: () => Y1,
+    ArrowRightToLine: () => rr,
+    ArrowUp: () => ir,
+    ArrowUp01: () => dr,
+    ArrowUp10: () => pr,
+    ArrowUpAZ: () => ua,
+    ArrowUpAz: () => ua,
+    ArrowUpCircle: () => Ia,
+    ArrowUpDown: () => lr,
+    ArrowUpFromDot: () => sr,
+    ArrowUpFromLine: () => hr,
+    ArrowUpLeft: () => fr,
+    ArrowUpLeftFromCircle: () => Ua,
+    ArrowUpLeftFromSquare: () => j1,
+    ArrowUpLeftSquare: () => ae,
+    ArrowUpNarrowWide: () => ca,
+    ArrowUpRight: () => ur,
+    ArrowUpRightFromCircle: () => _a,
+    ArrowUpRightFromSquare: () => Q1,
+    ArrowUpRightSquare: () => te,
+    ArrowUpSquare: () => ee,
+    ArrowUpToLine: () => cr,
+    ArrowUpWideNarrow: () => nr,
+    ArrowUpZA: () => na,
+    ArrowUpZa: () => na,
+    ArrowsUpFromLine: () => mr,
+    Asterisk: () => xr,
+    AsteriskSquare: () => re,
+    Astroid: () => Mr,
+    AtSign: () => vr,
+    Atom: () => gr,
+    AudioLines: () => yr,
+    AudioWaveform: () => wr,
+    Award: () => Cr,
+    Axe: () => Ar,
+    Axis3D: () => ia,
+    Axis3d: () => ia,
+    Baby: () => Hr,
+    Backpack: () => Sr,
+    Badge: () => _r,
+    BadgeAlert: () => Lr,
+    BadgeCent: () => Vr,
+    BadgeCheck: () => xa,
+    BadgeDollarSign: () => kr,
+    BadgeEuro: () => Pr,
+    BadgeHelp: () => ma,
+    BadgeIndianRupee: () => br,
+    BadgeInfo: () => Tr,
+    BadgeJapaneseYen: () => Br,
+    BadgeMinus: () => Rr,
+    BadgePercent: () => Dr,
+    BadgePlus: () => Er,
+    BadgePoundSterling: () => Fr,
+    BadgeQuestionMark: () => ma,
+    BadgeRussianRuble: () => Or,
+    BadgeSwissFranc: () => qr,
+    BadgeTurkishLira: () => zr,
+    BadgeX: () => Ur,
+    BaggageClaim: () => Nr,
+    Balloon: () => Ir,
+    Ban: () => Gr,
+    Banana: () => Wr,
+    Bandage: () => Zr,
+    Banknote: () => jr,
+    BanknoteArrowDown: () => Xr,
+    BanknoteArrowUp: () => Kr,
+    BanknoteCheck: () => $r,
+    BanknoteX: () => Jr,
+    BarChart: () => ba,
+    BarChart2: () => Ta,
+    BarChart3: () => ka,
+    BarChart4: () => Va,
+    BarChartBig: () => La,
+    BarChartHorizontal: () => Sa,
+    BarChartHorizontalBig: () => wa,
+    Barcode: () => Qr,
+    Barrel: () => Yr,
+    Baseline: () => ao,
+    Bath: () => to,
+    Battery: () => ho,
+    BatteryCharging: () => eo,
+    BatteryFull: () => ro,
+    BatteryLow: () => oo,
+    BatteryMedium: () => po,
+    BatteryPlus: () => lo,
+    BatteryWarning: () => so,
+    Beaker: () => fo,
+    Bean: () => co,
+    BeanOff: () => uo,
+    Bed: () => xo,
+    BedDouble: () => no,
+    BedSingle: () => io,
+    Beef: () => Mo,
+    BeefOff: () => mo,
+    Beer: () => go,
+    BeerOff: () => vo,
+    Bell: () => Vo,
+    BellCheck: () => Co,
+    BellDot: () => yo,
+    BellElectric: () => Ao,
+    BellMinus: () => wo,
+    BellOff: () => So,
+    BellPlus: () => Ho,
+    BellRing: () => Lo,
+    BetweenHorizonalEnd: () => Ma,
+    BetweenHorizonalStart: () => va,
+    BetweenHorizontalEnd: () => Ma,
+    BetweenHorizontalStart: () => va,
+    BetweenVerticalEnd: () => ko,
+    BetweenVerticalStart: () => Po,
+    BicepsFlexed: () => bo,
+    Bike: () => To,
+    Binary: () => Bo,
+    Binoculars: () => Do,
+    Biohazard: () => Ro,
+    Bird: () => Eo,
+    Birdhouse: () => Fo,
+    Bitcoin: () => Oo,
+    Blend: () => qo,
+    Blender: () => Uo,
+    Blinds: () => zo,
+    Blocks: () => _o,
+    Bluetooth: () => Wo,
+    BluetoothConnected: () => No,
+    BluetoothOff: () => Io,
+    BluetoothSearching: () => Go,
+    Bold: () => Zo,
+    Bolt: () => Xo,
+    Bomb: () => Ko,
+    Bone: () => Jo,
+    BoneFracture: () => $o,
+    Book: () => Cd,
+    BookA: () => jo,
+    BookAlert: () => Qo,
+    BookAudio: () => Yo,
+    BookCheck: () => ad,
+    BookCopy: () => td,
+    BookDashed: () => ga,
+    BookDown: () => ed,
+    BookHeadphones: () => rd,
+    BookHeart: () => od,
+    BookImage: () => dd,
+    BookKey: () => pd,
+    BookLock: () => ld,
+    BookMarked: () => sd,
+    BookMinus: () => hd,
+    BookOpen: () => cd,
+    BookOpenCheck: () => fd,
+    BookOpenText: () => ud,
+    BookPlus: () => nd,
+    BookSearch: () => id,
+    BookTemplate: () => ga,
+    BookText: () => xd,
+    BookType: () => md,
+    BookUp: () => vd,
+    BookUp2: () => Md,
+    BookUser: () => gd,
+    BookX: () => yd,
+    Bookmark: () => Vd,
+    BookmarkCheck: () => Ad,
+    BookmarkMinus: () => wd,
+    BookmarkOff: () => Sd,
+    BookmarkPlus: () => Hd,
+    BookmarkX: () => Ld,
+    BoomBox: () => Pd,
+    Bot: () => Td,
+    BotMessageSquare: () => kd,
+    BotOff: () => bd,
+    BottleWine: () => Bd,
+    BowArrow: () => Rd,
+    Box: () => Dd,
+    BoxSelect: () => me,
+    Boxes: () => Ed,
+    Braces: () => ya,
+    Brackets: () => Fd,
+    Brain: () => zd,
+    BrainCircuit: () => Od,
+    BrainCog: () => qd,
+    BrickWall: () => _d,
+    BrickWallFire: () => Nd,
+    BrickWallShield: () => Ud,
+    Briefcase: () => Zd,
+    BriefcaseBusiness: () => Id,
+    BriefcaseConveyorBelt: () => Gd,
+    BriefcaseMedical: () => Wd,
+    BringToFront: () => $d,
+    Broccoli: () => Xd,
+    Brush: () => Jd,
+    BrushCleaning: () => Kd,
+    Bubbles: () => jd,
+    Bug: () => ap,
+    BugOff: () => Qd,
+    BugPlay: () => Yd,
+    Building: () => ep,
+    Building2: () => tp,
+    Bus: () => op,
+    BusFront: () => rp,
+    Cable: () => pp,
+    CableCar: () => dp,
+    Cake: () => sp,
+    CakeSlice: () => lp,
+    Calculator: () => hp,
+    Calendar: () => bp,
+    Calendar1: () => fp,
+    CalendarArrowDown: () => up,
+    CalendarArrowUp: () => cp,
+    CalendarCheck: () => np,
+    CalendarCheck2: () => ip,
+    CalendarClock: () => xp,
+    CalendarCog: () => mp,
+    CalendarDays: () => Mp,
+    CalendarFold: () => vp,
+    CalendarHeart: () => yp,
+    CalendarMinus: () => Cp,
+    CalendarMinus2: () => gp,
+    CalendarOff: () => Ap,
+    CalendarPlus: () => Sp,
+    CalendarPlus2: () => wp,
+    CalendarRange: () => Hp,
+    CalendarSearch: () => Lp,
+    CalendarSync: () => Vp,
+    CalendarX: () => Pp,
+    CalendarX2: () => kp,
+    Calendars: () => Tp,
+    Camera: () => Rp,
+    CameraOff: () => Bp,
+    CandlestickChart: () => Ha,
+    Candy: () => Ep,
+    CandyCane: () => Dp,
+    CandyOff: () => Fp,
+    Cannabis: () => Op,
+    CannabisOff: () => qp,
+    Captions: () => Ca,
+    CaptionsOff: () => zp,
+    Car: () => Np,
+    CarFront: () => Up,
+    CarTaxiFront: () => _p,
+    Caravan: () => Ip,
+    CardSim: () => Gp,
+    Carrot: () => Wp,
+    CaseLower: () => Zp,
+    CaseSensitive: () => Xp,
+    CaseUpper: () => Kp,
+    CassetteTape: () => $p,
+    Cast: () => Jp,
+    Castle: () => jp,
+    Cat: () => Qp,
+    Cctv: () => al,
+    CctvOff: () => Yp,
+    ChartArea: () => Aa,
+    ChartBar: () => Sa,
+    ChartBarBig: () => wa,
+    ChartBarDecreasing: () => el,
+    ChartBarIncreasing: () => tl,
+    ChartBarStacked: () => rl,
+    ChartCandlestick: () => Ha,
+    ChartColumn: () => ka,
+    ChartColumnBig: () => La,
+    ChartColumnDecreasing: () => ol,
+    ChartColumnIncreasing: () => Va,
+    ChartColumnStacked: () => dl,
+    ChartGantt: () => pl,
+    ChartLine: () => Pa,
+    ChartNetwork: () => sl,
+    ChartNoAxesColumn: () => Ta,
+    ChartNoAxesColumnDecreasing: () => ll,
+    ChartNoAxesColumnIncreasing: () => ba,
+    ChartNoAxesCombined: () => hl,
+    ChartNoAxesGantt: () => Ba,
+    ChartPie: () => Ra,
+    ChartScatter: () => Da,
+    ChartSpline: () => fl,
+    Check: () => nl,
+    CheckCheck: () => ul,
+    CheckCircle: () => Ga,
+    CheckCircle2: () => Wa,
+    CheckLine: () => cl,
+    CheckSquare: () => le,
+    CheckSquare2: () => se,
+    ChefHat: () => il,
+    Cherry: () => xl,
+    ChessBishop: () => Ml,
+    ChessKing: () => ml,
+    ChessKnight: () => vl,
+    ChessPawn: () => gl,
+    ChessQueen: () => yl,
+    ChessRook: () => Cl,
+    ChevronDown: () => Al,
+    ChevronDownCircle: () => Za,
+    ChevronDownSquare: () => he,
+    ChevronFirst: () => Sl,
+    ChevronLast: () => wl,
+    ChevronLeft: () => Hl,
+    ChevronLeftCircle: () => Xa,
+    ChevronLeftSquare: () => fe,
+    ChevronRight: () => Ll,
+    ChevronRightCircle: () => Ka,
+    ChevronRightSquare: () => ue,
+    ChevronUp: () => Vl,
+    ChevronUpCircle: () => $a,
+    ChevronUpSquare: () => ce,
+    ChevronsDown: () => kl,
+    ChevronsDownUp: () => Pl,
+    ChevronsLeft: () => Bl,
+    ChevronsLeftRight: () => Tl,
+    ChevronsLeftRightEllipsis: () => bl,
+    ChevronsRight: () => Dl,
+    ChevronsRightLeft: () => Rl,
+    ChevronsUp: () => Fl,
+    ChevronsUpDown: () => El,
+    Church: () => Ol,
+    Cigarette: () => zl,
+    CigaretteOff: () => ql,
+    Circle: () => ts,
+    CircleAlert: () => Ea,
+    CircleArrowDown: () => Fa,
+    CircleArrowLeft: () => Oa,
+    CircleArrowOutDownLeft: () => qa,
+    CircleArrowOutDownRight: () => za,
+    CircleArrowOutUpLeft: () => Ua,
+    CircleArrowOutUpRight: () => _a,
+    CircleArrowRight: () => Na,
+    CircleArrowUp: () => Ia,
+    CircleCheck: () => Wa,
+    CircleCheckBig: () => Ga,
+    CircleChevronDown: () => Za,
+    CircleChevronLeft: () => Xa,
+    CircleChevronRight: () => Ka,
+    CircleChevronUp: () => $a,
+    CircleDashed: () => Ul,
+    CircleDivide: () => Ja,
+    CircleDollarSign: () => _l,
+    CircleDot: () => Il,
+    CircleDotDashed: () => Nl,
+    CircleEllipsis: () => Gl,
+    CircleEqual: () => Wl,
+    CircleEuro: () => Zl,
+    CircleFadingArrowUp: () => Xl,
+    CircleFadingPlus: () => Kl,
+    CircleGauge: () => ja,
+    CircleHelp: () => N,
+    CircleMinus: () => Qa,
+    CircleOff: () => $l,
+    CircleParking: () => at,
+    CircleParkingOff: () => Ya,
+    CirclePause: () => tt,
+    CirclePercent: () => et,
+    CirclePile: () => Jl,
+    CirclePlay: () => rt,
+    CirclePlus: () => ot,
+    CirclePoundSterling: () => jl,
+    CirclePower: () => dt,
+    CircleQuestionMark: () => N,
+    CircleSlash: () => Ql,
+    CircleSlash2: () => pt,
+    CircleSlashed: () => pt,
+    CircleSmall: () => Yl,
+    CircleStar: () => as,
+    CircleStop: () => lt,
+    CircleUser: () => ht,
+    CircleUserRound: () => st,
+    CircleX: () => ft,
+    CircuitBoard: () => es,
+    Citrus: () => rs,
+    Clapperboard: () => os,
+    Clipboard: () => is,
+    ClipboardCheck: () => ps,
+    ClipboardClock: () => ds,
+    ClipboardCopy: () => ls,
+    ClipboardEdit: () => ct,
+    ClipboardList: () => ss,
+    ClipboardMinus: () => hs,
+    ClipboardPaste: () => fs,
+    ClipboardPen: () => ct,
+    ClipboardPenLine: () => ut,
+    ClipboardPlus: () => us,
+    ClipboardSignature: () => ut,
+    ClipboardType: () => cs,
+    ClipboardX: () => ns,
+    Clock: () => Es,
+    Clock1: () => xs,
+    Clock10: () => ms,
+    Clock11: () => Ms,
+    Clock12: () => vs,
+    Clock2: () => gs,
+    Clock3: () => ys,
+    Clock4: () => Cs,
+    Clock5: () => As,
+    Clock6: () => ws,
+    Clock7: () => Ss,
+    Clock8: () => Ls,
+    Clock9: () => Hs,
+    ClockAlert: () => Vs,
+    ClockArrowDown: () => ks,
+    ClockArrowLeft: () => Ps,
+    ClockArrowRight: () => bs,
+    ClockArrowUp: () => Ts,
+    ClockCheck: () => Bs,
+    ClockFading: () => Rs,
+    ClockPlus: () => Ds,
+    ClosedCaption: () => Fs,
+    Cloud: () => ah,
+    CloudAlert: () => Os,
+    CloudBackup: () => zs,
+    CloudCheck: () => qs,
+    CloudCog: () => Us,
+    CloudDownload: () => nt,
+    CloudDrizzle: () => Ns,
+    CloudFog: () => _s,
+    CloudHail: () => Is,
+    CloudLightning: () => Gs,
+    CloudMoon: () => Zs,
+    CloudMoonRain: () => Ws,
+    CloudOff: () => Xs,
+    CloudRain: () => $s,
+    CloudRainWind: () => Ks,
+    CloudSnow: () => Js,
+    CloudSun: () => Qs,
+    CloudSunRain: () => js,
+    CloudSync: () => Ys,
+    CloudUpload: () => it,
+    Cloudy: () => th,
+    Clover: () => eh,
+    Club: () => rh,
+    Code: () => oh,
+    Code2: () => xt,
+    CodeSquare: () => ne,
+    CodeXml: () => xt,
+    Coffee: () => dh,
+    Cog: () => ph,
+    Coins: () => lh,
+    Columns: () => mt,
+    Columns2: () => mt,
+    Columns3: () => Mt,
     Columns3Cog: () => I,
-    Columns4: () => ah,
+    Columns4: () => sh,
     ColumnsSettings: () => I,
-    Combine: () => eh,
-    Command: () => th,
-    Compass: () => rh,
-    Component: () => oh,
-    Computer: () => dh,
-    ConciergeBell: () => ph,
-    Cone: () => lh,
-    Construction: () => sh,
-    Contact: () => hh,
-    Contact2: () => x1,
-    ContactRound: () => x1,
-    Container: () => fh,
-    Contrast: () => uh,
-    Cookie: () => ch,
-    CookingPot: () => nh,
-    Copy: () => gh,
-    CopyCheck: () => xh,
-    CopyMinus: () => ih,
-    CopyPlus: () => mh,
-    CopySlash: () => Mh,
-    CopyX: () => vh,
-    Copyleft: () => yh,
-    Copyright: () => Ch,
-    CornerDownLeft: () => Ah,
-    CornerDownRight: () => Sh,
-    CornerLeftDown: () => Hh,
-    CornerLeftUp: () => wh,
-    CornerRightDown: () => Lh,
-    CornerRightUp: () => Vh,
-    CornerUpLeft: () => kh,
-    CornerUpRight: () => Ph,
-    Cpu: () => Th,
-    CreativeCommons: () => Bh,
-    CreditCard: () => bh,
-    Croissant: () => Dh,
-    Crop: () => Rh,
-    Cross: () => Fh,
-    Crosshair: () => Eh,
-    Crown: () => zh,
-    Cuboid: () => Oh,
-    CupSoda: () => qh,
-    CurlyBraces: () => ma,
-    Currency: () => Uh,
-    Cylinder: () => Ih,
-    Dam: () => _h,
-    Database: () => Qh,
-    DatabaseArrowDown: () => Nh,
-    DatabaseArrowUp: () => Gh,
-    DatabaseBackup: () => Zh,
-    DatabaseCheck: () => Wh,
-    DatabaseMinus: () => Xh,
-    DatabasePlus: () => Kh,
-    DatabaseSearch: () => Jh,
-    DatabaseX: () => $h,
-    DatabaseZap: () => jh,
-    DecimalsArrowLeft: () => af,
-    DecimalsArrowRight: () => Yh,
-    Delete: () => tf,
-    Dessert: () => ef,
-    Diameter: () => rf,
-    Diamond: () => pf,
-    DiamondMinus: () => of,
-    DiamondPercent: () => i1,
-    DiamondPlus: () => df,
-    Dice1: () => lf,
-    Dice2: () => sf,
-    Dice3: () => hf,
-    Dice4: () => ff,
-    Dice5: () => uf,
-    Dice6: () => nf,
-    Dices: () => cf,
-    Diff: () => xf,
-    Disc: () => yf,
-    Disc2: () => mf,
-    Disc3: () => Mf,
-    DiscAlbum: () => gf,
-    Divide: () => vf,
-    DivideCircle: () => Za,
-    DivideSquare: () => ne,
-    Dna: () => Af,
-    DnaOff: () => Cf,
-    Dock: () => Sf,
-    Dog: () => wf,
-    DollarSign: () => Hf,
-    Donut: () => Lf,
-    DoorClosed: () => kf,
-    DoorClosedLocked: () => Vf,
-    DoorOpen: () => Pf,
-    Dot: () => Tf,
-    DotSquare: () => xe,
-    Download: () => Bf,
-    DownloadCloud: () => h1,
-    DraftingCompass: () => Rf,
-    Drama: () => bf,
-    Drill: () => Df,
-    Drone: () => Ff,
-    Droplet: () => Of,
-    DropletOff: () => Ef,
-    Droplets: () => qf,
-    Drum: () => zf,
-    Drumstick: () => Uf,
-    Dumbbell: () => If,
-    Ear: () => Nf,
-    EarOff: () => _f,
-    Earth: () => m1,
-    EarthLock: () => Gf,
-    Eclipse: () => Wf,
-    Edit: () => R,
-    Edit2: () => kt,
-    Edit3: () => Vt,
-    Egg: () => Kf,
-    EggFried: () => Zf,
-    EggOff: () => Xf,
-    Ellipse: () => Jf,
-    Ellipsis: () => v1,
-    EllipsisVertical: () => M1,
-    Equal: () => Qf,
-    EqualApproximately: () => $f,
-    EqualNot: () => jf,
-    EqualSquare: () => ie,
-    Eraser: () => Yf,
-    EthernetPort: () => a4,
-    Euro: () => t4,
-    EvCharger: () => e4,
-    Expand: () => r4,
-    ExternalLink: () => o4,
-    Eye: () => s4,
-    EyeClosed: () => d4,
-    EyeDashed: () => p4,
-    EyeOff: () => l4,
-    Factory: () => h4,
-    Fan: () => f4,
-    FastForward: () => u4,
-    Feather: () => n4,
-    Fence: () => c4,
-    FerrisWheel: () => x4,
-    File: () => N4,
-    FileArchive: () => i4,
-    FileAudio: () => _,
-    FileAudio2: () => _,
-    FileAxis3D: () => g1,
-    FileAxis3d: () => g1,
-    FileBadge: () => y1,
-    FileBadge2: () => y1,
-    FileBarChart: () => S1,
-    FileBarChart2: () => w1,
-    FileBox: () => m4,
-    FileBraces: () => A1,
-    FileBracesCorner: () => C1,
-    FileChartColumn: () => w1,
-    FileChartColumnIncreasing: () => S1,
-    FileChartLine: () => L1,
-    FileChartPie: () => H1,
-    FileCheck: () => M4,
-    FileCheck2: () => V1,
-    FileCheckCorner: () => V1,
-    FileClock: () => v4,
-    FileCode: () => g4,
-    FileCode2: () => k1,
-    FileCodeCorner: () => k1,
-    FileCog: () => P1,
-    FileCog2: () => P1,
-    FileDiff: () => C4,
-    FileDigit: () => y4,
-    FileDown: () => A4,
-    FileEdit: () => F1,
-    FileExclamationPoint: () => T1,
-    FileHeadphone: () => _,
-    FileHeart: () => S4,
-    FileImage: () => w4,
-    FileInput: () => H4,
-    FileJson: () => A1,
-    FileJson2: () => C1,
-    FileKey: () => B1,
-    FileKey2: () => B1,
-    FileLineChart: () => L1,
-    FileLock: () => b1,
-    FileLock2: () => b1,
-    FileMinus: () => L4,
-    FileMinus2: () => D1,
-    FileMinusCorner: () => D1,
-    FileMusic: () => V4,
-    FileOutput: () => k4,
-    FilePen: () => F1,
-    FilePenLine: () => R1,
-    FilePieChart: () => H1,
-    FilePlay: () => E1,
-    FilePlus: () => P4,
-    FilePlus2: () => O1,
-    FilePlusCorner: () => O1,
-    FileQuestion: () => q1,
-    FileQuestionMark: () => q1,
-    FileScan: () => T4,
-    FileSearch: () => B4,
-    FileSearch2: () => z1,
-    FileSearchCorner: () => z1,
-    FileSignal: () => U1,
-    FileSignature: () => R1,
-    FileSliders: () => b4,
-    FileSpreadsheet: () => D4,
-    FileStack: () => F4,
-    FileSymlink: () => R4,
-    FileTerminal: () => E4,
-    FileText: () => O4,
-    FileType: () => q4,
-    FileType2: () => I1,
-    FileTypeCorner: () => I1,
-    FileUp: () => z4,
-    FileUser: () => U4,
-    FileVideo: () => E1,
-    FileVideo2: () => _1,
-    FileVideoCamera: () => _1,
-    FileVolume: () => I4,
-    FileVolume2: () => U1,
-    FileWarning: () => T1,
-    FileX: () => _4,
-    FileX2: () => N1,
-    FileXCorner: () => N1,
-    Files: () => G4,
-    Film: () => W4,
-    Filter: () => K1,
-    FilterX: () => X1,
-    Fingerprint: () => G1,
-    FingerprintPattern: () => G1,
-    FireExtinguisher: () => Z4,
-    Fish: () => J4,
-    FishOff: () => X4,
-    FishSymbol: () => K4,
-    FishingHook: () => $4,
-    FishingRod: () => j4,
-    Flag: () => t5,
-    FlagOff: () => Q4,
-    FlagTriangleLeft: () => Y4,
-    FlagTriangleRight: () => a5,
-    Flame: () => r5,
-    FlameKindling: () => e5,
-    Flashlight: () => d5,
-    FlashlightOff: () => o5,
-    FlaskConical: () => l5,
-    FlaskConicalOff: () => p5,
-    FlaskRound: () => s5,
-    FlipHorizontal: () => te,
-    FlipHorizontal2: () => h5,
-    FlipVertical: () => ee,
-    FlipVertical2: () => f5,
-    Flower: () => u5,
-    Flower2: () => c5,
-    Focus: () => n5,
-    FoldHorizontal: () => x5,
-    FoldVertical: () => i5,
-    Folder: () => G5,
-    FolderArchive: () => m5,
-    FolderBookmark: () => v5,
-    FolderCheck: () => M5,
-    FolderClock: () => g5,
-    FolderClosed: () => y5,
-    FolderCode: () => C5,
-    FolderCog: () => W1,
-    FolderCog2: () => W1,
-    FolderDot: () => A5,
-    FolderDown: () => S5,
-    FolderEdit: () => Z1,
-    FolderGit: () => H5,
-    FolderGit2: () => w5,
-    FolderHeart: () => L5,
-    FolderInput: () => V5,
-    FolderKanban: () => k5,
-    FolderKey: () => P5,
-    FolderLock: () => T5,
-    FolderMinus: () => B5,
-    FolderOpen: () => D5,
-    FolderOpenDot: () => b5,
-    FolderOutput: () => R5,
-    FolderPen: () => Z1,
-    FolderPlus: () => F5,
-    FolderRoot: () => E5,
-    FolderSearch: () => q5,
-    FolderSearch2: () => O5,
-    FolderSymlink: () => z5,
-    FolderSync: () => U5,
-    FolderTree: () => I5,
-    FolderUp: () => _5,
-    FolderX: () => N5,
-    Folders: () => W5,
-    Footprints: () => X5,
-    ForkKnife: () => d2,
-    ForkKnifeCrossed: () => o2,
-    Forklift: () => Z5,
-    Form: () => K5,
-    FormInput: () => Tt,
-    Forward: () => J5,
-    Frame: () => $5,
-    Frown: () => j5,
-    Fuel: () => Q5,
-    Fullscreen: () => Y5,
-    FunctionSquare: () => me,
-    Funnel: () => K1,
-    FunnelPlus: () => au,
-    FunnelX: () => X1,
-    GalleryHorizontal: () => eu,
-    GalleryHorizontalEnd: () => tu,
-    GalleryThumbnails: () => ru,
-    GalleryVertical: () => ou,
-    GalleryVerticalEnd: () => du,
-    Gamepad: () => su,
-    Gamepad2: () => pu,
-    GamepadDirectional: () => lu,
-    GanttChart: () => ka,
-    GanttChartSquare: () => Z,
-    Gauge: () => hu,
-    GaugeCircle: () => Xa,
-    Gavel: () => fu,
-    Gem: () => uu,
-    GeorgianLari: () => nu,
-    Ghost: () => cu,
-    Gift: () => xu,
-    GitBranch: () => Mu,
-    GitBranchMinus: () => iu,
-    GitBranchPlus: () => mu,
-    GitCommit: () => J1,
-    GitCommitHorizontal: () => J1,
-    GitCommitVertical: () => vu,
-    GitCompare: () => yu,
-    GitCompareArrows: () => gu,
-    GitFork: () => Cu,
-    GitGraph: () => Au,
-    GitMerge: () => wu,
-    GitMergeConflict: () => Su,
-    GitPullRequest: () => Bu,
-    GitPullRequestArrow: () => Hu,
-    GitPullRequestClosed: () => Lu,
-    GitPullRequestCreate: () => ku,
-    GitPullRequestCreateArrow: () => Vu,
-    GitPullRequestDraft: () => Pu,
-    GlassWater: () => Tu,
-    Glasses: () => bu,
-    Globe: () => Ou,
-    Globe2: () => m1,
-    GlobeCheck: () => Du,
-    GlobeLock: () => Ru,
-    GlobeOff: () => Fu,
-    GlobeX: () => Eu,
-    Goal: () => qu,
-    Gpu: () => zu,
-    Grab: () => at,
-    GraduationCap: () => Uu,
-    Grape: () => Iu,
-    Grid: () => N,
-    Grid2X2: () => Y1,
-    Grid2X2Check: () => $1,
-    Grid2X2Plus: () => j1,
-    Grid2X2X: () => Q1,
-    Grid2x2: () => Y1,
-    Grid2x2Check: () => $1,
-    Grid2x2Plus: () => j1,
-    Grid2x2X: () => Q1,
-    Grid3X3: () => N,
-    Grid3x2: () => _u,
-    Grid3x3: () => N,
-    Grip: () => Wu,
-    GripHorizontal: () => Nu,
-    GripVertical: () => Gu,
-    Group: () => Zu,
-    Guitar: () => Xu,
-    Ham: () => Ju,
-    Hamburger: () => Ku,
-    Hammer: () => $u,
-    Hand: () => e3,
-    HandCoins: () => ju,
-    HandFist: () => Qu,
-    HandGrab: () => at,
-    HandHeart: () => Yu,
-    HandHelping: () => tt,
-    HandMetal: () => a3,
-    HandPlatter: () => t3,
-    Handbag: () => r3,
-    Handshake: () => o3,
-    HardDrive: () => p3,
-    HardDriveDownload: () => d3,
-    HardDriveUpload: () => l3,
-    HardHat: () => s3,
-    Hash: () => h3,
-    HatGlasses: () => f3,
-    Haze: () => u3,
-    Hd: () => c3,
-    HdmiPort: () => n3,
-    Heading: () => y3,
-    Heading1: () => x3,
-    Heading2: () => i3,
-    Heading3: () => M3,
-    Heading4: () => m3,
-    Heading5: () => v3,
-    Heading6: () => g3,
-    HeadphoneOff: () => C3,
-    Headphones: () => A3,
-    Headset: () => S3,
-    Heart: () => B3,
-    HeartCrack: () => w3,
-    HeartHandshake: () => H3,
-    HeartMinus: () => L3,
-    HeartOff: () => V3,
-    HeartPlus: () => k3,
-    HeartPulse: () => P3,
-    HeartX: () => T3,
-    Heater: () => b3,
-    Helicopter: () => D3,
-    HelpCircle: () => U,
-    HelpingHand: () => tt,
-    Hexagon: () => R3,
-    Highlighter: () => F3,
-    History: () => E3,
-    Home: () => et,
-    Hop: () => O3,
-    HopOff: () => q3,
-    Hospital: () => z3,
-    Hotel: () => U3,
-    Hourglass: () => _3,
-    House: () => et,
-    HouseHeart: () => I3,
-    HousePlug: () => G3,
-    HousePlus: () => N3,
-    HouseWifi: () => W3,
-    IceCream: () => ot,
-    IceCream2: () => rt,
-    IceCreamBowl: () => rt,
-    IceCreamCone: () => ot,
-    IdCard: () => X3,
-    IdCardLanyard: () => Z3,
-    Image: () => ac,
-    ImageDown: () => K3,
-    ImageMinus: () => J3,
-    ImageOff: () => $3,
-    ImagePlay: () => j3,
-    ImagePlus: () => Q3,
-    ImageUp: () => Y3,
-    ImageUpscale: () => ec,
-    Images: () => tc,
-    Import: () => oc,
-    Inbox: () => rc,
-    Indent: () => W,
-    IndentDecrease: () => G,
-    IndentIncrease: () => W,
-    IndianRupee: () => dc,
-    Infinity: () => pc,
-    Info: () => lc,
-    Inspect: () => Ae,
-    InspectionPanel: () => sc,
-    Italic: () => hc,
-    IterationCcw: () => fc,
-    IterationCw: () => uc,
-    JapaneseYen: () => cc,
-    Joystick: () => nc,
-    Kanban: () => ic,
-    KanbanSquare: () => Me,
-    KanbanSquareDashed: () => fe,
-    Kayak: () => xc,
-    Key: () => vc,
-    KeyRound: () => mc,
-    KeySquare: () => Mc,
-    Keyboard: () => yc,
-    KeyboardMusic: () => gc,
-    KeyboardOff: () => Cc,
-    Lamp: () => Vc,
-    LampCeiling: () => Ac,
-    LampDesk: () => Sc,
-    LampFloor: () => wc,
-    LampWallDown: () => Hc,
-    LampWallUp: () => Lc,
-    LandPlot: () => kc,
-    Landmark: () => Pc,
-    Languages: () => Tc,
-    Laptop: () => bc,
-    Laptop2: () => dt,
-    LaptopMinimal: () => dt,
-    LaptopMinimalCheck: () => Bc,
-    Lasso: () => Rc,
-    LassoSelect: () => Dc,
-    Laugh: () => Fc,
-    Layers: () => pt,
-    Layers2: () => Ec,
-    Layers3: () => pt,
-    LayersMinus: () => Oc,
-    LayersPlus: () => qc,
-    Layout: () => Lt,
-    LayoutDashboard: () => zc,
-    LayoutGrid: () => Uc,
-    LayoutList: () => Ic,
-    LayoutPanelLeft: () => _c,
-    LayoutPanelTop: () => Nc,
-    LayoutTemplate: () => Gc,
-    Leaf: () => Wc,
-    LeafyGreen: () => Zc,
-    Lectern: () => Xc,
-    LensConcave: () => Kc,
-    LensConvex: () => Jc,
-    LetterText: () => Ge,
-    Library: () => jc,
-    LibraryBig: () => $c,
-    LibrarySquare: () => ve,
-    LifeBuoy: () => Qc,
-    Ligature: () => Yc,
-    Lightbulb: () => tn,
-    LightbulbOff: () => an,
-    LineChart: () => Ha,
-    LineDotRightHorizontal: () => rn,
-    LineSquiggle: () => en,
-    LineStyle: () => dn,
-    Link: () => ln,
-    Link2: () => pn,
-    Link2Off: () => on,
-    List: () => Pn,
-    ListCheck: () => sn,
-    ListChecks: () => hn,
-    ListChevronsDownUp: () => fn,
-    ListChevronsUpDown: () => un,
-    ListCollapse: () => cn,
-    ListEnd: () => nn,
-    ListFilter: () => mn,
-    ListFilterPlus: () => xn,
-    ListIndentDecrease: () => G,
-    ListIndentIncrease: () => W,
-    ListMinus: () => Mn,
-    ListMusic: () => vn,
-    ListOrdered: () => Cn,
-    ListPlus: () => gn,
-    ListRestart: () => yn,
-    ListSortAscending: () => An,
-    ListSortDescending: () => Sn,
-    ListStart: () => wn,
-    ListTodo: () => Vn,
-    ListTree: () => Hn,
-    ListVideo: () => Ln,
-    ListX: () => kn,
-    Loader: () => Bn,
-    Loader2: () => lt,
-    LoaderCircle: () => lt,
-    LoaderPinwheel: () => Tn,
-    Locate: () => Rn,
-    LocateFixed: () => bn,
-    LocateOff: () => Dn,
-    LocationEdit: () => ut,
-    Lock: () => En,
-    LockKeyhole: () => Fn,
-    LockKeyholeOpen: () => st,
-    LockOpen: () => ht,
-    LogIn: () => On,
-    LogOut: () => qn,
-    Logs: () => zn,
-    Lollipop: () => Un,
-    Luggage: () => In,
-    MSquare: () => ge,
-    Magnet: () => _n,
-    Mail: () => Jn,
-    MailCheck: () => Nn,
-    MailMinus: () => Gn,
-    MailOpen: () => Wn,
-    MailPlus: () => Zn,
-    MailQuestion: () => ft,
-    MailQuestionMark: () => ft,
-    MailSearch: () => Xn,
-    MailWarning: () => Kn,
-    MailX: () => $n,
-    Mailbox: () => jn,
-    Mails: () => Qn,
-    Map: () => mx,
-    MapMinus: () => Yn,
-    MapPin: () => ux,
-    MapPinCheck: () => tx,
-    MapPinCheckInside: () => ax,
-    MapPinHouse: () => ex,
-    MapPinMinus: () => ox,
-    MapPinMinusInside: () => rx,
-    MapPinOff: () => dx,
-    MapPinPen: () => ut,
-    MapPinPlus: () => lx,
-    MapPinPlusInside: () => px,
-    MapPinSearch: () => sx,
-    MapPinX: () => fx,
-    MapPinXInside: () => hx,
-    MapPinned: () => cx,
-    MapPlus: () => nx,
-    Mars: () => ix,
-    MarsStroke: () => xx,
-    Martini: () => Mx,
-    Maximize: () => yx,
-    Maximize2: () => vx,
-    Medal: () => gx,
-    Megaphone: () => Ax,
-    MegaphoneOff: () => Cx,
-    Meh: () => Sx,
-    MemoryStick: () => wx,
-    Menu: () => Hx,
-    MenuSquare: () => ye,
-    Merge: () => Lx,
-    MessageCircle: () => Ox,
-    MessageCircleCheck: () => Vx,
-    MessageCircleCode: () => kx,
-    MessageCircleDashed: () => Px,
-    MessageCircleHeart: () => Tx,
-    MessageCircleMore: () => Bx,
-    MessageCircleOff: () => bx,
-    MessageCirclePlus: () => Dx,
-    MessageCircleQuestion: () => ct,
-    MessageCircleQuestionMark: () => ct,
-    MessageCircleReply: () => Rx,
-    MessageCircleWarning: () => Fx,
-    MessageCircleX: () => Ex,
-    MessageSquare: () => ai,
-    MessageSquareCheck: () => qx,
-    MessageSquareCode: () => zx,
-    MessageSquareDashed: () => Ix,
-    MessageSquareDiff: () => Ux,
-    MessageSquareDot: () => _x,
-    MessageSquareHeart: () => Nx,
-    MessageSquareLock: () => Gx,
-    MessageSquareMore: () => Wx,
-    MessageSquareOff: () => Zx,
-    MessageSquarePlus: () => Xx,
-    MessageSquareQuote: () => Jx,
-    MessageSquareReply: () => Kx,
-    MessageSquareShare: () => jx,
-    MessageSquareText: () => $x,
-    MessageSquareWarning: () => Qx,
-    MessageSquareX: () => Yx,
-    MessagesSquare: () => ti,
-    Metronome: () => ei,
-    Mic: () => oi,
-    Mic2: () => nt,
-    MicOff: () => ri,
-    MicVocal: () => nt,
-    Microchip: () => di,
-    Microscope: () => pi,
-    Microwave: () => li,
-    Milestone: () => si,
-    Milk: () => fi,
-    MilkOff: () => hi,
-    Minimize: () => ci,
-    Minimize2: () => ui,
-    Minus: () => ni,
-    MinusCircle: () => Ka,
-    MinusSquare: () => Ce,
-    MirrorRectangular: () => xi,
-    MirrorRound: () => ii,
-    Monitor: () => Ti,
-    MonitorCheck: () => mi,
-    MonitorCloud: () => gi,
-    MonitorCog: () => Mi,
-    MonitorDot: () => vi,
-    MonitorDown: () => yi,
-    MonitorOff: () => Ci,
-    MonitorPause: () => Ai,
-    MonitorPlay: () => Si,
-    MonitorSmartphone: () => wi,
-    MonitorSpeaker: () => Hi,
-    MonitorStop: () => Li,
-    MonitorUp: () => Vi,
-    MonitorX: () => ki,
-    Moon: () => Bi,
-    MoonStar: () => Pi,
-    MoreHorizontal: () => v1,
-    MoreVertical: () => M1,
-    Motorbike: () => bi,
-    Mountain: () => Ri,
-    MountainSnow: () => Di,
-    Mouse: () => Ni,
-    MouseLeft: () => Fi,
-    MouseOff: () => Ei,
-    MousePointer: () => Ui,
-    MousePointer2: () => zi,
-    MousePointer2Off: () => Oi,
-    MousePointerBan: () => qi,
-    MousePointerClick: () => Ii,
-    MousePointerSquareDashed: () => ue,
-    MouseRight: () => _i,
-    Move: () => e6,
-    Move3D: () => xt,
-    Move3d: () => xt,
-    MoveDiagonal: () => Wi,
-    MoveDiagonal2: () => Gi,
-    MoveDown: () => Ki,
-    MoveDownLeft: () => Zi,
-    MoveDownRight: () => Xi,
-    MoveHorizontal: () => Ji,
-    MoveLeft: () => $i,
-    MoveRight: () => ji,
-    MoveUp: () => a6,
-    MoveUpLeft: () => Qi,
-    MoveUpRight: () => Yi,
-    MoveVertical: () => t6,
-    Music: () => p6,
-    Music2: () => r6,
-    Music3: () => o6,
-    Music4: () => d6,
-    Navigation: () => f6,
-    Navigation2: () => s6,
-    Navigation2Off: () => l6,
-    NavigationOff: () => h6,
-    Network: () => u6,
-    Newspaper: () => c6,
-    Nfc: () => n6,
-    NonBinary: () => x6,
-    Notebook: () => v6,
-    NotebookPen: () => i6,
-    NotebookTabs: () => m6,
-    NotebookText: () => M6,
-    NotepadText: () => y6,
-    NotepadTextDashed: () => g6,
-    Nut: () => A6,
-    NutOff: () => C6,
-    Octagon: () => w6,
-    OctagonAlert: () => it,
-    OctagonMinus: () => S6,
-    OctagonPause: () => mt,
-    OctagonX: () => Mt,
-    Omega: () => H6,
-    Option: () => L6,
-    Orbit: () => V6,
-    Origami: () => k6,
-    Outdent: () => G,
-    Package: () => E6,
-    Package2: () => P6,
-    PackageCheck: () => T6,
-    PackageMinus: () => B6,
-    PackageOpen: () => D6,
-    PackagePlus: () => b6,
-    PackageSearch: () => R6,
-    PackageX: () => F6,
-    PaintBucket: () => O6,
-    PaintRoller: () => q6,
-    Paintbrush: () => z6,
-    Paintbrush2: () => vt,
-    PaintbrushVertical: () => vt,
-    Palette: () => U6,
-    Palmtree: () => Xe,
-    Panda: () => I6,
-    PanelBottom: () => G6,
-    PanelBottomClose: () => _6,
-    PanelBottomDashed: () => gt,
-    PanelBottomInactive: () => gt,
-    PanelBottomOpen: () => N6,
-    PanelLeft: () => St,
-    PanelLeftClose: () => yt,
-    PanelLeftDashed: () => Ct,
-    PanelLeftInactive: () => Ct,
-    PanelLeftOpen: () => At,
-    PanelLeftRightDashed: () => W6,
-    PanelRight: () => K6,
-    PanelRightClose: () => Z6,
-    PanelRightDashed: () => wt,
-    PanelRightInactive: () => wt,
-    PanelRightOpen: () => X6,
-    PanelTop: () => Q6,
-    PanelTopBottomDashed: () => J6,
-    PanelTopClose: () => $6,
-    PanelTopDashed: () => Ht,
-    PanelTopInactive: () => Ht,
-    PanelTopOpen: () => j6,
-    PanelsLeftBottom: () => Y6,
-    PanelsLeftRight: () => n1,
-    PanelsRightBottom: () => a8,
-    PanelsTopBottom: () => Dt,
-    PanelsTopLeft: () => Lt,
-    PaperBag: () => t8,
-    Paperclip: () => e8,
-    Parasol: () => r8,
-    Parentheses: () => o8,
-    ParkingCircle: () => $a,
-    ParkingCircleOff: () => Ja,
-    ParkingMeter: () => d8,
-    ParkingSquare: () => we,
-    ParkingSquareOff: () => Se,
-    PartyPopper: () => l8,
-    Pause: () => p8,
-    PauseCircle: () => ja,
-    PauseOctagon: () => mt,
-    PawPrint: () => h8,
-    PcCase: () => s8,
-    Pen: () => kt,
-    PenBox: () => R,
-    PenLine: () => Vt,
-    PenOff: () => f8,
-    PenSquare: () => R,
-    PenTool: () => u8,
-    Pencil: () => m8,
-    PencilLine: () => c8,
-    PencilOff: () => n8,
-    PencilRuler: () => x8,
-    PencilSparkles: () => i8,
-    Pentagon: () => M8,
-    Percent: () => v8,
-    PercentCircle: () => Qa,
-    PercentDiamond: () => i1,
-    PercentSquare: () => Le,
-    PersonStanding: () => g8,
-    Phi: () => y8,
-    PhilippinePeso: () => C8,
-    Phone: () => k8,
-    PhoneCall: () => A8,
-    PhoneForwarded: () => S8,
-    PhoneIncoming: () => w8,
-    PhoneMissed: () => H8,
-    PhoneOff: () => L8,
-    PhoneOutgoing: () => V8,
-    Pi: () => P8,
-    PiSquare: () => He,
-    Piano: () => T8,
-    Pickaxe: () => B8,
-    PictureInPicture: () => D8,
-    PictureInPicture2: () => b8,
-    PieChart: () => Pa,
-    PiggyBank: () => R8,
-    Pilcrow: () => O8,
-    PilcrowLeft: () => F8,
-    PilcrowRight: () => E8,
-    PilcrowSquare: () => Ve,
-    Pill: () => z8,
-    PillBottle: () => q8,
-    Pin: () => I8,
-    PinOff: () => U8,
-    Pipette: () => _8,
-    Pizza: () => N8,
-    Plane: () => Z8,
-    PlaneLanding: () => G8,
-    PlaneTakeoff: () => W8,
-    Play: () => K8,
-    PlayCircle: () => Ya,
-    PlayOff: () => X8,
-    PlaySquare: () => ke,
-    Plug: () => $8,
-    Plug2: () => J8,
-    PlugZap: () => Pt,
-    PlugZap2: () => Pt,
-    Plus: () => Q8,
-    PlusCircle: () => a1,
-    PlusSquare: () => Pe,
-    PocketKnife: () => j8,
-    Podcast: () => Y8,
-    Podium: () => am,
-    Pointer: () => em,
-    PointerOff: () => tm,
-    Popcorn: () => rm,
-    Popsicle: () => om,
-    PoundSterling: () => dm,
-    Power: () => lm,
-    PowerCircle: () => t1,
-    PowerOff: () => pm,
-    PowerSquare: () => Te,
-    Presentation: () => sm,
-    Printer: () => um,
-    PrinterCheck: () => hm,
-    PrinterX: () => fm,
-    Projector: () => cm,
-    Proportions: () => nm,
-    Puzzle: () => xm,
-    Pyramid: () => im,
-    QrCode: () => mm,
-    Quote: () => Mm,
-    Rabbit: () => ym,
-    Radar: () => vm,
-    Radiation: () => gm,
-    Radical: () => Cm,
-    Radio: () => Hm,
-    RadioOff: () => Am,
-    RadioReceiver: () => Sm,
-    RadioTower: () => wm,
-    Radius: () => Lm,
-    Rainbow: () => Vm,
-    Rat: () => km,
-    Ratio: () => Pm,
-    Receipt: () => Um,
-    ReceiptCent: () => Tm,
-    ReceiptEuro: () => Bm,
-    ReceiptIndianRupee: () => bm,
-    ReceiptJapaneseYen: () => Dm,
-    ReceiptPoundSterling: () => Rm,
-    ReceiptRussianRuble: () => Fm,
-    ReceiptSwissFranc: () => Em,
-    ReceiptText: () => Om,
-    ReceiptTurkishLira: () => qm,
-    RectangleCircle: () => zm,
-    RectangleEllipsis: () => Tt,
-    RectangleGoggles: () => Im,
-    RectangleHorizontal: () => Nm,
-    RectangleVertical: () => _m,
-    Recycle: () => Gm,
-    Redo: () => Xm,
-    Redo2: () => Wm,
-    RedoDot: () => Zm,
-    RefreshCcw: () => Jm,
-    RefreshCcwDot: () => Km,
-    RefreshCw: () => jm,
-    RefreshCwOff: () => $m,
-    Refrigerator: () => Qm,
-    Regex: () => Ym,
-    RemoveFormatting: () => a7,
-    Repeat: () => o7,
-    Repeat1: () => e7,
-    Repeat2: () => t7,
-    RepeatOff: () => r7,
-    Replace: () => p7,
-    ReplaceAll: () => d7,
-    Reply: () => s7,
-    ReplyAll: () => l7,
-    Rewind: () => h7,
-    Ribbon: () => f7,
-    Road: () => u7,
-    Rocket: () => c7,
-    RockingChair: () => n7,
-    RollerCoaster: () => x7,
-    Rose: () => i7,
-    Rotate3D: () => Bt,
-    Rotate3d: () => Bt,
-    RotateCcw: () => v7,
-    RotateCcwKey: () => m7,
-    RotateCcwSquare: () => M7,
-    RotateCw: () => y7,
-    RotateCwSquare: () => g7,
-    Route: () => C7,
-    RouteOff: () => A7,
-    Router: () => S7,
-    Rows: () => bt,
-    Rows2: () => bt,
-    Rows3: () => Dt,
-    Rows4: () => w7,
-    Rss: () => H7,
-    Ruler: () => V7,
-    RulerDimensionLine: () => L7,
-    RussianRuble: () => k7,
-    Sailboat: () => P7,
-    Salad: () => T7,
-    Sandwich: () => B7,
-    Satellite: () => D7,
-    SatelliteDish: () => b7,
-    SaudiRiyal: () => R7,
-    Save: () => U7,
-    SaveAll: () => F7,
-    SaveCheck: () => E7,
-    SaveOff: () => O7,
-    SavePen: () => q7,
-    SavePlus: () => z7,
-    Scale: () => I7,
-    Scale3D: () => Rt,
-    Scale3d: () => Rt,
-    Scaling: () => N7,
-    Scan: () => Q7,
-    ScanBarcode: () => _7,
-    ScanBox: () => G7,
-    ScanEye: () => W7,
-    ScanFace: () => X7,
-    ScanHeart: () => Z7,
-    ScanLine: () => K7,
-    ScanQrCode: () => J7,
-    ScanSearch: () => $7,
-    ScanText: () => j7,
-    ScatterChart: () => Ta,
-    School: () => Y7,
-    School2: () => $e,
-    Scissors: () => tM,
-    ScissorsLineDashed: () => aM,
-    ScissorsSquare: () => Be,
-    ScissorsSquareDashedBottom: () => ae,
-    Scooter: () => eM,
-    ScreenShare: () => dM,
-    ScreenShareOff: () => rM,
-    Scroll: () => pM,
-    ScrollText: () => oM,
-    Search: () => cM,
-    SearchAlert: () => lM,
-    SearchCheck: () => sM,
-    SearchCode: () => hM,
-    SearchSlash: () => fM,
-    SearchX: () => uM,
-    Section: () => nM,
-    Send: () => iM,
-    SendHorizonal: () => Ft,
-    SendHorizontal: () => Ft,
-    SendToBack: () => xM,
-    SeparatorHorizontal: () => mM,
-    SeparatorVertical: () => MM,
-    Server: () => AM,
-    ServerCog: () => vM,
-    ServerCrash: () => gM,
-    ServerOff: () => yM,
-    ServerPlus: () => CM,
-    Settings: () => wM,
-    Settings2: () => SM,
-    Shapes: () => HM,
-    Share: () => VM,
-    Share2: () => LM,
-    Sheet: () => PM,
-    Shell: () => kM,
-    ShelvingUnit: () => TM,
-    Shield: () => NM,
-    ShieldAlert: () => BM,
-    ShieldBan: () => bM,
-    ShieldCheck: () => DM,
-    ShieldClose: () => Ot,
-    ShieldCog: () => FM,
-    ShieldCogCorner: () => RM,
-    ShieldEllipsis: () => EM,
-    ShieldHalf: () => OM,
-    ShieldKeyhole: () => qM,
-    ShieldMinus: () => zM,
-    ShieldOff: () => UM,
-    ShieldPlus: () => IM,
-    ShieldQuestion: () => Et,
-    ShieldQuestionMark: () => Et,
-    ShieldUser: () => _M,
-    ShieldX: () => Ot,
-    Ship: () => ZM,
-    ShipWheel: () => GM,
-    Shirt: () => WM,
-    ShoppingBag: () => XM,
-    ShoppingBasket: () => KM,
-    ShoppingCart: () => JM,
-    Shovel: () => $M,
-    ShowerHead: () => jM,
-    Shredder: () => QM,
-    Shrimp: () => a9,
-    Shrink: () => YM,
-    Shrub: () => t9,
-    Shuffle: () => e9,
-    Sidebar: () => St,
-    SidebarClose: () => yt,
-    SidebarOpen: () => At,
-    Sigma: () => r9,
-    SigmaSquare: () => be,
-    Signal: () => s9,
-    SignalHigh: () => o9,
-    SignalLow: () => d9,
-    SignalMedium: () => p9,
-    SignalZero: () => l9,
-    Signature: () => h9,
-    Signpost: () => u9,
-    SignpostBig: () => f9,
-    Siren: () => n9,
-    SkipBack: () => c9,
-    SkipForward: () => x9,
-    Skull: () => i9,
-    Slash: () => m9,
-    SlashSquare: () => De,
-    Slice: () => M9,
-    Sliders: () => qt,
-    SlidersHorizontal: () => v9,
-    SlidersVertical: () => qt,
-    Smartphone: () => C9,
-    SmartphoneCharging: () => g9,
-    SmartphoneNfc: () => y9,
-    Smile: () => S9,
-    SmilePlus: () => A9,
-    Snail: () => w9,
-    Snowflake: () => H9,
-    SoapDispenserDroplet: () => L9,
-    Sofa: () => V9,
-    SolarPanel: () => k9,
-    SortAsc: () => sa,
-    SortDesc: () => da,
-    Soup: () => P9,
-    Space: () => T9,
-    Spade: () => b9,
-    Sparkle: () => B9,
-    Sparkles: () => zt,
-    Speaker: () => D9,
-    Speech: () => R9,
-    SpellCheck: () => E9,
-    SpellCheck2: () => F9,
-    Spline: () => q9,
-    SplinePointer: () => O9,
-    Split: () => z9,
-    SplitSquareHorizontal: () => Re,
-    SplitSquareVertical: () => Fe,
-    Spool: () => I9,
-    SportShoe: () => U9,
-    Spotlight: () => _9,
-    SprayCan: () => N9,
-    Sprout: () => G9,
-    Square: () => rv,
-    SquareActivity: () => Ut,
-    SquareArrowDown: () => Nt,
-    SquareArrowDownLeft: () => It,
-    SquareArrowDownRight: () => _t,
-    SquareArrowLeft: () => Gt,
-    SquareArrowOutDownLeft: () => Wt,
-    SquareArrowOutDownRight: () => Zt,
-    SquareArrowOutUpLeft: () => Xt,
-    SquareArrowOutUpRight: () => Kt,
-    SquareArrowRight: () => Jt,
-    SquareArrowRightEnter: () => W9,
-    SquareArrowRightExit: () => Z9,
-    SquareArrowUp: () => Qt,
-    SquareArrowUpLeft: () => $t,
-    SquareArrowUpRight: () => jt,
-    SquareAsterisk: () => Yt,
-    SquareBottomDashedScissors: () => ae,
-    SquareCenterlineDashedHorizontal: () => te,
-    SquareCenterlineDashedVertical: () => ee,
-    SquareChartGantt: () => Z,
-    SquareCheck: () => oe,
-    SquareCheckBig: () => re,
-    SquareChevronDown: () => de,
-    SquareChevronLeft: () => pe,
-    SquareChevronRight: () => le,
-    SquareChevronUp: () => se,
-    SquareCode: () => he,
-    SquareDashed: () => ce,
-    SquareDashedBottom: () => K9,
-    SquareDashedBottomCode: () => X9,
-    SquareDashedKanban: () => fe,
-    SquareDashedMousePointer: () => ue,
-    SquareDashedText: () => X,
-    SquareDashedTopSolid: () => J9,
-    SquareDivide: () => ne,
-    SquareDot: () => xe,
-    SquareEqual: () => ie,
-    SquareFunction: () => me,
-    SquareGanttChart: () => Z,
-    SquareKanban: () => Me,
-    SquareLibrary: () => ve,
-    SquareM: () => ge,
-    SquareMenu: () => ye,
-    SquareMinus: () => Ce,
-    SquareMousePointer: () => Ae,
-    SquareParking: () => we,
-    SquareParkingOff: () => Se,
-    SquarePause: () => $9,
-    SquarePen: () => R,
-    SquarePercent: () => Le,
-    SquarePi: () => He,
-    SquarePilcrow: () => Ve,
-    SquarePlay: () => ke,
-    SquarePlus: () => Pe,
-    SquarePower: () => Te,
-    SquareRadical: () => j9,
-    SquareRoundCorner: () => Q9,
-    SquareScissors: () => Be,
-    SquareSigma: () => be,
-    SquareSlash: () => De,
-    SquareSplitHorizontal: () => Re,
-    SquareSplitVertical: () => Fe,
-    SquareSquare: () => Y9,
-    SquareStack: () => av,
-    SquareStar: () => tv,
-    SquareStop: () => ev,
-    SquareTerminal: () => Ee,
-    SquareUser: () => qe,
-    SquareUserRound: () => Oe,
-    SquareX: () => ze,
-    SquaresExclude: () => ov,
-    SquaresIntersect: () => dv,
-    SquaresSubtract: () => pv,
-    SquaresUnite: () => lv,
-    Squircle: () => hv,
-    SquircleDashed: () => sv,
-    Squirrel: () => fv,
-    Stamp: () => uv,
-    Star: () => vv,
-    StarCheck: () => cv,
-    StarHalf: () => nv,
-    StarMinus: () => xv,
-    StarOff: () => iv,
-    StarPlus: () => mv,
-    StarX: () => Mv,
-    Stars: () => zt,
-    StepBack: () => gv,
-    StepForward: () => yv,
-    Stethoscope: () => Av,
-    Sticker: () => Cv,
-    StickyNote: () => kv,
-    StickyNoteCheck: () => Sv,
-    StickyNoteMinus: () => wv,
-    StickyNoteOff: () => Hv,
-    StickyNotePlus: () => Vv,
-    StickyNoteX: () => Lv,
-    StickyNotes: () => Pv,
-    Stone: () => Tv,
-    StopCircle: () => r1,
-    Store: () => Bv,
-    StretchHorizontal: () => bv,
-    StretchVertical: () => Dv,
-    Strikethrough: () => Rv,
-    Subscript: () => Fv,
-    Subtitles: () => Ma,
-    Summary: () => Ev,
-    Sun: () => Iv,
-    SunDim: () => Ov,
-    SunMedium: () => qv,
-    SunMoon: () => zv,
-    SunSnow: () => Uv,
-    Sunrise: () => _v,
-    Sunset: () => Nv,
-    Superscript: () => Wv,
-    SwatchBook: () => Gv,
-    SwissFranc: () => Zv,
-    SwitchCamera: () => Xv,
-    Sword: () => Kv,
-    Swords: () => $v,
-    Syringe: () => Jv,
-    Table: () => og,
-    Table2: () => jv,
-    TableCellsMerge: () => Qv,
-    TableCellsSplit: () => Yv,
-    TableColumnsSplit: () => ag,
+    Combine: () => fh,
+    Command: () => hh,
+    Compass: () => uh,
+    Component: () => ch,
+    Computer: () => nh,
+    ConciergeBell: () => ih,
+    Cone: () => xh,
+    Construction: () => mh,
+    Contact: () => Mh,
+    Contact2: () => vt,
+    ContactRound: () => vt,
+    Container: () => vh,
+    Contrast: () => gh,
+    Cookie: () => yh,
+    CookingPot: () => Ch,
+    Copy: () => Vh,
+    CopyCheck: () => Ah,
+    CopyMinus: () => wh,
+    CopyPlus: () => Sh,
+    CopySlash: () => Hh,
+    CopyX: () => Lh,
+    Copyleft: () => kh,
+    Copyright: () => Ph,
+    CornerDownLeft: () => bh,
+    CornerDownRight: () => Th,
+    CornerLeftDown: () => Rh,
+    CornerLeftUp: () => Bh,
+    CornerRightDown: () => Dh,
+    CornerRightUp: () => Eh,
+    CornerUpLeft: () => Fh,
+    CornerUpRight: () => Oh,
+    Cpu: () => qh,
+    CreativeCommons: () => zh,
+    CreditCard: () => Uh,
+    Croissant: () => _h,
+    Crop: () => Nh,
+    Cross: () => Ih,
+    Crosshair: () => Gh,
+    Crown: () => Xh,
+    Cuboid: () => Wh,
+    CupSoda: () => Zh,
+    CurlyBraces: () => ya,
+    Currency: () => Kh,
+    Cylinder: () => $h,
+    Dam: () => Jh,
+    Database: () => pf,
+    DatabaseArrowDown: () => jh,
+    DatabaseArrowUp: () => Qh,
+    DatabaseBackup: () => af,
+    DatabaseCheck: () => Yh,
+    DatabaseMinus: () => tf,
+    DatabasePlus: () => ef,
+    DatabaseSearch: () => rf,
+    DatabaseX: () => of,
+    DatabaseZap: () => df,
+    DecimalsArrowLeft: () => sf,
+    DecimalsArrowRight: () => lf,
+    Delete: () => hf,
+    Dessert: () => ff,
+    Diameter: () => uf,
+    Diamond: () => xf,
+    DiamondMinus: () => cf,
+    DiamondPercent: () => gt,
+    DiamondPlus: () => nf,
+    Dice1: () => mf,
+    Dice2: () => Mf,
+    Dice3: () => vf,
+    Dice4: () => gf,
+    Dice5: () => yf,
+    Dice6: () => Af,
+    Dices: () => Cf,
+    Diff: () => wf,
+    Disc: () => kf,
+    Disc2: () => Sf,
+    Disc3: () => Hf,
+    DiscAlbum: () => Vf,
+    Divide: () => Lf,
+    DivideCircle: () => Ja,
+    DivideSquare: () => Me,
+    Dna: () => bf,
+    DnaOff: () => Pf,
+    Dock: () => Tf,
+    Dog: () => Bf,
+    DollarSign: () => Rf,
+    Donut: () => Df,
+    DoorClosed: () => Ff,
+    DoorClosedLocked: () => Ef,
+    DoorOpen: () => Of,
+    Dot: () => qf,
+    DotSquare: () => ve,
+    Download: () => zf,
+    DownloadCloud: () => nt,
+    DraftingCompass: () => Nf,
+    Drama: () => Uf,
+    Drill: () => _f,
+    Drone: () => If,
+    Droplet: () => Wf,
+    DropletOff: () => Gf,
+    Droplets: () => Zf,
+    Drum: () => Xf,
+    Drumstick: () => Kf,
+    Dumbbell: () => $f,
+    Ear: () => jf,
+    EarOff: () => Jf,
+    Earth: () => yt,
+    EarthLock: () => Qf,
+    Eclipse: () => Yf,
+    Edit: () => E,
+    Edit2: () => B1,
+    Edit3: () => T1,
+    Egg: () => e4,
+    EggFried: () => a4,
+    EggOff: () => t4,
+    Ellipse: () => r4,
+    Ellipsis: () => At,
+    EllipsisVertical: () => Ct,
+    Equal: () => p4,
+    EqualApproximately: () => o4,
+    EqualNot: () => d4,
+    EqualSquare: () => ge,
+    Eraser: () => l4,
+    EthernetPort: () => s4,
+    Euro: () => h4,
+    EvCharger: () => f4,
+    Expand: () => u4,
+    ExternalLink: () => c4,
+    Eye: () => m4,
+    EyeClosed: () => n4,
+    EyeDashed: () => i4,
+    EyeOff: () => x4,
+    Factory: () => M4,
+    Fan: () => v4,
+    FastForward: () => g4,
+    Feather: () => C4,
+    Fence: () => y4,
+    FerrisWheel: () => A4,
+    File: () => j4,
+    FileArchive: () => w4,
+    FileAudio: () => G,
+    FileAudio2: () => G,
+    FileAxis3D: () => wt,
+    FileAxis3d: () => wt,
+    FileBadge: () => St,
+    FileBadge2: () => St,
+    FileBarChart: () => Vt,
+    FileBarChart2: () => kt,
+    FileBox: () => S4,
+    FileBraces: () => Lt,
+    FileBracesCorner: () => Ht,
+    FileChartColumn: () => kt,
+    FileChartColumnIncreasing: () => Vt,
+    FileChartLine: () => bt,
+    FileChartPie: () => Pt,
+    FileCheck: () => H4,
+    FileCheck2: () => Tt,
+    FileCheckCorner: () => Tt,
+    FileClock: () => L4,
+    FileCode: () => V4,
+    FileCode2: () => Bt,
+    FileCodeCorner: () => Bt,
+    FileCog: () => Rt,
+    FileCog2: () => Rt,
+    FileDiff: () => P4,
+    FileDigit: () => k4,
+    FileDown: () => b4,
+    FileEdit: () => zt,
+    FileExclamationPoint: () => Dt,
+    FileHeadphone: () => G,
+    FileHeart: () => T4,
+    FileImage: () => B4,
+    FileInput: () => R4,
+    FileJson: () => Lt,
+    FileJson2: () => Ht,
+    FileKey: () => Et,
+    FileKey2: () => Et,
+    FileLineChart: () => bt,
+    FileLock: () => Ft,
+    FileLock2: () => Ft,
+    FileMinus: () => D4,
+    FileMinus2: () => Ot,
+    FileMinusCorner: () => Ot,
+    FileMusic: () => E4,
+    FileOutput: () => F4,
+    FilePen: () => zt,
+    FilePenLine: () => qt,
+    FilePieChart: () => Pt,
+    FilePlay: () => Ut,
+    FilePlus: () => O4,
+    FilePlus2: () => _t,
+    FilePlusCorner: () => _t,
+    FileQuestion: () => Nt,
+    FileQuestionMark: () => Nt,
+    FileScan: () => q4,
+    FileSearch: () => z4,
+    FileSearch2: () => It,
+    FileSearchCorner: () => It,
+    FileSignal: () => Gt,
+    FileSignature: () => qt,
+    FileSliders: () => U4,
+    FileSpreadsheet: () => _4,
+    FileStack: () => I4,
+    FileSymlink: () => N4,
+    FileTerminal: () => G4,
+    FileText: () => W4,
+    FileType: () => Z4,
+    FileType2: () => Wt,
+    FileTypeCorner: () => Wt,
+    FileUp: () => X4,
+    FileUser: () => K4,
+    FileVideo: () => Ut,
+    FileVideo2: () => Zt,
+    FileVideoCamera: () => Zt,
+    FileVolume: () => $4,
+    FileVolume2: () => Gt,
+    FileWarning: () => Dt,
+    FileX: () => J4,
+    FileX2: () => Xt,
+    FileXCorner: () => Xt,
+    Files: () => Q4,
+    Film: () => Y4,
+    Filter: () => Qt,
+    FilterX: () => jt,
+    Fingerprint: () => Kt,
+    FingerprintPattern: () => Kt,
+    FireExtinguisher: () => a5,
+    Fish: () => r5,
+    FishOff: () => t5,
+    FishSymbol: () => e5,
+    FishingHook: () => o5,
+    FishingRod: () => d5,
+    Flag: () => h5,
+    FlagOff: () => p5,
+    FlagTriangleLeft: () => l5,
+    FlagTriangleRight: () => s5,
+    Flame: () => u5,
+    FlameKindling: () => f5,
+    Flashlight: () => n5,
+    FlashlightOff: () => c5,
+    FlaskConical: () => x5,
+    FlaskConicalOff: () => i5,
+    FlaskRound: () => m5,
+    FlipHorizontal: () => de,
+    FlipHorizontal2: () => M5,
+    FlipVertical: () => pe,
+    FlipVertical2: () => v5,
+    Flower: () => g5,
+    Flower2: () => y5,
+    Focus: () => C5,
+    FoldHorizontal: () => A5,
+    FoldVertical: () => w5,
+    Folder: () => Q5,
+    FolderArchive: () => S5,
+    FolderBookmark: () => L5,
+    FolderCheck: () => H5,
+    FolderClock: () => V5,
+    FolderClosed: () => k5,
+    FolderCode: () => P5,
+    FolderCog: () => $t,
+    FolderCog2: () => $t,
+    FolderDot: () => b5,
+    FolderDown: () => T5,
+    FolderEdit: () => Jt,
+    FolderGit: () => R5,
+    FolderGit2: () => B5,
+    FolderHeart: () => D5,
+    FolderInput: () => E5,
+    FolderKanban: () => F5,
+    FolderKey: () => O5,
+    FolderLock: () => q5,
+    FolderMinus: () => z5,
+    FolderOpen: () => _5,
+    FolderOpenDot: () => U5,
+    FolderOutput: () => N5,
+    FolderPen: () => Jt,
+    FolderPlus: () => I5,
+    FolderRoot: () => G5,
+    FolderSearch: () => Z5,
+    FolderSearch2: () => W5,
+    FolderSymlink: () => X5,
+    FolderSync: () => K5,
+    FolderTree: () => $5,
+    FolderUp: () => J5,
+    FolderX: () => j5,
+    Folders: () => Y5,
+    Footprints: () => tu,
+    ForkKnife: () => h2,
+    ForkKnifeCrossed: () => s2,
+    Forklift: () => au,
+    Form: () => eu,
+    FormInput: () => D1,
+    Forward: () => ru,
+    Frame: () => ou,
+    Frown: () => du,
+    Fuel: () => pu,
+    Fullscreen: () => lu,
+    FunctionSquare: () => ye,
+    Funnel: () => Qt,
+    FunnelPlus: () => su,
+    FunnelX: () => jt,
+    GalleryHorizontal: () => fu,
+    GalleryHorizontalEnd: () => hu,
+    GalleryThumbnails: () => uu,
+    GalleryVertical: () => cu,
+    GalleryVerticalEnd: () => nu,
+    Gamepad: () => mu,
+    Gamepad2: () => iu,
+    GamepadDirectional: () => xu,
+    GanttChart: () => Ba,
+    GanttChartSquare: () => K,
+    Gauge: () => Mu,
+    GaugeCircle: () => ja,
+    Gavel: () => vu,
+    Gem: () => gu,
+    GeorgianLari: () => Cu,
+    Ghost: () => yu,
+    Gift: () => Au,
+    GitBranch: () => Hu,
+    GitBranchMinus: () => wu,
+    GitBranchPlus: () => Su,
+    GitCommit: () => Yt,
+    GitCommitHorizontal: () => Yt,
+    GitCommitVertical: () => Lu,
+    GitCompare: () => ku,
+    GitCompareArrows: () => Vu,
+    GitFork: () => Pu,
+    GitGraph: () => bu,
+    GitMerge: () => Bu,
+    GitMergeConflict: () => Tu,
+    GitPullRequest: () => zu,
+    GitPullRequestArrow: () => Ru,
+    GitPullRequestClosed: () => Du,
+    GitPullRequestCreate: () => Fu,
+    GitPullRequestCreateArrow: () => Eu,
+    GitPullRequestDraft: () => Ou,
+    GlassWater: () => qu,
+    Glasses: () => Uu,
+    Globe: () => Wu,
+    Globe2: () => yt,
+    GlobeCheck: () => _u,
+    GlobeLock: () => Nu,
+    GlobeOff: () => Iu,
+    GlobeX: () => Gu,
+    Goal: () => Zu,
+    Gpu: () => Xu,
+    Grab: () => o1,
+    GraduationCap: () => Ku,
+    Grape: () => $u,
+    Grid: () => W,
+    Grid2X2: () => r1,
+    Grid2X2Check: () => a1,
+    Grid2X2Plus: () => t1,
+    Grid2X2X: () => e1,
+    Grid2x2: () => r1,
+    Grid2x2Check: () => a1,
+    Grid2x2Plus: () => t1,
+    Grid2x2X: () => e1,
+    Grid3X3: () => W,
+    Grid3x2: () => Ju,
+    Grid3x3: () => W,
+    Grip: () => Yu,
+    GripHorizontal: () => ju,
+    GripVertical: () => Qu,
+    Group: () => ac,
+    Guitar: () => tc,
+    Ham: () => rc,
+    Hamburger: () => ec,
+    Hammer: () => oc,
+    Hand: () => fc,
+    HandCoins: () => dc,
+    HandFist: () => pc,
+    HandGrab: () => o1,
+    HandHeart: () => lc,
+    HandHelping: () => d1,
+    HandMetal: () => sc,
+    HandPlatter: () => hc,
+    Handbag: () => uc,
+    Handshake: () => cc,
+    HardDrive: () => ic,
+    HardDriveDownload: () => nc,
+    HardDriveUpload: () => xc,
+    HardHat: () => mc,
+    Hash: () => Mc,
+    HatGlasses: () => vc,
+    Haze: () => gc,
+    Hd: () => yc,
+    HdmiPort: () => Cc,
+    Heading: () => kc,
+    Heading1: () => Ac,
+    Heading2: () => wc,
+    Heading3: () => Hc,
+    Heading4: () => Sc,
+    Heading5: () => Lc,
+    Heading6: () => Vc,
+    HeadphoneOff: () => Pc,
+    Headphones: () => bc,
+    Headset: () => Tc,
+    Heart: () => zc,
+    HeartCrack: () => Bc,
+    HeartHandshake: () => Rc,
+    HeartMinus: () => Dc,
+    HeartOff: () => Ec,
+    HeartPlus: () => Fc,
+    HeartPulse: () => Oc,
+    HeartX: () => qc,
+    Heater: () => Uc,
+    Helicopter: () => _c,
+    HelpCircle: () => N,
+    HelpingHand: () => d1,
+    Hexagon: () => Nc,
+    Highlighter: () => Ic,
+    History: () => Gc,
+    Home: () => p1,
+    Hop: () => Wc,
+    HopOff: () => Zc,
+    Hospital: () => Xc,
+    Hotel: () => Kc,
+    Hourglass: () => Jc,
+    House: () => p1,
+    HouseHeart: () => $c,
+    HousePlug: () => Qc,
+    HousePlus: () => jc,
+    HouseWifi: () => Yc,
+    IceCream: () => s1,
+    IceCream2: () => l1,
+    IceCreamBowl: () => l1,
+    IceCreamCone: () => s1,
+    IdCard: () => tn,
+    IdCardLanyard: () => an,
+    Image: () => sn,
+    ImageDown: () => en,
+    ImageMinus: () => rn,
+    ImageOff: () => on,
+    ImagePlay: () => dn,
+    ImagePlus: () => pn,
+    ImageUp: () => ln,
+    ImageUpscale: () => fn,
+    Images: () => hn,
+    Import: () => cn,
+    Inbox: () => un,
+    Indent: () => X,
+    IndentDecrease: () => Z,
+    IndentIncrease: () => X,
+    IndianRupee: () => nn,
+    Infinity: () => xn,
+    Info: () => mn,
+    Inspect: () => Le,
+    InspectionPanel: () => Mn,
+    Italic: () => vn,
+    IterationCcw: () => gn,
+    IterationCw: () => yn,
+    JapaneseYen: () => Cn,
+    Joystick: () => An,
+    Kanban: () => Sn,
+    KanbanSquare: () => Ce,
+    KanbanSquareDashed: () => ie,
+    Kayak: () => wn,
+    Key: () => Vn,
+    KeyRound: () => Hn,
+    KeySquare: () => Ln,
+    Keyboard: () => Pn,
+    KeyboardMusic: () => kn,
+    KeyboardOff: () => bn,
+    Lamp: () => Fn,
+    LampCeiling: () => Tn,
+    LampDesk: () => Bn,
+    LampFloor: () => Rn,
+    LampWallDown: () => Dn,
+    LampWallUp: () => En,
+    LandPlot: () => On,
+    Landmark: () => qn,
+    Languages: () => zn,
+    Laptop: () => _n,
+    Laptop2: () => h1,
+    LaptopMinimal: () => h1,
+    LaptopMinimalCheck: () => Un,
+    Lasso: () => In,
+    LassoSelect: () => Nn,
+    Laugh: () => Gn,
+    Layers: () => f1,
+    Layers2: () => Wn,
+    Layers3: () => f1,
+    LayersMinus: () => Zn,
+    LayersPlus: () => Xn,
+    Layout: () => b1,
+    LayoutDashboard: () => Kn,
+    LayoutGrid: () => $n,
+    LayoutList: () => Jn,
+    LayoutPanelLeft: () => jn,
+    LayoutPanelTop: () => Qn,
+    LayoutTemplate: () => Yn,
+    Leaf: () => a3,
+    LeafyGreen: () => t3,
+    Lectern: () => e3,
+    LensConcave: () => r3,
+    LensConvex: () => o3,
+    LetterText: () => Ke,
+    Library: () => p3,
+    LibraryBig: () => d3,
+    LibrarySquare: () => Ae,
+    LifeBuoy: () => l3,
+    Ligature: () => s3,
+    Lightbulb: () => f3,
+    LightbulbOff: () => h3,
+    LineChart: () => Pa,
+    LineDotRightHorizontal: () => c3,
+    LineSquiggle: () => u3,
+    LineStyle: () => i3,
+    Link: () => m3,
+    Link2: () => x3,
+    Link2Off: () => n3,
+    List: () => O3,
+    ListCheck: () => M3,
+    ListChecks: () => v3,
+    ListChevronsDownUp: () => g3,
+    ListChevronsUpDown: () => y3,
+    ListCollapse: () => C3,
+    ListEnd: () => A3,
+    ListFilter: () => S3,
+    ListFilterPlus: () => w3,
+    ListIndentDecrease: () => Z,
+    ListIndentIncrease: () => X,
+    ListMinus: () => H3,
+    ListMusic: () => L3,
+    ListOrdered: () => P3,
+    ListPlus: () => V3,
+    ListRestart: () => k3,
+    ListSortAscending: () => b3,
+    ListSortDescending: () => T3,
+    ListStart: () => B3,
+    ListTodo: () => E3,
+    ListTree: () => R3,
+    ListVideo: () => D3,
+    ListX: () => F3,
+    Loader: () => z3,
+    Loader2: () => u1,
+    LoaderCircle: () => u1,
+    LoaderPinwheel: () => q3,
+    Locate: () => N3,
+    LocateFixed: () => U3,
+    LocateOff: () => _3,
+    LocationEdit: () => x1,
+    Lock: () => G3,
+    LockKeyhole: () => I3,
+    LockKeyholeOpen: () => c1,
+    LockOpen: () => n1,
+    LogIn: () => W3,
+    LogOut: () => Z3,
+    Logs: () => X3,
+    Lollipop: () => K3,
+    Luggage: () => $3,
+    MSquare: () => we,
+    Magnet: () => J3,
+    Mail: () => ri,
+    MailCheck: () => j3,
+    MailMinus: () => Q3,
+    MailOpen: () => Y3,
+    MailPlus: () => ai,
+    MailQuestion: () => i1,
+    MailQuestionMark: () => i1,
+    MailSearch: () => ti,
+    MailWarning: () => ei,
+    MailX: () => oi,
+    Mailbox: () => di,
+    Mails: () => pi,
+    Map: () => Si,
+    MapMinus: () => li,
+    MapPin: () => gi,
+    MapPinCheck: () => hi,
+    MapPinCheckInside: () => si,
+    MapPinHouse: () => fi,
+    MapPinMinus: () => ci,
+    MapPinMinusInside: () => ui,
+    MapPinOff: () => ni,
+    MapPinPen: () => x1,
+    MapPinPlus: () => xi,
+    MapPinPlusInside: () => ii,
+    MapPinSearch: () => mi,
+    MapPinX: () => vi,
+    MapPinXInside: () => Mi,
+    MapPinned: () => yi,
+    MapPlus: () => Ci,
+    Mars: () => wi,
+    MarsStroke: () => Ai,
+    Martini: () => Hi,
+    Maximize: () => ki,
+    Maximize2: () => Li,
+    Medal: () => Vi,
+    Megaphone: () => bi,
+    MegaphoneOff: () => Pi,
+    Meh: () => Ti,
+    MemoryStick: () => Bi,
+    Menu: () => Ri,
+    MenuSquare: () => Se,
+    Merge: () => Di,
+    MessageCircle: () => Wi,
+    MessageCircleCheck: () => Ei,
+    MessageCircleCode: () => Fi,
+    MessageCircleDashed: () => Oi,
+    MessageCircleHeart: () => qi,
+    MessageCircleMore: () => zi,
+    MessageCircleOff: () => Ui,
+    MessageCirclePlus: () => _i,
+    MessageCircleQuestion: () => m1,
+    MessageCircleQuestionMark: () => m1,
+    MessageCircleReply: () => Ni,
+    MessageCircleWarning: () => Ii,
+    MessageCircleX: () => Gi,
+    MessageSquare: () => sx,
+    MessageSquareCheck: () => Zi,
+    MessageSquareCode: () => Xi,
+    MessageSquareDashed: () => $i,
+    MessageSquareDiff: () => Ki,
+    MessageSquareDot: () => Ji,
+    MessageSquareHeart: () => ji,
+    MessageSquareLock: () => Qi,
+    MessageSquareMore: () => Yi,
+    MessageSquareOff: () => ax,
+    MessageSquarePlus: () => tx,
+    MessageSquareQuote: () => rx,
+    MessageSquareReply: () => ex,
+    MessageSquareShare: () => dx,
+    MessageSquareText: () => ox,
+    MessageSquareWarning: () => px,
+    MessageSquareX: () => lx,
+    MessagesSquare: () => hx,
+    Metronome: () => fx,
+    Mic: () => cx,
+    Mic2: () => M1,
+    MicOff: () => ux,
+    MicVocal: () => M1,
+    Microchip: () => nx,
+    Microscope: () => ix,
+    Microwave: () => xx,
+    Milestone: () => mx,
+    Milk: () => vx,
+    MilkOff: () => Mx,
+    Minimize: () => yx,
+    Minimize2: () => gx,
+    Minus: () => Cx,
+    MinusCircle: () => Qa,
+    MinusSquare: () => He,
+    MirrorRectangular: () => Ax,
+    MirrorRound: () => wx,
+    Monitor: () => qx,
+    MonitorCheck: () => Sx,
+    MonitorCloud: () => Vx,
+    MonitorCog: () => Hx,
+    MonitorDot: () => Lx,
+    MonitorDown: () => kx,
+    MonitorOff: () => Px,
+    MonitorPause: () => bx,
+    MonitorPlay: () => Tx,
+    MonitorSmartphone: () => Bx,
+    MonitorSpeaker: () => Rx,
+    MonitorStop: () => Dx,
+    MonitorUp: () => Ex,
+    MonitorX: () => Fx,
+    Moon: () => zx,
+    MoonStar: () => Ox,
+    MoreHorizontal: () => At,
+    MoreVertical: () => Ct,
+    Motorbike: () => Ux,
+    Mountain: () => Nx,
+    MountainSnow: () => _x,
+    Mouse: () => jx,
+    MouseLeft: () => Ix,
+    MouseOff: () => Gx,
+    MousePointer: () => Kx,
+    MousePointer2: () => Xx,
+    MousePointer2Off: () => Wx,
+    MousePointerBan: () => Zx,
+    MousePointerClick: () => $x,
+    MousePointerSquareDashed: () => xe,
+    MouseRight: () => Jx,
+    Move: () => f6,
+    Move3D: () => v1,
+    Move3d: () => v1,
+    MoveDiagonal: () => Yx,
+    MoveDiagonal2: () => Qx,
+    MoveDown: () => e6,
+    MoveDownLeft: () => a6,
+    MoveDownRight: () => t6,
+    MoveHorizontal: () => r6,
+    MoveLeft: () => o6,
+    MoveRight: () => d6,
+    MoveUp: () => s6,
+    MoveUpLeft: () => p6,
+    MoveUpRight: () => l6,
+    MoveVertical: () => h6,
+    Music: () => i6,
+    Music2: () => u6,
+    Music3: () => c6,
+    Music4: () => n6,
+    Navigation: () => v6,
+    Navigation2: () => m6,
+    Navigation2Off: () => x6,
+    NavigationOff: () => M6,
+    Network: () => g6,
+    Newspaper: () => y6,
+    Nfc: () => C6,
+    NonBinary: () => A6,
+    Notebook: () => L6,
+    NotebookPen: () => w6,
+    NotebookTabs: () => S6,
+    NotebookText: () => H6,
+    NotepadText: () => k6,
+    NotepadTextDashed: () => V6,
+    Nut: () => b6,
+    NutOff: () => P6,
+    Octagon: () => B6,
+    OctagonAlert: () => g1,
+    OctagonMinus: () => T6,
+    OctagonPause: () => y1,
+    OctagonX: () => C1,
+    Omega: () => R6,
+    Option: () => D6,
+    Orbit: () => E6,
+    Origami: () => F6,
+    Outdent: () => Z,
+    Package: () => G6,
+    Package2: () => O6,
+    PackageCheck: () => q6,
+    PackageMinus: () => z6,
+    PackageOpen: () => _6,
+    PackagePlus: () => U6,
+    PackageSearch: () => N6,
+    PackageX: () => I6,
+    PaintBucket: () => W6,
+    PaintRoller: () => Z6,
+    Paintbrush: () => X6,
+    Paintbrush2: () => A1,
+    PaintbrushVertical: () => A1,
+    Palette: () => K6,
+    Palmtree: () => je,
+    Panda: () => $6,
+    PanelBottom: () => Q6,
+    PanelBottomClose: () => J6,
+    PanelBottomDashed: () => w1,
+    PanelBottomInactive: () => w1,
+    PanelBottomOpen: () => j6,
+    PanelLeft: () => V1,
+    PanelLeftClose: () => S1,
+    PanelLeftDashed: () => H1,
+    PanelLeftInactive: () => H1,
+    PanelLeftOpen: () => L1,
+    PanelLeftRightDashed: () => Y6,
+    PanelRight: () => e8,
+    PanelRightClose: () => a8,
+    PanelRightDashed: () => k1,
+    PanelRightInactive: () => k1,
+    PanelRightOpen: () => t8,
+    PanelTop: () => p8,
+    PanelTopBottomDashed: () => r8,
+    PanelTopClose: () => o8,
+    PanelTopDashed: () => P1,
+    PanelTopInactive: () => P1,
+    PanelTopOpen: () => d8,
+    PanelsLeftBottom: () => l8,
+    PanelsLeftRight: () => Mt,
+    PanelsRightBottom: () => s8,
+    PanelsTopBottom: () => O1,
+    PanelsTopLeft: () => b1,
+    PaperBag: () => h8,
+    Paperclip: () => f8,
+    Parasol: () => u8,
+    Parentheses: () => c8,
+    ParkingCircle: () => at,
+    ParkingCircleOff: () => Ya,
+    ParkingMeter: () => n8,
+    ParkingSquare: () => ke,
+    ParkingSquareOff: () => Ve,
+    PartyPopper: () => x8,
+    Pause: () => i8,
+    PauseCircle: () => tt,
+    PauseOctagon: () => y1,
+    PawPrint: () => M8,
+    PcCase: () => m8,
+    Pen: () => B1,
+    PenBox: () => E,
+    PenLine: () => T1,
+    PenOff: () => v8,
+    PenSquare: () => E,
+    PenTool: () => g8,
+    Pencil: () => S8,
+    PencilLine: () => y8,
+    PencilOff: () => C8,
+    PencilRuler: () => A8,
+    PencilSparkles: () => w8,
+    Pentagon: () => H8,
+    Percent: () => L8,
+    PercentCircle: () => et,
+    PercentDiamond: () => gt,
+    PercentSquare: () => be,
+    PersonStanding: () => V8,
+    Phi: () => k8,
+    PhilippinePeso: () => P8,
+    Phone: () => F8,
+    PhoneCall: () => b8,
+    PhoneForwarded: () => T8,
+    PhoneIncoming: () => B8,
+    PhoneMissed: () => R8,
+    PhoneOff: () => D8,
+    PhoneOutgoing: () => E8,
+    Pi: () => O8,
+    PiSquare: () => Pe,
+    Piano: () => q8,
+    Pickaxe: () => z8,
+    PictureInPicture: () => _8,
+    PictureInPicture2: () => U8,
+    PieChart: () => Ra,
+    PiggyBank: () => N8,
+    Pilcrow: () => W8,
+    PilcrowLeft: () => I8,
+    PilcrowRight: () => G8,
+    PilcrowSquare: () => Te,
+    Pill: () => X8,
+    PillBottle: () => Z8,
+    Pin: () => $8,
+    PinOff: () => K8,
+    Pipette: () => J8,
+    Pizza: () => j8,
+    Plane: () => am,
+    PlaneLanding: () => Q8,
+    PlaneTakeoff: () => Y8,
+    Play: () => em,
+    PlayCircle: () => rt,
+    PlayOff: () => tm,
+    PlaySquare: () => Be,
+    Plug: () => om,
+    Plug2: () => rm,
+    PlugZap: () => R1,
+    PlugZap2: () => R1,
+    Plus: () => pm,
+    PlusCircle: () => ot,
+    PlusSquare: () => Re,
+    PocketKnife: () => dm,
+    Podcast: () => lm,
+    Podium: () => sm,
+    Pointer: () => fm,
+    PointerOff: () => hm,
+    Popcorn: () => um,
+    Popsicle: () => cm,
+    PoundSterling: () => nm,
+    Power: () => xm,
+    PowerCircle: () => dt,
+    PowerOff: () => im,
+    PowerSquare: () => De,
+    Presentation: () => mm,
+    Printer: () => gm,
+    PrinterCheck: () => Mm,
+    PrinterX: () => vm,
+    Projector: () => ym,
+    Proportions: () => Cm,
+    Puzzle: () => Am,
+    Pyramid: () => wm,
+    QrCode: () => Sm,
+    Quote: () => Hm,
+    Rabbit: () => km,
+    Radar: () => Lm,
+    Radiation: () => Vm,
+    Radical: () => Pm,
+    Radio: () => Rm,
+    RadioOff: () => bm,
+    RadioReceiver: () => Tm,
+    RadioTower: () => Bm,
+    Radius: () => Dm,
+    Rainbow: () => Em,
+    Rat: () => Fm,
+    Ratio: () => Om,
+    Receipt: () => Km,
+    ReceiptCent: () => qm,
+    ReceiptEuro: () => zm,
+    ReceiptIndianRupee: () => Um,
+    ReceiptJapaneseYen: () => _m,
+    ReceiptPoundSterling: () => Nm,
+    ReceiptRussianRuble: () => Im,
+    ReceiptSwissFranc: () => Gm,
+    ReceiptText: () => Wm,
+    ReceiptTurkishLira: () => Zm,
+    RectangleCircle: () => Xm,
+    RectangleEllipsis: () => D1,
+    RectangleGoggles: () => $m,
+    RectangleHorizontal: () => jm,
+    RectangleVertical: () => Jm,
+    Recycle: () => Qm,
+    Redo: () => t7,
+    Redo2: () => Ym,
+    RedoDot: () => a7,
+    RefreshCcw: () => r7,
+    RefreshCcwDot: () => e7,
+    RefreshCw: () => d7,
+    RefreshCwOff: () => o7,
+    Refrigerator: () => p7,
+    Regex: () => l7,
+    RemoveFormatting: () => s7,
+    Repeat: () => c7,
+    Repeat1: () => f7,
+    Repeat2: () => h7,
+    RepeatOff: () => u7,
+    Replace: () => i7,
+    ReplaceAll: () => n7,
+    Reply: () => m7,
+    ReplyAll: () => x7,
+    Rewind: () => M7,
+    Ribbon: () => v7,
+    Road: () => g7,
+    Rocket: () => y7,
+    RockingChair: () => C7,
+    RollerCoaster: () => A7,
+    Rose: () => w7,
+    Rotate3D: () => E1,
+    Rotate3d: () => E1,
+    RotateCcw: () => L7,
+    RotateCcwKey: () => S7,
+    RotateCcwSquare: () => H7,
+    RotateCw: () => k7,
+    RotateCwSquare: () => V7,
+    Route: () => P7,
+    RouteOff: () => b7,
+    Router: () => T7,
+    Rows: () => F1,
+    Rows2: () => F1,
+    Rows3: () => O1,
+    Rows4: () => B7,
+    Rss: () => R7,
+    Ruler: () => E7,
+    RulerDimensionLine: () => D7,
+    RussianRuble: () => F7,
+    Sailboat: () => O7,
+    Salad: () => q7,
+    Sandwich: () => z7,
+    Satellite: () => _7,
+    SatelliteDish: () => U7,
+    SaudiRiyal: () => N7,
+    Save: () => K7,
+    SaveAll: () => I7,
+    SaveCheck: () => G7,
+    SaveOff: () => W7,
+    SavePen: () => Z7,
+    SavePlus: () => X7,
+    Scale: () => $7,
+    Scale3D: () => q1,
+    Scale3d: () => q1,
+    Scaling: () => j7,
+    Scan: () => pM,
+    ScanBarcode: () => J7,
+    ScanBox: () => Q7,
+    ScanEye: () => Y7,
+    ScanFace: () => tM,
+    ScanHeart: () => aM,
+    ScanLine: () => eM,
+    ScanQrCode: () => rM,
+    ScanSearch: () => oM,
+    ScanText: () => dM,
+    ScatterChart: () => Da,
+    School: () => lM,
+    School2: () => a2,
+    Scissors: () => hM,
+    ScissorsLineDashed: () => sM,
+    ScissorsSquare: () => Ee,
+    ScissorsSquareDashedBottom: () => oe,
+    Scooter: () => fM,
+    ScreenShare: () => nM,
+    ScreenShareOff: () => uM,
+    Scroll: () => iM,
+    ScrollText: () => cM,
+    Search: () => yM,
+    SearchAlert: () => xM,
+    SearchCheck: () => mM,
+    SearchCode: () => MM,
+    SearchSlash: () => vM,
+    SearchX: () => gM,
+    Section: () => CM,
+    Send: () => wM,
+    SendHorizonal: () => z1,
+    SendHorizontal: () => z1,
+    SendToBack: () => AM,
+    SeparatorHorizontal: () => SM,
+    SeparatorVertical: () => HM,
+    Server: () => bM,
+    ServerCog: () => LM,
+    ServerCrash: () => VM,
+    ServerOff: () => kM,
+    ServerPlus: () => PM,
+    Settings: () => BM,
+    Settings2: () => TM,
+    Shapes: () => RM,
+    Share: () => EM,
+    Share2: () => DM,
+    Sheet: () => OM,
+    Shell: () => FM,
+    ShelvingUnit: () => qM,
+    Shield: () => jM,
+    ShieldAlert: () => zM,
+    ShieldBan: () => UM,
+    ShieldCheck: () => _M,
+    ShieldClose: () => _1,
+    ShieldCog: () => IM,
+    ShieldCogCorner: () => NM,
+    ShieldEllipsis: () => GM,
+    ShieldHalf: () => WM,
+    ShieldKeyhole: () => ZM,
+    ShieldMinus: () => XM,
+    ShieldOff: () => KM,
+    ShieldPlus: () => $M,
+    ShieldQuestion: () => U1,
+    ShieldQuestionMark: () => U1,
+    ShieldUser: () => JM,
+    ShieldX: () => _1,
+    Ship: () => a9,
+    ShipWheel: () => QM,
+    Shirt: () => YM,
+    ShoppingBag: () => t9,
+    ShoppingBasket: () => e9,
+    ShoppingCart: () => r9,
+    Shovel: () => o9,
+    ShowerHead: () => d9,
+    Shredder: () => p9,
+    Shrimp: () => s9,
+    Shrink: () => l9,
+    Shrub: () => h9,
+    Shuffle: () => f9,
+    Sidebar: () => V1,
+    SidebarClose: () => S1,
+    SidebarOpen: () => L1,
+    Sigma: () => u9,
+    SigmaSquare: () => Fe,
+    Signal: () => m9,
+    SignalHigh: () => c9,
+    SignalLow: () => n9,
+    SignalMedium: () => i9,
+    SignalZero: () => x9,
+    Signature: () => M9,
+    Signpost: () => g9,
+    SignpostBig: () => v9,
+    Siren: () => C9,
+    SkipBack: () => y9,
+    SkipForward: () => A9,
+    Skull: () => w9,
+    Slash: () => S9,
+    SlashSquare: () => Oe,
+    Slice: () => H9,
+    Sliders: () => N1,
+    SlidersHorizontal: () => L9,
+    SlidersVertical: () => N1,
+    Smartphone: () => P9,
+    SmartphoneCharging: () => V9,
+    SmartphoneNfc: () => k9,
+    Smile: () => T9,
+    SmilePlus: () => b9,
+    Snail: () => B9,
+    Snowflake: () => R9,
+    SoapDispenserDroplet: () => D9,
+    Sofa: () => E9,
+    SolarPanel: () => F9,
+    SortAsc: () => ca,
+    SortDesc: () => ha,
+    Soup: () => O9,
+    Space: () => q9,
+    Spade: () => U9,
+    Sparkle: () => z9,
+    Sparkles: () => I1,
+    Speaker: () => _9,
+    Speech: () => N9,
+    SpellCheck: () => G9,
+    SpellCheck2: () => I9,
+    Spline: () => Z9,
+    SplinePointer: () => W9,
+    Split: () => X9,
+    SplitSquareHorizontal: () => qe,
+    SplitSquareVertical: () => ze,
+    Spool: () => $9,
+    SportShoe: () => K9,
+    Spotlight: () => J9,
+    SprayCan: () => j9,
+    Sprout: () => Q9,
+    Square: () => uv,
+    SquareActivity: () => G1,
+    SquareArrowDown: () => X1,
+    SquareArrowDownLeft: () => W1,
+    SquareArrowDownRight: () => Z1,
+    SquareArrowLeft: () => K1,
+    SquareArrowOutDownLeft: () => $1,
+    SquareArrowOutDownRight: () => J1,
+    SquareArrowOutUpLeft: () => j1,
+    SquareArrowOutUpRight: () => Q1,
+    SquareArrowRight: () => Y1,
+    SquareArrowRightEnter: () => Y9,
+    SquareArrowRightExit: () => av,
+    SquareArrowUp: () => ee,
+    SquareArrowUpLeft: () => ae,
+    SquareArrowUpRight: () => te,
+    SquareAsterisk: () => re,
+    SquareBottomDashedScissors: () => oe,
+    SquareCenterlineDashedHorizontal: () => de,
+    SquareCenterlineDashedVertical: () => pe,
+    SquareChartGantt: () => K,
+    SquareCheck: () => se,
+    SquareCheckBig: () => le,
+    SquareChevronDown: () => he,
+    SquareChevronLeft: () => fe,
+    SquareChevronRight: () => ue,
+    SquareChevronUp: () => ce,
+    SquareCode: () => ne,
+    SquareDashed: () => me,
+    SquareDashedBottom: () => ev,
+    SquareDashedBottomCode: () => tv,
+    SquareDashedKanban: () => ie,
+    SquareDashedMousePointer: () => xe,
+    SquareDashedText: () => $,
+    SquareDashedTopSolid: () => rv,
+    SquareDivide: () => Me,
+    SquareDot: () => ve,
+    SquareEqual: () => ge,
+    SquareFunction: () => ye,
+    SquareGanttChart: () => K,
+    SquareKanban: () => Ce,
+    SquareLibrary: () => Ae,
+    SquareM: () => we,
+    SquareMenu: () => Se,
+    SquareMinus: () => He,
+    SquareMousePointer: () => Le,
+    SquareParking: () => ke,
+    SquareParkingOff: () => Ve,
+    SquarePause: () => ov,
+    SquarePen: () => E,
+    SquarePercent: () => be,
+    SquarePi: () => Pe,
+    SquarePilcrow: () => Te,
+    SquarePlay: () => Be,
+    SquarePlus: () => Re,
+    SquarePower: () => De,
+    SquareRadical: () => dv,
+    SquareRoundCorner: () => pv,
+    SquareScissors: () => Ee,
+    SquareSigma: () => Fe,
+    SquareSlash: () => Oe,
+    SquareSplitHorizontal: () => qe,
+    SquareSplitVertical: () => ze,
+    SquareSquare: () => lv,
+    SquareStack: () => sv,
+    SquareStar: () => hv,
+    SquareStop: () => fv,
+    SquareTerminal: () => Ue,
+    SquareUser: () => Ne,
+    SquareUserRound: () => _e,
+    SquareX: () => Ie,
+    SquaresExclude: () => cv,
+    SquaresIntersect: () => nv,
+    SquaresSubtract: () => iv,
+    SquaresUnite: () => xv,
+    Squircle: () => Mv,
+    SquircleDashed: () => mv,
+    Squirrel: () => vv,
+    Stamp: () => gv,
+    Star: () => Lv,
+    StarCheck: () => yv,
+    StarHalf: () => Cv,
+    StarMinus: () => Av,
+    StarOff: () => wv,
+    StarPlus: () => Sv,
+    StarX: () => Hv,
+    Stars: () => I1,
+    StepBack: () => Vv,
+    StepForward: () => kv,
+    Stethoscope: () => bv,
+    Sticker: () => Pv,
+    StickyNote: () => Fv,
+    StickyNoteCheck: () => Tv,
+    StickyNoteMinus: () => Bv,
+    StickyNoteOff: () => Rv,
+    StickyNotePlus: () => Ev,
+    StickyNoteX: () => Dv,
+    StickyNotes: () => Ov,
+    Stone: () => qv,
+    StopCircle: () => lt,
+    Store: () => zv,
+    StretchHorizontal: () => Uv,
+    StretchVertical: () => _v,
+    Strikethrough: () => Nv,
+    Subscript: () => Iv,
+    Subtitles: () => Ca,
+    Summary: () => Gv,
+    Sun: () => $v,
+    SunDim: () => Wv,
+    SunMedium: () => Zv,
+    SunMoon: () => Xv,
+    SunSnow: () => Kv,
+    Sunrise: () => Jv,
+    Sunset: () => jv,
+    Superscript: () => Yv,
+    SwatchBook: () => Qv,
+    SwissFranc: () => ag,
+    SwitchCamera: () => tg,
+    Sword: () => eg,
+    Swords: () => og,
+    Syringe: () => rg,
+    Table: () => cg,
+    Table2: () => dg,
+    TableCellsMerge: () => pg,
+    TableCellsSplit: () => lg,
+    TableColumnsSplit: () => sg,
     TableConfig: () => I,
-    TableOfContents: () => tg,
-    TableProperties: () => eg,
-    TableRowsSplit: () => rg,
-    Tablet: () => pg,
-    TabletSmartphone: () => dg,
-    Tablets: () => lg,
-    Tag: () => fg,
-    TagPlus: () => sg,
-    TagX: () => hg,
-    Tags: () => ug,
-    Tally1: () => ng,
-    Tally2: () => cg,
-    Tally3: () => xg,
-    Tally4: () => ig,
-    Tally5: () => Mg,
-    Tangent: () => mg,
-    Target: () => yg,
-    Telescope: () => vg,
-    Tent: () => Cg,
-    TentTree: () => gg,
-    Terminal: () => Ag,
-    TerminalSquare: () => Ee,
-    TestTube: () => Sg,
-    TestTube2: () => Ue,
-    TestTubeDiagonal: () => Ue,
-    TestTubes: () => wg,
-    Text: () => K,
-    TextAlignCenter: () => Ie,
-    TextAlignEnd: () => _e,
-    TextAlignJustify: () => Ne,
-    TextAlignStart: () => K,
-    TextCursor: () => Lg,
-    TextCursorInput: () => Hg,
-    TextInitial: () => Ge,
-    TextQuote: () => kg,
-    TextSearch: () => Vg,
-    TextSelect: () => X,
-    TextSelection: () => X,
-    TextWrap: () => We,
-    Theater: () => Pg,
-    Thermometer: () => bg,
-    ThermometerSnowflake: () => Tg,
-    ThermometerSun: () => Bg,
-    ThumbsDown: () => Dg,
-    ThumbsUp: () => Rg,
-    Ticket: () => Ig,
-    TicketCheck: () => Fg,
-    TicketMinus: () => Eg,
-    TicketPercent: () => Og,
-    TicketPlus: () => qg,
-    TicketSlash: () => zg,
-    TicketX: () => Ug,
-    Tickets: () => Ng,
-    TicketsPlane: () => _g,
-    Timeline: () => Gg,
-    Timer: () => Xg,
-    TimerOff: () => Wg,
-    TimerReset: () => Zg,
-    ToggleLeft: () => Kg,
-    ToggleRight: () => Jg,
-    Toilet: () => $g,
-    ToolCase: () => jg,
-    Toolbox: () => Qg,
-    Tornado: () => ay,
-    Torus: () => Yg,
-    Touchpad: () => ey,
-    TouchpadOff: () => ty,
-    TowelRack: () => ry,
-    TowerControl: () => oy,
-    ToyBrick: () => dy,
-    Tractor: () => py,
-    TrafficCone: () => ly,
-    Train: () => Ze,
-    TrainFront: () => hy,
-    TrainFrontTunnel: () => sy,
-    TrainTrack: () => fy,
-    TramFront: () => Ze,
-    Transgender: () => uy,
-    Trash: () => ny,
-    Trash2: () => cy,
-    TreeDeciduous: () => xy,
-    TreePalm: () => Xe,
-    TreePine: () => iy,
-    Trees: () => my,
-    TrendingDown: () => My,
-    TrendingUp: () => gy,
-    TrendingUpDown: () => vy,
-    Triangle: () => Ay,
-    TriangleAlert: () => Ke,
-    TriangleDashed: () => yy,
-    TriangleRight: () => Cy,
-    Trophy: () => Sy,
-    Truck: () => Hy,
-    TruckElectric: () => wy,
-    TurkishLira: () => Ly,
-    Turntable: () => ky,
-    Turtle: () => Vy,
-    Tv: () => Ty,
-    Tv2: () => Je,
-    TvMinimal: () => Je,
-    TvMinimalPlay: () => Py,
-    Type: () => By,
-    TypeOutline: () => by,
-    Umbrella: () => Ry,
-    UmbrellaOff: () => Dy,
-    Underline: () => Fy,
-    Undo: () => qy,
-    Undo2: () => Ey,
-    UndoDot: () => Oy,
-    UnfoldHorizontal: () => zy,
-    UnfoldVertical: () => Uy,
-    Ungroup: () => Iy,
-    University: () => $e,
-    Unlink: () => _y,
-    Unlink2: () => Ny,
-    Unlock: () => ht,
-    UnlockKeyhole: () => st,
-    Unplug: () => Gy,
-    Upload: () => Wy,
-    UploadCloud: () => f1,
-    Usb: () => Zy,
-    User: () => lC,
-    User2: () => e2,
-    UserCheck: () => Xy,
-    UserCheck2: () => je,
-    UserCircle: () => d1,
-    UserCircle2: () => o1,
-    UserCog: () => Ky,
-    UserCog2: () => Qe,
-    UserKey: () => $y,
-    UserLock: () => Jy,
-    UserMinus: () => jy,
-    UserMinus2: () => Ye,
-    UserPen: () => Qy,
-    UserPlus: () => Yy,
-    UserPlus2: () => a2,
-    UserRound: () => e2,
-    UserRoundArrowLeft: () => aC,
-    UserRoundCheck: () => je,
-    UserRoundCog: () => Qe,
-    UserRoundKey: () => tC,
-    UserRoundMinus: () => Ye,
-    UserRoundPen: () => eC,
-    UserRoundPlus: () => a2,
-    UserRoundSearch: () => rC,
-    UserRoundX: () => t2,
-    UserSearch: () => oC,
-    UserSquare: () => qe,
-    UserSquare2: () => Oe,
-    UserStar: () => dC,
-    UserX: () => pC,
-    UserX2: () => t2,
-    Users: () => sC,
-    Users2: () => r2,
-    UsersRound: () => r2,
-    Utensils: () => d2,
-    UtensilsCrossed: () => o2,
-    UtilityPole: () => hC,
-    Van: () => fC,
-    Variable: () => uC,
-    Vault: () => cC,
-    VectorSquare: () => nC,
-    Vegan: () => xC,
-    VenetianMask: () => iC,
-    Venus: () => MC,
-    VenusAndMars: () => mC,
-    Verified: () => ua,
-    Vibrate: () => gC,
-    VibrateOff: () => vC,
-    Video: () => CC,
-    VideoOff: () => yC,
-    Videotape: () => AC,
-    View: () => SC,
-    Voicemail: () => wC,
-    Volleyball: () => HC,
-    Volume: () => TC,
-    Volume1: () => LC,
-    Volume2: () => kC,
-    VolumeOff: () => VC,
-    VolumeX: () => PC,
-    Vote: () => BC,
-    Wallet: () => DC,
-    Wallet2: () => p2,
-    WalletCards: () => bC,
-    WalletMinimal: () => p2,
-    Wallpaper: () => RC,
-    Wand: () => EC,
-    Wand2: () => l2,
-    WandSparkles: () => l2,
-    Warehouse: () => FC,
-    WashingMachine: () => OC,
-    Watch: () => qC,
-    Waves: () => s2,
-    WavesArrowDown: () => zC,
-    WavesArrowUp: () => UC,
-    WavesHorizontal: () => s2,
-    WavesLadder: () => IC,
-    WavesVertical: () => _C,
-    Waypoints: () => NC,
-    Webcam: () => WC,
-    WebcamOff: () => GC,
-    Webhook: () => XC,
-    WebhookOff: () => ZC,
-    Weight: () => JC,
-    WeightTilde: () => KC,
-    Wheat: () => $C,
-    WheatOff: () => jC,
-    WholeWord: () => QC,
-    Wifi: () => pA,
-    WifiCog: () => YC,
-    WifiHigh: () => aA,
-    WifiLow: () => tA,
-    WifiOff: () => eA,
-    WifiPen: () => rA,
-    WifiSync: () => oA,
-    WifiZero: () => dA,
-    Wind: () => sA,
-    WindArrowDown: () => lA,
-    Wine: () => fA,
-    WineOff: () => hA,
-    Workflow: () => uA,
-    Worm: () => cA,
-    WrapText: () => We,
-    Wrench: () => nA,
-    WrenchOff: () => xA,
-    X: () => mA,
-    XCircle: () => p1,
-    XLineTop: () => iA,
-    XOctagon: () => Mt,
-    XSquare: () => ze,
-    Zap: () => vA,
-    ZapOff: () => MA,
-    ZodiacAquarius: () => gA,
-    ZodiacAries: () => yA,
-    ZodiacCancer: () => CA,
-    ZodiacCapricorn: () => SA,
-    ZodiacGemini: () => AA,
-    ZodiacLeo: () => HA,
-    ZodiacLibra: () => wA,
-    ZodiacOphiuchus: () => LA,
-    ZodiacPisces: () => VA,
-    ZodiacSagittarius: () => kA,
-    ZodiacScorpio: () => TA,
-    ZodiacTaurus: () => PA,
-    ZodiacVirgo: () => BA,
-    ZoomIn: () => bA,
-    ZoomOut: () => DA,
+    TableOfContents: () => hg,
+    TableProperties: () => fg,
+    TableRowsSplit: () => ug,
+    Tablet: () => ig,
+    TabletSmartphone: () => ng,
+    Tablets: () => xg,
+    Tag: () => vg,
+    TagPlus: () => mg,
+    TagX: () => Mg,
+    Tags: () => gg,
+    Tally1: () => Cg,
+    Tally2: () => yg,
+    Tally3: () => Ag,
+    Tally4: () => wg,
+    Tally5: () => Hg,
+    Tangent: () => Sg,
+    Target: () => kg,
+    Telescope: () => Lg,
+    Tent: () => Pg,
+    TentTree: () => Vg,
+    Terminal: () => bg,
+    TerminalSquare: () => Ue,
+    TestTube: () => Tg,
+    TestTube2: () => Ge,
+    TestTubeDiagonal: () => Ge,
+    TestTubes: () => Bg,
+    Text: () => J,
+    TextAlignCenter: () => We,
+    TextAlignEnd: () => Ze,
+    TextAlignJustify: () => Xe,
+    TextAlignStart: () => J,
+    TextCursor: () => Dg,
+    TextCursorInput: () => Rg,
+    TextInitial: () => Ke,
+    TextQuote: () => Fg,
+    TextSearch: () => Eg,
+    TextSelect: () => $,
+    TextSelection: () => $,
+    TextWrap: () => $e,
+    Theater: () => Og,
+    Thermometer: () => Ug,
+    ThermometerSnowflake: () => qg,
+    ThermometerSun: () => zg,
+    ThumbsDown: () => _g,
+    ThumbsUp: () => Ng,
+    Ticket: () => $g,
+    TicketCheck: () => Ig,
+    TicketMinus: () => Gg,
+    TicketPercent: () => Wg,
+    TicketPlus: () => Zg,
+    TicketSlash: () => Xg,
+    TicketX: () => Kg,
+    Tickets: () => jg,
+    TicketsPlane: () => Jg,
+    Timeline: () => Qg,
+    Timer: () => ty,
+    TimerOff: () => Yg,
+    TimerReset: () => ay,
+    ToggleLeft: () => ey,
+    ToggleRight: () => ry,
+    Toilet: () => oy,
+    ToolCase: () => dy,
+    Toolbox: () => py,
+    Tornado: () => sy,
+    Torus: () => ly,
+    Touchpad: () => fy,
+    TouchpadOff: () => hy,
+    TowelRack: () => uy,
+    TowerControl: () => cy,
+    ToyBrick: () => ny,
+    Tractor: () => iy,
+    TrafficCone: () => xy,
+    Train: () => Je,
+    TrainFront: () => My,
+    TrainFrontTunnel: () => my,
+    TrainTrack: () => vy,
+    TramFront: () => Je,
+    Transgender: () => gy,
+    Trash: () => Cy,
+    Trash2: () => yy,
+    TreeDeciduous: () => Ay,
+    TreePalm: () => je,
+    TreePine: () => wy,
+    Trees: () => Sy,
+    TrendingDown: () => Hy,
+    TrendingUp: () => Vy,
+    TrendingUpDown: () => Ly,
+    Triangle: () => by,
+    TriangleAlert: () => Qe,
+    TriangleDashed: () => ky,
+    TriangleRight: () => Py,
+    Trophy: () => Ty,
+    Truck: () => Ry,
+    TruckElectric: () => By,
+    TurkishLira: () => Dy,
+    Turntable: () => Fy,
+    Turtle: () => Ey,
+    Tv: () => qy,
+    Tv2: () => Ye,
+    TvMinimal: () => Ye,
+    TvMinimalPlay: () => Oy,
+    Type: () => zy,
+    TypeOutline: () => Uy,
+    Umbrella: () => Ny,
+    UmbrellaOff: () => _y,
+    Underline: () => Iy,
+    Undo: () => Zy,
+    Undo2: () => Gy,
+    UndoDot: () => Wy,
+    UnfoldHorizontal: () => Xy,
+    UnfoldVertical: () => Ky,
+    Ungroup: () => $y,
+    University: () => a2,
+    Unlink: () => Jy,
+    Unlink2: () => jy,
+    Unlock: () => n1,
+    UnlockKeyhole: () => c1,
+    Unplug: () => Qy,
+    Upload: () => Yy,
+    UploadCloud: () => it,
+    Usb: () => aC,
+    User: () => xC,
+    User2: () => p2,
+    UserCheck: () => tC,
+    UserCheck2: () => t2,
+    UserCircle: () => ht,
+    UserCircle2: () => st,
+    UserCog: () => eC,
+    UserCog2: () => e2,
+    UserKey: () => oC,
+    UserLock: () => rC,
+    UserMinus: () => dC,
+    UserMinus2: () => r2,
+    UserPen: () => pC,
+    UserPlus: () => lC,
+    UserPlus2: () => o2,
+    UserRound: () => p2,
+    UserRoundArrowLeft: () => sC,
+    UserRoundCheck: () => t2,
+    UserRoundCog: () => e2,
+    UserRoundKey: () => hC,
+    UserRoundMinus: () => r2,
+    UserRoundPen: () => fC,
+    UserRoundPlus: () => o2,
+    UserRoundSearch: () => uC,
+    UserRoundX: () => d2,
+    UserSearch: () => cC,
+    UserSquare: () => Ne,
+    UserSquare2: () => _e,
+    UserStar: () => nC,
+    UserX: () => iC,
+    UserX2: () => d2,
+    Users: () => mC,
+    Users2: () => l2,
+    UsersRound: () => l2,
+    Utensils: () => h2,
+    UtensilsCrossed: () => s2,
+    UtilityPole: () => MC,
+    Van: () => vC,
+    Variable: () => gC,
+    Vault: () => yC,
+    VectorSquare: () => CC,
+    Vegan: () => AC,
+    VenetianMask: () => wC,
+    Venus: () => HC,
+    VenusAndMars: () => SC,
+    Verified: () => xa,
+    Vibrate: () => VC,
+    VibrateOff: () => LC,
+    Video: () => PC,
+    VideoOff: () => kC,
+    Videotape: () => bC,
+    View: () => TC,
+    Voicemail: () => BC,
+    Volleyball: () => RC,
+    Volume: () => qC,
+    Volume1: () => DC,
+    Volume2: () => FC,
+    VolumeOff: () => EC,
+    VolumeX: () => OC,
+    Vote: () => zC,
+    Wallet: () => _C,
+    Wallet2: () => f2,
+    WalletCards: () => UC,
+    WalletMinimal: () => f2,
+    Wallpaper: () => NC,
+    Wand: () => GC,
+    Wand2: () => u2,
+    WandSparkles: () => u2,
+    Warehouse: () => IC,
+    WashingMachine: () => WC,
+    Watch: () => ZC,
+    Waves: () => c2,
+    WavesArrowDown: () => XC,
+    WavesArrowUp: () => KC,
+    WavesHorizontal: () => c2,
+    WavesLadder: () => $C,
+    WavesVertical: () => JC,
+    Waypoints: () => jC,
+    Webcam: () => YC,
+    WebcamOff: () => QC,
+    Webhook: () => tA,
+    WebhookOff: () => aA,
+    Weight: () => rA,
+    WeightTilde: () => eA,
+    Wheat: () => oA,
+    WheatOff: () => dA,
+    WholeWord: () => pA,
+    Wifi: () => iA,
+    WifiCog: () => lA,
+    WifiHigh: () => sA,
+    WifiLow: () => hA,
+    WifiOff: () => fA,
+    WifiPen: () => uA,
+    WifiSync: () => cA,
+    WifiZero: () => nA,
+    Wind: () => mA,
+    WindArrowDown: () => xA,
+    Wine: () => vA,
+    WineOff: () => MA,
+    Workflow: () => gA,
+    Worm: () => yA,
+    WrapText: () => $e,
+    Wrench: () => CA,
+    WrenchOff: () => AA,
+    X: () => SA,
+    XCircle: () => ft,
+    XLineTop: () => wA,
+    XOctagon: () => C1,
+    XSquare: () => Ie,
+    Zap: () => LA,
+    ZapOff: () => HA,
+    ZodiacAquarius: () => VA,
+    ZodiacAries: () => kA,
+    ZodiacCancer: () => PA,
+    ZodiacCapricorn: () => TA,
+    ZodiacGemini: () => bA,
+    ZodiacLeo: () => RA,
+    ZodiacLibra: () => BA,
+    ZodiacOphiuchus: () => DA,
+    ZodiacPisces: () => EA,
+    ZodiacSagittarius: () => FA,
+    ZodiacScorpio: () => qA,
+    ZodiacTaurus: () => OA,
+    ZodiacVirgo: () => zA,
+    ZoomIn: () => UA,
+    ZoomOut: () => _A,
 });
-var k2 = [
+var F2 = [
     ['path', { d: 'm14 12 4 4 4-4' }],
     ['path', { d: 'M18 16V7' }],
     ['path', { d: 'm2 16 4.039-9.69a.5.5 0 0 1 .923 0L11 16' }],
     ['path', { d: 'M3.304 13h6.392' }],
 ];
-var P2 = [
+var O2 = [
     ['path', { d: 'm14 11 4-4 4 4' }],
     ['path', { d: 'M18 16V7' }],
     ['path', { d: 'm2 16 4.039-9.69a.5.5 0 0 1 .923 0L11 16' }],
     ['path', { d: 'M3.304 13h6.392' }],
 ];
-var T2 = [
+var q2 = [
     ['circle', { cx: '16', cy: '4', r: '1' }],
     ['path', { d: 'm18 19 1-7-6 1' }],
     ['path', { d: 'm5 8 3-3 5.5 3-2.36 3.5' }],
     ['path', { d: 'M4.24 14.5a5 5 0 0 0 6.88 6' }],
     ['path', { d: 'M13.76 17.5a5 5 0 0 0-6.88-6' }],
 ];
-var B2 = [
+var z2 = [
     [
         'path',
         {
@@ -2343,13 +2388,13 @@ var B2 = [
         },
     ],
 ];
-var b2 = [
+var U2 = [
     ['path', { d: 'm15 16 2.536-7.328a1.02 1.02 1 0 1 1.928 0L22 16' }],
     ['path', { d: 'M15.697 14h5.606' }],
     ['path', { d: 'm2 16 4.039-9.69a.5.5 0 0 1 .923 0L11 16' }],
     ['path', { d: 'M3.304 13h6.392' }],
 ];
-var D2 = [
+var _2 = [
     ['path', { d: 'M10 13H6' }],
     ['path', { d: 'M10 15v-4a2 2 0 0 0-4 0v4' }],
     [
@@ -2360,17 +2405,17 @@ var D2 = [
     ],
     ['rect', { x: '2', y: '5', width: '20', height: '14', rx: '2' }],
 ];
-var R2 = [
+var N2 = [
     ['path', { d: 'M18 17.5a2.5 2.5 0 1 1-4 2.03V12' }],
     ['path', { d: 'M6 12H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2' }],
     ['path', { d: 'M6 8h12' }],
     ['path', { d: 'M6.6 15.572A2 2 0 1 0 10 17v-5' }],
 ];
-var F2 = [
+var I2 = [
     ['path', { d: 'M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1' }],
     ['path', { d: 'm12 15 5 6H7Z' }],
 ];
-var ta = [
+var da = [
     ['circle', { cx: '12', cy: '13', r: '8' }],
     ['path', { d: 'M5 3 2 6' }],
     ['path', { d: 'm22 6-3-3' }],
@@ -2378,7 +2423,7 @@ var ta = [
     ['path', { d: 'M17.64 18.67 20 21' }],
     ['path', { d: 'M9 13h6' }],
 ];
-var ea = [
+var pa = [
     ['circle', { cx: '12', cy: '13', r: '8' }],
     ['path', { d: 'M5 3 2 6' }],
     ['path', { d: 'm22 6-3-3' }],
@@ -2386,7 +2431,7 @@ var ea = [
     ['path', { d: 'M17.64 18.67 20 21' }],
     ['path', { d: 'm9 13 2 2 4-4' }],
 ];
-var E2 = [
+var G2 = [
     ['path', { d: 'M6.87 6.87a8 8 0 1 0 11.26 11.26' }],
     ['path', { d: 'M19.9 14.25a8 8 0 0 0-9.15-9.15' }],
     ['path', { d: 'm22 6-3-3' }],
@@ -2394,7 +2439,7 @@ var E2 = [
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M4 4 2 6' }],
 ];
-var ra = [
+var la = [
     ['circle', { cx: '12', cy: '13', r: '8' }],
     ['path', { d: 'M5 3 2 6' }],
     ['path', { d: 'm22 6-3-3' }],
@@ -2403,7 +2448,7 @@ var ra = [
     ['path', { d: 'M12 10v6' }],
     ['path', { d: 'M9 13h6' }],
 ];
-var O2 = [
+var W2 = [
     ['circle', { cx: '12', cy: '13', r: '8' }],
     ['path', { d: 'M12 9v4l2 2' }],
     ['path', { d: 'M5 3 2 6' }],
@@ -2411,37 +2456,37 @@ var O2 = [
     ['path', { d: 'M6.38 18.7 4 21' }],
     ['path', { d: 'M17.64 18.67 20 21' }],
 ];
-var q2 = [
+var Z2 = [
     ['path', { d: 'M11 21c0-2.5 2-2.5 2-5' }],
     ['path', { d: 'M16 21c0-2.5 2-2.5 2-5' }],
     ['path', { d: 'm19 8-.8 3a1.25 1.25 0 0 1-1.2 1H7a1.25 1.25 0 0 1-1.2-1L5 8' }],
     ['path', { d: 'M21 3a1 1 0 0 1 1 1v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a1 1 0 0 1 1-1z' }],
     ['path', { d: 'M6 21c0-2.5 2-2.5 2-5' }],
 ];
-var z2 = [
+var X2 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
     ['polyline', { points: '11 3 11 11 14 8 17 11 17 3' }],
 ];
-var U2 = [
+var K2 = [
     ['path', { d: 'M2 12h20' }],
     ['path', { d: 'M10 16v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4' }],
     ['path', { d: 'M10 8V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v4' }],
     ['path', { d: 'M20 16v1a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-1' }],
     ['path', { d: 'M14 8V7c0-1.1.9-2 2-2h2a2 2 0 0 1 2 2v1' }],
 ];
-var I2 = [
+var $2 = [
     ['path', { d: 'M12 2v20' }],
     ['path', { d: 'M8 10H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2h4' }],
     ['path', { d: 'M16 10h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-4' }],
     ['path', { d: 'M8 20H7a2 2 0 0 1-2-2v-2c0-1.1.9-2 2-2h1' }],
     ['path', { d: 'M16 14h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-1' }],
 ];
-var _2 = [
+var J2 = [
     ['rect', { width: '6', height: '16', x: '4', y: '2', rx: '2' }],
     ['rect', { width: '6', height: '9', x: '14', y: '9', rx: '2' }],
     ['path', { d: 'M22 22H2' }],
 ];
-var N2 = [
+var j2 = [
     ['rect', { width: '6', height: '14', x: '4', y: '5', rx: '2' }],
     ['rect', { width: '6', height: '10', x: '14', y: '7', rx: '2' }],
     ['path', { d: 'M17 22v-5' }],
@@ -2449,60 +2494,60 @@ var N2 = [
     ['path', { d: 'M7 22v-3' }],
     ['path', { d: 'M7 5V2' }],
 ];
-var G2 = [
+var Q2 = [
     ['rect', { width: '16', height: '6', x: '2', y: '4', rx: '2' }],
     ['rect', { width: '9', height: '6', x: '9', y: '14', rx: '2' }],
     ['path', { d: 'M22 22V2' }],
 ];
-var W2 = [
+var Y2 = [
     ['rect', { width: '6', height: '14', x: '4', y: '5', rx: '2' }],
     ['rect', { width: '6', height: '10', x: '14', y: '7', rx: '2' }],
     ['path', { d: 'M10 2v20' }],
     ['path', { d: 'M20 2v20' }],
 ];
-var Z2 = [
+var a0 = [
     ['rect', { width: '6', height: '14', x: '4', y: '5', rx: '2' }],
     ['rect', { width: '6', height: '10', x: '14', y: '7', rx: '2' }],
     ['path', { d: 'M4 2v20' }],
     ['path', { d: 'M14 2v20' }],
 ];
-var X2 = [
+var t0 = [
     ['rect', { width: '6', height: '14', x: '2', y: '5', rx: '2' }],
     ['rect', { width: '6', height: '10', x: '16', y: '7', rx: '2' }],
     ['path', { d: 'M12 2v20' }],
 ];
-var K2 = [
+var e0 = [
     ['rect', { width: '6', height: '14', x: '2', y: '5', rx: '2' }],
     ['rect', { width: '6', height: '10', x: '12', y: '7', rx: '2' }],
     ['path', { d: 'M22 2v20' }],
 ];
-var J2 = [
+var r0 = [
     ['rect', { width: '6', height: '14', x: '6', y: '5', rx: '2' }],
     ['rect', { width: '6', height: '10', x: '16', y: '7', rx: '2' }],
     ['path', { d: 'M2 2v20' }],
 ];
-var $2 = [
+var o0 = [
     ['rect', { width: '6', height: '10', x: '9', y: '7', rx: '2' }],
     ['path', { d: 'M4 22V2' }],
     ['path', { d: 'M20 22V2' }],
 ];
-var j2 = [
+var d0 = [
     ['rect', { width: '6', height: '16', x: '4', y: '6', rx: '2' }],
     ['rect', { width: '6', height: '9', x: '14', y: '6', rx: '2' }],
     ['path', { d: 'M22 2H2' }],
 ];
-var Q2 = [
+var p0 = [
     ['rect', { width: '6', height: '14', x: '3', y: '5', rx: '2' }],
     ['rect', { width: '6', height: '10', x: '15', y: '7', rx: '2' }],
     ['path', { d: 'M3 2v20' }],
     ['path', { d: 'M21 2v20' }],
 ];
-var Y2 = [
+var l0 = [
     ['rect', { width: '9', height: '6', x: '6', y: '14', rx: '2' }],
     ['rect', { width: '16', height: '6', x: '6', y: '4', rx: '2' }],
     ['path', { d: 'M2 2v20' }],
 ];
-var a0 = [
+var s0 = [
     ['path', { d: 'M22 17h-3' }],
     ['path', { d: 'M22 7h-5' }],
     ['path', { d: 'M5 17H2' }],
@@ -2510,45 +2555,45 @@ var a0 = [
     ['rect', { x: '5', y: '14', width: '14', height: '6', rx: '2' }],
     ['rect', { x: '7', y: '4', width: '10', height: '6', rx: '2' }],
 ];
-var t0 = [
+var h0 = [
     ['rect', { width: '14', height: '6', x: '5', y: '14', rx: '2' }],
     ['rect', { width: '10', height: '6', x: '7', y: '4', rx: '2' }],
     ['path', { d: 'M2 20h20' }],
     ['path', { d: 'M2 10h20' }],
 ];
-var e0 = [
+var f0 = [
     ['rect', { width: '14', height: '6', x: '5', y: '14', rx: '2' }],
     ['rect', { width: '10', height: '6', x: '7', y: '4', rx: '2' }],
     ['path', { d: 'M2 14h20' }],
     ['path', { d: 'M2 4h20' }],
 ];
-var r0 = [
+var u0 = [
     ['rect', { width: '14', height: '6', x: '5', y: '16', rx: '2' }],
     ['rect', { width: '10', height: '6', x: '7', y: '2', rx: '2' }],
     ['path', { d: 'M2 12h20' }],
 ];
-var o0 = [
+var c0 = [
     ['rect', { width: '14', height: '6', x: '5', y: '12', rx: '2' }],
     ['rect', { width: '10', height: '6', x: '7', y: '2', rx: '2' }],
     ['path', { d: 'M2 22h20' }],
 ];
-var d0 = [
+var n0 = [
     ['rect', { width: '14', height: '6', x: '5', y: '16', rx: '2' }],
     ['rect', { width: '10', height: '6', x: '7', y: '6', rx: '2' }],
     ['path', { d: 'M2 2h20' }],
 ];
-var p0 = [
+var i0 = [
     ['rect', { width: '10', height: '6', x: '7', y: '9', rx: '2' }],
     ['path', { d: 'M22 20H2' }],
     ['path', { d: 'M22 4H2' }],
 ];
-var l0 = [
+var x0 = [
     ['rect', { width: '14', height: '6', x: '5', y: '15', rx: '2' }],
     ['rect', { width: '10', height: '6', x: '7', y: '3', rx: '2' }],
     ['path', { d: 'M2 21h20' }],
     ['path', { d: 'M2 3h20' }],
 ];
-var s0 = [
+var m0 = [
     ['path', { d: 'M10 10H6' }],
     ['path', { d: 'M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2' }],
     [
@@ -2562,7 +2607,7 @@ var s0 = [
     ['circle', { cx: '17', cy: '18', r: '2' }],
     ['circle', { cx: '7', cy: '18', r: '2' }],
 ];
-var h0 = [
+var M0 = [
     [
         'path',
         { d: 'M10 17c-5-3-7-7-7-9a2 2 0 0 1 4 0c0 2.5-5 2.5-5 6 0 1.7 1.3 3 3 3 2.8 0 5-2.2 5-5' },
@@ -2572,7 +2617,7 @@ var h0 = [
         { d: 'M22 17c-5-3-7-7-7-9a2 2 0 0 1 4 0c0 2.5-5 2.5-5 6 0 1.7 1.3 3 3 3 2.8 0 5-2.2 5-5' },
     ],
 ];
-var f0 = [
+var v0 = [
     ['path', { d: 'M16 12h3' }],
     [
         'path',
@@ -2581,7 +2626,7 @@ var f0 = [
         },
     ],
 ];
-var u0 = [
+var g0 = [
     ['path', { d: 'M10 2v5.632c0 .424-.272.795-.653.982A6 6 0 0 0 6 14c.006 4 3 7 5 8' }],
     ['path', { d: 'M10 5H8a2 2 0 0 0 0 4h.68' }],
     ['path', { d: 'M14 2v5.632c0 .424.272.795.652.982A6 6 0 0 1 18 14c0 4-3 7-5 8' }],
@@ -2589,13 +2634,13 @@ var u0 = [
     ['path', { d: 'M18 22H6' }],
     ['path', { d: 'M9 2h6' }],
 ];
-var c0 = [
+var y0 = [
     ['path', { d: 'M12 6v16' }],
     ['path', { d: 'm19 13 2-1a9 9 0 0 1-18 0l2 1' }],
     ['path', { d: 'M9 11h6' }],
     ['circle', { cx: '12', cy: '4', r: '2' }],
 ];
-var n0 = [
+var C0 = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M16 16s-1.5-2-4-2-4 2-4 2' }],
     ['path', { d: 'M7.5 8 10 9' }],
@@ -2603,13 +2648,13 @@ var n0 = [
     ['path', { d: 'M9 10h.01' }],
     ['path', { d: 'M15 10h.01' }],
 ];
-var x0 = [
+var A0 = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M8 15h8' }],
     ['path', { d: 'M8 9h2' }],
     ['path', { d: 'M14 9h2' }],
 ];
-var i0 = [
+var w0 = [
     ['path', { d: 'M2 12 7 2' }],
     ['path', { d: 'm7 12 5-10' }],
     ['path', { d: 'm12 12 5-10' }],
@@ -2617,14 +2662,14 @@ var i0 = [
     ['path', { d: 'M4.5 7h15' }],
     ['path', { d: 'M12 16v6' }],
 ];
-var m0 = [
+var S0 = [
     ['path', { d: 'M7 10H6a4 4 0 0 1-4-4 1 1 0 0 1 1-1h4' }],
     ['path', { d: 'M7 5a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1 7 7 0 0 1-7 7H8a1 1 0 0 1-1-1z' }],
     ['path', { d: 'M9 12v5' }],
     ['path', { d: 'M15 12v5' }],
     ['path', { d: 'M5 20a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3 1 1 0 0 1-1 1H6a1 1 0 0 1-1-1' }],
 ];
-var M0 = [
+var H0 = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'm14.31 8 5.74 9.94' }],
     ['path', { d: 'M9.69 8h11.48' }],
@@ -2633,13 +2678,13 @@ var M0 = [
     ['path', { d: 'M14.31 16H2.83' }],
     ['path', { d: 'm16.62 12-5.74 9.94' }],
 ];
-var v0 = [
+var L0 = [
     ['rect', { width: '20', height: '16', x: '2', y: '4', rx: '2' }],
     ['path', { d: 'M6 8h.01' }],
     ['path', { d: 'M10 8h.01' }],
     ['path', { d: 'M14 8h.01' }],
 ];
-var g0 = [
+var V0 = [
     ['path', { d: 'M12 6.528V3a1 1 0 0 1 1-1h0' }],
     [
         'path',
@@ -2648,26 +2693,26 @@ var g0 = [
         },
     ],
 ];
-var y0 = [
+var k0 = [
     ['rect', { x: '2', y: '4', width: '20', height: '16', rx: '2' }],
     ['path', { d: 'M10 4v4' }],
     ['path', { d: 'M2 8h20' }],
     ['path', { d: 'M6 4v4' }],
 ];
-var C0 = [
+var P0 = [
     ['rect', { width: '20', height: '5', x: '2', y: '3', rx: '1' }],
     ['path', { d: 'M4 8v11a2 2 0 0 0 2 2h2' }],
     ['path', { d: 'M20 8v11a2 2 0 0 1-2 2h-2' }],
     ['path', { d: 'm9 15 3-3 3 3' }],
     ['path', { d: 'M12 12v9' }],
 ];
-var A0 = [
+var b0 = [
     ['rect', { width: '20', height: '5', x: '2', y: '3', rx: '1' }],
     ['path', { d: 'M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8' }],
     ['path', { d: 'm9.5 17 5-5' }],
     ['path', { d: 'm9.5 12 5 5' }],
 ];
-var S0 = [
+var T0 = [
     ['path', { d: 'M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3' }],
     [
         'path',
@@ -2678,12 +2723,12 @@ var S0 = [
     ['path', { d: 'M5 18v2' }],
     ['path', { d: 'M19 18v2' }],
 ];
-var w0 = [
+var B0 = [
     ['rect', { width: '20', height: '5', x: '2', y: '3', rx: '1' }],
     ['path', { d: 'M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8' }],
     ['path', { d: 'M10 12h4' }],
 ];
-var H0 = [
+var R0 = [
     [
         'path',
         {
@@ -2692,7 +2737,7 @@ var H0 = [
     ],
     ['path', { d: 'M9 4h6' }],
 ];
-var L0 = [
+var D0 = [
     [
         'path',
         {
@@ -2700,7 +2745,7 @@ var L0 = [
         },
     ],
 ];
-var V0 = [
+var E0 = [
     [
         'path',
         {
@@ -2709,7 +2754,7 @@ var V0 = [
     ],
     ['path', { d: 'M20 9v6' }],
 ];
-var k0 = [
+var F0 = [
     [
         'path',
         {
@@ -2717,7 +2762,7 @@ var k0 = [
         },
     ],
 ];
-var P0 = [
+var O0 = [
     [
         'path',
         {
@@ -2726,7 +2771,7 @@ var P0 = [
     ],
     ['path', { d: 'M4 9v6' }],
 ];
-var T0 = [
+var q0 = [
     [
         'path',
         {
@@ -2734,7 +2779,7 @@ var T0 = [
         },
     ],
 ];
-var B0 = [
+var z0 = [
     [
         'path',
         {
@@ -2743,7 +2788,7 @@ var B0 = [
     ],
     ['path', { d: 'M9 20h6' }],
 ];
-var b0 = [
+var U0 = [
     [
         'path',
         {
@@ -2751,209 +2796,209 @@ var b0 = [
         },
     ],
 ];
-var D0 = [
+var _0 = [
     ['path', { d: 'm3 16 4 4 4-4' }],
     ['path', { d: 'M7 20V4' }],
     ['rect', { x: '15', y: '4', width: '4', height: '6', ry: '2' }],
     ['path', { d: 'M17 20v-6h-2' }],
     ['path', { d: 'M15 20h4' }],
 ];
-var R0 = [
+var N0 = [
     ['path', { d: 'm3 16 4 4 4-4' }],
     ['path', { d: 'M7 20V4' }],
     ['path', { d: 'M17 10V4h-2' }],
     ['path', { d: 'M15 10h4' }],
     ['rect', { x: '15', y: '14', width: '4', height: '6', ry: '2' }],
 ];
-var F0 = [
+var I0 = [
     ['path', { d: 'M19 3H5' }],
     ['path', { d: 'M12 21V7' }],
     ['path', { d: 'm6 15 6 6 6-6' }],
 ];
-var oa = [
+var sa = [
     ['path', { d: 'm3 16 4 4 4-4' }],
     ['path', { d: 'M7 20V4' }],
     ['path', { d: 'M20 8h-5' }],
     ['path', { d: 'M15 10V6.5a2.5 2.5 0 0 1 5 0V10' }],
     ['path', { d: 'M15 14h5l-5 6h5' }],
 ];
-var E0 = [
+var G0 = [
     ['path', { d: 'M17 7 7 17' }],
     ['path', { d: 'M17 17H7V7' }],
 ];
-var O0 = [
+var W0 = [
     ['path', { d: 'm3 16 4 4 4-4' }],
     ['path', { d: 'M7 20V4' }],
     ['path', { d: 'M11 4h4' }],
     ['path', { d: 'M11 8h7' }],
     ['path', { d: 'M11 12h10' }],
 ];
-var q0 = [
+var Z0 = [
     ['path', { d: 'm7 7 10 10' }],
     ['path', { d: 'M17 7v10H7' }],
 ];
-var z0 = [
+var X0 = [
     ['path', { d: 'M12 17V3' }],
     ['path', { d: 'm6 11 6 6 6-6' }],
     ['path', { d: 'M19 21H5' }],
 ];
-var U0 = [
+var K0 = [
     ['path', { d: 'M12 2v14' }],
     ['path', { d: 'm19 9-7 7-7-7' }],
     ['circle', { cx: '12', cy: '21', r: '1' }],
 ];
-var I0 = [
+var $0 = [
     ['path', { d: 'm3 16 4 4 4-4' }],
     ['path', { d: 'M7 20V4' }],
     ['path', { d: 'm21 8-4-4-4 4' }],
     ['path', { d: 'M17 4v16' }],
 ];
-var da = [
+var ha = [
     ['path', { d: 'm3 16 4 4 4-4' }],
     ['path', { d: 'M7 20V4' }],
     ['path', { d: 'M11 4h10' }],
     ['path', { d: 'M11 8h7' }],
     ['path', { d: 'M11 12h4' }],
 ];
-var pa = [
+var fa = [
     ['path', { d: 'm3 16 4 4 4-4' }],
     ['path', { d: 'M7 4v16' }],
     ['path', { d: 'M15 4h5l-5 6h5' }],
     ['path', { d: 'M15 20v-3.5a2.5 2.5 0 0 1 5 0V20' }],
     ['path', { d: 'M20 18h-5' }],
 ];
-var _0 = [
+var J0 = [
     ['path', { d: 'm9 6-6 6 6 6' }],
     ['path', { d: 'M3 12h14' }],
     ['path', { d: 'M21 19V5' }],
 ];
-var N0 = [
+var j0 = [
     ['path', { d: 'M12 5v14' }],
     ['path', { d: 'm19 12-7 7-7-7' }],
 ];
-var G0 = [
+var Q0 = [
     ['path', { d: 'M8 3 4 7l4 4' }],
     ['path', { d: 'M4 7h16' }],
     ['path', { d: 'm16 21 4-4-4-4' }],
     ['path', { d: 'M20 17H4' }],
 ];
-var W0 = [
+var Y0 = [
     ['path', { d: 'M3 19V5' }],
     ['path', { d: 'm13 6-6 6 6 6' }],
     ['path', { d: 'M7 12h14' }],
 ];
-var Z0 = [
+var ar = [
     ['path', { d: 'm12 19-7-7 7-7' }],
     ['path', { d: 'M19 12H5' }],
 ];
-var X0 = [
+var tr = [
     ['path', { d: 'M3 5v14' }],
     ['path', { d: 'M21 12H7' }],
     ['path', { d: 'm15 18 6-6-6-6' }],
 ];
-var K0 = [
+var er = [
     ['path', { d: 'm16 3 4 4-4 4' }],
     ['path', { d: 'M20 7H4' }],
     ['path', { d: 'm8 21-4-4 4-4' }],
     ['path', { d: 'M4 17h16' }],
 ];
-var J0 = [
+var rr = [
     ['path', { d: 'M17 12H3' }],
     ['path', { d: 'm11 18 6-6-6-6' }],
     ['path', { d: 'M21 5v14' }],
 ];
-var $0 = [
+var or = [
     ['path', { d: 'M5 12h14' }],
     ['path', { d: 'm12 5 7 7-7 7' }],
 ];
-var j0 = [
+var dr = [
     ['path', { d: 'm3 8 4-4 4 4' }],
     ['path', { d: 'M7 4v16' }],
     ['rect', { x: '15', y: '4', width: '4', height: '6', ry: '2' }],
     ['path', { d: 'M17 20v-6h-2' }],
     ['path', { d: 'M15 20h4' }],
 ];
-var Q0 = [
+var pr = [
     ['path', { d: 'm3 8 4-4 4 4' }],
     ['path', { d: 'M7 4v16' }],
     ['path', { d: 'M17 10V4h-2' }],
     ['path', { d: 'M15 10h4' }],
     ['rect', { x: '15', y: '14', width: '4', height: '6', ry: '2' }],
 ];
-var la = [
+var ua = [
     ['path', { d: 'm3 8 4-4 4 4' }],
     ['path', { d: 'M7 4v16' }],
     ['path', { d: 'M20 8h-5' }],
     ['path', { d: 'M15 10V6.5a2.5 2.5 0 0 1 5 0V10' }],
     ['path', { d: 'M15 14h5l-5 6h5' }],
 ];
-var Y0 = [
+var lr = [
     ['path', { d: 'm21 16-4 4-4-4' }],
     ['path', { d: 'M17 20V4' }],
     ['path', { d: 'm3 8 4-4 4 4' }],
     ['path', { d: 'M7 4v16' }],
 ];
-var ar = [
+var sr = [
     ['path', { d: 'm5 9 7-7 7 7' }],
     ['path', { d: 'M12 16V2' }],
     ['circle', { cx: '12', cy: '21', r: '1' }],
 ];
-var tr = [
+var hr = [
     ['path', { d: 'm18 9-6-6-6 6' }],
     ['path', { d: 'M12 3v14' }],
     ['path', { d: 'M5 21h14' }],
 ];
-var er = [
+var fr = [
     ['path', { d: 'M7 17V7h10' }],
     ['path', { d: 'M17 17 7 7' }],
 ];
-var sa = [
+var ca = [
     ['path', { d: 'm3 8 4-4 4 4' }],
     ['path', { d: 'M7 4v16' }],
     ['path', { d: 'M11 12h4' }],
     ['path', { d: 'M11 16h7' }],
     ['path', { d: 'M11 20h10' }],
 ];
-var rr = [
+var ur = [
     ['path', { d: 'M7 7h10v10' }],
     ['path', { d: 'M7 17 17 7' }],
 ];
-var or = [
+var cr = [
     ['path', { d: 'M5 3h14' }],
     ['path', { d: 'm18 13-6-6-6 6' }],
     ['path', { d: 'M12 7v14' }],
 ];
-var dr = [
+var nr = [
     ['path', { d: 'm3 8 4-4 4 4' }],
     ['path', { d: 'M7 4v16' }],
     ['path', { d: 'M11 12h10' }],
     ['path', { d: 'M11 16h7' }],
     ['path', { d: 'M11 20h4' }],
 ];
-var ha = [
+var na = [
     ['path', { d: 'm3 8 4-4 4 4' }],
     ['path', { d: 'M7 4v16' }],
     ['path', { d: 'M15 4h5l-5 6h5' }],
     ['path', { d: 'M15 20v-3.5a2.5 2.5 0 0 1 5 0V20' }],
     ['path', { d: 'M20 18h-5' }],
 ];
-var pr = [
+var ir = [
     ['path', { d: 'm5 12 7-7 7 7' }],
     ['path', { d: 'M12 19V5' }],
 ];
-var lr = [
+var xr = [
     ['path', { d: 'M12 6v12' }],
     ['path', { d: 'M17.196 9 6.804 15' }],
     ['path', { d: 'm6.804 9 10.392 6' }],
 ];
-var sr = [
+var mr = [
     ['path', { d: 'm4 6 3-3 3 3' }],
     ['path', { d: 'M7 17V3' }],
     ['path', { d: 'm14 6 3-3 3 3' }],
     ['path', { d: 'M17 17V3' }],
     ['path', { d: 'M4 21h16' }],
 ];
-var hr = [
+var Mr = [
     [
         'path',
         {
@@ -2961,11 +3006,11 @@ var hr = [
         },
     ],
 ];
-var fr = [
+var vr = [
     ['circle', { cx: '12', cy: '12', r: '4' }],
     ['path', { d: 'M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8' }],
 ];
-var ur = [
+var gr = [
     ['circle', { cx: '12', cy: '12', r: '1' }],
     [
         'path',
@@ -2980,7 +3025,7 @@ var ur = [
         },
     ],
 ];
-var cr = [
+var yr = [
     ['path', { d: 'M2 10v3' }],
     ['path', { d: 'M6 6v11' }],
     ['path', { d: 'M10 3v18' }],
@@ -2988,7 +3033,7 @@ var cr = [
     ['path', { d: 'M18 5v13' }],
     ['path', { d: 'M22 10v3' }],
 ];
-var nr = [
+var Cr = [
     [
         'path',
         {
@@ -2997,7 +3042,7 @@ var nr = [
     ],
     ['circle', { cx: '12', cy: '8', r: '6' }],
 ];
-var xr = [
+var Ar = [
     ['path', { d: 'm14 12-8.381 8.38a1 1 0 0 1-3.001-3L11 9' }],
     [
         'path',
@@ -3006,7 +3051,7 @@ var xr = [
         },
     ],
 ];
-var ir = [
+var wr = [
     [
         'path',
         {
@@ -3014,20 +3059,20 @@ var ir = [
         },
     ],
 ];
-var fa = [
+var ia = [
     ['path', { d: 'M13.5 10.5 15 9' }],
     ['path', { d: 'M4 4v15a1 1 0 0 0 1 1h15' }],
     ['path', { d: 'M4.293 19.707 6 18' }],
     ['path', { d: 'm9 15 1.5-1.5' }],
 ];
-var mr = [
+var Sr = [
     ['path', { d: 'M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z' }],
     ['path', { d: 'M8 10h8' }],
     ['path', { d: 'M8 18h8' }],
     ['path', { d: 'M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6' }],
     ['path', { d: 'M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2' }],
 ];
-var Mr = [
+var Hr = [
     ['path', { d: 'M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5' }],
     ['path', { d: 'M15 12h.01' }],
     [
@@ -3038,7 +3083,7 @@ var Mr = [
     ],
     ['path', { d: 'M9 12h.01' }],
 ];
-var vr = [
+var Lr = [
     [
         'path',
         {
@@ -3048,7 +3093,7 @@ var vr = [
     ['line', { x1: '12', x2: '12', y1: '8', y2: '12' }],
     ['line', { x1: '12', x2: '12.01', y1: '16', y2: '16' }],
 ];
-var gr = [
+var Vr = [
     [
         'path',
         {
@@ -3058,7 +3103,7 @@ var gr = [
     ['path', { d: 'M12 7v10' }],
     ['path', { d: 'M15.4 10a4 4 0 1 0 0 4' }],
 ];
-var ua = [
+var xa = [
     [
         'path',
         {
@@ -3067,7 +3112,7 @@ var ua = [
     ],
     ['path', { d: 'm9 12 2 2 4-4' }],
 ];
-var yr = [
+var kr = [
     [
         'path',
         {
@@ -3077,7 +3122,7 @@ var yr = [
     ['path', { d: 'M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8' }],
     ['path', { d: 'M12 18V6' }],
 ];
-var Cr = [
+var Pr = [
     [
         'path',
         {
@@ -3087,7 +3132,7 @@ var Cr = [
     ['path', { d: 'M7 12h5' }],
     ['path', { d: 'M15 9.4a4 4 0 1 0 0 5.2' }],
 ];
-var Ar = [
+var br = [
     [
         'path',
         {
@@ -3098,7 +3143,7 @@ var Ar = [
     ['path', { d: 'M8 12h8' }],
     ['path', { d: 'm13 17-5-1h1a4 4 0 0 0 0-8' }],
 ];
-var Sr = [
+var Tr = [
     [
         'path',
         {
@@ -3108,7 +3153,7 @@ var Sr = [
     ['line', { x1: '12', x2: '12', y1: '16', y2: '12' }],
     ['line', { x1: '12', x2: '12.01', y1: '8', y2: '8' }],
 ];
-var wr = [
+var Br = [
     [
         'path',
         {
@@ -3120,7 +3165,7 @@ var wr = [
     ['path', { d: 'M9 12h6' }],
     ['path', { d: 'M9 16h6' }],
 ];
-var Hr = [
+var Rr = [
     [
         'path',
         {
@@ -3129,7 +3174,7 @@ var Hr = [
     ],
     ['line', { x1: '8', x2: '16', y1: '12', y2: '12' }],
 ];
-var Lr = [
+var Dr = [
     [
         'path',
         {
@@ -3140,7 +3185,7 @@ var Lr = [
     ['path', { d: 'M9 9h.01' }],
     ['path', { d: 'M15 15h.01' }],
 ];
-var Vr = [
+var Er = [
     [
         'path',
         {
@@ -3150,7 +3195,7 @@ var Vr = [
     ['line', { x1: '12', x2: '12', y1: '8', y2: '16' }],
     ['line', { x1: '8', x2: '16', y1: '12', y2: '12' }],
 ];
-var kr = [
+var Fr = [
     [
         'path',
         {
@@ -3161,7 +3206,7 @@ var kr = [
     ['path', { d: 'M10 16V9.5a2.5 2.5 0 0 1 5 0' }],
     ['path', { d: 'M8 16h7' }],
 ];
-var ca = [
+var ma = [
     [
         'path',
         {
@@ -3171,7 +3216,7 @@ var ca = [
     ['path', { d: 'M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3' }],
     ['line', { x1: '12', x2: '12.01', y1: '17', y2: '17' }],
 ];
-var Pr = [
+var Or = [
     [
         'path',
         {
@@ -3181,7 +3226,7 @@ var Pr = [
     ['path', { d: 'M9 16h5' }],
     ['path', { d: 'M9 12h5a2 2 0 1 0 0-4h-3v9' }],
 ];
-var Tr = [
+var qr = [
     [
         'path',
         {
@@ -3192,7 +3237,7 @@ var Tr = [
     ['path', { d: 'M11 12h3' }],
     ['path', { d: 'M9 16h4' }],
 ];
-var Br = [
+var zr = [
     ['path', { d: 'M11 7v10a5 5 0 0 0 5-5' }],
     ['path', { d: 'm15 8-6 3' }],
     [
@@ -3202,7 +3247,7 @@ var Br = [
         },
     ],
 ];
-var br = [
+var Ur = [
     [
         'path',
         {
@@ -3212,7 +3257,7 @@ var br = [
     ['line', { x1: '15', x2: '9', y1: '9', y2: '15' }],
     ['line', { x1: '9', x2: '15', y1: '9', y2: '15' }],
 ];
-var Dr = [
+var _r = [
     [
         'path',
         {
@@ -3220,23 +3265,23 @@ var Dr = [
         },
     ],
 ];
-var Rr = [
+var Nr = [
     ['path', { d: 'M22 18H6a2 2 0 0 1-2-2V7a2 2 0 0 0-2-2' }],
     ['path', { d: 'M17 14V4a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v10' }],
     ['rect', { width: '13', height: '8', x: '8', y: '6', rx: '1' }],
     ['circle', { cx: '18', cy: '20', r: '2' }],
     ['circle', { cx: '9', cy: '20', r: '2' }],
 ];
-var Fr = [
+var Ir = [
     ['path', { d: 'M12 16v1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v1' }],
     ['path', { d: 'M12 6a2 2 0 0 1 2 2' }],
     ['path', { d: 'M18 8c0 4-3.5 8-6 8s-6-4-6-8a6 6 0 0 1 12 0' }],
 ];
-var Er = [
+var Gr = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M4.929 4.929 19.07 19.071' }],
 ];
-var Or = [
+var Wr = [
     ['path', { d: 'M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5' }],
     [
         'path',
@@ -3245,7 +3290,7 @@ var Or = [
         },
     ],
 ];
-var qr = [
+var Zr = [
     ['path', { d: 'M10 10.01h.01' }],
     ['path', { d: 'M10 14.01h.01' }],
     ['path', { d: 'M14 10.01h.01' }],
@@ -3254,7 +3299,7 @@ var qr = [
     ['path', { d: 'M6 6v12' }],
     ['rect', { x: '2', y: '6', width: '20', height: '12', rx: '2' }],
 ];
-var zr = [
+var Xr = [
     ['path', { d: 'M12 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5' }],
     ['path', { d: 'm16 19 3 3 3-3' }],
     ['path', { d: 'M18 12h.01' }],
@@ -3262,7 +3307,7 @@ var zr = [
     ['path', { d: 'M6 12h.01' }],
     ['circle', { cx: '12', cy: '12', r: '2' }],
 ];
-var Ur = [
+var Kr = [
     ['path', { d: 'M12 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5' }],
     ['path', { d: 'M18 12h.01' }],
     ['path', { d: 'M19 22v-6' }],
@@ -3270,14 +3315,14 @@ var Ur = [
     ['path', { d: 'M6 12h.01' }],
     ['circle', { cx: '12', cy: '12', r: '2' }],
 ];
-var Ir = [
+var $r = [
     ['path', { d: 'M11.748 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4.875' }],
     ['path', { d: 'm16 19 2 2 4-4' }],
     ['path', { d: 'M18 12h.01' }],
     ['path', { d: 'M6 12h.01' }],
     ['circle', { cx: '12', cy: '12', r: '2' }],
 ];
-var _r = [
+var Jr = [
     ['path', { d: 'M13 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5' }],
     ['path', { d: 'm17 17 5 5' }],
     ['path', { d: 'M18 12h.01' }],
@@ -3285,19 +3330,19 @@ var _r = [
     ['path', { d: 'M6 12h.01' }],
     ['circle', { cx: '12', cy: '12', r: '2' }],
 ];
-var Nr = [
+var jr = [
     ['rect', { width: '20', height: '12', x: '2', y: '6', rx: '2' }],
     ['circle', { cx: '12', cy: '12', r: '2' }],
     ['path', { d: 'M6 12h.01M18 12h.01' }],
 ];
-var Gr = [
+var Qr = [
     ['path', { d: 'M3 5v14' }],
     ['path', { d: 'M8 5v14' }],
     ['path', { d: 'M12 5v14' }],
     ['path', { d: 'M17 5v14' }],
     ['path', { d: 'M21 5v14' }],
 ];
-var Wr = [
+var Yr = [
     ['path', { d: 'M10 3a41 41 0 0 0 0 18' }],
     ['path', { d: 'M14 3a41 41 0 0 1 0 18' }],
     [
@@ -3309,72 +3354,72 @@ var Wr = [
     ['path', { d: 'M3.84 17h16.32' }],
     ['path', { d: 'M3.84 7h16.32' }],
 ];
-var Zr = [
+var ao = [
     ['path', { d: 'M4 20h16' }],
     ['path', { d: 'm6 16 6-12 6 12' }],
     ['path', { d: 'M8 12h8' }],
 ];
-var Xr = [
+var to = [
     ['path', { d: 'M10 4 8 6' }],
     ['path', { d: 'M17 19v2' }],
     ['path', { d: 'M2 12h20' }],
     ['path', { d: 'M7 19v2' }],
     ['path', { d: 'M9 5 7.621 3.621A2.121 2.121 0 0 0 4 5v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5' }],
 ];
-var Kr = [
+var eo = [
     ['path', { d: 'm11 7-3 5h4l-3 5' }],
     ['path', { d: 'M14.856 6H16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.935' }],
     ['path', { d: 'M22 14v-4' }],
     ['path', { d: 'M5.14 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2.936' }],
 ];
-var Jr = [
+var ro = [
     ['path', { d: 'M10 10v4' }],
     ['path', { d: 'M14 10v4' }],
     ['path', { d: 'M22 14v-4' }],
     ['path', { d: 'M6 10v4' }],
     ['rect', { x: '2', y: '6', width: '16', height: '12', rx: '2' }],
 ];
-var $r = [
+var oo = [
     ['path', { d: 'M22 14v-4' }],
     ['path', { d: 'M6 14v-4' }],
     ['rect', { x: '2', y: '6', width: '16', height: '12', rx: '2' }],
 ];
-var jr = [
+var po = [
     ['path', { d: 'M10 14v-4' }],
     ['path', { d: 'M22 14v-4' }],
     ['path', { d: 'M6 14v-4' }],
     ['rect', { x: '2', y: '6', width: '16', height: '12', rx: '2' }],
 ];
-var Qr = [
+var lo = [
     ['path', { d: 'M10 9v6' }],
     ['path', { d: 'M12.543 6H16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3.605' }],
     ['path', { d: 'M22 14v-4' }],
     ['path', { d: 'M7 12h6' }],
     ['path', { d: 'M7.606 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.606' }],
 ];
-var Yr = [
+var so = [
     ['path', { d: 'M10 17h.01' }],
     ['path', { d: 'M10 7v6' }],
     ['path', { d: 'M14 6h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2' }],
     ['path', { d: 'M22 14v-4' }],
     ['path', { d: 'M6 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2' }],
 ];
-var ao = [
+var ho = [
     ['path', { d: 'M 22 14 L 22 10' }],
     ['rect', { x: '2', y: '6', width: '16', height: '12', rx: '2' }],
 ];
-var to = [
+var fo = [
     ['path', { d: 'M4.5 3h15' }],
     ['path', { d: 'M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3' }],
     ['path', { d: 'M6 14h12' }],
 ];
-var eo = [
+var uo = [
     ['path', { d: 'M9 9c-.64.64-1.521.954-2.402 1.165A6 6 0 0 0 8 22a13.96 13.96 0 0 0 9.9-4.1' }],
     ['path', { d: 'M10.75 5.093A6 6 0 0 1 22 8c0 2.411-.61 4.68-1.683 6.66' }],
     ['path', { d: 'M5.341 10.62a4 4 0 0 0 6.487 1.208M10.62 5.341a4.015 4.015 0 0 1 2.039 2.04' }],
     ['line', { x1: '2', x2: '22', y1: '2', y2: '22' }],
 ];
-var ro = [
+var co = [
     [
         'path',
         {
@@ -3383,24 +3428,24 @@ var ro = [
     ],
     ['path', { d: 'M5.341 10.62a4 4 0 1 0 5.279-5.28' }],
 ];
-var oo = [
+var no = [
     ['path', { d: 'M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8' }],
     ['path', { d: 'M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4' }],
     ['path', { d: 'M12 4v6' }],
     ['path', { d: 'M2 18h20' }],
 ];
-var po = [
+var io = [
     ['path', { d: 'M3 20v-8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8' }],
     ['path', { d: 'M5 10V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4' }],
     ['path', { d: 'M3 18h18' }],
 ];
-var lo = [
+var xo = [
     ['path', { d: 'M2 4v16' }],
     ['path', { d: 'M2 8h18a2 2 0 0 1 2 2v10' }],
     ['path', { d: 'M2 17h20' }],
     ['path', { d: 'M6 8v9' }],
 ];
-var so = [
+var mo = [
     ['path', { d: 'M11.771 6.109a2.5 2.5 0 0 1 3.12 3.12' }],
     ['path', { d: 'M17.852 12.185a6.5 6.5 0 0 0-9.035-9.04' }],
     ['path', { d: 'M18.013 18.013C15.029 20.349 10.831 22 7 22a3 3 0 0 1-2.68-1.66L2.4 16.5' }],
@@ -3413,7 +3458,7 @@ var so = [
         },
     ],
 ];
-var ho = [
+var Mo = [
     [
         'path',
         {
@@ -3428,7 +3473,7 @@ var ho = [
     ],
     ['circle', { cx: '12.5', cy: '8.5', r: '2.5' }],
 ];
-var fo = [
+var vo = [
     ['path', { d: 'M13 13v5' }],
     ['path', { d: 'M17 11.47V8' }],
     ['path', { d: 'M17 11h1a3 3 0 0 1 2.745 4.211' }],
@@ -3443,7 +3488,7 @@ var fo = [
     ],
     ['path', { d: 'M9 14.6V18' }],
 ];
-var uo = [
+var go = [
     ['path', { d: 'M17 11h1a3 3 0 0 1 0 6h-1' }],
     ['path', { d: 'M9 12v6' }],
     ['path', { d: 'M13 12v6' }],
@@ -3455,7 +3500,7 @@ var uo = [
     ],
     ['path', { d: 'M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8' }],
 ];
-var co = [
+var yo = [
     ['path', { d: 'M10.268 21a2 2 0 0 0 3.464 0' }],
     [
         'path',
@@ -3465,7 +3510,7 @@ var co = [
     ],
     ['circle', { cx: '18', cy: '5', r: '3' }],
 ];
-var no = [
+var Co = [
     ['path', { d: 'M10.268 21a2 2 0 0 0 3.464 0' }],
     ['path', { d: 'm15 8 2 2 4-4' }],
     ['path', { d: 'M16.8607 4.4824A6 6 0 0 0 6 8C6 12.499 4.589 13.956 3.262 15.326' }],
@@ -3476,7 +3521,7 @@ var no = [
         },
     ],
 ];
-var xo = [
+var Ao = [
     ['path', { d: 'M18.518 17.347A7 7 0 0 1 14 19' }],
     ['path', { d: 'M18.8 4A11 11 0 0 1 20 9' }],
     ['path', { d: 'M9 9h.01' }],
@@ -3484,7 +3529,7 @@ var xo = [
     ['circle', { cx: '9', cy: '9', r: '7' }],
     ['rect', { x: '4', y: '16', width: '10', height: '6', rx: '2' }],
 ];
-var io = [
+var wo = [
     ['path', { d: 'M10.268 21a2 2 0 0 0 3.464 0' }],
     ['path', { d: 'M15 8h6' }],
     [
@@ -3494,13 +3539,13 @@ var io = [
         },
     ],
 ];
-var mo = [
+var So = [
     ['path', { d: 'M10.268 21a2 2 0 0 0 3.464 0' }],
     ['path', { d: 'M17 17H4a1 1 0 0 1-.74-1.673C4.59 13.956 6 12.499 6 8a6 6 0 0 1 .258-1.742' }],
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M8.668 3.01A6 6 0 0 1 18 8c0 2.687.77 4.653 1.707 6.05' }],
 ];
-var Mo = [
+var Ho = [
     ['path', { d: 'M10.268 21a2 2 0 0 0 3.464 0' }],
     ['path', { d: 'M15 8h6' }],
     ['path', { d: 'M18 5v6' }],
@@ -3511,7 +3556,7 @@ var Mo = [
         },
     ],
 ];
-var vo = [
+var Lo = [
     ['path', { d: 'M10.268 21a2 2 0 0 0 3.464 0' }],
     ['path', { d: 'M22 8c0-2.3-.8-4.3-2-6' }],
     [
@@ -3522,7 +3567,7 @@ var vo = [
     ],
     ['path', { d: 'M4 2C2.8 3.7 2 5.7 2 8' }],
 ];
-var go = [
+var Vo = [
     ['path', { d: 'M10.268 21a2 2 0 0 0 3.464 0' }],
     [
         'path',
@@ -3531,27 +3576,27 @@ var go = [
         },
     ],
 ];
-var na = [
+var Ma = [
     ['rect', { width: '13', height: '7', x: '3', y: '3', rx: '1' }],
     ['path', { d: 'm22 15-3-3 3-3' }],
     ['rect', { width: '13', height: '7', x: '3', y: '14', rx: '1' }],
 ];
-var xa = [
+var va = [
     ['rect', { width: '13', height: '7', x: '8', y: '3', rx: '1' }],
     ['path', { d: 'm2 9 3 3-3 3' }],
     ['rect', { width: '13', height: '7', x: '8', y: '14', rx: '1' }],
 ];
-var yo = [
+var ko = [
     ['rect', { width: '7', height: '13', x: '3', y: '3', rx: '1' }],
     ['path', { d: 'm9 22 3-3 3 3' }],
     ['rect', { width: '7', height: '13', x: '14', y: '3', rx: '1' }],
 ];
-var Co = [
+var Po = [
     ['rect', { width: '7', height: '13', x: '3', y: '8', rx: '1' }],
     ['path', { d: 'm15 2-3 3-3-3' }],
     ['rect', { width: '7', height: '13', x: '14', y: '8', rx: '1' }],
 ];
-var Ao = [
+var bo = [
     [
         'path',
         {
@@ -3561,13 +3606,13 @@ var Ao = [
     ['path', { d: 'M15 14a5 5 0 0 0-7.584 2' }],
     ['path', { d: 'M9.964 6.825C8.019 7.977 9.5 13 8 15' }],
 ];
-var So = [
+var To = [
     ['circle', { cx: '18.5', cy: '17.5', r: '3.5' }],
     ['circle', { cx: '5.5', cy: '17.5', r: '3.5' }],
     ['circle', { cx: '15', cy: '5', r: '1' }],
     ['path', { d: 'M12 17.5V14l-3-3 4-3 2 3h2' }],
 ];
-var wo = [
+var Bo = [
     ['rect', { x: '14', y: '14', width: '4', height: '6', rx: '2' }],
     ['rect', { x: '6', y: '4', width: '4', height: '6', rx: '2' }],
     ['path', { d: 'M6 20h4' }],
@@ -3575,7 +3620,7 @@ var wo = [
     ['path', { d: 'M6 14h2v6' }],
     ['path', { d: 'M14 4h2v6' }],
 ];
-var Ho = [
+var Ro = [
     ['circle', { cx: '12', cy: '11.9', r: '2' }],
     ['path', { d: 'M6.7 3.4c-.9 2.5 0 5.2 2.2 6.7C6.5 9 3.7 9.6 2 11.6' }],
     ['path', { d: 'm8.9 10.1 1.4.8' }],
@@ -3587,7 +3632,7 @@ var Ho = [
     ['path', { d: 'M17 16.4c.7-.7 1.2-1.6 1.5-2.5' }],
     ['path', { d: 'M5.5 13.9c.3.9.8 1.8 1.5 2.5' }],
 ];
-var Lo = [
+var Do = [
     ['path', { d: 'M10 10h4' }],
     ['path', { d: 'M19 7V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3' }],
     [
@@ -3605,7 +3650,7 @@ var Lo = [
     ],
     ['path', { d: 'M9 7V4a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3' }],
 ];
-var Vo = [
+var Eo = [
     ['path', { d: 'M16 7h.01' }],
     ['path', { d: 'M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20' }],
     ['path', { d: 'm20 7 2 .5-2 .5' }],
@@ -3613,7 +3658,7 @@ var Vo = [
     ['path', { d: 'M14 17.75V21' }],
     ['path', { d: 'M7 18a6 6 0 0 0 3.84-10.61' }],
 ];
-var ko = [
+var Fo = [
     ['path', { d: 'M12 18v4' }],
     ['path', { d: 'm17 18 1.956-11.468' }],
     ['path', { d: 'm3 8 7.82-5.615a2 2 0 0 1 2.36 0L21 8' }],
@@ -3621,7 +3666,7 @@ var ko = [
     ['path', { d: 'M7 18 5.044 6.532' }],
     ['circle', { cx: '12', cy: '10', r: '2' }],
 ];
-var Po = [
+var Oo = [
     [
         'path',
         {
@@ -3629,11 +3674,11 @@ var Po = [
         },
     ],
 ];
-var To = [
+var qo = [
     ['circle', { cx: '9', cy: '9', r: '7' }],
     ['circle', { cx: '15', cy: '15', r: '7' }],
 ];
-var Bo = [
+var zo = [
     ['path', { d: 'M3 3h18' }],
     ['path', { d: 'M20 7H8' }],
     ['path', { d: 'M20 11H8' }],
@@ -3642,7 +3687,7 @@ var Bo = [
     ['path', { d: 'M4 3v14' }],
     ['circle', { cx: '4', cy: '19', r: '2' }],
 ];
-var bo = [
+var Uo = [
     [
         'path',
         {
@@ -3655,7 +3700,7 @@ var bo = [
     ['path', { d: 'M19 2H5a2 2 0 0 0-2 2v5a2 2 0 0 0 .688 1.5' }],
     ['path', { d: 'M12 18h.01' }],
 ];
-var Do = [
+var _o = [
     [
         'path',
         {
@@ -3664,24 +3709,24 @@ var Do = [
     ],
     ['rect', { x: '14', y: '2', width: '8', height: '8', rx: '1' }],
 ];
-var Ro = [
+var No = [
     ['path', { d: 'm7 7 10 10-5 5V2l5 5L7 17' }],
     ['line', { x1: '18', x2: '21', y1: '12', y2: '12' }],
     ['line', { x1: '3', x2: '6', y1: '12', y2: '12' }],
 ];
-var Fo = [
+var Io = [
     ['path', { d: 'm17 17-5 5V12l-5 5' }],
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M14.5 9.5 17 7l-5-5v4.5' }],
 ];
-var Eo = [
+var Go = [
     ['path', { d: 'm7 7 10 10-5 5V2l5 5L7 17' }],
     ['path', { d: 'M20.83 14.83a4 4 0 0 0 0-5.66' }],
     ['path', { d: 'M18 12h.01' }],
 ];
-var Oo = [['path', { d: 'm7 7 10 10-5 5V2l5 5L7 17' }]];
-var qo = [['path', { d: 'M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8' }]];
-var zo = [
+var Wo = [['path', { d: 'm7 7 10 10-5 5V2l5 5L7 17' }]];
+var Zo = [['path', { d: 'M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8' }]];
+var Xo = [
     [
         'path',
         {
@@ -3690,7 +3735,7 @@ var zo = [
     ],
     ['circle', { cx: '12', cy: '12', r: '4' }],
 ];
-var Uo = [
+var Ko = [
     ['circle', { cx: '11', cy: '13', r: '9' }],
     [
         'path',
@@ -3698,7 +3743,7 @@ var Uo = [
     ],
     ['path', { d: 'm22 2-1.5 1.5' }],
 ];
-var Io = [
+var $o = [
     [
         'path',
         {
@@ -3716,7 +3761,7 @@ var Io = [
         },
     ],
 ];
-var _o = [
+var Jo = [
     [
         'path',
         {
@@ -3724,7 +3769,7 @@ var _o = [
         },
     ],
 ];
-var No = [
+var jo = [
     [
         'path',
         {
@@ -3734,7 +3779,7 @@ var No = [
     ['path', { d: 'm8 13 4-7 4 7' }],
     ['path', { d: 'M9.1 11h5.7' }],
 ];
-var Go = [
+var Qo = [
     ['path', { d: 'M12 13h.01' }],
     ['path', { d: 'M12 6v3' }],
     [
@@ -3744,7 +3789,7 @@ var Go = [
         },
     ],
 ];
-var Wo = [
+var Yo = [
     ['path', { d: 'M12 6v7' }],
     ['path', { d: 'M16 8v3' }],
     [
@@ -3755,7 +3800,7 @@ var Wo = [
     ],
     ['path', { d: 'M8 8v3' }],
 ];
-var Zo = [
+var ad = [
     [
         'path',
         {
@@ -3764,7 +3809,7 @@ var Zo = [
     ],
     ['path', { d: 'm9 9.5 2 2 4-4' }],
 ];
-var Xo = [
+var td = [
     ['path', { d: 'M5 7a2 2 0 0 0-2 2v11' }],
     ['path', { d: 'M5.803 18H5a2 2 0 0 0 0 4h9.5a.5.5 0 0 0 .5-.5V21' }],
     [
@@ -3772,7 +3817,7 @@ var Xo = [
         { d: 'M9 15V4a2 2 0 0 1 2-2h9.5a.5.5 0 0 1 .5.5v14a.5.5 0 0 1-.5.5H11a2 2 0 0 1 0-4h10' },
     ],
 ];
-var ia = [
+var ga = [
     ['path', { d: 'M12 17h1.5' }],
     ['path', { d: 'M12 22h1.5' }],
     ['path', { d: 'M12 2h1.5' }],
@@ -3785,7 +3830,7 @@ var ia = [
     ['path', { d: 'M4 4.5A2.5 2.5 0 0 1 6.5 2H8' }],
     ['path', { d: 'M8 22H6.5a1 1 0 0 1 0-5H8' }],
 ];
-var Ko = [
+var ed = [
     ['path', { d: 'M12 13V7' }],
     [
         'path',
@@ -3795,7 +3840,7 @@ var Ko = [
     ],
     ['path', { d: 'm9 10 3 3 3-3' }],
 ];
-var Jo = [
+var rd = [
     [
         'path',
         {
@@ -3806,7 +3851,7 @@ var Jo = [
     ['circle', { cx: '15', cy: '12', r: '1' }],
     ['circle', { cx: '9', cy: '12', r: '1' }],
 ];
-var $o = [
+var od = [
     [
         'path',
         {
@@ -3820,7 +3865,7 @@ var $o = [
         },
     ],
 ];
-var jo = [
+var dd = [
     ['path', { d: 'm20 13.7-2.1-2.1a2 2 0 0 0-2.8 0L9.7 17' }],
     [
         'path',
@@ -3830,20 +3875,20 @@ var jo = [
     ],
     ['circle', { cx: '10', cy: '8', r: '2' }],
 ];
-var Qo = [
+var pd = [
     ['path', { d: 'M13 2H6.5A2.5 2.5 0 0 0 4 4.5v15' }],
     ['path', { d: 'M17 2v6' }],
     ['path', { d: 'M17 4h2' }],
     ['path', { d: 'M20 15.2V21a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20' }],
     ['circle', { cx: '17', cy: '10', r: '2' }],
 ];
-var Yo = [
+var ld = [
     ['path', { d: 'M18 6V4a2 2 0 1 0-4 0v2' }],
     ['path', { d: 'M20 15v6a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20' }],
     ['path', { d: 'M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H10' }],
     ['rect', { x: '12', y: '6', width: '8', height: '5', rx: '1' }],
 ];
-var ad = [
+var sd = [
     ['path', { d: 'M10 2v8l3-3 3 3V2' }],
     [
         'path',
@@ -3852,7 +3897,7 @@ var ad = [
         },
     ],
 ];
-var td = [
+var hd = [
     [
         'path',
         {
@@ -3861,7 +3906,7 @@ var td = [
     ],
     ['path', { d: 'M9 10h6' }],
 ];
-var ed = [
+var fd = [
     ['path', { d: 'M12 5v16' }],
     ['path', { d: 'm16 12 2 2 4-4' }],
     [
@@ -3871,7 +3916,7 @@ var ed = [
         },
     ],
 ];
-var rd = [
+var ud = [
     ['path', { d: 'M12 5v16' }],
     ['path', { d: 'M16 13h2' }],
     ['path', { d: 'M16 9h2' }],
@@ -3884,7 +3929,7 @@ var rd = [
     ['path', { d: 'M6 13h2' }],
     ['path', { d: 'M6 9h2' }],
 ];
-var od = [
+var cd = [
     ['path', { d: 'M12 5v16' }],
     [
         'path',
@@ -3893,7 +3938,7 @@ var od = [
         },
     ],
 ];
-var dd = [
+var nd = [
     ['path', { d: 'M12 7v6' }],
     [
         'path',
@@ -3903,13 +3948,13 @@ var dd = [
     ],
     ['path', { d: 'M9 10h6' }],
 ];
-var pd = [
+var id = [
     ['path', { d: 'M11 22H5.5a1 1 0 0 1 0-5h4.501' }],
     ['path', { d: 'm21 22-1.879-1.878' }],
     ['path', { d: 'M3 19.5v-15A2.5 2.5 0 0 1 5.5 2H18a1 1 0 0 1 1 1v8' }],
     ['circle', { cx: '17', cy: '18', r: '3' }],
 ];
-var ld = [
+var xd = [
     [
         'path',
         {
@@ -3919,7 +3964,7 @@ var ld = [
     ['path', { d: 'M8 11h8' }],
     ['path', { d: 'M8 7h6' }],
 ];
-var sd = [
+var md = [
     ['path', { d: 'M10 13h4' }],
     ['path', { d: 'M12 6v7' }],
     ['path', { d: 'M16 8V6H8v2' }],
@@ -3930,14 +3975,14 @@ var sd = [
         },
     ],
 ];
-var hd = [
+var Md = [
     ['path', { d: 'M12 13V7' }],
     ['path', { d: 'M18 2h1a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20' }],
     ['path', { d: 'M4 19.5v-15A2.5 2.5 0 0 1 6.5 2' }],
     ['path', { d: 'm9 10 3-3 3 3' }],
     ['path', { d: 'm9 5 3-3 3 3' }],
 ];
-var fd = [
+var vd = [
     ['path', { d: 'M12 13V7' }],
     [
         'path',
@@ -3947,7 +3992,7 @@ var fd = [
     ],
     ['path', { d: 'm9 10 3-3 3 3' }],
 ];
-var ud = [
+var gd = [
     ['path', { d: 'M15 13a3 3 0 1 0-6 0' }],
     [
         'path',
@@ -3957,7 +4002,7 @@ var ud = [
     ],
     ['circle', { cx: '12', cy: '8', r: '2' }],
 ];
-var cd = [
+var yd = [
     ['path', { d: 'm14.5 7-5 5' }],
     [
         'path',
@@ -3967,7 +4012,7 @@ var cd = [
     ],
     ['path', { d: 'm9.5 7 5 5' }],
 ];
-var nd = [
+var Cd = [
     [
         'path',
         {
@@ -3975,7 +4020,7 @@ var nd = [
         },
     ],
 ];
-var xd = [
+var Ad = [
     [
         'path',
         {
@@ -3984,7 +4029,7 @@ var xd = [
     ],
     ['path', { d: 'm9 10 2 2 4-4' }],
 ];
-var id = [
+var wd = [
     ['path', { d: 'M15 10H9' }],
     [
         'path',
@@ -3993,7 +4038,7 @@ var id = [
         },
     ],
 ];
-var md = [
+var Sd = [
     [
         'path',
         {
@@ -4003,7 +4048,7 @@ var md = [
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M8.656 3H17a2 2 0 0 1 2 2v8.344' }],
 ];
-var Md = [
+var Hd = [
     ['path', { d: 'M12 7v6' }],
     ['path', { d: 'M15 10H9' }],
     [
@@ -4013,7 +4058,7 @@ var Md = [
         },
     ],
 ];
-var vd = [
+var Ld = [
     ['path', { d: 'm14.5 7.5-5 5' }],
     [
         'path',
@@ -4023,7 +4068,7 @@ var vd = [
     ],
     ['path', { d: 'm9.5 7.5 5 5' }],
 ];
-var gd = [
+var Vd = [
     [
         'path',
         {
@@ -4031,7 +4076,7 @@ var gd = [
         },
     ],
 ];
-var yd = [
+var kd = [
     ['path', { d: 'M12 6V2H8' }],
     ['path', { d: 'M15 11v2' }],
     ['path', { d: 'M2 12h2' }],
@@ -4044,7 +4089,7 @@ var yd = [
     ],
     ['path', { d: 'M9 11v2' }],
 ];
-var Cd = [
+var Pd = [
     ['path', { d: 'M4 9V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4' }],
     ['path', { d: 'M8 8v1' }],
     ['path', { d: 'M12 8v1' }],
@@ -4053,7 +4098,7 @@ var Cd = [
     ['circle', { cx: '8', cy: '15', r: '2' }],
     ['circle', { cx: '16', cy: '15', r: '2' }],
 ];
-var Ad = [
+var bd = [
     ['path', { d: 'M13.67 8H18a2 2 0 0 1 2 2v4.33' }],
     ['path', { d: 'M2 14h2' }],
     ['path', { d: 'M20 14h2' }],
@@ -4062,7 +4107,7 @@ var Ad = [
     ['path', { d: 'M9 13v2' }],
     ['path', { d: 'M9.67 4H12v2.33' }],
 ];
-var Sd = [
+var Td = [
     ['path', { d: 'M12 8V4H8' }],
     ['rect', { width: '16', height: '12', x: '4', y: '8', rx: '2' }],
     ['path', { d: 'M2 14h2' }],
@@ -4070,7 +4115,7 @@ var Sd = [
     ['path', { d: 'M15 13v2' }],
     ['path', { d: 'M9 13v2' }],
 ];
-var wd = [
+var Bd = [
     [
         'path',
         {
@@ -4079,7 +4124,7 @@ var wd = [
     ],
     ['path', { d: 'M17 13h-4a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h4' }],
 ];
-var Hd = [
+var Rd = [
     ['path', { d: 'M17 3h4v4' }],
     ['path', { d: 'M18.575 11.082a13 13 0 0 1 1.048 9.027 1.17 1.17 0 0 1-1.914.597L14 17' }],
     ['path', { d: 'M7 10 3.29 6.29a1.17 1.17 0 0 1 .6-1.91 13 13 0 0 1 9.03 1.05' }],
@@ -4091,7 +4136,7 @@ var Hd = [
     ],
     ['path', { d: 'M9.707 14.293 21 3' }],
 ];
-var Ld = [
+var Dd = [
     [
         'path',
         {
@@ -4101,7 +4146,7 @@ var Ld = [
     ['path', { d: 'm3.3 7 8.7 5 8.7-5' }],
     ['path', { d: 'M12 22V12' }],
 ];
-var Vd = [
+var Ed = [
     [
         'path',
         {
@@ -4130,15 +4175,15 @@ var Vd = [
     ['path', { d: 'm12 8 4.74-2.85' }],
     ['path', { d: 'M12 13.5V8' }],
 ];
-var ma = [
+var ya = [
     ['path', { d: 'M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1' }],
     ['path', { d: 'M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1' }],
 ];
-var kd = [
+var Fd = [
     ['path', { d: 'M16 3h3a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-3' }],
     ['path', { d: 'M8 21H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h3' }],
 ];
-var Pd = [
+var Od = [
     [
         'path',
         {
@@ -4158,7 +4203,7 @@ var Pd = [
     ['circle', { cx: '20', cy: '21', r: '.5' }],
     ['circle', { cx: '20', cy: '8', r: '.5' }],
 ];
-var Td = [
+var qd = [
     ['path', { d: 'm10.852 14.772-.383.923' }],
     ['path', { d: 'm10.852 9.228-.383-.923' }],
     ['path', { d: 'm13.148 14.772.382.924' }],
@@ -4183,7 +4228,7 @@ var Td = [
     ['path', { d: 'm9.228 13.148-.923.383' }],
     ['circle', { cx: '12', cy: '12', r: '3' }],
 ];
-var Bd = [
+var zd = [
     ['path', { d: 'M12 18V5' }],
     ['path', { d: 'M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4' }],
     ['path', { d: 'M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5' }],
@@ -4193,7 +4238,7 @@ var Bd = [
     ['path', { d: 'M6 18a4 4 0 0 1-2-7.464' }],
     ['path', { d: 'M6.003 5.125a4 4 0 0 0-2.526 5.77' }],
 ];
-var bd = [
+var Ud = [
     ['path', { d: 'M12 9v1.258' }],
     ['path', { d: 'M16 3v5.46' }],
     ['path', { d: 'M21 9.118V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5.75' }],
@@ -4208,7 +4253,7 @@ var bd = [
     ['path', { d: 'M8 15v6' }],
     ['path', { d: 'M8 3v6' }],
 ];
-var Dd = [
+var _d = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M12 9v6' }],
     ['path', { d: 'M16 15v6' }],
@@ -4218,7 +4263,7 @@ var Dd = [
     ['path', { d: 'M8 15v6' }],
     ['path', { d: 'M8 3v6' }],
 ];
-var Rd = [
+var Nd = [
     ['path', { d: 'M16 3v2.107' }],
     [
         'path',
@@ -4232,13 +4277,13 @@ var Rd = [
     ['path', { d: 'M8 15v6' }],
     ['path', { d: 'M8 3v6' }],
 ];
-var Fd = [
+var Id = [
     ['path', { d: 'M12 12h.01' }],
     ['path', { d: 'M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2' }],
     ['path', { d: 'M22 13a18.15 18.15 0 0 1-20 0' }],
     ['rect', { width: '20', height: '14', x: '2', y: '6', rx: '2' }],
 ];
-var Ed = [
+var Gd = [
     ['path', { d: 'M10 20v2' }],
     ['path', { d: 'M14 20v2' }],
     ['path', { d: 'M18 20v2' }],
@@ -4247,7 +4292,7 @@ var Ed = [
     ['path', { d: 'M8 16V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v12' }],
     ['rect', { x: '4', y: '6', width: '16', height: '10', rx: '2' }],
 ];
-var Od = [
+var Wd = [
     ['path', { d: 'M12 11v4' }],
     ['path', { d: 'M14 13h-4' }],
     ['path', { d: 'M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2' }],
@@ -4255,11 +4300,11 @@ var Od = [
     ['path', { d: 'M6 6v14' }],
     ['rect', { width: '20', height: '14', x: '2', y: '6', rx: '2' }],
 ];
-var qd = [
+var Zd = [
     ['path', { d: 'M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16' }],
     ['rect', { width: '20', height: '14', x: '2', y: '6', rx: '2' }],
 ];
-var zd = [
+var Xd = [
     ['path', { d: 'M10 13a3 3 0 0 1-2.121-5.121' }],
     [
         'path',
@@ -4275,7 +4320,7 @@ var zd = [
         },
     ],
 ];
-var Ud = [
+var Kd = [
     ['path', { d: 'm16 22-1-4' }],
     [
         'path',
@@ -4286,23 +4331,23 @@ var Ud = [
     ['path', { d: 'M19 14H5l-1.973 6.767A1 1 0 0 0 4 22h16a1 1 0 0 0 .973-1.233z' }],
     ['path', { d: 'm8 22 1-4' }],
 ];
-var Id = [
+var $d = [
     ['rect', { x: '8', y: '8', width: '8', height: '8', rx: '2' }],
     ['path', { d: 'M4 10a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2' }],
     ['path', { d: 'M14 20a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2' }],
 ];
-var _d = [
+var Jd = [
     ['path', { d: 'm11 10 3 3' }],
     ['path', { d: 'M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z' }],
     ['path', { d: 'M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031' }],
 ];
-var Nd = [
+var jd = [
     ['path', { d: 'M7.001 15.085A1.5 1.5 0 0 1 9 16.5' }],
     ['circle', { cx: '18.5', cy: '8.5', r: '3.5' }],
     ['circle', { cx: '7.5', cy: '16.5', r: '5.5' }],
     ['circle', { cx: '7.5', cy: '4.5', r: '2.5' }],
 ];
-var Gd = [
+var Qd = [
     ['path', { d: 'M12 20v-8' }],
     ['path', { d: 'M12.656 7H14a4 4 0 0 1 4 4v1.344' }],
     ['path', { d: 'M14.12 3.88 16 2' }],
@@ -4316,7 +4361,7 @@ var Gd = [
     ['path', { d: 'm8 2 1.88 1.88' }],
     ['path', { d: 'M9.712 4.06A3 3 0 0 1 15 6v1.13' }],
 ];
-var Wd = [
+var Yd = [
     ['path', { d: 'M10 19.655A6 6 0 0 1 6 14v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 3.97' }],
     [
         'path',
@@ -4332,7 +4377,7 @@ var Wd = [
     ['path', { d: 'm8 2 1.88 1.88' }],
     ['path', { d: 'M9 7.13V6a3 3 0 1 1 6 0v1.13' }],
 ];
-var Zd = [
+var ap = [
     ['path', { d: 'M12 20v-9' }],
     ['path', { d: 'M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z' }],
     ['path', { d: 'M14.12 3.88 16 2' }],
@@ -4345,14 +4390,14 @@ var Zd = [
     ['path', { d: 'm8 2 1.88 1.88' }],
     ['path', { d: 'M9 7.13V6a3 3 0 1 1 6 0v1.13' }],
 ];
-var Xd = [
+var tp = [
     ['path', { d: 'M10 12h4' }],
     ['path', { d: 'M10 8h4' }],
     ['path', { d: 'M14 21v-3a2 2 0 0 0-4 0v3' }],
     ['path', { d: 'M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2' }],
     ['path', { d: 'M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16' }],
 ];
-var Kd = [
+var ep = [
     ['path', { d: 'M12 10h.01' }],
     ['path', { d: 'M12 14h.01' }],
     ['path', { d: 'M12 6h.01' }],
@@ -4365,7 +4410,7 @@ var Kd = [
     ['path', { d: 'M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3' }],
     ['rect', { x: '4', y: '2', width: '16', height: '20', rx: '2' }],
 ];
-var Jd = [
+var rp = [
     ['path', { d: 'M4 6 2 7' }],
     ['path', { d: 'M10 6h4' }],
     ['path', { d: 'm22 7-2-1' }],
@@ -4376,7 +4421,7 @@ var Jd = [
     ['path', { d: 'M6 19v2' }],
     ['path', { d: 'M18 21v-2' }],
 ];
-var $d = [
+var op = [
     ['path', { d: 'M8 6v6' }],
     ['path', { d: 'M15 6v6' }],
     ['path', { d: 'M2 12h19.6' }],
@@ -4390,7 +4435,7 @@ var $d = [
     ['path', { d: 'M9 18h5' }],
     ['circle', { cx: '16', cy: '18', r: '2' }],
 ];
-var jd = [
+var dp = [
     ['path', { d: 'M10 3h.01' }],
     ['path', { d: 'M14 2h.01' }],
     ['path', { d: 'm2 9 20-5' }],
@@ -4400,7 +4445,7 @@ var jd = [
     ['path', { d: 'M15 12v5' }],
     ['path', { d: 'M4 17h16' }],
 ];
-var Qd = [
+var pp = [
     ['path', { d: 'M17 19a1 1 0 0 1-1-1v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2a1 1 0 0 1-1 1z' }],
     ['path', { d: 'M17 21v-2' }],
     ['path', { d: 'M19 14V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V10' }],
@@ -4409,7 +4454,7 @@ var Qd = [
     ['path', { d: 'M4 10a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2a2 2 0 0 1-2 2z' }],
     ['path', { d: 'M7 5V3' }],
 ];
-var Yd = [
+var lp = [
     ['path', { d: 'M16 13H3' }],
     ['path', { d: 'M16 17H3' }],
     [
@@ -4420,7 +4465,7 @@ var Yd = [
     ],
     ['circle', { cx: '9', cy: '7', r: '2' }],
 ];
-var ap = [
+var sp = [
     ['path', { d: 'M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8' }],
     ['path', { d: 'M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1' }],
     ['path', { d: 'M2 21h20' }],
@@ -4431,7 +4476,7 @@ var ap = [
     ['path', { d: 'M12 4h.01' }],
     ['path', { d: 'M17 4h.01' }],
 ];
-var tp = [
+var hp = [
     ['rect', { width: '16', height: '20', x: '4', y: '2', rx: '2' }],
     ['line', { x1: '8', x2: '16', y1: '6', y2: '6' }],
     ['line', { x1: '16', x2: '16', y1: '14', y2: '18' }],
@@ -4443,14 +4488,14 @@ var tp = [
     ['path', { d: 'M12 18h.01' }],
     ['path', { d: 'M8 18h.01' }],
 ];
-var ep = [
+var fp = [
     ['path', { d: 'M11 14h1v4' }],
     ['path', { d: 'M16 2v4' }],
     ['path', { d: 'M3 10h18' }],
     ['path', { d: 'M8 2v4' }],
     ['rect', { x: '3', y: '4', width: '18', height: '18', rx: '2' }],
 ];
-var rp = [
+var up = [
     ['path', { d: 'm14 18 4 4 4-4' }],
     ['path', { d: 'M16 2v4' }],
     ['path', { d: 'M18 14v8' }],
@@ -4458,7 +4503,7 @@ var rp = [
     ['path', { d: 'M3 10h18' }],
     ['path', { d: 'M8 2v4' }],
 ];
-var op = [
+var cp = [
     ['path', { d: 'm14 18 4-4 4 4' }],
     ['path', { d: 'M16 2v4' }],
     ['path', { d: 'M18 22v-8' }],
@@ -4466,21 +4511,21 @@ var op = [
     ['path', { d: 'M3 10h18' }],
     ['path', { d: 'M8 2v4' }],
 ];
-var dp = [
+var np = [
     ['path', { d: 'M8 2v4' }],
     ['path', { d: 'M16 2v4' }],
     ['rect', { width: '18', height: '18', x: '3', y: '4', rx: '2' }],
     ['path', { d: 'M3 10h18' }],
     ['path', { d: 'm9 16 2 2 4-4' }],
 ];
-var pp = [
+var ip = [
     ['path', { d: 'M8 2v4' }],
     ['path', { d: 'M16 2v4' }],
     ['path', { d: 'M21 14V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8' }],
     ['path', { d: 'M3 10h18' }],
     ['path', { d: 'm16 20 2 2 4-4' }],
 ];
-var lp = [
+var xp = [
     ['path', { d: 'M16 14v2.2l1.6 1' }],
     ['path', { d: 'M16 2v4' }],
     ['path', { d: 'M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5' }],
@@ -4488,7 +4533,7 @@ var lp = [
     ['path', { d: 'M8 2v4' }],
     ['circle', { cx: '16', cy: '16', r: '6' }],
 ];
-var sp = [
+var mp = [
     ['path', { d: 'm15.228 16.852-.923-.383' }],
     ['path', { d: 'm15.228 19.148-.923.383' }],
     ['path', { d: 'M16 2v4' }],
@@ -4503,7 +4548,7 @@ var sp = [
     ['path', { d: 'M8 2v4' }],
     ['circle', { cx: '18', cy: '18', r: '3' }],
 ];
-var hp = [
+var Mp = [
     ['path', { d: 'M8 2v4' }],
     ['path', { d: 'M16 2v4' }],
     ['rect', { width: '18', height: '18', x: '3', y: '4', rx: '2' }],
@@ -4515,7 +4560,7 @@ var hp = [
     ['path', { d: 'M12 18h.01' }],
     ['path', { d: 'M16 18h.01' }],
 ];
-var fp = [
+var vp = [
     [
         'path',
         {
@@ -4527,14 +4572,14 @@ var fp = [
     ['path', { d: 'M16 2v4' }],
     ['path', { d: 'M3 10h18' }],
 ];
-var up = [
+var gp = [
     ['path', { d: 'M8 2v4' }],
     ['path', { d: 'M16 2v4' }],
     ['rect', { width: '18', height: '18', x: '3', y: '4', rx: '2' }],
     ['path', { d: 'M3 10h18' }],
     ['path', { d: 'M10 16h4' }],
 ];
-var cp = [
+var yp = [
     ['path', { d: 'M12.127 22H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5.125' }],
     [
         'path',
@@ -4546,14 +4591,14 @@ var cp = [
     ['path', { d: 'M3 10h18' }],
     ['path', { d: 'M8 2v4' }],
 ];
-var np = [
+var Cp = [
     ['path', { d: 'M16 19h6' }],
     ['path', { d: 'M16 2v4' }],
     ['path', { d: 'M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5' }],
     ['path', { d: 'M3 10h18' }],
     ['path', { d: 'M8 2v4' }],
 ];
-var xp = [
+var Ap = [
     ['path', { d: 'M4.2 4.2A2 2 0 0 0 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 1.82-1.18' }],
     ['path', { d: 'M21 15.5V6a2 2 0 0 0-2-2H9.5' }],
     ['path', { d: 'M16 2v4' }],
@@ -4561,7 +4606,7 @@ var xp = [
     ['path', { d: 'M21 10h-5.5' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var ip = [
+var wp = [
     ['path', { d: 'M8 2v4' }],
     ['path', { d: 'M16 2v4' }],
     ['rect', { width: '18', height: '18', x: '3', y: '4', rx: '2' }],
@@ -4569,7 +4614,7 @@ var ip = [
     ['path', { d: 'M10 16h4' }],
     ['path', { d: 'M12 14v4' }],
 ];
-var mp = [
+var Sp = [
     ['path', { d: 'M16 19h6' }],
     ['path', { d: 'M16 2v4' }],
     ['path', { d: 'M19 16v6' }],
@@ -4577,7 +4622,7 @@ var mp = [
     ['path', { d: 'M3 10h18' }],
     ['path', { d: 'M8 2v4' }],
 ];
-var Mp = [
+var Hp = [
     ['rect', { width: '18', height: '18', x: '3', y: '4', rx: '2' }],
     ['path', { d: 'M16 2v4' }],
     ['path', { d: 'M3 10h18' }],
@@ -4587,7 +4632,7 @@ var Mp = [
     ['path', { d: 'M7 14h.01' }],
     ['path', { d: 'M17 18h.01' }],
 ];
-var vp = [
+var Lp = [
     ['path', { d: 'M16 2v4' }],
     ['path', { d: 'M21 11.75V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7.25' }],
     ['path', { d: 'm22 22-1.875-1.875' }],
@@ -4595,7 +4640,7 @@ var vp = [
     ['path', { d: 'M8 2v4' }],
     ['circle', { cx: '18', cy: '18', r: '3' }],
 ];
-var gp = [
+var Vp = [
     ['path', { d: 'M11 10v4h4' }],
     ['path', { d: 'm11 14 1.535-1.605a5 5 0 0 1 8 1.5' }],
     ['path', { d: 'M16 2v4' }],
@@ -4605,7 +4650,7 @@ var gp = [
     ['path', { d: 'M3 10h4' }],
     ['path', { d: 'M8 2v4' }],
 ];
-var yp = [
+var kp = [
     ['path', { d: 'M8 2v4' }],
     ['path', { d: 'M16 2v4' }],
     ['path', { d: 'M21 13V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8' }],
@@ -4613,7 +4658,7 @@ var yp = [
     ['path', { d: 'm17 22 5-5' }],
     ['path', { d: 'm17 17 5 5' }],
 ];
-var Cp = [
+var Pp = [
     ['path', { d: 'M8 2v4' }],
     ['path', { d: 'M16 2v4' }],
     ['rect', { width: '18', height: '18', x: '3', y: '4', rx: '2' }],
@@ -4621,13 +4666,13 @@ var Cp = [
     ['path', { d: 'm14 14-4 4' }],
     ['path', { d: 'm10 14 4 4' }],
 ];
-var Ap = [
+var bp = [
     ['path', { d: 'M8 2v4' }],
     ['path', { d: 'M16 2v4' }],
     ['rect', { width: '18', height: '18', x: '3', y: '4', rx: '2' }],
     ['path', { d: 'M3 10h18' }],
 ];
-var Sp = [
+var Tp = [
     ['path', { d: 'M12 2v2' }],
     ['path', { d: 'M15.726 21.01A2 2 0 0 1 14 22H4a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2' }],
     ['path', { d: 'M18 2v2' }],
@@ -4635,7 +4680,7 @@ var Sp = [
     ['path', { d: 'M8 8h14' }],
     ['rect', { x: '8', y: '3', width: '14', height: '14', rx: '2' }],
 ];
-var wp = [
+var Bp = [
     ['path', { d: 'M14.564 14.558a3 3 0 1 1-4.122-4.121' }],
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M20 20H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 .819-.175' }],
@@ -4646,7 +4691,7 @@ var wp = [
         },
     ],
 ];
-var Hp = [
+var Rp = [
     [
         'path',
         {
@@ -4655,7 +4700,7 @@ var Hp = [
     ],
     ['circle', { cx: '12', cy: '13', r: '3' }],
 ];
-var Lp = [
+var Dp = [
     ['path', { d: 'm10.8 5 2.111 4.223' }],
     ['path', { d: 'M17.75 7 15 2.1' }],
     ['path', { d: 'm4.874 14.647 2.12 4.24' }],
@@ -4667,7 +4712,7 @@ var Lp = [
     ],
     ['path', { d: 'm7.906 9.712 2.005 4.411' }],
 ];
-var Vp = [
+var Ep = [
     ['path', { d: 'M10 7v10.9' }],
     ['path', { d: 'M14 6.1V17' }],
     [
@@ -4689,7 +4734,7 @@ var Vp = [
         },
     ],
 ];
-var kp = [
+var Fp = [
     ['path', { d: 'M10 10v7.9' }],
     ['path', { d: 'M11.802 6.145a5 5 0 0 1 6.053 6.053' }],
     ['path', { d: 'M14 6.1v2.243' }],
@@ -4708,7 +4753,7 @@ var kp = [
         },
     ],
 ];
-var Pp = [
+var Op = [
     ['path', { d: 'M12 22v-4' }],
     [
         'path',
@@ -4717,7 +4762,7 @@ var Pp = [
         },
     ],
 ];
-var Tp = [
+var qp = [
     ['path', { d: 'M12 22v-4c1.5 1.5 3.5 3 6 3 0-1.5-.5-3.5-2-5' }],
     ['path', { d: 'M13.988 8.327C13.902 6.054 13.365 3.82 12 2a9.3 9.3 0 0 0-1.445 2.9' }],
     ['path', { d: 'M17.375 11.725C18.882 10.53 21 7.841 21 6c-2.324 0-5.08 1.296-6.662 2.684' }],
@@ -4730,7 +4775,7 @@ var Tp = [
         },
     ],
 ];
-var Bp = [
+var zp = [
     ['path', { d: 'M10.5 5H19a2 2 0 0 1 2 2v8.5' }],
     ['path', { d: 'M17 11h-.5' }],
     ['path', { d: 'M19 19H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2' }],
@@ -4738,11 +4783,11 @@ var Bp = [
     ['path', { d: 'M7 11h4' }],
     ['path', { d: 'M7 15h2.5' }],
 ];
-var Ma = [
+var Ca = [
     ['rect', { width: '18', height: '14', x: '3', y: '5', rx: '2', ry: '2' }],
     ['path', { d: 'M7 15h4M15 15h2M7 11h2M13 11h4' }],
 ];
-var bp = [
+var Up = [
     ['path', { d: 'm21 8-2 2-1.5-3.7A2 2 0 0 0 15.646 5H8.4a2 2 0 0 0-1.903 1.257L5 10 3 8' }],
     ['path', { d: 'M7 14h.01' }],
     ['path', { d: 'M17 14h.01' }],
@@ -4750,7 +4795,7 @@ var bp = [
     ['path', { d: 'M5 18v2' }],
     ['path', { d: 'M19 18v2' }],
 ];
-var Dp = [
+var _p = [
     ['path', { d: 'M10 2h4' }],
     ['path', { d: 'm21 8-2 2-1.5-3.7A2 2 0 0 0 15.646 5H8.4a2 2 0 0 0-1.903 1.257L5 10 3 8' }],
     ['path', { d: 'M7 14h.01' }],
@@ -4759,7 +4804,7 @@ var Dp = [
     ['path', { d: 'M5 18v2' }],
     ['path', { d: 'M19 18v2' }],
 ];
-var Rp = [
+var Np = [
     [
         'path',
         {
@@ -4770,13 +4815,13 @@ var Rp = [
     ['path', { d: 'M9 17h6' }],
     ['circle', { cx: '17', cy: '17', r: '2' }],
 ];
-var Fp = [
+var Ip = [
     ['path', { d: 'M18 19V9a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v8a2 2 0 0 0 2 2h2' }],
     ['path', { d: 'M2 9h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2' }],
     ['path', { d: 'M22 17v1a1 1 0 0 1-1 1H10v-9a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v9' }],
     ['circle', { cx: '8', cy: '19', r: '2' }],
 ];
-var Ep = [
+var Gp = [
     ['path', { d: 'M12 14v4' }],
     [
         'path',
@@ -4787,24 +4832,24 @@ var Ep = [
     ['path', { d: 'M8 14h8' }],
     ['rect', { x: '8', y: '10', width: '8', height: '8', rx: '1' }],
 ];
-var Op = [
+var Wp = [
     ['path', { d: 'M15 16a1 1 0 0 0-7-7q-4 4-5.987 12.385a.5.5 0 0 0 .602.602Q11 20 15 16l-3-3' }],
     ['path', { d: 'M15 9q4 4 7 0-3-4-7 0 4-4 0-7-4 3 0 7' }],
     ['path', { d: 'm8 15-2.58-2.58' }],
 ];
-var qp = [
+var Zp = [
     ['path', { d: 'M10 9v7' }],
     ['path', { d: 'M14 6v10' }],
     ['circle', { cx: '17.5', cy: '12.5', r: '3.5' }],
     ['circle', { cx: '6.5', cy: '12.5', r: '3.5' }],
 ];
-var zp = [
+var Xp = [
     ['path', { d: 'm2 16 4.039-9.69a.5.5 0 0 1 .923 0L11 16' }],
     ['path', { d: 'M22 9v7' }],
     ['path', { d: 'M3.304 13h6.392' }],
     ['circle', { cx: '18.5', cy: '12.5', r: '3.5' }],
 ];
-var Up = [
+var Kp = [
     [
         'path',
         { d: 'M15 11h4.5a1 1 0 0 1 0 5h-4a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h3a1 1 0 0 1 0 5' },
@@ -4812,20 +4857,20 @@ var Up = [
     ['path', { d: 'm2 16 4.039-9.69a.5.5 0 0 1 .923 0L11 16' }],
     ['path', { d: 'M3.304 13h6.392' }],
 ];
-var Ip = [
+var $p = [
     ['rect', { width: '20', height: '16', x: '2', y: '4', rx: '2' }],
     ['circle', { cx: '8', cy: '10', r: '2' }],
     ['path', { d: 'M8 12h8' }],
     ['circle', { cx: '16', cy: '10', r: '2' }],
     ['path', { d: 'm6 20 .7-2.9A1.4 1.4 0 0 1 8.1 16h7.8a1.4 1.4 0 0 1 1.4 1l.7 3' }],
 ];
-var _p = [
+var Jp = [
     ['path', { d: 'M2 8V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6' }],
     ['path', { d: 'M2 12a9 9 0 0 1 8 8' }],
     ['path', { d: 'M2 16a5 5 0 0 1 4 4' }],
     ['line', { x1: '2', x2: '2.01', y1: '20', y2: '20' }],
 ];
-var Np = [
+var jp = [
     ['path', { d: 'M10 5V3' }],
     ['path', { d: 'M14 5V3' }],
     ['path', { d: 'M15 21v-3a3 3 0 0 0-6 0v3' }],
@@ -4835,7 +4880,7 @@ var Np = [
     ['path', { d: 'M22 9v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9' }],
     ['path', { d: 'M6 3v8' }],
 ];
-var Gp = [
+var Qp = [
     [
         'path',
         {
@@ -4846,7 +4891,7 @@ var Gp = [
     ['path', { d: 'M16 14v.5' }],
     ['path', { d: 'M11.25 16.25h1.5L12 17l-.75-.75Z' }],
 ];
-var Wp = [
+var Yp = [
     [
         'path',
         {
@@ -4864,7 +4909,7 @@ var Wp = [
     ['path', { d: 'M2 21v-4' }],
     ['path', { d: 'M7 9h.01' }],
 ];
-var Zp = [
+var al = [
     [
         'path',
         { d: 'M16.75 12h3.632a1 1 0 0 1 .894 1.447l-2.034 4.069a1 1 0 0 1-1.708.134l-2.124-2.97' },
@@ -4879,7 +4924,7 @@ var Zp = [
     ['path', { d: 'M2 21v-4' }],
     ['path', { d: 'M7 9h.01' }],
 ];
-var va = [
+var Aa = [
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     [
         'path',
@@ -4888,37 +4933,37 @@ var va = [
         },
     ],
 ];
-var ga = [
+var wa = [
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['rect', { x: '7', y: '13', width: '9', height: '4', rx: '1' }],
     ['rect', { x: '7', y: '5', width: '12', height: '4', rx: '1' }],
 ];
-var Xp = [
+var tl = [
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['path', { d: 'M7 11h8' }],
     ['path', { d: 'M7 16h12' }],
     ['path', { d: 'M7 6h3' }],
 ];
-var Kp = [
+var el = [
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['path', { d: 'M7 11h8' }],
     ['path', { d: 'M7 16h3' }],
     ['path', { d: 'M7 6h12' }],
 ];
-var Jp = [
+var rl = [
     ['path', { d: 'M11 13v4' }],
     ['path', { d: 'M15 5v4' }],
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['rect', { x: '7', y: '13', width: '9', height: '4', rx: '1' }],
     ['rect', { x: '7', y: '5', width: '12', height: '4', rx: '1' }],
 ];
-var ya = [
+var Sa = [
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['path', { d: 'M7 16h8' }],
     ['path', { d: 'M7 11h12' }],
     ['path', { d: 'M7 6h3' }],
 ];
-var Ca = [
+var Ha = [
     ['path', { d: 'M9 5v4' }],
     ['rect', { width: '4', height: '6', x: '7', y: '9', rx: '1' }],
     ['path', { d: 'M9 15v2' }],
@@ -4927,62 +4972,62 @@ var Ca = [
     ['path', { d: 'M17 13v3' }],
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
 ];
-var Aa = [
+var La = [
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['rect', { x: '15', y: '5', width: '4', height: '12', rx: '1' }],
     ['rect', { x: '7', y: '8', width: '4', height: '9', rx: '1' }],
 ];
-var $p = [
+var ol = [
     ['path', { d: 'M13 17V9' }],
     ['path', { d: 'M18 17v-3' }],
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['path', { d: 'M8 17V5' }],
 ];
-var Sa = [
+var Va = [
     ['path', { d: 'M13 17V9' }],
     ['path', { d: 'M18 17V5' }],
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['path', { d: 'M8 17v-3' }],
 ];
-var jp = [
+var dl = [
     ['path', { d: 'M11 13H7' }],
     ['path', { d: 'M19 9h-4' }],
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['rect', { x: '15', y: '5', width: '4', height: '12', rx: '1' }],
     ['rect', { x: '7', y: '8', width: '4', height: '9', rx: '1' }],
 ];
-var wa = [
+var ka = [
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['path', { d: 'M18 17V9' }],
     ['path', { d: 'M13 17V5' }],
     ['path', { d: 'M8 17v-3' }],
 ];
-var Qp = [
+var pl = [
     ['path', { d: 'M10 6h8' }],
     ['path', { d: 'M12 16h6' }],
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['path', { d: 'M8 11h7' }],
 ];
-var Ha = [
+var Pa = [
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['path', { d: 'm19 9-5 5-4-4-3 3' }],
 ];
-var Yp = [
+var ll = [
     ['path', { d: 'M5 21V3' }],
     ['path', { d: 'M12 21V9' }],
     ['path', { d: 'M19 21v-6' }],
 ];
-var La = [
+var ba = [
     ['path', { d: 'M5 21v-6' }],
     ['path', { d: 'M12 21V9' }],
     ['path', { d: 'M19 21V3' }],
 ];
-var Va = [
+var Ta = [
     ['path', { d: 'M5 21v-6' }],
     ['path', { d: 'M12 21V3' }],
     ['path', { d: 'M19 21V9' }],
 ];
-var al = [
+var sl = [
     ['path', { d: 'm13.11 7.664 1.78 2.672' }],
     ['path', { d: 'm14.162 12.788-3.324 1.424' }],
     ['path', { d: 'm20 4-6.06 1.515' }],
@@ -4991,7 +5036,7 @@ var al = [
     ['circle', { cx: '16', cy: '12', r: '2' }],
     ['circle', { cx: '9', cy: '15', r: '2' }],
 ];
-var tl = [
+var hl = [
     ['path', { d: 'M12 16v5' }],
     ['path', { d: 'M16 14.639V21' }],
     ['path', { d: 'M20 10.656V21' }],
@@ -4999,12 +5044,12 @@ var tl = [
     ['path', { d: 'M4 18.463V21' }],
     ['path', { d: 'M8 14.656V21' }],
 ];
-var ka = [
+var Ba = [
     ['path', { d: 'M6 5h12' }],
     ['path', { d: 'M4 12h10' }],
     ['path', { d: 'M12 19h8' }],
 ];
-var Pa = [
+var Ra = [
     [
         'path',
         {
@@ -5013,7 +5058,7 @@ var Pa = [
     ],
     ['path', { d: 'M21.21 15.89A10 10 0 1 1 8 2.83' }],
 ];
-var Ta = [
+var Da = [
     ['circle', { cx: '7.5', cy: '7.5', r: '.5', fill: 'currentColor' }],
     ['circle', { cx: '18.5', cy: '5.5', r: '.5', fill: 'currentColor' }],
     ['circle', { cx: '11.5', cy: '11.5', r: '.5', fill: 'currentColor' }],
@@ -5021,21 +5066,21 @@ var Ta = [
     ['circle', { cx: '17.5', cy: '14.5', r: '.5', fill: 'currentColor' }],
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
 ];
-var el = [
+var fl = [
     ['path', { d: 'M3 3v16a2 2 0 0 0 2 2h16' }],
     ['path', { d: 'M7 16c.5-2 1.5-7 4-7 2 0 2 3 4 3 2.5 0 4.5-5 5-7' }],
 ];
-var rl = [
+var ul = [
     ['path', { d: 'M18 6 7 17l-5-5' }],
     ['path', { d: 'm22 10-7.5 7.5L13 16' }],
 ];
-var ol = [
+var cl = [
     ['path', { d: 'M20 4L9 15' }],
     ['path', { d: 'M21 19L3 19' }],
     ['path', { d: 'M9 15L4 10' }],
 ];
-var dl = [['path', { d: 'M20 6 9 17l-5-5' }]];
-var pl = [
+var nl = [['path', { d: 'M20 6 9 17l-5-5' }]];
+var il = [
     [
         'path',
         {
@@ -5044,13 +5089,13 @@ var pl = [
     ],
     ['path', { d: 'M6 17h12' }],
 ];
-var ll = [
+var xl = [
     ['path', { d: 'M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z' }],
     ['path', { d: 'M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z' }],
     ['path', { d: 'M7 14c3.22-2.91 4.29-8.75 5-12 1.66 2.38 4.94 9 5 12' }],
     ['path', { d: 'M22 9c-4.29 0-7.14-2.33-10-7 5.71 0 10 4.67 10 7Z' }],
 ];
-var sl = [
+var ml = [
     ['path', { d: 'M4 20a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z' }],
     [
         'path',
@@ -5061,7 +5106,7 @@ var sl = [
     ['path', { d: 'M10 4h4' }],
     ['path', { d: 'M12 2v6.818' }],
 ];
-var hl = [
+var Ml = [
     ['path', { d: 'M5 20a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z' }],
     [
         'path',
@@ -5072,7 +5117,7 @@ var hl = [
     ['path', { d: 'm16 7-2.5 2.5' }],
     ['path', { d: 'M9 2h6' }],
 ];
-var fl = [
+var vl = [
     ['path', { d: 'M5 20a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z' }],
     [
         'path',
@@ -5084,14 +5129,14 @@ var fl = [
     ['path', { d: 'm17 8 1.53-1.53' }],
     ['path', { d: 'M9.713 12.185 7 18' }],
 ];
-var ul = [
+var gl = [
     ['path', { d: 'M5 20a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z' }],
     ['path', { d: 'm14.5 10 1.5 8' }],
     ['path', { d: 'M7 10h10' }],
     ['path', { d: 'm8 18 1.5-8' }],
     ['circle', { cx: '12', cy: '6', r: '4' }],
 ];
-var cl = [
+var yl = [
     ['path', { d: 'M4 20a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z' }],
     ['path', { d: 'm12.474 5.943 1.567 5.34a1 1 0 0 0 1.75.328l2.616-3.402' }],
     ['path', { d: 'm20 9-3 9' }],
@@ -5101,7 +5146,7 @@ var cl = [
     ['circle', { cx: '20', cy: '7', r: '2' }],
     ['circle', { cx: '4', cy: '7', r: '2' }],
 ];
-var nl = [
+var Cl = [
     ['path', { d: 'M5 20a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z' }],
     ['path', { d: 'M10 2v2' }],
     ['path', { d: 'M14 2v2' }],
@@ -5110,58 +5155,58 @@ var nl = [
     ['path', { d: 'M6 4h12' }],
     ['path', { d: 'm7 18 1-9' }],
 ];
-var xl = [['path', { d: 'm6 9 6 6 6-6' }]];
-var il = [
+var Al = [['path', { d: 'm6 9 6 6 6-6' }]];
+var wl = [
     ['path', { d: 'm7 18 6-6-6-6' }],
     ['path', { d: 'M17 6v12' }],
 ];
-var ml = [
+var Sl = [
     ['path', { d: 'm17 18-6-6 6-6' }],
     ['path', { d: 'M7 6v12' }],
 ];
-var Ml = [['path', { d: 'm15 18-6-6 6-6' }]];
-var vl = [['path', { d: 'm9 18 6-6-6-6' }]];
-var gl = [['path', { d: 'm18 15-6-6-6 6' }]];
-var yl = [
+var Hl = [['path', { d: 'm15 18-6-6 6-6' }]];
+var Ll = [['path', { d: 'm9 18 6-6-6-6' }]];
+var Vl = [['path', { d: 'm18 15-6-6-6 6' }]];
+var kl = [
     ['path', { d: 'm7 6 5 5 5-5' }],
     ['path', { d: 'm7 13 5 5 5-5' }],
 ];
-var Cl = [
+var Pl = [
     ['path', { d: 'm7 20 5-5 5 5' }],
     ['path', { d: 'm7 4 5 5 5-5' }],
 ];
-var Al = [
+var bl = [
     ['path', { d: 'M12 12h.01' }],
     ['path', { d: 'M16 12h.01' }],
     ['path', { d: 'm17 7 5 5-5 5' }],
     ['path', { d: 'm7 7-5 5 5 5' }],
     ['path', { d: 'M8 12h.01' }],
 ];
-var Sl = [
+var Tl = [
     ['path', { d: 'm9 7-5 5 5 5' }],
     ['path', { d: 'm15 7 5 5-5 5' }],
 ];
-var wl = [
+var Bl = [
     ['path', { d: 'm11 17-5-5 5-5' }],
     ['path', { d: 'm18 17-5-5 5-5' }],
 ];
-var Hl = [
+var Rl = [
     ['path', { d: 'm20 17-5-5 5-5' }],
     ['path', { d: 'm4 17 5-5-5-5' }],
 ];
-var Ll = [
+var Dl = [
     ['path', { d: 'm6 17 5-5-5-5' }],
     ['path', { d: 'm13 17 5-5-5-5' }],
 ];
-var Vl = [
+var El = [
     ['path', { d: 'm7 15 5 5 5-5' }],
     ['path', { d: 'm7 9 5-5 5 5' }],
 ];
-var kl = [
+var Fl = [
     ['path', { d: 'm17 11-5-5-5 5' }],
     ['path', { d: 'm17 18-5-5-5 5' }],
 ];
-var Pl = [
+var Ol = [
     ['path', { d: 'M10 9h4' }],
     ['path', { d: 'M12 7v5' }],
     ['path', { d: 'M14 21v-3a2 2 0 0 0-4 0v3' }],
@@ -5176,7 +5221,7 @@ var Pl = [
         { d: 'M6 21V7a1 1 0 0 1 .376-.782l5-3.999a1 1 0 0 1 1.249.001l5 4A1 1 0 0 1 18 7v14' },
     ],
 ];
-var Tl = [
+var ql = [
     ['path', { d: 'M12 12H3a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h13' }],
     ['path', { d: 'M18 8c0-2.5-2-2.5-2-5' }],
     ['path', { d: 'm2 2 20 20' }],
@@ -5184,83 +5229,83 @@ var Tl = [
     ['path', { d: 'M22 8c0-2.5-2-2.5-2-5' }],
     ['path', { d: 'M7 12v4' }],
 ];
-var Bl = [
+var zl = [
     ['path', { d: 'M17 12H3a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h14' }],
     ['path', { d: 'M18 8c0-2.5-2-2.5-2-5' }],
     ['path', { d: 'M21 16a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1' }],
     ['path', { d: 'M22 8c0-2.5-2-2.5-2-5' }],
     ['path', { d: 'M7 12v4' }],
 ];
-var Ba = [
+var Ea = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['line', { x1: '12', x2: '12', y1: '8', y2: '12' }],
     ['line', { x1: '12', x2: '12.01', y1: '16', y2: '16' }],
 ];
-var ba = [
+var Fa = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 8v8' }],
     ['path', { d: 'm8 12 4 4 4-4' }],
 ];
-var Da = [
+var Oa = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'm12 8-4 4 4 4' }],
     ['path', { d: 'M16 12H8' }],
 ];
-var Ra = [
+var qa = [
     ['path', { d: 'M2 12a10 10 0 1 1 10 10' }],
     ['path', { d: 'm2 22 10-10' }],
     ['path', { d: 'M8 22H2v-6' }],
 ];
-var Fa = [
+var za = [
     ['path', { d: 'M12 22a10 10 0 1 1 10-10' }],
     ['path', { d: 'M22 22 12 12' }],
     ['path', { d: 'M22 16v6h-6' }],
 ];
-var Ea = [
+var Ua = [
     ['path', { d: 'M2 8V2h6' }],
     ['path', { d: 'm2 2 10 10' }],
     ['path', { d: 'M12 2A10 10 0 1 1 2 12' }],
 ];
-var Oa = [
+var _a = [
     ['path', { d: 'M22 12A10 10 0 1 1 12 2' }],
     ['path', { d: 'M22 2 12 12' }],
     ['path', { d: 'M16 2h6v6' }],
 ];
-var qa = [
+var Na = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'm12 16 4-4-4-4' }],
     ['path', { d: 'M8 12h8' }],
 ];
-var za = [
+var Ia = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'm16 12-4-4-4 4' }],
     ['path', { d: 'M12 16V8' }],
 ];
-var Ua = [
+var Ga = [
     ['path', { d: 'M21.801 10A10 10 0 1 1 17 3.335' }],
     ['path', { d: 'm9 11 3 3L22 4' }],
 ];
-var Ia = [
+var Wa = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'm9 12 2 2 4-4' }],
 ];
-var _a = [
+var Za = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'm16 10-4 4-4-4' }],
 ];
-var Na = [
+var Xa = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'm14 16-4-4 4-4' }],
 ];
-var Ga = [
+var Ka = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'm10 8 4 4-4 4' }],
 ];
-var Wa = [
+var $a = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'm8 14 4-4 4 4' }],
 ];
-var bl = [
+var Ul = [
     ['path', { d: 'M10.1 2.182a10 10 0 0 1 3.8 0' }],
     ['path', { d: 'M13.9 21.818a10 10 0 0 1-3.8 0' }],
     ['path', { d: 'M17.609 3.721a10 10 0 0 1 2.69 2.7' }],
@@ -5270,18 +5315,18 @@ var bl = [
     ['path', { d: 'M3.721 6.391a10 10 0 0 1 2.7-2.69' }],
     ['path', { d: 'M6.391 20.279a10 10 0 0 1-2.69-2.7' }],
 ];
-var Za = [
+var Ja = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['line', { x1: '8', x2: '16', y1: '12', y2: '12' }],
     ['line', { x1: '12', x2: '12', y1: '16', y2: '16' }],
     ['line', { x1: '12', x2: '12', y1: '8', y2: '8' }],
 ];
-var Dl = [
+var _l = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8' }],
     ['path', { d: 'M12 18V6' }],
 ];
-var Rl = [
+var Nl = [
     ['path', { d: 'M10.1 2.18a9.93 9.93 0 0 1 3.8 0' }],
     ['path', { d: 'M17.6 3.71a9.95 9.95 0 0 1 2.69 2.7' }],
     ['path', { d: 'M21.82 10.1a9.93 9.93 0 0 1 0 3.8' }],
@@ -5292,27 +5337,27 @@ var Rl = [
     ['path', { d: 'M3.71 6.4a9.95 9.95 0 0 1 2.7-2.69' }],
     ['circle', { cx: '12', cy: '12', r: '1' }],
 ];
-var Fl = [
+var Il = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['circle', { cx: '12', cy: '12', r: '1' }],
 ];
-var El = [
+var Gl = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M17 12h.01' }],
     ['path', { d: 'M12 12h.01' }],
     ['path', { d: 'M7 12h.01' }],
 ];
-var Ol = [
+var Wl = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M7 10h10' }],
     ['path', { d: 'M7 14h10' }],
 ];
-var ql = [
+var Zl = [
     ['path', { d: 'M15 9.4a4 4 0 1 0 0 5.2' }],
     ['path', { d: 'M7 12h5' }],
     ['circle', { cx: '12', cy: '12', r: '10' }],
 ];
-var zl = [
+var Xl = [
     ['path', { d: 'M12 2a10 10 0 0 1 7.38 16.75' }],
     ['path', { d: 'm16 12-4-4-4 4' }],
     ['path', { d: 'M12 16V8' }],
@@ -5321,12 +5366,12 @@ var zl = [
     ['path', { d: 'M4.636 5.235a10 10 0 0 1 .891-.857' }],
     ['path', { d: 'M8.644 21.42a10 10 0 0 0 7.631-.38' }],
 ];
-var Xa = [
+var ja = [
     ['path', { d: 'M15.6 2.7a10 10 0 1 0 5.7 5.7' }],
     ['circle', { cx: '12', cy: '12', r: '2' }],
     ['path', { d: 'M13.4 10.6 19 5' }],
 ];
-var Ul = [
+var Kl = [
     ['path', { d: 'M12 2a10 10 0 0 1 7.38 16.75' }],
     ['path', { d: 'M12 8v8' }],
     ['path', { d: 'M16 12H8' }],
@@ -5335,16 +5380,16 @@ var Ul = [
     ['path', { d: 'M4.636 5.235a10 10 0 0 1 .891-.857' }],
     ['path', { d: 'M8.644 21.42a10 10 0 0 0 7.631-.38' }],
 ];
-var Ka = [
+var Qa = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M8 12h8' }],
 ];
-var Il = [
+var $l = [
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M8.35 2.69A10 10 0 0 1 21.3 15.65' }],
     ['path', { d: 'M19.08 19.08A10 10 0 1 1 4.92 4.92' }],
 ];
-var Ja = [
+var Ya = [
     ['path', { d: 'M12.656 7H13a3 3 0 0 1 2.984 3.307' }],
     ['path', { d: 'M13 13H9' }],
     ['path', { d: 'M19.071 19.071A1 1 0 0 1 4.93 4.93' }],
@@ -5352,22 +5397,22 @@ var Ja = [
     ['path', { d: 'M8.357 2.687a10 10 0 0 1 12.956 12.956' }],
     ['path', { d: 'M9 17V9' }],
 ];
-var $a = [
+var at = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M9 17V7h4a3 3 0 0 1 0 6H9' }],
 ];
-var ja = [
+var tt = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['line', { x1: '10', x2: '10', y1: '15', y2: '9' }],
     ['line', { x1: '14', x2: '14', y1: '15', y2: '9' }],
 ];
-var Qa = [
+var et = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'm15 9-6 6' }],
     ['path', { d: 'M9 9h.01' }],
     ['path', { d: 'M15 15h.01' }],
 ];
-var _l = [
+var Jl = [
     ['circle', { cx: '12', cy: '19', r: '2' }],
     ['circle', { cx: '12', cy: '5', r: '2' }],
     ['circle', { cx: '16', cy: '12', r: '2' }],
@@ -5375,7 +5420,7 @@ var _l = [
     ['circle', { cx: '4', cy: '19', r: '2' }],
     ['circle', { cx: '8', cy: '12', r: '2' }],
 ];
-var Ya = [
+var rt = [
     [
         'path',
         {
@@ -5384,37 +5429,37 @@ var Ya = [
     ],
     ['circle', { cx: '12', cy: '12', r: '10' }],
 ];
-var a1 = [
+var ot = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M8 12h8' }],
     ['path', { d: 'M12 8v8' }],
 ];
-var Nl = [
+var jl = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M10 16V9.5a1 1 0 0 1 5 0' }],
     ['path', { d: 'M8 12h4' }],
     ['path', { d: 'M8 16h7' }],
 ];
-var t1 = [
+var dt = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 7v4' }],
     ['path', { d: 'M7.998 9.003a5 5 0 1 0 8-.005' }],
 ];
-var U = [
+var N = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3' }],
     ['path', { d: 'M12 17h.01' }],
 ];
-var Gl = [
+var Ql = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['line', { x1: '9', x2: '15', y1: '15', y2: '9' }],
 ];
-var e1 = [
+var pt = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M22 2 2 22' }],
 ];
-var Wl = [['circle', { cx: '12', cy: '12', r: '6' }]];
-var Zl = [
+var Yl = [['circle', { cx: '12', cy: '12', r: '6' }]];
+var as = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     [
         'path',
@@ -5423,34 +5468,34 @@ var Zl = [
         },
     ],
 ];
-var r1 = [
+var lt = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['rect', { x: '9', y: '9', width: '6', height: '6', rx: '1' }],
 ];
-var o1 = [
+var st = [
     ['path', { d: 'M17.925 20.056a6 6 0 0 0-11.851.001' }],
     ['circle', { cx: '12', cy: '11', r: '4' }],
     ['circle', { cx: '12', cy: '12', r: '10' }],
 ];
-var d1 = [
+var ht = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['circle', { cx: '12', cy: '10', r: '3' }],
     ['path', { d: 'M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662' }],
 ];
-var p1 = [
+var ft = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'm15 9-6 6' }],
     ['path', { d: 'm9 9 6 6' }],
 ];
-var Xl = [['circle', { cx: '12', cy: '12', r: '10' }]];
-var Kl = [
+var ts = [['circle', { cx: '12', cy: '12', r: '10' }]];
+var es = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M11 9h4a2 2 0 0 0 2-2V3' }],
     ['circle', { cx: '9', cy: '9', r: '2' }],
     ['path', { d: 'M7 21v-4a2 2 0 0 1 2-2h4' }],
     ['circle', { cx: '15', cy: '15', r: '2' }],
 ];
-var Jl = [
+var rs = [
     [
         'path',
         { d: 'M21.66 17.67a1.08 1.08 0 0 1-.04 1.6A12 12 0 0 1 4.73 2.38a1.1 1.1 0 0 1 1.61-.04z' },
@@ -5459,32 +5504,32 @@ var Jl = [
     ['path', { d: 'm14 10-5.5 5.5' }],
     ['path', { d: 'M14 17.85V10H6.15' }],
 ];
-var $l = [
+var os = [
     ['path', { d: 'm12.296 3.464 3.02 3.956' }],
     ['path', { d: 'M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3z' }],
     ['path', { d: 'M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' }],
     ['path', { d: 'm6.18 5.276 3.1 3.899' }],
 ];
-var jl = [
+var ds = [
     ['path', { d: 'M16 14v2.2l1.6 1' }],
     ['path', { d: 'M16 4h2a2 2 0 0 1 2 2v.832' }],
     ['path', { d: 'M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h2' }],
     ['circle', { cx: '16', cy: '16', r: '6' }],
     ['rect', { x: '8', y: '2', width: '8', height: '4', rx: '1' }],
 ];
-var Ql = [
+var ps = [
     ['rect', { width: '8', height: '4', x: '8', y: '2', rx: '1', ry: '1' }],
     ['path', { d: 'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'm9 14 2 2 4-4' }],
 ];
-var Yl = [
+var ls = [
     ['rect', { width: '8', height: '4', x: '8', y: '2', rx: '1', ry: '1' }],
     ['path', { d: 'M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2' }],
     ['path', { d: 'M16 4h2a2 2 0 0 1 2 2v4' }],
     ['path', { d: 'M21 14H11' }],
     ['path', { d: 'm15 10-4 4 4 4' }],
 ];
-var as = [
+var ss = [
     ['rect', { width: '8', height: '4', x: '8', y: '2', rx: '1', ry: '1' }],
     ['path', { d: 'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M12 11h4' }],
@@ -5492,19 +5537,19 @@ var as = [
     ['path', { d: 'M8 11h.01' }],
     ['path', { d: 'M8 16h.01' }],
 ];
-var ts = [
+var hs = [
     ['rect', { width: '8', height: '4', x: '8', y: '2', rx: '1', ry: '1' }],
     ['path', { d: 'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M9 14h6' }],
 ];
-var es = [
+var fs = [
     ['path', { d: 'M11 14h10' }],
     ['path', { d: 'M16 4h2a2 2 0 0 1 2 2v1.344' }],
     ['path', { d: 'm17 18 4-4-4-4' }],
     ['path', { d: 'M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 1.793-1.113' }],
     ['rect', { x: '8', y: '2', width: '8', height: '4', rx: '1' }],
 ];
-var l1 = [
+var ut = [
     ['rect', { width: '8', height: '4', x: '8', y: '2', rx: '1' }],
     ['path', { d: 'M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-.5' }],
     ['path', { d: 'M16 4h2a2 2 0 0 1 1.73 1' }],
@@ -5516,7 +5561,7 @@ var l1 = [
         },
     ],
 ];
-var s1 = [
+var ct = [
     ['path', { d: 'M16 4h2a2 2 0 0 1 2 2v2' }],
     [
         'path',
@@ -5527,113 +5572,113 @@ var s1 = [
     ['path', { d: 'M8 22H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2' }],
     ['rect', { x: '8', y: '2', width: '8', height: '4', rx: '1' }],
 ];
-var rs = [
+var us = [
     ['rect', { width: '8', height: '4', x: '8', y: '2', rx: '1', ry: '1' }],
     ['path', { d: 'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M9 14h6' }],
     ['path', { d: 'M12 17v-6' }],
 ];
-var os = [
+var cs = [
     ['rect', { width: '8', height: '4', x: '8', y: '2', rx: '1', ry: '1' }],
     ['path', { d: 'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M9 12v-1h6v1' }],
     ['path', { d: 'M11 17h2' }],
     ['path', { d: 'M12 11v6' }],
 ];
-var ds = [
+var ns = [
     ['rect', { width: '8', height: '4', x: '8', y: '2', rx: '1', ry: '1' }],
     ['path', { d: 'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'm15 11-6 6' }],
     ['path', { d: 'm9 11 6 6' }],
 ];
-var ps = [
+var is = [
     ['rect', { width: '8', height: '4', x: '8', y: '2', rx: '1', ry: '1' }],
     ['path', { d: 'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2' }],
 ];
-var ls = [
+var xs = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v6l2-4' }],
 ];
-var ss = [
+var ms = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v6l-4-2' }],
 ];
-var hs = [
+var Ms = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v6l-2-4' }],
 ];
-var fs = [
+var vs = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v6' }],
 ];
-var us = [
+var gs = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v6l4-2' }],
 ];
-var cs = [
+var ys = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v6h4' }],
 ];
-var ns = [
+var Cs = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v6l4 2' }],
 ];
-var xs = [
+var As = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v6l2 4' }],
 ];
-var is = [
+var ws = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v10' }],
 ];
-var ms = [
+var Ss = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v6l-2 4' }],
 ];
-var Ms = [
+var Hs = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v6H8' }],
 ];
-var vs = [
+var Ls = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v6l-4 2' }],
 ];
-var gs = [
+var Vs = [
     ['path', { d: 'M12 6v6l4 2' }],
     ['path', { d: 'M20 12v5' }],
     ['path', { d: 'M20 21h.01' }],
     ['path', { d: 'M21.25 8.2A10 10 0 1 0 16 21.16' }],
 ];
-var ys = [
+var ks = [
     ['path', { d: 'M12 6v6l2 1' }],
     ['path', { d: 'M12.337 21.994a10 10 0 1 1 9.588-8.767' }],
     ['path', { d: 'm14 18 4 4 4-4' }],
     ['path', { d: 'M18 14v8' }],
 ];
-var Cs = [
+var Ps = [
     ['path', { d: 'M12 6v6l1.5.8' }],
     ['path', { d: 'M12.338 21.994a10 10 0 1 1 9.587-8.767' }],
     ['path', { d: 'M14 18h8' }],
     ['path', { d: 'm18 22-4-4 4-4' }],
 ];
-var As = [
+var bs = [
     ['path', { d: 'M12 6v6l2 1' }],
     ['path', { d: 'M13.5 21.885A10 10 0 1 1 22 12' }],
     ['path', { d: 'M14 18h8' }],
     ['path', { d: 'm18 22 4-4-4-4' }],
 ];
-var Ss = [
+var Ts = [
     ['path', { d: 'M12 6v6l1.56.78' }],
     ['path', { d: 'M13.227 21.925a10 10 0 1 1 8.767-9.588' }],
     ['path', { d: 'm14 18 4-4 4 4' }],
     ['path', { d: 'M18 22v-8' }],
 ];
-var ws = [
+var Bs = [
     ['path', { d: 'M12 6v6l4 2' }],
     ['path', { d: 'M22 12a10 10 0 1 0-11 9.95' }],
     ['path', { d: 'm22 16-5.5 5.5L14 19' }],
 ];
-var Hs = [
+var Rs = [
     ['path', { d: 'M12 2a10 10 0 0 1 7.38 16.75' }],
     ['path', { d: 'M12 6v6l4 2' }],
     ['path', { d: 'M2.5 8.875a10 10 0 0 0-.5 3' }],
@@ -5641,36 +5686,36 @@ var Hs = [
     ['path', { d: 'M4.636 5.235a10 10 0 0 1 .891-.857' }],
     ['path', { d: 'M8.644 21.42a10 10 0 0 0 7.631-.38' }],
 ];
-var Ls = [
+var Ds = [
     ['path', { d: 'M12 6v6l3.644 1.822' }],
     ['path', { d: 'M16 19h6' }],
     ['path', { d: 'M19 16v6' }],
     ['path', { d: 'M21.92 13.267a10 10 0 1 0-8.653 8.653' }],
 ];
-var Vs = [
+var Es = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 6v6l4 2' }],
 ];
-var ks = [
+var Fs = [
     ['path', { d: 'M10 9.17a3 3 0 1 0 0 5.66' }],
     ['path', { d: 'M17 9.17a3 3 0 1 0 0 5.66' }],
     ['rect', { x: '2', y: '5', width: '20', height: '14', rx: '2' }],
 ];
-var Ps = [
+var Os = [
     ['path', { d: 'M12 12v4' }],
     ['path', { d: 'M12 20h.01' }],
     ['path', { d: 'M8.128 16.949A7 7 0 1 1 15.71 8h1.79a1 1 0 0 1 0 9h-1.642' }],
 ];
-var Ts = [
+var qs = [
     ['path', { d: 'm17 15-5.5 5.5L9 18' }],
     ['path', { d: 'M5.516 16.07A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 3.501 7.327' }],
 ];
-var Bs = [
+var zs = [
     ['path', { d: 'M21 15.251A4.5 4.5 0 0 0 17.5 8h-1.79A7 7 0 1 0 3 13.607' }],
     ['path', { d: 'M7 11v4h4' }],
     ['path', { d: 'M8 19a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5 4.82 4.82 0 0 0-3.41 1.41L7 15' }],
 ];
-var bs = [
+var Us = [
     ['path', { d: 'm10.852 19.772-.383.924' }],
     ['path', { d: 'm13.148 14.228.383-.923' }],
     ['path', { d: 'M13.148 19.772a3 3 0 1 0-2.296-5.544l-.383-.923' }],
@@ -5681,17 +5726,17 @@ var bs = [
     ['path', { d: 'm9.228 15.852-.923-.383' }],
     ['path', { d: 'm9.228 18.148-.923.383' }],
 ];
-var h1 = [
+var nt = [
     ['path', { d: 'M12 13v8l-4-4' }],
     ['path', { d: 'm12 21 4-4' }],
     ['path', { d: 'M4.393 15.269A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.436 8.284' }],
 ];
-var Ds = [
+var _s = [
     ['path', { d: 'M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242' }],
     ['path', { d: 'M16 17H7' }],
     ['path', { d: 'M17 21H9' }],
 ];
-var Rs = [
+var Ns = [
     ['path', { d: 'M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242' }],
     ['path', { d: 'M8 19v1' }],
     ['path', { d: 'M8 14v1' }],
@@ -5700,7 +5745,7 @@ var Rs = [
     ['path', { d: 'M12 21v1' }],
     ['path', { d: 'M12 16v1' }],
 ];
-var Fs = [
+var Is = [
     ['path', { d: 'M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242' }],
     ['path', { d: 'M16 14v2' }],
     ['path', { d: 'M8 14v2' }],
@@ -5709,11 +5754,11 @@ var Fs = [
     ['path', { d: 'M12 16v2' }],
     ['path', { d: 'M12 22h.01' }],
 ];
-var Es = [
+var Gs = [
     ['path', { d: 'M6 16.326A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 .5 8.973' }],
     ['path', { d: 'm13 12-3 5h4l-3 5' }],
 ];
-var Os = [
+var Ws = [
     ['path', { d: 'M11 20v2' }],
     [
         'path',
@@ -5724,7 +5769,7 @@ var Os = [
     ['path', { d: 'M3 20a5 5 0 1 1 8.9-4H13a3 3 0 0 1 2 5.24' }],
     ['path', { d: 'M7 19v2' }],
 ];
-var qs = [
+var Zs = [
     ['path', { d: 'M13 16a3 3 0 0 1 0 6H7a5 5 0 1 1 4.9-6z' }],
     [
         'path',
@@ -5733,24 +5778,24 @@ var qs = [
         },
     ],
 ];
-var zs = [
+var Xs = [
     ['path', { d: 'M10.94 5.274A7 7 0 0 1 15.71 10h1.79a4.5 4.5 0 0 1 4.222 6.057' }],
     ['path', { d: 'M18.796 18.81A4.5 4.5 0 0 1 17.5 19H9A7 7 0 0 1 5.79 5.78' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var Us = [
+var Ks = [
     ['path', { d: 'M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242' }],
     ['path', { d: 'm9.2 22 3-7' }],
     ['path', { d: 'm9 13-3 7' }],
     ['path', { d: 'm17 13-3 7' }],
 ];
-var Is = [
+var $s = [
     ['path', { d: 'M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242' }],
     ['path', { d: 'M16 14v6' }],
     ['path', { d: 'M8 14v6' }],
     ['path', { d: 'M12 16v6' }],
 ];
-var _s = [
+var Js = [
     ['path', { d: 'M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242' }],
     ['path', { d: 'M8 15h.01' }],
     ['path', { d: 'M8 19h.01' }],
@@ -5759,7 +5804,7 @@ var _s = [
     ['path', { d: 'M16 15h.01' }],
     ['path', { d: 'M16 19h.01' }],
 ];
-var Ns = [
+var js = [
     ['path', { d: 'M12 2v2' }],
     ['path', { d: 'm4.93 4.93 1.41 1.41' }],
     ['path', { d: 'M20 12h2' }],
@@ -5769,7 +5814,7 @@ var Ns = [
     ['path', { d: 'M11 20v2' }],
     ['path', { d: 'M7 19v2' }],
 ];
-var Gs = [
+var Qs = [
     ['path', { d: 'M12 2v2' }],
     ['path', { d: 'm4.93 4.93 1.41 1.41' }],
     ['path', { d: 'M20 12h2' }],
@@ -5777,24 +5822,24 @@ var Gs = [
     ['path', { d: 'M15.947 12.65a4 4 0 0 0-5.925-4.128' }],
     ['path', { d: 'M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z' }],
 ];
-var Ws = [
+var Ys = [
     ['path', { d: 'm17 18-1.535 1.605a5 5 0 0 1-8-1.5' }],
     ['path', { d: 'M17 22v-4h-4' }],
     ['path', { d: 'M20.996 15.251A4.5 4.5 0 0 0 17.495 8h-1.79a7 7 0 1 0-12.709 5.607' }],
     ['path', { d: 'M7 10v4h4' }],
     ['path', { d: 'm7 14 1.535-1.605a5 5 0 0 1 8 1.5' }],
 ];
-var f1 = [
+var it = [
     ['path', { d: 'M12 13v8' }],
     ['path', { d: 'M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242' }],
     ['path', { d: 'm8 17 4-4 4 4' }],
 ];
-var Zs = [['path', { d: 'M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z' }]];
-var Xs = [
+var ah = [['path', { d: 'M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z' }]];
+var th = [
     ['path', { d: 'M17.5 12a1 1 0 1 1 0 9H9.006a7 7 0 1 1 6.702-9z' }],
     ['path', { d: 'M21.832 9A3 3 0 0 0 19 7h-2.207a5.5 5.5 0 0 0-10.72.61' }],
 ];
-var Ks = [
+var eh = [
     ['path', { d: 'M16.17 7.83 2 22' }],
     [
         'path',
@@ -5804,23 +5849,23 @@ var Ks = [
     ],
     ['path', { d: 'm7.83 7.83 8.34 8.34' }],
 ];
-var Js = [
+var rh = [
     [
         'path',
         { d: 'M17.28 9.05a5.5 5.5 0 1 0-10.56 0A5.5 5.5 0 1 0 12 17.66a5.5 5.5 0 1 0 5.28-8.6Z' },
     ],
     ['path', { d: 'M12 17.66L12 22' }],
 ];
-var u1 = [
+var xt = [
     ['path', { d: 'm18 16 4-4-4-4' }],
     ['path', { d: 'm6 8-4 4 4 4' }],
     ['path', { d: 'm14.5 4-5 16' }],
 ];
-var $s = [
+var oh = [
     ['path', { d: 'm16 18 6-6-6-6' }],
     ['path', { d: 'm8 6-6 6 6 6' }],
 ];
-var js = [
+var dh = [
     ['path', { d: 'M10 2v2' }],
     ['path', { d: 'M14 2v2' }],
     [
@@ -5831,7 +5876,7 @@ var js = [
     ],
     ['path', { d: 'M6 2v2' }],
 ];
-var Qs = [
+var ph = [
     ['path', { d: 'M11 10.27 7 3.34' }],
     ['path', { d: 'm11 13.73-4 6.93' }],
     ['path', { d: 'M12 22v-2' }],
@@ -5847,13 +5892,13 @@ var Qs = [
     ['circle', { cx: '12', cy: '12', r: '2' }],
     ['circle', { cx: '12', cy: '12', r: '8' }],
 ];
-var Ys = [
+var lh = [
     ['path', { d: 'M13.744 17.736a6 6 0 1 1-7.48-7.48' }],
     ['path', { d: 'M15 6h1v4' }],
     ['path', { d: 'm6.134 14.768.866-.5 2 3.464' }],
     ['circle', { cx: '16', cy: '8', r: '6' }],
 ];
-var c1 = [
+var mt = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M12 3v18' }],
 ];
@@ -5871,21 +5916,21 @@ var I = [
     ['path', { d: 'M9 3v18' }],
     ['circle', { cx: '18', cy: '18', r: '3' }],
 ];
-var n1 = [
+var Mt = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M9 3v18' }],
     ['path', { d: 'M15 3v18' }],
 ];
-var ah = [
+var sh = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M7.5 3v18' }],
     ['path', { d: 'M12 3v18' }],
     ['path', { d: 'M16.5 3v18' }],
 ];
-var th = [
+var hh = [
     ['path', { d: 'M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3' }],
 ];
-var eh = [
+var fh = [
     ['path', { d: 'M14 3a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1' }],
     ['path', { d: 'M19 3a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1' }],
     ['path', { d: 'm7 15 3 3' }],
@@ -5893,7 +5938,7 @@ var eh = [
     ['rect', { x: '14', y: '14', width: '7', height: '7', rx: '1' }],
     ['rect', { x: '3', y: '3', width: '7', height: '7', rx: '1' }],
 ];
-var rh = [
+var uh = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     [
         'path',
@@ -5902,7 +5947,7 @@ var rh = [
         },
     ],
 ];
-var oh = [
+var ch = [
     [
         'path',
         {
@@ -5928,30 +5973,30 @@ var oh = [
         },
     ],
 ];
-var dh = [
+var nh = [
     ['rect', { width: '14', height: '8', x: '5', y: '2', rx: '2' }],
     ['rect', { width: '20', height: '8', x: '2', y: '14', rx: '2' }],
     ['path', { d: 'M6 18h2' }],
     ['path', { d: 'M12 18h6' }],
 ];
-var ph = [
+var ih = [
     ['path', { d: 'M3 20a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1Z' }],
     ['path', { d: 'M20 16a8 8 0 1 0-16 0' }],
     ['path', { d: 'M12 4v4' }],
     ['path', { d: 'M10 4h4' }],
 ];
-var lh = [
+var xh = [
     ['path', { d: 'm20.9 18.55-8-15.98a1 1 0 0 0-1.8 0l-8 15.98' }],
     ['ellipse', { cx: '12', cy: '19', rx: '9', ry: '3' }],
 ];
-var x1 = [
+var vt = [
     ['path', { d: 'M16 2v2' }],
     ['path', { d: 'M17.915 22a6 6 0 0 0-12 0' }],
     ['path', { d: 'M8 2v2' }],
     ['circle', { cx: '12', cy: '12', r: '4' }],
     ['rect', { x: '3', y: '4', width: '18', height: '18', rx: '2' }],
 ];
-var sh = [
+var mh = [
     ['rect', { x: '2', y: '6', width: '20', height: '8', rx: '1' }],
     ['path', { d: 'M17 14v7' }],
     ['path', { d: 'M7 14v7' }],
@@ -5961,14 +6006,14 @@ var sh = [
     ['path', { d: 'm14 6 7.7 7.7' }],
     ['path', { d: 'm8 6 8 8' }],
 ];
-var hh = [
+var Mh = [
     ['path', { d: 'M16 2v2' }],
     ['path', { d: 'M7 22v-2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M8 2v2' }],
     ['circle', { cx: '12', cy: '11', r: '3' }],
     ['rect', { x: '3', y: '4', width: '18', height: '18', rx: '2' }],
 ];
-var fh = [
+var vh = [
     [
         'path',
         {
@@ -5980,11 +6025,11 @@ var fh = [
     ['path', { d: 'M14 19.8v-8.1' }],
     ['path', { d: 'M18 17.5V9.4' }],
 ];
-var uh = [
+var gh = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 18a6 6 0 0 0 0-12v12z' }],
 ];
-var ch = [
+var yh = [
     ['path', { d: 'M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5' }],
     ['path', { d: 'M8.5 8.5v.01' }],
     ['path', { d: 'M16 15.5v.01' }],
@@ -5992,84 +6037,84 @@ var ch = [
     ['path', { d: 'M11 17v.01' }],
     ['path', { d: 'M7 14v.01' }],
 ];
-var nh = [
+var Ch = [
     ['path', { d: 'M2 12h20' }],
     ['path', { d: 'M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8' }],
     ['path', { d: 'm4 8 16-4' }],
     ['path', { d: 'm8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8' }],
 ];
-var xh = [
+var Ah = [
     ['path', { d: 'm12 15 2 2 4-4' }],
     ['rect', { width: '14', height: '14', x: '8', y: '8', rx: '2', ry: '2' }],
     ['path', { d: 'M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2' }],
 ];
-var ih = [
+var wh = [
     ['line', { x1: '12', x2: '18', y1: '15', y2: '15' }],
     ['rect', { width: '14', height: '14', x: '8', y: '8', rx: '2', ry: '2' }],
     ['path', { d: 'M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2' }],
 ];
-var mh = [
+var Sh = [
     ['line', { x1: '15', x2: '15', y1: '12', y2: '18' }],
     ['line', { x1: '12', x2: '18', y1: '15', y2: '15' }],
     ['rect', { width: '14', height: '14', x: '8', y: '8', rx: '2', ry: '2' }],
     ['path', { d: 'M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2' }],
 ];
-var Mh = [
+var Hh = [
     ['line', { x1: '12', x2: '18', y1: '18', y2: '12' }],
     ['rect', { width: '14', height: '14', x: '8', y: '8', rx: '2', ry: '2' }],
     ['path', { d: 'M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2' }],
 ];
-var vh = [
+var Lh = [
     ['line', { x1: '12', x2: '18', y1: '12', y2: '18' }],
     ['line', { x1: '12', x2: '18', y1: '18', y2: '12' }],
     ['rect', { width: '14', height: '14', x: '8', y: '8', rx: '2', ry: '2' }],
     ['path', { d: 'M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2' }],
 ];
-var gh = [
+var Vh = [
     ['rect', { width: '14', height: '14', x: '8', y: '8', rx: '2', ry: '2' }],
     ['path', { d: 'M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2' }],
 ];
-var yh = [
+var kh = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M9.17 14.83a4 4 0 1 0 0-5.66' }],
 ];
-var Ch = [
+var Ph = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M14.83 14.83a4 4 0 1 1 0-5.66' }],
 ];
-var Ah = [
+var bh = [
     ['path', { d: 'M20 4v7a4 4 0 0 1-4 4H4' }],
     ['path', { d: 'm9 10-5 5 5 5' }],
 ];
-var Sh = [
+var Th = [
     ['path', { d: 'm15 10 5 5-5 5' }],
     ['path', { d: 'M4 4v7a4 4 0 0 0 4 4h12' }],
 ];
-var wh = [
+var Bh = [
     ['path', { d: 'M14 9 9 4 4 9' }],
     ['path', { d: 'M20 20h-7a4 4 0 0 1-4-4V4' }],
 ];
-var Hh = [
+var Rh = [
     ['path', { d: 'm14 15-5 5-5-5' }],
     ['path', { d: 'M20 4h-7a4 4 0 0 0-4 4v12' }],
 ];
-var Lh = [
+var Dh = [
     ['path', { d: 'm10 15 5 5 5-5' }],
     ['path', { d: 'M4 4h7a4 4 0 0 1 4 4v12' }],
 ];
-var Vh = [
+var Eh = [
     ['path', { d: 'm10 9 5-5 5 5' }],
     ['path', { d: 'M4 20h7a4 4 0 0 0 4-4V4' }],
 ];
-var kh = [
+var Fh = [
     ['path', { d: 'M20 20v-7a4 4 0 0 0-4-4H4' }],
     ['path', { d: 'M9 14 4 9l5-5' }],
 ];
-var Ph = [
+var Oh = [
     ['path', { d: 'm15 14 5-5-5-5' }],
     ['path', { d: 'M4 20v-7a4 4 0 0 1 4-4h12' }],
 ];
-var Th = [
+var qh = [
     ['path', { d: 'M12 20v2' }],
     ['path', { d: 'M12 2v2' }],
     ['path', { d: 'M17 20v2' }],
@@ -6085,16 +6130,16 @@ var Th = [
     ['rect', { x: '4', y: '4', width: '16', height: '16', rx: '2' }],
     ['rect', { x: '8', y: '8', width: '8', height: '8', rx: '1' }],
 ];
-var Bh = [
+var zh = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M10 9.3a2.8 2.8 0 0 0-3.5 1 3.1 3.1 0 0 0 0 3.4 2.7 2.7 0 0 0 3.5 1' }],
     ['path', { d: 'M17 9.3a2.8 2.8 0 0 0-3.5 1 3.1 3.1 0 0 0 0 3.4 2.7 2.7 0 0 0 3.5 1' }],
 ];
-var bh = [
+var Uh = [
     ['rect', { width: '20', height: '14', x: '2', y: '5', rx: '2' }],
     ['line', { x1: '2', x2: '22', y1: '10', y2: '10' }],
 ];
-var Dh = [
+var _h = [
     ['path', { d: 'M10.2 18H4.774a1.5 1.5 0 0 1-1.352-.97 11 11 0 0 1 .132-6.487' }],
     ['path', { d: 'M18 10.2V4.774a1.5 1.5 0 0 0-.97-1.352 11 11 0 0 0-6.486.132' }],
     ['path', { d: 'M18 5a4 3 0 0 1 4 3 2 2 0 0 1-2 2 10 10 0 0 0-5.139 1.42' }],
@@ -6106,11 +6151,11 @@ var Dh = [
         },
     ],
 ];
-var Rh = [
+var Nh = [
     ['path', { d: 'M6 2v14a2 2 0 0 0 2 2h14' }],
     ['path', { d: 'M18 22V8a2 2 0 0 0-2-2H2' }],
 ];
-var Fh = [
+var Ih = [
     [
         'path',
         {
@@ -6118,14 +6163,14 @@ var Fh = [
         },
     ],
 ];
-var Eh = [
+var Gh = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['line', { x1: '22', x2: '18', y1: '12', y2: '12' }],
     ['line', { x1: '6', x2: '2', y1: '12', y2: '12' }],
     ['line', { x1: '12', x2: '12', y1: '6', y2: '2' }],
     ['line', { x1: '12', x2: '12', y1: '22', y2: '18' }],
 ];
-var Oh = [
+var Wh = [
     ['path', { d: 'M10 22v-8' }],
     ['path', { d: 'M2.336 8.89 10 14l11.715-7.029' }],
     [
@@ -6135,13 +6180,13 @@ var Oh = [
         },
     ],
 ];
-var qh = [
+var Zh = [
     ['path', { d: 'm6 8 1.75 12.28a2 2 0 0 0 2 1.72h4.54a2 2 0 0 0 2-1.72L18 8' }],
     ['path', { d: 'M5 8h14' }],
     ['path', { d: 'M7 15a6.47 6.47 0 0 1 5 0 6.47 6.47 0 0 0 5 0' }],
     ['path', { d: 'm12 8 1-6h2' }],
 ];
-var zh = [
+var Xh = [
     [
         'path',
         {
@@ -6150,18 +6195,18 @@ var zh = [
     ],
     ['path', { d: 'M5 21h14' }],
 ];
-var Uh = [
+var Kh = [
     ['circle', { cx: '12', cy: '12', r: '8' }],
     ['line', { x1: '3', x2: '6', y1: '3', y2: '6' }],
     ['line', { x1: '21', x2: '18', y1: '3', y2: '6' }],
     ['line', { x1: '3', x2: '6', y1: '21', y2: '18' }],
     ['line', { x1: '21', x2: '18', y1: '21', y2: '18' }],
 ];
-var Ih = [
+var $h = [
     ['ellipse', { cx: '12', cy: '5', rx: '9', ry: '3' }],
     ['path', { d: 'M3 5v14a9 3 0 0 0 18 0V5' }],
 ];
-var _h = [
+var Jh = [
     ['path', { d: 'M11 11.31c1.17.56 1.54 1.69 3.5 1.69 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1' }],
     ['path', { d: 'M11.75 18c.35.5 1.45 1 2.75 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1' }],
     ['path', { d: 'M2 10h4' }],
@@ -6170,7 +6215,7 @@ var _h = [
     ['path', { d: 'M2 6h4' }],
     ['path', { d: 'M7 3a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1L10 4a1 1 0 0 0-1-1z' }],
 ];
-var Nh = [
+var jh = [
     ['path', { d: 'm16 19 3 3 3-3' }],
     ['path', { d: 'M19 16v6' }],
     ['path', { d: 'M21 12.536V5' }],
@@ -6178,7 +6223,7 @@ var Nh = [
     ['path', { d: 'M3 5V19A9 3 0 0 0 13.318 21.968' }],
     ['ellipse', { cx: '12', cy: '5', rx: '9', ry: '3' }],
 ];
-var Gh = [
+var Qh = [
     ['path', { d: 'M19 22v-6' }],
     ['path', { d: 'M21 12.536V5' }],
     ['path', { d: 'm22 19-3-3-3 3' }],
@@ -6186,14 +6231,14 @@ var Gh = [
     ['path', { d: 'M3 5V19A9 3 0 0 0 13.318 21.968' }],
     ['ellipse', { cx: '12', cy: '5', rx: '9', ry: '3' }],
 ];
-var Wh = [
+var Yh = [
     ['path', { d: 'm16 19 2 2 4-4' }],
     ['path', { d: 'M21 13.127V5' }],
     ['path', { d: 'M3 12A9 3 0 0 0 21 12' }],
     ['path', { d: 'M3 5V19A9 3 0 0 0 13.318 21.968' }],
     ['ellipse', { cx: '12', cy: '5', rx: '9', ry: '3' }],
 ];
-var Zh = [
+var af = [
     ['ellipse', { cx: '12', cy: '5', rx: '9', ry: '3' }],
     ['path', { d: 'M3 12a9 3 0 0 0 5 2.69' }],
     ['path', { d: 'M21 9.3V5' }],
@@ -6201,14 +6246,14 @@ var Zh = [
     ['path', { d: 'M12 12v4h4' }],
     ['path', { d: 'M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16' }],
 ];
-var Xh = [
+var tf = [
     ['path', { d: 'M21 15V5' }],
     ['path', { d: 'M22 19h-6' }],
     ['path', { d: 'M3 12A9 3 0 0 0 21 12' }],
     ['path', { d: 'M3 5V19A9 3 0 0 0 13.318 21.968' }],
     ['ellipse', { cx: '12', cy: '5', rx: '9', ry: '3' }],
 ];
-var Kh = [
+var ef = [
     ['path', { d: 'M19 16v6' }],
     ['path', { d: 'M21 12.536V5' }],
     ['path', { d: 'M22 19h-6' }],
@@ -6216,7 +6261,7 @@ var Kh = [
     ['path', { d: 'M3 5V19A9 3 0 0 0 13.318 21.968' }],
     ['ellipse', { cx: '12', cy: '5', rx: '9', ry: '3' }],
 ];
-var Jh = [
+var rf = [
     ['path', { d: 'M21 11.693V5' }],
     ['path', { d: 'm22 22-1.875-1.875' }],
     ['path', { d: 'M3 12a9 3 0 0 0 8.697 2.998' }],
@@ -6224,7 +6269,7 @@ var Jh = [
     ['circle', { cx: '18', cy: '18', r: '3' }],
     ['ellipse', { cx: '12', cy: '5', rx: '9', ry: '3' }],
 ];
-var $h = [
+var of = [
     ['path', { d: 'm17 17 5 5' }],
     ['path', { d: 'M19.323 13.744A9 3 0 0 0 21 12' }],
     ['path', { d: 'M21 13.127V5' }],
@@ -6233,32 +6278,32 @@ var $h = [
     ['path', { d: 'M3 5V19A9 3 0 0 0 13 21.981' }],
     ['ellipse', { cx: '12', cy: '5', rx: '9', ry: '3' }],
 ];
-var jh = [
+var df = [
     ['ellipse', { cx: '12', cy: '5', rx: '9', ry: '3' }],
     ['path', { d: 'M3 5V19A9 3 0 0 0 15 21.84' }],
     ['path', { d: 'M21 5V8' }],
     ['path', { d: 'M21 12L18 17H22L19 22' }],
     ['path', { d: 'M3 12A9 3 0 0 0 14.59 14.87' }],
 ];
-var Qh = [
+var pf = [
     ['ellipse', { cx: '12', cy: '5', rx: '9', ry: '3' }],
     ['path', { d: 'M3 5V19A9 3 0 0 0 21 19V5' }],
     ['path', { d: 'M3 12A9 3 0 0 0 21 12' }],
 ];
-var Yh = [
+var lf = [
     ['path', { d: 'M10 18h10' }],
     ['path', { d: 'm17 21 3-3-3-3' }],
     ['path', { d: 'M3 11h.01' }],
     ['rect', { x: '15', y: '3', width: '5', height: '8', rx: '2.5' }],
     ['rect', { x: '6', y: '3', width: '5', height: '8', rx: '2.5' }],
 ];
-var af = [
+var sf = [
     ['path', { d: 'm13 21-3-3 3-3' }],
     ['path', { d: 'M20 18H10' }],
     ['path', { d: 'M3 11h.01' }],
     ['rect', { x: '6', y: '3', width: '5', height: '8', rx: '2.5' }],
 ];
-var tf = [
+var hf = [
     [
         'path',
         {
@@ -6268,7 +6313,7 @@ var tf = [
     ['path', { d: 'm12 9 6 6' }],
     ['path', { d: 'm18 9-6 6' }],
 ];
-var ef = [
+var ff = [
     [
         'path',
         {
@@ -6278,14 +6323,14 @@ var ef = [
     ['path', { d: 'M20.804 14.869a9 9 0 0 1-17.608 0' }],
     ['circle', { cx: '12', cy: '4', r: '2' }],
 ];
-var rf = [
+var uf = [
     ['circle', { cx: '19', cy: '19', r: '2' }],
     ['circle', { cx: '5', cy: '5', r: '2' }],
     ['path', { d: 'M6.48 3.66a10 10 0 0 1 13.86 13.86' }],
     ['path', { d: 'm6.41 6.41 11.18 11.18' }],
     ['path', { d: 'M3.66 6.48a10 10 0 0 0 13.86 13.86' }],
 ];
-var of = [
+var cf = [
     [
         'path',
         {
@@ -6294,7 +6339,7 @@ var of = [
     ],
     ['path', { d: 'M8 12h8' }],
 ];
-var i1 = [
+var gt = [
     [
         'path',
         {
@@ -6305,7 +6350,7 @@ var i1 = [
     ['path', { d: 'm14.5 9.5-5 5' }],
     ['path', { d: 'M14.7 14.8h.01' }],
 ];
-var df = [
+var nf = [
     ['path', { d: 'M12 8v8' }],
     [
         'path',
@@ -6315,7 +6360,7 @@ var df = [
     ],
     ['path', { d: 'M8 12h8' }],
 ];
-var pf = [
+var xf = [
     [
         'path',
         {
@@ -6323,29 +6368,29 @@ var pf = [
         },
     ],
 ];
-var lf = [
+var mf = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
     ['path', { d: 'M12 12h.01' }],
 ];
-var sf = [
+var Mf = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
     ['path', { d: 'M15 9h.01' }],
     ['path', { d: 'M9 15h.01' }],
 ];
-var hf = [
+var vf = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
     ['path', { d: 'M16 8h.01' }],
     ['path', { d: 'M12 12h.01' }],
     ['path', { d: 'M8 16h.01' }],
 ];
-var ff = [
+var gf = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
     ['path', { d: 'M16 8h.01' }],
     ['path', { d: 'M8 8h.01' }],
     ['path', { d: 'M8 16h.01' }],
     ['path', { d: 'M16 16h.01' }],
 ];
-var uf = [
+var yf = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
     ['path', { d: 'M16 8h.01' }],
     ['path', { d: 'M8 8h.01' }],
@@ -6353,7 +6398,7 @@ var uf = [
     ['path', { d: 'M16 16h.01' }],
     ['path', { d: 'M12 12h.01' }],
 ];
-var cf = [
+var Cf = [
     ['rect', { width: '12', height: '12', x: '2', y: '10', rx: '2', ry: '2' }],
     ['path', { d: 'm17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6' }],
     ['path', { d: 'M6 18h.01' }],
@@ -6361,7 +6406,7 @@ var cf = [
     ['path', { d: 'M15 6h.01' }],
     ['path', { d: 'M18 9h.01' }],
 ];
-var nf = [
+var Af = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
     ['path', { d: 'M16 8h.01' }],
     ['path', { d: 'M16 12h.01' }],
@@ -6370,37 +6415,37 @@ var nf = [
     ['path', { d: 'M8 12h.01' }],
     ['path', { d: 'M8 16h.01' }],
 ];
-var xf = [
+var wf = [
     ['path', { d: 'M12 3v14' }],
     ['path', { d: 'M5 10h14' }],
     ['path', { d: 'M5 21h14' }],
 ];
-var mf = [
+var Sf = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['circle', { cx: '12', cy: '12', r: '4' }],
     ['path', { d: 'M12 12h.01' }],
 ];
-var Mf = [
+var Hf = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M6 12c0-1.7.7-3.2 1.8-4.2' }],
     ['circle', { cx: '12', cy: '12', r: '2' }],
     ['path', { d: 'M18 12c0 1.7-.7 3.2-1.8 4.2' }],
 ];
-var vf = [
+var Lf = [
     ['circle', { cx: '12', cy: '6', r: '1' }],
     ['line', { x1: '5', x2: '19', y1: '12', y2: '12' }],
     ['circle', { cx: '12', cy: '18', r: '1' }],
 ];
-var gf = [
+var Vf = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['circle', { cx: '12', cy: '12', r: '5' }],
     ['path', { d: 'M12 12h.01' }],
 ];
-var yf = [
+var kf = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['circle', { cx: '12', cy: '12', r: '2' }],
 ];
-var Cf = [
+var Pf = [
     ['path', { d: 'M15 2c-1.35 1.5-2.092 3-2.5 4.5L14 8' }],
     ['path', { d: 'm17 6-2.891-2.891' }],
     ['path', { d: 'M2 15c3.333-3 6.667-3 10-3' }],
@@ -6412,7 +6457,7 @@ var Cf = [
     ['path', { d: 'm7 18 2.891 2.891' }],
     ['path', { d: 'M9 22c1.35-1.5 2.092-3 2.5-4.5L10 16' }],
 ];
-var Af = [
+var bf = [
     ['path', { d: 'm10 16 1.5 1.5' }],
     ['path', { d: 'm14 8-1.5-1.5' }],
     ['path', { d: 'M15 2c-1.798 1.998-2.518 3.995-2.807 5.993' }],
@@ -6425,12 +6470,12 @@ var Af = [
     ['path', { d: 'm7 18 2.891 2.891' }],
     ['path', { d: 'M9 22c1.798-1.998 2.518-3.995 2.807-5.993' }],
 ];
-var Sf = [
+var Tf = [
     ['path', { d: 'M2 8h20' }],
     ['rect', { width: '20', height: '16', x: '2', y: '4', rx: '2' }],
     ['path', { d: 'M6 16h12' }],
 ];
-var wf = [
+var Bf = [
     ['path', { d: 'M11.25 16.25h1.5L12 17z' }],
     ['path', { d: 'M16 14v.5' }],
     [
@@ -6447,11 +6492,11 @@ var wf = [
         },
     ],
 ];
-var Hf = [
+var Rf = [
     ['line', { x1: '12', x2: '12', y1: '2', y2: '22' }],
     ['path', { d: 'M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' }],
 ];
-var Lf = [
+var Df = [
     [
         'path',
         {
@@ -6460,19 +6505,19 @@ var Lf = [
     ],
     ['circle', { cx: '12', cy: '12', r: '3' }],
 ];
-var Vf = [
+var Ef = [
     ['path', { d: 'M10 12h.01' }],
     ['path', { d: 'M18 9V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14' }],
     ['path', { d: 'M2 20h8' }],
     ['path', { d: 'M20 17v-2a2 2 0 1 0-4 0v2' }],
     ['rect', { x: '14', y: '17', width: '8', height: '5', rx: '1' }],
 ];
-var kf = [
+var Ff = [
     ['path', { d: 'M10 12h.01' }],
     ['path', { d: 'M18 20V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14' }],
     ['path', { d: 'M2 20h20' }],
 ];
-var Pf = [
+var Of = [
     ['path', { d: 'M11 20H2' }],
     [
         'path',
@@ -6484,13 +6529,13 @@ var Pf = [
     ['path', { d: 'M14 12h.01' }],
     ['path', { d: 'M22 20h-3' }],
 ];
-var Tf = [['circle', { cx: '12', cy: '12', r: '1' }]];
-var Bf = [
+var qf = [['circle', { cx: '12', cy: '12', r: '1' }]];
+var zf = [
     ['path', { d: 'M12 15V3' }],
     ['path', { d: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' }],
     ['path', { d: 'm7 10 5 5 5-5' }],
 ];
-var bf = [
+var Uf = [
     ['path', { d: 'M10 11h.01' }],
     ['path', { d: 'M14 6h.01' }],
     ['path', { d: 'M18 6h.01' }],
@@ -6505,7 +6550,7 @@ var bf = [
     ],
     ['path', { d: 'M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4' }],
 ];
-var Df = [
+var _f = [
     ['path', { d: 'M10 18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a3 3 0 0 1-3-3 1 1 0 0 1 1-1z' }],
     [
         'path',
@@ -6518,14 +6563,14 @@ var Df = [
     ['path', { d: 'm5 10-2 8' }],
     ['path', { d: 'm7 18 2-8' }],
 ];
-var Rf = [
+var Nf = [
     ['path', { d: 'm12.99 6.74 1.93 3.44' }],
     ['path', { d: 'M19.136 12a10 10 0 0 1-14.271 0' }],
     ['path', { d: 'm21 21-2.16-3.84' }],
     ['path', { d: 'm3 21 8.02-14.26' }],
     ['circle', { cx: '12', cy: '5', r: '2' }],
 ];
-var Ff = [
+var If = [
     ['path', { d: 'M10 10 7 7' }],
     ['path', { d: 'm10 14-3 3' }],
     ['path', { d: 'm14 10 3-3' }],
@@ -6536,7 +6581,7 @@ var Ff = [
     ['path', { d: 'M9.795 19.862a4 4 0 1 1-5.429-5.873' }],
     ['rect', { x: '10', y: '8', width: '4', height: '8', rx: '1' }],
 ];
-var Ef = [
+var Gf = [
     [
         'path',
         {
@@ -6546,7 +6591,7 @@ var Ef = [
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M8.795 8.797A11 11 0 0 1 8 9.5C6 11.1 5 13 5 15a7 7 0 0 0 13.222 3.208' }],
 ];
-var Of = [
+var Wf = [
     [
         'path',
         {
@@ -6554,7 +6599,7 @@ var Of = [
         },
     ],
 ];
-var qf = [
+var Zf = [
     [
         'path',
         {
@@ -6568,7 +6613,7 @@ var qf = [
         },
     ],
 ];
-var zf = [
+var Xf = [
     ['path', { d: 'm2 2 8 8' }],
     ['path', { d: 'm22 2-8 8' }],
     ['ellipse', { cx: '12', cy: '9', rx: '10', ry: '5' }],
@@ -6577,11 +6622,11 @@ var zf = [
     ['path', { d: 'M17 13.4v7.9' }],
     ['path', { d: 'M2 9v8a10 5 0 0 0 20 0V9' }],
 ];
-var Uf = [
+var Kf = [
     ['path', { d: 'M15.4 15.63a7.875 6 135 1 1 6.23-6.23 4.5 3.43 135 0 0-6.23 6.23' }],
     ['path', { d: 'm8.29 12.71-2.6 2.6a2.5 2.5 0 1 0-1.65 4.65A2.5 2.5 0 1 0 8.7 18.3l2.59-2.59' }],
 ];
-var If = [
+var $f = [
     [
         'path',
         {
@@ -6598,18 +6643,18 @@ var If = [
     ],
     ['path', { d: 'm9.6 14.4 4.8-4.8' }],
 ];
-var _f = [
+var Jf = [
     ['path', { d: 'M6 18.5a3.5 3.5 0 1 0 7 0c0-1.57.92-2.52 2.04-3.46' }],
     ['path', { d: 'M6 8.5c0-.75.13-1.47.36-2.14' }],
     ['path', { d: 'M8.8 3.15A6.5 6.5 0 0 1 19 8.5c0 1.63-.44 2.81-1.09 3.76' }],
     ['path', { d: 'M12.5 6A2.5 2.5 0 0 1 15 8.5M10 13a2 2 0 0 0 1.82-1.18' }],
     ['line', { x1: '2', x2: '22', y1: '2', y2: '22' }],
 ];
-var Nf = [
+var jf = [
     ['path', { d: 'M6 8.5a6.5 6.5 0 1 1 13 0c0 6-6 6-6 10a3.5 3.5 0 1 1-7 0' }],
     ['path', { d: 'M15 8.5a2.5 2.5 0 0 0-5 0v1a2 2 0 1 1 0 4' }],
 ];
-var Gf = [
+var Qf = [
     ['path', { d: 'M7 3.34V5a3 3 0 0 0 3 3' }],
     ['path', { d: 'M11 21.95V18a2 2 0 0 0-2-2 2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05' }],
     ['path', { d: 'M21.54 15H17a2 2 0 0 0-2 2v4.54' }],
@@ -6617,11 +6662,11 @@ var Gf = [
     ['path', { d: 'M20 6V4a2 2 0 1 0-4 0v2' }],
     ['rect', { width: '8', height: '5', x: '14', y: '6', rx: '1' }],
 ];
-var Wf = [
+var Yf = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 2a7 7 0 1 0 10 10' }],
 ];
-var m1 = [
+var yt = [
     ['path', { d: 'M21.54 15H17a2 2 0 0 0-2 2v4.54' }],
     [
         'path',
@@ -6632,7 +6677,7 @@ var m1 = [
     ['path', { d: 'M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05' }],
     ['circle', { cx: '12', cy: '12', r: '10' }],
 ];
-var Zf = [
+var a4 = [
     ['circle', { cx: '11.5', cy: '12.5', r: '3.5' }],
     [
         'path',
@@ -6641,37 +6686,37 @@ var Zf = [
         },
     ],
 ];
-var Xf = [
+var t4 = [
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M20 14.347V14c0-6-4-12-8-12-1.078 0-2.157.436-3.157 1.19' }],
     ['path', { d: 'M6.206 6.21C4.871 8.4 4 11.2 4 14a8 8 0 0 0 14.568 4.568' }],
 ];
-var Kf = [['path', { d: 'M12 2C8 2 4 8 4 14a8 8 0 0 0 16 0c0-6-4-12-8-12' }]];
-var Jf = [['ellipse', { cx: '12', cy: '12', rx: '10', ry: '6' }]];
-var M1 = [
+var e4 = [['path', { d: 'M12 2C8 2 4 8 4 14a8 8 0 0 0 16 0c0-6-4-12-8-12' }]];
+var r4 = [['ellipse', { cx: '12', cy: '12', rx: '10', ry: '6' }]];
+var Ct = [
     ['circle', { cx: '12', cy: '12', r: '1' }],
     ['circle', { cx: '12', cy: '5', r: '1' }],
     ['circle', { cx: '12', cy: '19', r: '1' }],
 ];
-var v1 = [
+var At = [
     ['circle', { cx: '12', cy: '12', r: '1' }],
     ['circle', { cx: '19', cy: '12', r: '1' }],
     ['circle', { cx: '5', cy: '12', r: '1' }],
 ];
-var $f = [
+var o4 = [
     ['path', { d: 'M5 15a6.5 6.5 0 0 1 7 0 6.5 6.5 0 0 0 7 0' }],
     ['path', { d: 'M5 9a6.5 6.5 0 0 1 7 0 6.5 6.5 0 0 0 7 0' }],
 ];
-var jf = [
+var d4 = [
     ['line', { x1: '5', x2: '19', y1: '9', y2: '9' }],
     ['line', { x1: '5', x2: '19', y1: '15', y2: '15' }],
     ['line', { x1: '19', x2: '5', y1: '5', y2: '19' }],
 ];
-var Qf = [
+var p4 = [
     ['line', { x1: '5', x2: '19', y1: '9', y2: '9' }],
     ['line', { x1: '5', x2: '19', y1: '15', y2: '15' }],
 ];
-var Yf = [
+var l4 = [
     [
         'path',
         {
@@ -6680,7 +6725,7 @@ var Yf = [
     ],
     ['path', { d: 'm5.082 11.09 8.828 8.828' }],
 ];
-var a4 = [
+var s4 = [
     ['path', { d: 'M10 8v1' }],
     ['path', { d: 'M14 8v1' }],
     ['path', { d: 'M18 8v1' }],
@@ -6692,7 +6737,7 @@ var a4 = [
     ],
     ['path', { d: 'M6 8v1' }],
 ];
-var t4 = [
+var h4 = [
     ['path', { d: 'M4 10h12' }],
     ['path', { d: 'M4 14h9' }],
     [
@@ -6700,14 +6745,14 @@ var t4 = [
         { d: 'M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2' },
     ],
 ];
-var e4 = [
+var f4 = [
     ['path', { d: 'M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0v-6.998a2 2 0 0 0-.59-1.42L18 5' }],
     ['path', { d: 'M14 21V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16' }],
     ['path', { d: 'M2 21h13' }],
     ['path', { d: 'M3 7h11' }],
     ['path', { d: 'm9 11-2 3h3l-2 3' }],
 ];
-var r4 = [
+var u4 = [
     ['path', { d: 'm15 15 6 6' }],
     ['path', { d: 'm15 9 6-6' }],
     ['path', { d: 'M21 16v5h-5' }],
@@ -6717,19 +6762,19 @@ var r4 = [
     ['path', { d: 'M3 8V3h5' }],
     ['path', { d: 'M9 9 3 3' }],
 ];
-var o4 = [
+var c4 = [
     ['path', { d: 'M15 3h6v6' }],
     ['path', { d: 'M10 14 21 3' }],
     ['path', { d: 'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6' }],
 ];
-var d4 = [
+var n4 = [
     ['path', { d: 'm15 18-.722-3.25' }],
     ['path', { d: 'M2 8a10.645 10.645 0 0 0 20 0' }],
     ['path', { d: 'm20 15-1.726-2.05' }],
     ['path', { d: 'm4 15 1.726-2.05' }],
     ['path', { d: 'm9 18 .722-3.25' }],
 ];
-var p4 = [
+var i4 = [
     ['path', { d: 'M13.054 18.946a11 11 0 0 1-2.11 0' }],
     ['path', { d: 'M13.054 5.054a11 11 0 0 0-2.11-.001' }],
     ['path', { d: 'M17.072 6.274a11 11 0 0 1 1.753 1.173' }],
@@ -6740,7 +6785,7 @@ var p4 = [
     ['path', { d: 'M6.926 17.726a11 11 0 0 1-1.753-1.174' }],
     ['circle', { cx: '12', cy: '12', r: '3' }],
 ];
-var l4 = [
+var x4 = [
     [
         'path',
         {
@@ -6756,7 +6801,7 @@ var l4 = [
     ],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var s4 = [
+var m4 = [
     [
         'path',
         {
@@ -6765,7 +6810,7 @@ var s4 = [
     ],
     ['circle', { cx: '12', cy: '12', r: '3' }],
 ];
-var h4 = [
+var M4 = [
     ['path', { d: 'M12 16h.01' }],
     ['path', { d: 'M16 16h.01' }],
     [
@@ -6776,7 +6821,7 @@ var h4 = [
     ],
     ['path', { d: 'M8 16h.01' }],
 ];
-var f4 = [
+var v4 = [
     [
         'path',
         {
@@ -6785,11 +6830,11 @@ var f4 = [
     ],
     ['path', { d: 'M12 12v.01' }],
 ];
-var u4 = [
+var g4 = [
     ['path', { d: 'M12 6a2 2 0 0 1 3.414-1.414l6 6a2 2 0 0 1 0 2.828l-6 6A2 2 0 0 1 12 18z' }],
     ['path', { d: 'M2 6a2 2 0 0 1 3.414-1.414l6 6a2 2 0 0 1 0 2.828l-6 6A2 2 0 0 1 2 18z' }],
 ];
-var c4 = [
+var y4 = [
     ['path', { d: 'M4 3 2 5v15c0 .6.4 1 1 1h2c.6 0 1-.4 1-1V5Z' }],
     ['path', { d: 'M6 8h4' }],
     ['path', { d: 'M6 18h4' }],
@@ -6798,7 +6843,7 @@ var c4 = [
     ['path', { d: 'M14 18h4' }],
     ['path', { d: 'm20 3-2 2v15c0 .6.4 1 1 1h2c.6 0 1-.4 1-1V5Z' }],
 ];
-var n4 = [
+var C4 = [
     [
         'path',
         {
@@ -6808,7 +6853,7 @@ var n4 = [
     ['path', { d: 'M16 8 2 22' }],
     ['path', { d: 'M17.5 15H9' }],
 ];
-var x4 = [
+var A4 = [
     ['circle', { cx: '12', cy: '12', r: '2' }],
     ['path', { d: 'M12 2v4' }],
     ['path', { d: 'm6.8 15-3.5 2' }],
@@ -6819,7 +6864,7 @@ var x4 = [
     ['path', { d: 'M8 22h8' }],
     ['path', { d: 'M18 18.7a9 9 0 1 0-12 0' }],
 ];
-var i4 = [
+var w4 = [
     [
         'path',
         {
@@ -6832,7 +6877,7 @@ var i4 = [
     ['path', { d: 'M8 7V6' }],
     ['circle', { cx: '8', cy: '20', r: '2' }],
 ];
-var g1 = [
+var wt = [
     [
         'path',
         {
@@ -6843,7 +6888,7 @@ var g1 = [
     ['path', { d: 'm8 18 4-4' }],
     ['path', { d: 'M8 10v8h8' }],
 ];
-var y1 = [
+var St = [
     [
         'path',
         {
@@ -6859,7 +6904,7 @@ var y1 = [
     ],
     ['circle', { cx: '6', cy: '14', r: '3' }],
 ];
-var m4 = [
+var S4 = [
     ['path', { d: 'M14 2v5a1 1 0 001 1h5' }],
     [
         'path',
@@ -6876,7 +6921,7 @@ var m4 = [
     ],
     ['path', { d: 'M7 16.5V22' }],
 ];
-var C1 = [
+var Ht = [
     [
         'path',
         {
@@ -6887,7 +6932,7 @@ var C1 = [
     ['path', { d: 'M5 14a1 1 0 0 0-1 1v2a1 1 0 0 1-1 1 1 1 0 0 1 1 1v2a1 1 0 0 0 1 1' }],
     ['path', { d: 'M9 22a1 1 0 0 0 1-1v-2a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-2a1 1 0 0 0-1-1' }],
 ];
-var A1 = [
+var Lt = [
     [
         'path',
         {
@@ -6898,7 +6943,7 @@ var A1 = [
     ['path', { d: 'M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1' }],
     ['path', { d: 'M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1' }],
 ];
-var S1 = [
+var Vt = [
     [
         'path',
         {
@@ -6910,7 +6955,7 @@ var S1 = [
     ['path', { d: 'M12 18v-4' }],
     ['path', { d: 'M16 18v-6' }],
 ];
-var w1 = [
+var kt = [
     [
         'path',
         {
@@ -6922,7 +6967,7 @@ var w1 = [
     ['path', { d: 'M12 18v-6' }],
     ['path', { d: 'M16 18v-3' }],
 ];
-var H1 = [
+var Pt = [
     [
         'path',
         {
@@ -6938,7 +6983,7 @@ var H1 = [
         },
     ],
 ];
-var L1 = [
+var bt = [
     [
         'path',
         {
@@ -6948,7 +6993,7 @@ var L1 = [
     ['path', { d: 'M14 2v5a1 1 0 0 0 1 1h5' }],
     ['path', { d: 'm16 13-3.5 3.5-2-2L8 17' }],
 ];
-var V1 = [
+var Tt = [
     [
         'path',
         {
@@ -6958,7 +7003,7 @@ var V1 = [
     ['path', { d: 'M14 2v5a1 1 0 0 0 1 1h5' }],
     ['path', { d: 'm14 20 2 2 4-4' }],
 ];
-var M4 = [
+var H4 = [
     [
         'path',
         {
@@ -6968,7 +7013,7 @@ var M4 = [
     ['path', { d: 'M14 2v5a1 1 0 0 0 1 1h5' }],
     ['path', { d: 'm9 15 2 2 4-4' }],
 ];
-var k1 = [
+var Bt = [
     [
         'path',
         {
@@ -6979,7 +7024,7 @@ var k1 = [
     ['path', { d: 'm5 16-3 3 3 3' }],
     ['path', { d: 'm9 22 3-3-3-3' }],
 ];
-var v4 = [
+var L4 = [
     [
         'path',
         {
@@ -6990,7 +7035,7 @@ var v4 = [
     ['path', { d: 'M8 14v2.2l1.6 1' }],
     ['circle', { cx: '8', cy: '16', r: '6' }],
 ];
-var g4 = [
+var V4 = [
     [
         'path',
         {
@@ -7001,7 +7046,7 @@ var g4 = [
     ['path', { d: 'M10 12.5 8 15l2 2.5' }],
     ['path', { d: 'm14 12.5 2 2.5-2 2.5' }],
 ];
-var P1 = [
+var Rt = [
     [
         'path',
         { d: 'M15 8a1 1 0 0 1-1-1V2a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8z' },
@@ -7018,7 +7063,7 @@ var P1 = [
     ['path', { d: 'm9.773 19.148.922.383' }],
     ['circle', { cx: '7', cy: '18', r: '3' }],
 ];
-var y4 = [
+var k4 = [
     [
         'path',
         {
@@ -7030,7 +7075,7 @@ var y4 = [
     ['path', { d: 'M10 22h4' }],
     ['rect', { x: '2', y: '16', width: '4', height: '6', rx: '2' }],
 ];
-var C4 = [
+var P4 = [
     [
         'path',
         {
@@ -7041,7 +7086,7 @@ var C4 = [
     ['path', { d: 'M12 13V7' }],
     ['path', { d: 'M9 17h6' }],
 ];
-var A4 = [
+var b4 = [
     [
         'path',
         {
@@ -7052,7 +7097,7 @@ var A4 = [
     ['path', { d: 'M12 18v-6' }],
     ['path', { d: 'm9 15 3 3 3-3' }],
 ];
-var T1 = [
+var Dt = [
     [
         'path',
         {
@@ -7062,7 +7107,7 @@ var T1 = [
     ['path', { d: 'M12 9v4' }],
     ['path', { d: 'M12 17h.01' }],
 ];
-var _ = [
+var G = [
     [
         'path',
         {
@@ -7077,7 +7122,7 @@ var _ = [
         },
     ],
 ];
-var S4 = [
+var T4 = [
     [
         'path',
         {
@@ -7092,7 +7137,7 @@ var S4 = [
         },
     ],
 ];
-var w4 = [
+var B4 = [
     [
         'path',
         {
@@ -7103,7 +7148,7 @@ var w4 = [
     ['circle', { cx: '10', cy: '12', r: '2' }],
     ['path', { d: 'm20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22' }],
 ];
-var H4 = [
+var R4 = [
     [
         'path',
         {
@@ -7114,7 +7159,7 @@ var H4 = [
     ['path', { d: 'M2 15h10' }],
     ['path', { d: 'm9 18 3-3-3-3' }],
 ];
-var B1 = [
+var Et = [
     ['path', { d: 'M14 2v5a1 1 0 0 0 1 1h5' }],
     ['path', { d: 'M4 12v6' }],
     ['path', { d: 'M4 14h2' }],
@@ -7126,7 +7171,7 @@ var B1 = [
     ],
     ['circle', { cx: '4', cy: '20', r: '2' }],
 ];
-var b1 = [
+var Ft = [
     [
         'path',
         {
@@ -7137,7 +7182,7 @@ var b1 = [
     ['path', { d: 'M9 17v-2a2 2 0 0 0-4 0v2' }],
     ['rect', { width: '8', height: '5', x: '3', y: '17', rx: '1' }],
 ];
-var D1 = [
+var Ot = [
     [
         'path',
         {
@@ -7147,7 +7192,7 @@ var D1 = [
     ['path', { d: 'M14 2v5a1 1 0 0 0 1 1h5' }],
     ['path', { d: 'M14 18h6' }],
 ];
-var L4 = [
+var D4 = [
     [
         'path',
         {
@@ -7157,7 +7202,7 @@ var L4 = [
     ['path', { d: 'M14 2v5a1 1 0 0 0 1 1h5' }],
     ['path', { d: 'M9 15h6' }],
 ];
-var V4 = [
+var E4 = [
     [
         'path',
         {
@@ -7168,7 +7213,7 @@ var V4 = [
     ['path', { d: 'M8 20v-7l3 1.474' }],
     ['circle', { cx: '6', cy: '20', r: '2' }],
 ];
-var k4 = [
+var F4 = [
     [
         'path',
         {
@@ -7179,7 +7224,7 @@ var k4 = [
     ['path', { d: 'm5 11-3 3' }],
     ['path', { d: 'm5 17-3-3h10' }],
 ];
-var R1 = [
+var qt = [
     [
         'path',
         {
@@ -7195,7 +7240,7 @@ var R1 = [
     ],
     ['path', { d: 'M8 18h1' }],
 ];
-var F1 = [
+var zt = [
     [
         'path',
         {
@@ -7210,7 +7255,7 @@ var F1 = [
         },
     ],
 ];
-var E1 = [
+var Ut = [
     [
         'path',
         {
@@ -7225,7 +7270,7 @@ var E1 = [
         },
     ],
 ];
-var O1 = [
+var _t = [
     [
         'path',
         {
@@ -7236,7 +7281,7 @@ var O1 = [
     ['path', { d: 'M14 19h6' }],
     ['path', { d: 'M17 16v6' }],
 ];
-var P4 = [
+var O4 = [
     [
         'path',
         {
@@ -7247,7 +7292,7 @@ var P4 = [
     ['path', { d: 'M9 15h6' }],
     ['path', { d: 'M12 18v-6' }],
 ];
-var q1 = [
+var Nt = [
     [
         'path',
         {
@@ -7257,7 +7302,7 @@ var q1 = [
     ['path', { d: 'M12 17h.01' }],
     ['path', { d: 'M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3' }],
 ];
-var T4 = [
+var q4 = [
     [
         'path',
         {
@@ -7270,7 +7315,7 @@ var T4 = [
     ['path', { d: 'M20 14a2 2 0 0 1 2 2' }],
     ['path', { d: 'M20 22a2 2 0 0 0 2-2' }],
 ];
-var z1 = [
+var It = [
     [
         'path',
         {
@@ -7281,7 +7326,7 @@ var z1 = [
     ['path', { d: 'm21 22-2.88-2.88' }],
     ['circle', { cx: '16', cy: '17', r: '3' }],
 ];
-var B4 = [
+var z4 = [
     [
         'path',
         {
@@ -7292,7 +7337,7 @@ var B4 = [
     ['circle', { cx: '11.5', cy: '14.5', r: '2.5' }],
     ['path', { d: 'M13.3 16.3 15 18' }],
 ];
-var b4 = [
+var U4 = [
     [
         'path',
         {
@@ -7305,7 +7350,7 @@ var b4 = [
     ['path', { d: 'M8 17h8' }],
     ['path', { d: 'M14 16v2' }],
 ];
-var U1 = [
+var Gt = [
     [
         'path',
         {
@@ -7317,7 +7362,7 @@ var U1 = [
     ['path', { d: 'M11.5 13.5a2.5 2.5 0 0 1 0 3' }],
     ['path', { d: 'M15 12a5 5 0 0 1 0 6' }],
 ];
-var D4 = [
+var _4 = [
     [
         'path',
         {
@@ -7330,7 +7375,7 @@ var D4 = [
     ['path', { d: 'M8 17h2' }],
     ['path', { d: 'M14 17h2' }],
 ];
-var R4 = [
+var N4 = [
     [
         'path',
         {
@@ -7340,7 +7385,7 @@ var R4 = [
     ['path', { d: 'M14 2v5a1 1 0 0 0 1 1h5' }],
     ['path', { d: 'm10 18 3-3-3-3' }],
 ];
-var F4 = [
+var I4 = [
     ['path', { d: 'M11 21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1' }],
     ['path', { d: 'M16 16a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1' }],
     [
@@ -7350,7 +7395,7 @@ var F4 = [
         },
     ],
 ];
-var E4 = [
+var G4 = [
     [
         'path',
         {
@@ -7361,7 +7406,7 @@ var E4 = [
     ['path', { d: 'm8 16 2-2-2-2' }],
     ['path', { d: 'M12 18h4' }],
 ];
-var O4 = [
+var W4 = [
     [
         'path',
         {
@@ -7373,7 +7418,7 @@ var O4 = [
     ['path', { d: 'M16 13H8' }],
     ['path', { d: 'M16 17H8' }],
 ];
-var I1 = [
+var Wt = [
     [
         'path',
         {
@@ -7385,7 +7430,7 @@ var I1 = [
     ['path', { d: 'M6 22h2' }],
     ['path', { d: 'M7 14v8' }],
 ];
-var q4 = [
+var Z4 = [
     [
         'path',
         {
@@ -7397,7 +7442,7 @@ var q4 = [
     ['path', { d: 'M12 12v6' }],
     ['path', { d: 'M9 13v-.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v.5' }],
 ];
-var z4 = [
+var X4 = [
     [
         'path',
         {
@@ -7408,7 +7453,7 @@ var z4 = [
     ['path', { d: 'M12 12v6' }],
     ['path', { d: 'm15 15-3-3-3 3' }],
 ];
-var U4 = [
+var K4 = [
     [
         'path',
         {
@@ -7419,7 +7464,7 @@ var U4 = [
     ['path', { d: 'M16 22a4 4 0 0 0-8 0' }],
     ['circle', { cx: '12', cy: '15', r: '3' }],
 ];
-var _1 = [
+var Zt = [
     [
         'path',
         {
@@ -7433,7 +7478,7 @@ var _1 = [
     ],
     ['rect', { width: '7', height: '6', x: '3', y: '16', rx: '1' }],
 ];
-var I4 = [
+var $4 = [
     [
         'path',
         {
@@ -7449,7 +7494,7 @@ var I4 = [
         },
     ],
 ];
-var N1 = [
+var Xt = [
     [
         'path',
         {
@@ -7460,7 +7505,7 @@ var N1 = [
     ['path', { d: 'm15 17 5 5' }],
     ['path', { d: 'm20 17-5 5' }],
 ];
-var _4 = [
+var J4 = [
     [
         'path',
         {
@@ -7471,7 +7516,7 @@ var _4 = [
     ['path', { d: 'm14.5 12.5-5 5' }],
     ['path', { d: 'm9.5 12.5 5 5' }],
 ];
-var N4 = [
+var j4 = [
     [
         'path',
         {
@@ -7480,12 +7525,12 @@ var N4 = [
     ],
     ['path', { d: 'M14 2v5a1 1 0 0 0 1 1h5' }],
 ];
-var G4 = [
+var Q4 = [
     ['path', { d: 'M15 2h-4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8' }],
     ['path', { d: 'M16.706 2.706A2.4 2.4 0 0 0 15 2v5a1 1 0 0 0 1 1h5a2.4 2.4 0 0 0-.706-1.706z' }],
     ['path', { d: 'M5 7a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h8a2 2 0 0 0 1.732-1' }],
 ];
-var W4 = [
+var Y4 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M7 3v18' }],
     ['path', { d: 'M3 7.5h4' }],
@@ -7495,7 +7540,7 @@ var W4 = [
     ['path', { d: 'M17 7.5h4' }],
     ['path', { d: 'M17 16.5h4' }],
 ];
-var G1 = [
+var Kt = [
     ['path', { d: 'M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4' }],
     ['path', { d: 'M14 13.12c0 2.38 0 6.38-1 8.88' }],
     ['path', { d: 'M17.29 21.02c.12-.6.43-2.3.5-3.02' }],
@@ -7506,7 +7551,7 @@ var G1 = [
     ['path', { d: 'M8.65 22c.21-.66.45-1.32.57-2' }],
     ['path', { d: 'M9 6.8a6 6 0 0 1 9 5.2v2' }],
 ];
-var Z4 = [
+var a5 = [
     ['path', { d: 'M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5' }],
     ['path', { d: 'M9 18h8' }],
     ['path', { d: 'M18 3h-3' }],
@@ -7514,7 +7559,7 @@ var Z4 = [
     ['path', { d: 'M5 13h4' }],
     ['path', { d: 'M17 10a4 4 0 0 0-8 0v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2Z' }],
 ];
-var X4 = [
+var t5 = [
     [
         'path',
         {
@@ -7534,8 +7579,8 @@ var X4 = [
         },
     ],
 ];
-var K4 = [['path', { d: 'M2 16s9-15 20-4C11 23 2 8 2 8' }]];
-var J4 = [
+var e5 = [['path', { d: 'M2 16s9-15 20-4C11 23 2 8 2 8' }]];
+var r5 = [
     [
         'path',
         {
@@ -7553,25 +7598,25 @@ var J4 = [
     ['path', { d: 'M10.46 7.26C10.2 5.88 9.17 4.24 8 3h5.8a2 2 0 0 1 1.98 1.67l.23 1.4' }],
     ['path', { d: 'm16.01 17.93-.23 1.4A2 2 0 0 1 13.8 21H9.5a5.96 5.96 0 0 0 1.49-3.98' }],
 ];
-var $4 = [
+var o5 = [
     ['path', { d: 'm17.586 11.414-5.93 5.93a1 1 0 0 1-8-8l3.137-3.137a.707.707 0 0 1 1.207.5V10' }],
     ['path', { d: 'M20.414 8.586 22 7' }],
     ['circle', { cx: '19', cy: '10', r: '2' }],
 ];
-var j4 = [
+var d5 = [
     ['path', { d: 'M4 11h1' }],
     ['path', { d: 'M8 15a2 2 0 0 1-4 0V3a1 1 0 0 1 1-1h.5C14 2 20 9 20 18v4' }],
     ['circle', { cx: '18', cy: '18', r: '2' }],
 ];
-var Q4 = [
+var p5 = [
     ['path', { d: 'M16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528' }],
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M4 22V4' }],
     ['path', { d: 'M7.656 2H8c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10.347' }],
 ];
-var Y4 = [['path', { d: 'M18 22V2.8a.8.8 0 0 0-1.17-.71L5.45 7.78a.8.8 0 0 0 0 1.44L18 15.5' }]];
-var a5 = [['path', { d: 'M6 22V2.8a.8.8 0 0 1 1.17-.71l11.38 5.69a.8.8 0 0 1 0 1.44L6 15.5' }]];
-var t5 = [
+var l5 = [['path', { d: 'M18 22V2.8a.8.8 0 0 0-1.17-.71L5.45 7.78a.8.8 0 0 0 0 1.44L18 15.5' }]];
+var s5 = [['path', { d: 'M6 22V2.8a.8.8 0 0 1 1.17-.71l11.38 5.69a.8.8 0 0 1 0 1.44L6 15.5' }]];
+var h5 = [
     [
         'path',
         {
@@ -7579,7 +7624,7 @@ var t5 = [
         },
     ],
 ];
-var e5 = [
+var f5 = [
     [
         'path',
         {
@@ -7589,7 +7634,7 @@ var e5 = [
     ['path', { d: 'm5 22 14-4' }],
     ['path', { d: 'm5 18 14 4' }],
 ];
-var r5 = [
+var u5 = [
     [
         'path',
         {
@@ -7597,7 +7642,7 @@ var r5 = [
         },
     ],
 ];
-var o5 = [
+var c5 = [
     ['path', { d: 'M11.652 6H18' }],
     ['path', { d: 'M12 13v1' }],
     [
@@ -7607,7 +7652,7 @@ var o5 = [
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M7.649 2H17a1 1 0 0 1 1 1v4a3 3 0 0 1-.6 1.8l-.6.8a4 4 0 0 0-.55 1.007' }],
 ];
-var d5 = [
+var n5 = [
     ['path', { d: 'M12 13v1' }],
     [
         'path',
@@ -7617,7 +7662,7 @@ var d5 = [
     ],
     ['path', { d: 'M6 6h12' }],
 ];
-var p5 = [
+var i5 = [
     ['path', { d: 'M10 2v2.343' }],
     ['path', { d: 'M14 2v6.343' }],
     ['path', { d: 'm2 2 20 20' }],
@@ -7625,7 +7670,7 @@ var p5 = [
     ['path', { d: 'M6.453 15H15' }],
     ['path', { d: 'M8.5 2h7' }],
 ];
-var l5 = [
+var x5 = [
     [
         'path',
         {
@@ -7635,12 +7680,12 @@ var l5 = [
     ['path', { d: 'M6.453 15h11.094' }],
     ['path', { d: 'M8.5 2h7' }],
 ];
-var s5 = [
+var m5 = [
     ['path', { d: 'M10 2v6.292a7 7 0 1 0 4 0V2' }],
     ['path', { d: 'M5 15h14' }],
     ['path', { d: 'M8.5 2h7' }],
 ];
-var h5 = [
+var M5 = [
     ['path', { d: 'm3 7 5 5-5 5V7' }],
     ['path', { d: 'm21 7-5 5 5 5V7' }],
     ['path', { d: 'M12 20v2' }],
@@ -7648,7 +7693,7 @@ var h5 = [
     ['path', { d: 'M12 8v2' }],
     ['path', { d: 'M12 2v2' }],
 ];
-var f5 = [
+var v5 = [
     ['path', { d: 'm17 3-5 5-5-5h10' }],
     ['path', { d: 'm17 21-5-5-5 5h10' }],
     ['path', { d: 'M4 12H2' }],
@@ -7656,7 +7701,7 @@ var f5 = [
     ['path', { d: 'M16 12h-2' }],
     ['path', { d: 'M22 12h-2' }],
 ];
-var u5 = [
+var g5 = [
     ['circle', { cx: '12', cy: '12', r: '3' }],
     [
         'path',
@@ -7673,7 +7718,7 @@ var u5 = [
     ['path', { d: 'm8 16 1.88-1.88' }],
     ['path', { d: 'M14.12 14.12 16 16' }],
 ];
-var c5 = [
+var y5 = [
     [
         'path',
         {
@@ -7685,14 +7730,14 @@ var c5 = [
     ['path', { d: 'M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z' }],
     ['path', { d: 'M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z' }],
 ];
-var n5 = [
+var C5 = [
     ['circle', { cx: '12', cy: '12', r: '3' }],
     ['path', { d: 'M3 7V5a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M21 17v2a2 2 0 0 1-2 2h-2' }],
     ['path', { d: 'M7 21H5a2 2 0 0 1-2-2v-2' }],
 ];
-var x5 = [
+var A5 = [
     ['path', { d: 'M2 12h6' }],
     ['path', { d: 'M22 12h-6' }],
     ['path', { d: 'M12 2v2' }],
@@ -7702,7 +7747,7 @@ var x5 = [
     ['path', { d: 'm19 9-3 3 3 3' }],
     ['path', { d: 'm5 15 3-3-3-3' }],
 ];
-var i5 = [
+var w5 = [
     ['path', { d: 'M12 22v-6' }],
     ['path', { d: 'M12 8V2' }],
     ['path', { d: 'M4 12H2' }],
@@ -7712,7 +7757,7 @@ var i5 = [
     ['path', { d: 'm15 19-3-3-3 3' }],
     ['path', { d: 'm15 5-3 3-3-3' }],
 ];
-var m5 = [
+var S5 = [
     ['circle', { cx: '15', cy: '19', r: '2' }],
     [
         'path',
@@ -7723,7 +7768,7 @@ var m5 = [
     ['path', { d: 'M15 11v-1' }],
     ['path', { d: 'M15 17v-2' }],
 ];
-var M5 = [
+var H5 = [
     [
         'path',
         {
@@ -7732,7 +7777,7 @@ var M5 = [
     ],
     ['path', { d: 'm9 13 2 2 4-4' }],
 ];
-var v5 = [
+var L5 = [
     ['path', { d: 'M12 6v8l3-3 3 3V6' }],
     [
         'path',
@@ -7741,7 +7786,7 @@ var v5 = [
         },
     ],
 ];
-var g5 = [
+var V5 = [
     ['path', { d: 'M16 14v2.2l1.6 1' }],
     [
         'path',
@@ -7751,7 +7796,7 @@ var g5 = [
     ],
     ['circle', { cx: '16', cy: '16', r: '6' }],
 ];
-var y5 = [
+var k5 = [
     [
         'path',
         {
@@ -7760,7 +7805,7 @@ var y5 = [
     ],
     ['path', { d: 'M2 10h20' }],
 ];
-var C5 = [
+var P5 = [
     ['path', { d: 'M10 10.5 8 13l2 2.5' }],
     ['path', { d: 'm14 10.5 2 2.5-2 2.5' }],
     [
@@ -7770,7 +7815,7 @@ var C5 = [
         },
     ],
 ];
-var W1 = [
+var $t = [
     [
         'path',
         {
@@ -7787,7 +7832,7 @@ var W1 = [
     ['path', { d: 'm20.772 19.148.924.383' }],
     ['circle', { cx: '18', cy: '18', r: '3' }],
 ];
-var A5 = [
+var b5 = [
     [
         'path',
         {
@@ -7796,7 +7841,7 @@ var A5 = [
     ],
     ['circle', { cx: '12', cy: '13', r: '1' }],
 ];
-var S5 = [
+var T5 = [
     [
         'path',
         {
@@ -7806,7 +7851,7 @@ var S5 = [
     ['path', { d: 'M12 10v6' }],
     ['path', { d: 'm15 13-3 3-3-3' }],
 ];
-var w5 = [
+var B5 = [
     ['path', { d: 'M18 19a5 5 0 0 1-5-5v8' }],
     [
         'path',
@@ -7817,7 +7862,7 @@ var w5 = [
     ['circle', { cx: '13', cy: '12', r: '2' }],
     ['circle', { cx: '20', cy: '19', r: '2' }],
 ];
-var H5 = [
+var R5 = [
     ['circle', { cx: '12', cy: '13', r: '2' }],
     [
         'path',
@@ -7828,7 +7873,7 @@ var H5 = [
     ['path', { d: 'M14 13h3' }],
     ['path', { d: 'M7 13h3' }],
 ];
-var L5 = [
+var D5 = [
     [
         'path',
         {
@@ -7842,7 +7887,7 @@ var L5 = [
         },
     ],
 ];
-var V5 = [
+var E5 = [
     [
         'path',
         {
@@ -7852,7 +7897,7 @@ var V5 = [
     ['path', { d: 'M2 13h10' }],
     ['path', { d: 'm9 16 3-3-3-3' }],
 ];
-var k5 = [
+var F5 = [
     [
         'path',
         {
@@ -7863,7 +7908,7 @@ var k5 = [
     ['path', { d: 'M12 10v2' }],
     ['path', { d: 'M16 10v6' }],
 ];
-var P5 = [
+var O5 = [
     [
         'path',
         {
@@ -7874,7 +7919,7 @@ var P5 = [
     ['path', { d: 'M19 14h2' }],
     ['circle', { cx: '19', cy: '20', r: '2' }],
 ];
-var T5 = [
+var q5 = [
     ['rect', { width: '8', height: '5', x: '14', y: '17', rx: '1' }],
     [
         'path',
@@ -7884,7 +7929,7 @@ var T5 = [
     ],
     ['path', { d: 'M20 17v-2a2 2 0 1 0-4 0v2' }],
 ];
-var B5 = [
+var z5 = [
     ['path', { d: 'M9 13h6' }],
     [
         'path',
@@ -7893,7 +7938,7 @@ var B5 = [
         },
     ],
 ];
-var b5 = [
+var U5 = [
     [
         'path',
         {
@@ -7902,7 +7947,7 @@ var b5 = [
     ],
     ['circle', { cx: '14', cy: '15', r: '1' }],
 ];
-var D5 = [
+var _5 = [
     [
         'path',
         {
@@ -7910,7 +7955,7 @@ var D5 = [
         },
     ],
 ];
-var R5 = [
+var N5 = [
     [
         'path',
         {
@@ -7920,7 +7965,7 @@ var R5 = [
     ['path', { d: 'M2 13h10' }],
     ['path', { d: 'm5 10-3 3 3 3' }],
 ];
-var F5 = [
+var I5 = [
     ['path', { d: 'M12 10v6' }],
     ['path', { d: 'M9 13h6' }],
     [
@@ -7930,7 +7975,7 @@ var F5 = [
         },
     ],
 ];
-var Z1 = [
+var Jt = [
     [
         'path',
         {
@@ -7944,7 +7989,7 @@ var Z1 = [
         },
     ],
 ];
-var E5 = [
+var G5 = [
     [
         'path',
         {
@@ -7954,7 +7999,7 @@ var E5 = [
     ['circle', { cx: '12', cy: '13', r: '2' }],
     ['path', { d: 'M12 15v5' }],
 ];
-var O5 = [
+var W5 = [
     ['circle', { cx: '11.5', cy: '12.5', r: '2.5' }],
     [
         'path',
@@ -7964,7 +8009,7 @@ var O5 = [
     ],
     ['path', { d: 'M13.3 14.3 15 16' }],
 ];
-var q5 = [
+var Z5 = [
     [
         'path',
         {
@@ -7974,7 +8019,7 @@ var q5 = [
     ['path', { d: 'm21 21-1.9-1.9' }],
     ['circle', { cx: '17', cy: '17', r: '3' }],
 ];
-var z5 = [
+var X5 = [
     [
         'path',
         {
@@ -7983,7 +8028,7 @@ var z5 = [
     ],
     ['path', { d: 'm8 16 3-3-3-3' }],
 ];
-var U5 = [
+var K5 = [
     [
         'path',
         {
@@ -7995,7 +8040,7 @@ var U5 = [
     ['path', { d: 'M22 22v-4h-4' }],
     ['path', { d: 'm22 18-1.535 1.605a5 5 0 0 1-8-1.5' }],
 ];
-var I5 = [
+var $5 = [
     [
         'path',
         {
@@ -8011,7 +8056,7 @@ var I5 = [
     ['path', { d: 'M3 5a2 2 0 0 0 2 2h3' }],
     ['path', { d: 'M3 3v13a2 2 0 0 0 2 2h3' }],
 ];
-var _5 = [
+var J5 = [
     [
         'path',
         {
@@ -8021,7 +8066,7 @@ var _5 = [
     ['path', { d: 'M12 10v6' }],
     ['path', { d: 'm9 13 3-3 3 3' }],
 ];
-var N5 = [
+var j5 = [
     [
         'path',
         {
@@ -8031,7 +8076,7 @@ var N5 = [
     ['path', { d: 'm9.5 10.5 5 5' }],
     ['path', { d: 'm14.5 10.5-5 5' }],
 ];
-var G5 = [
+var Q5 = [
     [
         'path',
         {
@@ -8039,7 +8084,7 @@ var G5 = [
         },
     ],
 ];
-var W5 = [
+var Y5 = [
     [
         'path',
         {
@@ -8048,7 +8093,7 @@ var W5 = [
     ],
     ['path', { d: 'M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1' }],
 ];
-var Z5 = [
+var au = [
     ['path', { d: 'M12 12H5a2 2 0 0 0-2 2v5' }],
     ['path', { d: 'M15 19h7' }],
     ['path', { d: 'M16 19V2' }],
@@ -8060,7 +8105,7 @@ var Z5 = [
     ['circle', { cx: '13', cy: '19', r: '2' }],
     ['circle', { cx: '5', cy: '19', r: '2' }],
 ];
-var X5 = [
+var tu = [
     [
         'path',
         {
@@ -8076,42 +8121,42 @@ var X5 = [
     ['path', { d: 'M16 17h4' }],
     ['path', { d: 'M4 13h4' }],
 ];
-var K5 = [
+var eu = [
     ['path', { d: 'M4 14h6' }],
     ['path', { d: 'M4 2h10' }],
     ['rect', { x: '4', y: '18', width: '16', height: '4', rx: '1' }],
     ['rect', { x: '4', y: '6', width: '16', height: '4', rx: '1' }],
 ];
-var J5 = [
+var ru = [
     ['path', { d: 'm15 17 5-5-5-5' }],
     ['path', { d: 'M4 18v-2a4 4 0 0 1 4-4h12' }],
 ];
-var $5 = [
+var ou = [
     ['line', { x1: '22', x2: '2', y1: '6', y2: '6' }],
     ['line', { x1: '22', x2: '2', y1: '18', y2: '18' }],
     ['line', { x1: '6', x2: '6', y1: '2', y2: '22' }],
     ['line', { x1: '18', x2: '18', y1: '2', y2: '22' }],
 ];
-var j5 = [
+var du = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M16 16s-1.5-2-4-2-4 2-4 2' }],
     ['line', { x1: '9', x2: '9.01', y1: '9', y2: '9' }],
     ['line', { x1: '15', x2: '15.01', y1: '9', y2: '9' }],
 ];
-var Q5 = [
+var pu = [
     ['path', { d: 'M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0v-6.998a2 2 0 0 0-.59-1.42L18 5' }],
     ['path', { d: 'M14 21V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16' }],
     ['path', { d: 'M2 21h13' }],
     ['path', { d: 'M3 9h11' }],
 ];
-var Y5 = [
+var lu = [
     ['path', { d: 'M3 7V5a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M21 17v2a2 2 0 0 1-2 2h-2' }],
     ['path', { d: 'M7 21H5a2 2 0 0 1-2-2v-2' }],
     ['rect', { width: '10', height: '8', x: '7', y: '8', rx: '1' }],
 ];
-var au = [
+var su = [
     [
         'path',
         {
@@ -8121,7 +8166,7 @@ var au = [
     ['path', { d: 'M16 6h6' }],
     ['path', { d: 'M19 3v6' }],
 ];
-var X1 = [
+var jt = [
     [
         'path',
         {
@@ -8131,7 +8176,7 @@ var X1 = [
     ['path', { d: 'm16.5 3.5 5 5' }],
     ['path', { d: 'm21.5 3.5-5 5' }],
 ];
-var K1 = [
+var Qt = [
     [
         'path',
         {
@@ -8139,34 +8184,34 @@ var K1 = [
         },
     ],
 ];
-var tu = [
+var hu = [
     ['path', { d: 'M2 7v10' }],
     ['path', { d: 'M6 5v14' }],
     ['rect', { width: '12', height: '18', x: '10', y: '3', rx: '2' }],
 ];
-var eu = [
+var fu = [
     ['path', { d: 'M2 3v18' }],
     ['rect', { width: '12', height: '18', x: '6', y: '3', rx: '2' }],
     ['path', { d: 'M22 3v18' }],
 ];
-var ru = [
+var uu = [
     ['rect', { width: '18', height: '14', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M4 21h1' }],
     ['path', { d: 'M9 21h1' }],
     ['path', { d: 'M14 21h1' }],
     ['path', { d: 'M19 21h1' }],
 ];
-var ou = [
+var cu = [
     ['path', { d: 'M3 2h18' }],
     ['rect', { width: '18', height: '12', x: '3', y: '6', rx: '2' }],
     ['path', { d: 'M3 22h18' }],
 ];
-var du = [
+var nu = [
     ['path', { d: 'M7 2h10' }],
     ['path', { d: 'M5 6h14' }],
     ['rect', { width: '18', height: '12', x: '3', y: '10', rx: '2' }],
 ];
-var pu = [
+var iu = [
     ['line', { x1: '6', x2: '10', y1: '11', y2: '11' }],
     ['line', { x1: '8', x2: '8', y1: '9', y2: '13' }],
     ['line', { x1: '15', x2: '15.01', y1: '12', y2: '12' }],
@@ -8178,7 +8223,7 @@ var pu = [
         },
     ],
 ];
-var lu = [
+var xu = [
     [
         'path',
         {
@@ -8204,25 +8249,25 @@ var lu = [
         },
     ],
 ];
-var su = [
+var mu = [
     ['line', { x1: '6', x2: '10', y1: '12', y2: '12' }],
     ['line', { x1: '8', x2: '8', y1: '10', y2: '14' }],
     ['line', { x1: '15', x2: '15.01', y1: '13', y2: '13' }],
     ['line', { x1: '18', x2: '18.01', y1: '11', y2: '11' }],
     ['rect', { width: '20', height: '12', x: '2', y: '6', rx: '2' }],
 ];
-var hu = [
+var Mu = [
     ['path', { d: 'm12 14 4-4' }],
     ['path', { d: 'M3.34 19a10 10 0 1 1 17.32 0' }],
 ];
-var fu = [
+var vu = [
     ['path', { d: 'm14 13-8.381 8.38a1 1 0 0 1-3.001-3l8.384-8.381' }],
     ['path', { d: 'm16 16 6-6' }],
     ['path', { d: 'm21.5 10.5-8-8' }],
     ['path', { d: 'm8 8 6-6' }],
     ['path', { d: 'm8.5 7.5 8 8' }],
 ];
-var uu = [
+var gu = [
     ['path', { d: 'M10.5 3 8 9l4 13 4-13-2.5-6' }],
     [
         'path',
@@ -8232,30 +8277,30 @@ var uu = [
     ],
     ['path', { d: 'M2 9h20' }],
 ];
-var cu = [
+var yu = [
     ['path', { d: 'M9 10h.01' }],
     ['path', { d: 'M15 10h.01' }],
     ['path', { d: 'M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z' }],
 ];
-var nu = [
+var Cu = [
     ['path', { d: 'M11.5 21a7.5 7.5 0 1 1 7.35-9' }],
     ['path', { d: 'M13 12V3' }],
     ['path', { d: 'M4 21h16' }],
     ['path', { d: 'M9 12V3' }],
 ];
-var xu = [
+var Au = [
     ['path', { d: 'M12 7v14' }],
     ['path', { d: 'M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8' }],
     ['path', { d: 'M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5' }],
     ['rect', { x: '3', y: '7', width: '18', height: '4', rx: '1' }],
 ];
-var iu = [
+var wu = [
     ['path', { d: 'M15 6a9 9 0 0 0-9 9V3' }],
     ['path', { d: 'M21 18h-6' }],
     ['circle', { cx: '18', cy: '6', r: '3' }],
     ['circle', { cx: '6', cy: '18', r: '3' }],
 ];
-var mu = [
+var Su = [
     ['path', { d: 'M6 3v12' }],
     ['path', { d: 'M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z' }],
     ['path', { d: 'M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z' }],
@@ -8263,17 +8308,17 @@ var mu = [
     ['path', { d: 'M18 15v6' }],
     ['path', { d: 'M21 18h-6' }],
 ];
-var Mu = [
+var Hu = [
     ['path', { d: 'M15 6a9 9 0 0 0-9 9V3' }],
     ['circle', { cx: '18', cy: '6', r: '3' }],
     ['circle', { cx: '6', cy: '18', r: '3' }],
 ];
-var vu = [
+var Lu = [
     ['path', { d: 'M12 3v6' }],
     ['circle', { cx: '12', cy: '12', r: '3' }],
     ['path', { d: 'M12 15v6' }],
 ];
-var gu = [
+var Vu = [
     ['circle', { cx: '5', cy: '6', r: '3' }],
     ['path', { d: 'M12 6h5a2 2 0 0 1 2 2v7' }],
     ['path', { d: 'm15 9-3-3 3-3' }],
@@ -8281,25 +8326,25 @@ var gu = [
     ['path', { d: 'M12 18H7a2 2 0 0 1-2-2V9' }],
     ['path', { d: 'm9 15 3 3-3 3' }],
 ];
-var J1 = [
+var Yt = [
     ['circle', { cx: '12', cy: '12', r: '3' }],
     ['line', { x1: '3', x2: '9', y1: '12', y2: '12' }],
     ['line', { x1: '15', x2: '21', y1: '12', y2: '12' }],
 ];
-var yu = [
+var ku = [
     ['circle', { cx: '18', cy: '18', r: '3' }],
     ['circle', { cx: '6', cy: '6', r: '3' }],
     ['path', { d: 'M13 6h3a2 2 0 0 1 2 2v7' }],
     ['path', { d: 'M11 18H8a2 2 0 0 1-2-2V9' }],
 ];
-var Cu = [
+var Pu = [
     ['circle', { cx: '12', cy: '18', r: '3' }],
     ['circle', { cx: '6', cy: '6', r: '3' }],
     ['circle', { cx: '18', cy: '6', r: '3' }],
     ['path', { d: 'M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9' }],
     ['path', { d: 'M12 12v3' }],
 ];
-var Au = [
+var bu = [
     ['circle', { cx: '5', cy: '6', r: '3' }],
     ['path', { d: 'M5 9v6' }],
     ['circle', { cx: '5', cy: '18', r: '3' }],
@@ -8307,26 +8352,26 @@ var Au = [
     ['circle', { cx: '19', cy: '6', r: '3' }],
     ['path', { d: 'M16 15.7A9 9 0 0 0 19 9' }],
 ];
-var Su = [
+var Tu = [
     ['path', { d: 'M12 6h4a2 2 0 0 1 2 2v7' }],
     ['path', { d: 'M6 12v9' }],
     ['path', { d: 'M9 3 3 9' }],
     ['path', { d: 'M9 9 3 3' }],
     ['circle', { cx: '18', cy: '18', r: '3' }],
 ];
-var wu = [
+var Bu = [
     ['circle', { cx: '18', cy: '18', r: '3' }],
     ['circle', { cx: '6', cy: '6', r: '3' }],
     ['path', { d: 'M6 21V9a9 9 0 0 0 9 9' }],
 ];
-var Hu = [
+var Ru = [
     ['circle', { cx: '5', cy: '6', r: '3' }],
     ['path', { d: 'M5 9v12' }],
     ['circle', { cx: '19', cy: '18', r: '3' }],
     ['path', { d: 'm15 9-3-3 3-3' }],
     ['path', { d: 'M12 6h5a2 2 0 0 1 2 2v7' }],
 ];
-var Lu = [
+var Du = [
     ['circle', { cx: '6', cy: '6', r: '3' }],
     ['path', { d: 'M6 9v12' }],
     ['path', { d: 'm21 3-6 6' }],
@@ -8334,7 +8379,7 @@ var Lu = [
     ['path', { d: 'M18 11.5V15' }],
     ['circle', { cx: '18', cy: '18', r: '3' }],
 ];
-var Vu = [
+var Eu = [
     ['circle', { cx: '5', cy: '6', r: '3' }],
     ['path', { d: 'M5 9v12' }],
     ['path', { d: 'm15 9-3-3 3-3' }],
@@ -8342,21 +8387,21 @@ var Vu = [
     ['path', { d: 'M19 15v6' }],
     ['path', { d: 'M22 18h-6' }],
 ];
-var ku = [
+var Fu = [
     ['circle', { cx: '6', cy: '6', r: '3' }],
     ['path', { d: 'M6 9v12' }],
     ['path', { d: 'M13 6h3a2 2 0 0 1 2 2v3' }],
     ['path', { d: 'M18 15v6' }],
     ['path', { d: 'M21 18h-6' }],
 ];
-var Pu = [
+var Ou = [
     ['circle', { cx: '18', cy: '18', r: '3' }],
     ['circle', { cx: '6', cy: '6', r: '3' }],
     ['path', { d: 'M18 6V5' }],
     ['path', { d: 'M18 11v-1' }],
     ['line', { x1: '6', x2: '6', y1: '9', y2: '21' }],
 ];
-var Tu = [
+var qu = [
     [
         'path',
         {
@@ -8365,30 +8410,30 @@ var Tu = [
     ],
     ['path', { d: 'M6 12a5 5 0 0 1 6 0 5 5 0 0 0 6 0' }],
 ];
-var Bu = [
+var zu = [
     ['circle', { cx: '18', cy: '18', r: '3' }],
     ['circle', { cx: '6', cy: '6', r: '3' }],
     ['path', { d: 'M13 6h3a2 2 0 0 1 2 2v7' }],
     ['line', { x1: '6', x2: '6', y1: '9', y2: '21' }],
 ];
-var bu = [
+var Uu = [
     ['circle', { cx: '6', cy: '15', r: '4' }],
     ['circle', { cx: '18', cy: '15', r: '4' }],
     ['path', { d: 'M14 15a2 2 0 0 0-2-2 2 2 0 0 0-2 2' }],
     ['path', { d: 'M2.5 13 5 7c.7-1.3 1.4-2 3-2' }],
     ['path', { d: 'M21.5 13 19 7c-.7-1.3-1.5-2-3-2' }],
 ];
-var Du = [
+var _u = [
     ['path', { d: 'm15 6 2 2 4-4' }],
     ['path', { d: 'M2 12h20A10 10 0 1 1 12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 4-10' }],
 ];
-var Ru = [
+var Nu = [
     ['path', { d: 'M15.686 15A14.5 14.5 0 0 1 12 22a14.5 14.5 0 0 1 0-20 10 10 0 1 0 9.542 13' }],
     ['path', { d: 'M2 12h8.5' }],
     ['path', { d: 'M20 6V4a2 2 0 1 0-4 0v2' }],
     ['rect', { width: '8', height: '5', x: '14', y: '6', rx: '1' }],
 ];
-var Fu = [
+var Iu = [
     ['path', { d: 'M10.114 4.462A14.5 14.5 0 0 1 12 2a10 10 0 0 1 9.313 13.643' }],
     ['path', { d: 'M15.557 15.556A14.5 14.5 0 0 1 12 22 10 10 0 0 1 4.929 4.929' }],
     ['path', { d: 'M15.892 10.234A14.5 14.5 0 0 0 12 2a10 10 0 0 0-3.643.687' }],
@@ -8397,29 +8442,29 @@ var Fu = [
     ['path', { d: 'M2 12h10' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var Eu = [
+var Gu = [
     ['path', { d: 'm16 3 5 5' }],
     ['path', { d: 'M2 12h20A10 10 0 1 1 12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 4-10' }],
     ['path', { d: 'm21 3-5 5' }],
 ];
-var Ou = [
+var Wu = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20' }],
     ['path', { d: 'M2 12h20' }],
 ];
-var qu = [
+var Zu = [
     ['path', { d: 'M12 13V2l8 4-8 4' }],
     ['path', { d: 'M20.561 10.222a9 9 0 1 1-12.55-5.29' }],
     ['path', { d: 'M8.002 9.997a5 5 0 1 0 8.9 2.02' }],
 ];
-var zu = [
+var Xu = [
     ['path', { d: 'M2 17h18a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H2' }],
     ['path', { d: 'M2 21V3' }],
     ['path', { d: 'M7 17v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3' }],
     ['circle', { cx: '16', cy: '11', r: '2' }],
     ['circle', { cx: '8', cy: '11', r: '2' }],
 ];
-var Uu = [
+var Ku = [
     [
         'path',
         {
@@ -8429,7 +8474,7 @@ var Uu = [
     ['path', { d: 'M22 10v6' }],
     ['path', { d: 'M6 12.5V16a6 3 0 0 0 12 0v-3.5' }],
 ];
-var Iu = [
+var $u = [
     ['path', { d: 'M22 5V2l-5.89 5.89' }],
     ['circle', { cx: '16.6', cy: '15.89', r: '3' }],
     ['circle', { cx: '8.11', cy: '7.4', r: '3' }],
@@ -8440,7 +8485,7 @@ var Iu = [
     ['circle', { cx: '10.8', cy: '17.44', r: '3' }],
     ['circle', { cx: '5', cy: '19', r: '3' }],
 ];
-var $1 = [
+var a1 = [
     [
         'path',
         {
@@ -8449,7 +8494,7 @@ var $1 = [
     ],
     ['path', { d: 'm16 19 2 2 4-4' }],
 ];
-var j1 = [
+var t1 = [
     [
         'path',
         {
@@ -8459,7 +8504,7 @@ var j1 = [
     ['path', { d: 'M16 19h6' }],
     ['path', { d: 'M19 22v-6' }],
 ];
-var Q1 = [
+var e1 = [
     [
         'path',
         {
@@ -8469,25 +8514,25 @@ var Q1 = [
     ['path', { d: 'm16 16 5 5' }],
     ['path', { d: 'm16 21 5-5' }],
 ];
-var Y1 = [
+var r1 = [
     ['path', { d: 'M12 3v18' }],
     ['path', { d: 'M3 12h18' }],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var _u = [
+var Ju = [
     ['path', { d: 'M15 3v18' }],
     ['path', { d: 'M3 12h18' }],
     ['path', { d: 'M9 3v18' }],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var N = [
+var W = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M3 9h18' }],
     ['path', { d: 'M3 15h18' }],
     ['path', { d: 'M9 3v18' }],
     ['path', { d: 'M15 3v18' }],
 ];
-var Nu = [
+var ju = [
     ['circle', { cx: '12', cy: '9', r: '1' }],
     ['circle', { cx: '19', cy: '9', r: '1' }],
     ['circle', { cx: '5', cy: '9', r: '1' }],
@@ -8495,7 +8540,7 @@ var Nu = [
     ['circle', { cx: '19', cy: '15', r: '1' }],
     ['circle', { cx: '5', cy: '15', r: '1' }],
 ];
-var Gu = [
+var Qu = [
     ['circle', { cx: '9', cy: '12', r: '1' }],
     ['circle', { cx: '9', cy: '5', r: '1' }],
     ['circle', { cx: '9', cy: '19', r: '1' }],
@@ -8503,7 +8548,7 @@ var Gu = [
     ['circle', { cx: '15', cy: '5', r: '1' }],
     ['circle', { cx: '15', cy: '19', r: '1' }],
 ];
-var Wu = [
+var Yu = [
     ['circle', { cx: '12', cy: '5', r: '1' }],
     ['circle', { cx: '19', cy: '5', r: '1' }],
     ['circle', { cx: '5', cy: '5', r: '1' }],
@@ -8514,7 +8559,7 @@ var Wu = [
     ['circle', { cx: '19', cy: '19', r: '1' }],
     ['circle', { cx: '5', cy: '19', r: '1' }],
 ];
-var Zu = [
+var ac = [
     ['path', { d: 'M3 7V5c0-1.1.9-2 2-2h2' }],
     ['path', { d: 'M17 3h2c1.1 0 2 .9 2 2v2' }],
     ['path', { d: 'M21 17v2c0 1.1-.9 2-2 2h-2' }],
@@ -8522,7 +8567,7 @@ var Zu = [
     ['rect', { width: '7', height: '5', x: '7', y: '7', rx: '1' }],
     ['rect', { width: '7', height: '5', x: '10', y: '12', rx: '1' }],
 ];
-var Xu = [
+var tc = [
     ['path', { d: 'm11.9 12.1 4.514-4.514' }],
     [
         'path',
@@ -8538,13 +8583,13 @@ var Xu = [
         },
     ],
 ];
-var Ku = [
+var ec = [
     ['path', { d: 'M12 16H4a2 2 0 1 1 0-4h16a2 2 0 1 1 0 4h-4.25' }],
     ['path', { d: 'M5 12a2 2 0 0 1-2-2 9 7 0 0 1 18 0 2 2 0 0 1-2 2' }],
     ['path', { d: 'M5 16a2 2 0 0 0-2 2 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 2 2 0 0 0-2-2q0 0 0 0' }],
     ['path', { d: 'm6.67 12 6.13 4.6a2 2 0 0 0 2.8-.4l3.15-4.2' }],
 ];
-var Ju = [
+var rc = [
     ['path', { d: 'M13.144 21.144A7.274 10.445 45 1 0 2.856 10.856' }],
     [
         'path',
@@ -8558,7 +8603,7 @@ var Ju = [
     ],
     ['path', { d: 'm8.5 16.5-1-1' }],
 ];
-var $u = [
+var oc = [
     ['path', { d: 'm15 12-9.373 9.373a1 1 0 0 1-3.001-3L12 9' }],
     ['path', { d: 'm18 15 4-4' }],
     [
@@ -8568,7 +8613,7 @@ var $u = [
         },
     ],
 ];
-var ju = [
+var dc = [
     ['path', { d: 'M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17' }],
     [
         'path',
@@ -8580,7 +8625,7 @@ var ju = [
     ['circle', { cx: '16', cy: '9', r: '2.9' }],
     ['circle', { cx: '6', cy: '5', r: '3' }],
 ];
-var Qu = [
+var pc = [
     [
         'path',
         {
@@ -8591,7 +8636,7 @@ var Qu = [
     ['path', { d: 'M9 5A2 2 0 1 0 5 5V10' }],
     ['path', { d: 'M9 7V4A2 2 0 1 1 13 4V7.268' }],
 ];
-var Yu = [
+var lc = [
     ['path', { d: 'M11 14h2a2 2 0 0 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16' }],
     [
         'path',
@@ -8605,14 +8650,14 @@ var Yu = [
         { d: 'm7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a1 1 0 0 0-2.75-2.91' },
     ],
 ];
-var at = [
+var o1 = [
     ['path', { d: 'M18 11.5V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1.4' }],
     ['path', { d: 'M14 10V8a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2' }],
     ['path', { d: 'M10 9.9V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v5' }],
     ['path', { d: 'M6 14a2 2 0 0 0-2-2a2 2 0 0 0-2 2' }],
     ['path', { d: 'M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8 2 2 0 1 1 4 0' }],
 ];
-var tt = [
+var d1 = [
     ['path', { d: 'M11 12h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 14' }],
     [
         'path',
@@ -8622,7 +8667,7 @@ var tt = [
     ],
     ['path', { d: 'm2 13 6 6' }],
 ];
-var a3 = [
+var sc = [
     ['path', { d: 'M18 12.5V10a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1.4' }],
     ['path', { d: 'M14 11V9a2 2 0 1 0-4 0v2' }],
     ['path', { d: 'M10 10.5V5a2 2 0 1 0-4 0v9' }],
@@ -8633,7 +8678,7 @@ var a3 = [
         },
     ],
 ];
-var t3 = [
+var hc = [
     ['path', { d: 'M12 3V2' }],
     [
         'path',
@@ -8646,7 +8691,7 @@ var t3 = [
     ['path', { d: 'M5 10a7 7 0 0 1 14 0' }],
     ['path', { d: 'M5 14v6a1 1 0 0 1-1 1H2' }],
 ];
-var e3 = [
+var fc = [
     ['path', { d: 'M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2' }],
     ['path', { d: 'M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2' }],
     ['path', { d: 'M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8' }],
@@ -8657,7 +8702,7 @@ var e3 = [
         },
     ],
 ];
-var r3 = [
+var uc = [
     [
         'path',
         {
@@ -8666,7 +8711,7 @@ var r3 = [
     ],
     ['path', { d: 'M8 11V6a4 4 0 0 1 8 0v5' }],
 ];
-var o3 = [
+var cc = [
     ['path', { d: 'm11 17 2 2a1 1 0 1 0 3-3' }],
     [
         'path',
@@ -8678,14 +8723,14 @@ var o3 = [
     ['path', { d: 'M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3' }],
     ['path', { d: 'M3 4h8' }],
 ];
-var d3 = [
+var nc = [
     ['path', { d: 'M12 2v8' }],
     ['path', { d: 'm16 6-4 4-4-4' }],
     ['rect', { width: '20', height: '8', x: '2', y: '14', rx: '2' }],
     ['path', { d: 'M6 18h.01' }],
     ['path', { d: 'M10 18h.01' }],
 ];
-var p3 = [
+var ic = [
     ['path', { d: 'M10 16h.01' }],
     [
         'path',
@@ -8696,26 +8741,26 @@ var p3 = [
     ['path', { d: 'M21.946 12.013H2.054' }],
     ['path', { d: 'M6 16h.01' }],
 ];
-var l3 = [
+var xc = [
     ['path', { d: 'm16 6-4-4-4 4' }],
     ['path', { d: 'M12 2v8' }],
     ['rect', { width: '20', height: '8', x: '2', y: '14', rx: '2' }],
     ['path', { d: 'M6 18h.01' }],
     ['path', { d: 'M10 18h.01' }],
 ];
-var s3 = [
+var mc = [
     ['path', { d: 'M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5' }],
     ['path', { d: 'M14 6a6 6 0 0 1 6 6v3' }],
     ['path', { d: 'M4 15v-3a6 6 0 0 1 6-6' }],
     ['rect', { x: '2', y: '15', width: '20', height: '4', rx: '1' }],
 ];
-var h3 = [
+var Mc = [
     ['line', { x1: '4', x2: '20', y1: '9', y2: '9' }],
     ['line', { x1: '4', x2: '20', y1: '15', y2: '15' }],
     ['line', { x1: '10', x2: '8', y1: '3', y2: '21' }],
     ['line', { x1: '16', x2: '14', y1: '3', y2: '21' }],
 ];
-var f3 = [
+var vc = [
     ['path', { d: 'M14 18a2 2 0 0 0-4 0' }],
     [
         'path',
@@ -8727,7 +8772,7 @@ var f3 = [
     ['circle', { cx: '17', cy: '18', r: '3' }],
     ['circle', { cx: '7', cy: '18', r: '3' }],
 ];
-var u3 = [
+var gc = [
     ['path', { d: 'm5.2 6.2 1.4 1.4' }],
     ['path', { d: 'M2 13h2' }],
     ['path', { d: 'M20 13h2' }],
@@ -8737,7 +8782,7 @@ var u3 = [
     ['path', { d: 'M16 13a4 4 0 0 0-8 0' }],
     ['path', { d: 'M12 5V2.5' }],
 ];
-var c3 = [
+var yc = [
     ['path', { d: 'M10 12H6' }],
     ['path', { d: 'M10 15V9' }],
     [
@@ -8749,7 +8794,7 @@ var c3 = [
     ['path', { d: 'M6 15V9' }],
     ['rect', { x: '2', y: '5', width: '20', height: '14', rx: '2' }],
 ];
-var n3 = [
+var Cc = [
     [
         'path',
         {
@@ -8758,52 +8803,52 @@ var n3 = [
     ],
     ['path', { d: 'M8 12h8' }],
 ];
-var x3 = [
+var Ac = [
     ['path', { d: 'M4 12h8' }],
     ['path', { d: 'M4 18V6' }],
     ['path', { d: 'M12 18V6' }],
     ['path', { d: 'm17 12 3-2v8' }],
 ];
-var i3 = [
+var wc = [
     ['path', { d: 'M4 12h8' }],
     ['path', { d: 'M4 18V6' }],
     ['path', { d: 'M12 18V6' }],
     ['path', { d: 'M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1' }],
 ];
-var m3 = [
+var Sc = [
     ['path', { d: 'M12 18V6' }],
     ['path', { d: 'M17 10v3a1 1 0 0 0 1 1h3' }],
     ['path', { d: 'M21 10v8' }],
     ['path', { d: 'M4 12h8' }],
     ['path', { d: 'M4 18V6' }],
 ];
-var M3 = [
+var Hc = [
     ['path', { d: 'M4 12h8' }],
     ['path', { d: 'M4 18V6' }],
     ['path', { d: 'M12 18V6' }],
     ['path', { d: 'M17.5 10.5c1.7-1 3.5 0 3.5 1.5a2 2 0 0 1-2 2' }],
     ['path', { d: 'M17 17.5c2 1.5 4 .3 4-1.5a2 2 0 0 0-2-2' }],
 ];
-var v3 = [
+var Lc = [
     ['path', { d: 'M4 12h8' }],
     ['path', { d: 'M4 18V6' }],
     ['path', { d: 'M12 18V6' }],
     ['path', { d: 'M17 13v-3h4' }],
     ['path', { d: 'M17 17.7c.4.2.8.3 1.3.3 1.5 0 2.7-1.1 2.7-2.5S19.8 13 18.3 13H17' }],
 ];
-var g3 = [
+var Vc = [
     ['path', { d: 'M4 12h8' }],
     ['path', { d: 'M4 18V6' }],
     ['path', { d: 'M12 18V6' }],
     ['circle', { cx: '19', cy: '16', r: '2' }],
     ['path', { d: 'M20 10c-2 2-3 3.5-3 6' }],
 ];
-var y3 = [
+var kc = [
     ['path', { d: 'M6 12h12' }],
     ['path', { d: 'M6 20V4' }],
     ['path', { d: 'M18 20V4' }],
 ];
-var C3 = [
+var Pc = [
     ['path', { d: 'M21 14h-1.343' }],
     ['path', { d: 'M9.128 3.47A9 9 0 0 1 21 12v3.343' }],
     ['path', { d: 'm2 2 20 20' }],
@@ -8813,7 +8858,7 @@ var C3 = [
         { d: 'M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 2.636-6.364' },
     ],
 ];
-var A3 = [
+var bc = [
     [
         'path',
         {
@@ -8821,7 +8866,7 @@ var A3 = [
         },
     ],
 ];
-var S3 = [
+var Tc = [
     [
         'path',
         {
@@ -8830,7 +8875,7 @@ var S3 = [
     ],
     ['path', { d: 'M21 16v2a4 4 0 0 1-4 4h-5' }],
 ];
-var w3 = [
+var Bc = [
     [
         'path',
         {
@@ -8844,7 +8889,7 @@ var w3 = [
         },
     ],
 ];
-var H3 = [
+var Rc = [
     [
         'path',
         {
@@ -8852,7 +8897,7 @@ var H3 = [
         },
     ],
 ];
-var L3 = [
+var Dc = [
     [
         'path',
         {
@@ -8861,7 +8906,7 @@ var L3 = [
     ],
     ['path', { d: 'M15 15h6' }],
 ];
-var V3 = [
+var Ec = [
     [
         'path',
         {
@@ -8876,7 +8921,7 @@ var V3 = [
     ],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var k3 = [
+var Fc = [
     [
         'path',
         {
@@ -8886,7 +8931,7 @@ var k3 = [
     ['path', { d: 'M15 15h6' }],
     ['path', { d: 'M18 12v6' }],
 ];
-var P3 = [
+var Oc = [
     [
         'path',
         {
@@ -8895,7 +8940,7 @@ var P3 = [
     ],
     ['path', { d: 'M3.22 13H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27' }],
 ];
-var T3 = [
+var qc = [
     ['path', { d: 'm15.5 12.5 5 5' }],
     ['path', { d: 'm20.5 12.5-5 5' }],
     [
@@ -8905,7 +8950,7 @@ var T3 = [
         },
     ],
 ];
-var B3 = [
+var zc = [
     [
         'path',
         {
@@ -8913,7 +8958,7 @@ var B3 = [
         },
     ],
 ];
-var b3 = [
+var Uc = [
     ['path', { d: 'M11 8c2-3-2-3 0-6' }],
     ['path', { d: 'M15.5 8c2-3-2-3 0-6' }],
     ['path', { d: 'M6 10h.01' }],
@@ -8925,7 +8970,7 @@ var b3 = [
     ['path', { d: 'M5 20v2' }],
     ['path', { d: 'M19 20v2' }],
 ];
-var D3 = [
+var _c = [
     ['path', { d: 'M11 17v4' }],
     ['path', { d: 'M14 3v8a2 2 0 0 0 2 2h5.865' }],
     ['path', { d: 'M17 17v4' }],
@@ -8935,7 +8980,7 @@ var D3 = [
     ['path', { d: 'M7 21h14' }],
     ['path', { d: 'M8 13H2' }],
 ];
-var R3 = [
+var Nc = [
     [
         'path',
         {
@@ -8943,16 +8988,16 @@ var R3 = [
         },
     ],
 ];
-var F3 = [
+var Ic = [
     ['path', { d: 'm9 11-6 6v3h9l3-3' }],
     ['path', { d: 'm22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4' }],
 ];
-var E3 = [
+var Gc = [
     ['path', { d: 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8' }],
     ['path', { d: 'M3 3v5h5' }],
     ['path', { d: 'M12 7v5l4 2' }],
 ];
-var O3 = [
+var Wc = [
     [
         'path',
         { d: 'M10.82 16.12c1.69.6 3.91.79 5.18.85.55.03 1-.42.97-.97-.06-1.27-.26-3.5-.85-5.18' },
@@ -8989,7 +9034,7 @@ var O3 = [
         },
     ],
 ];
-var q3 = [
+var Zc = [
     ['path', { d: 'M10.82 16.12c1.69.6 3.91.79 5.18.85.28.01.53-.09.7-.27' }],
     [
         'path',
@@ -9016,14 +9061,14 @@ var q3 = [
     ['path', { d: 'M8.35 2.68a10 10 0 0 1 9.98 1.58c.43.35.4.96-.12 1.17-1.5.6-4.3.98-6.07 1.05' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var z3 = [
+var Xc = [
     ['path', { d: 'M12 7v4' }],
     ['path', { d: 'M14 21v-3a2 2 0 0 0-4 0v3' }],
     ['path', { d: 'M14 9h-4' }],
     ['path', { d: 'M18 11h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M18 21V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16' }],
 ];
-var U3 = [
+var Kc = [
     ['path', { d: 'M10 22v-6.57' }],
     ['path', { d: 'M12 11h.01' }],
     ['path', { d: 'M12 7h.01' }],
@@ -9035,7 +9080,7 @@ var U3 = [
     ['path', { d: 'M8 7h.01' }],
     ['rect', { x: '4', y: '2', width: '16', height: '20', rx: '2' }],
 ];
-var I3 = [
+var $c = [
     [
         'path',
         {
@@ -9049,13 +9094,13 @@ var I3 = [
         },
     ],
 ];
-var _3 = [
+var Jc = [
     ['path', { d: 'M5 22h14' }],
     ['path', { d: 'M5 2h14' }],
     ['path', { d: 'M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22' }],
     ['path', { d: 'M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2' }],
 ];
-var N3 = [
+var jc = [
     [
         'path',
         {
@@ -9066,7 +9111,7 @@ var N3 = [
     ['path', { d: 'M15 18h6' }],
     ['path', { d: 'M18 15v6' }],
 ];
-var G3 = [
+var Qc = [
     ['path', { d: 'M10 12V8.964' }],
     ['path', { d: 'M14 12V8.964' }],
     ['path', { d: 'M15 12a1 1 0 0 1 1 1v2a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-2a1 1 0 0 1 1-1z' }],
@@ -9077,7 +9122,7 @@ var G3 = [
         },
     ],
 ];
-var W3 = [
+var Yc = [
     ['path', { d: 'M9.5 13.866a4 4 0 0 1 5 .01' }],
     ['path', { d: 'M12 17h.01' }],
     [
@@ -9088,7 +9133,7 @@ var W3 = [
     ],
     ['path', { d: 'M7 10.754a8 8 0 0 1 10 0' }],
 ];
-var et = [
+var p1 = [
     ['path', { d: 'M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8' }],
     [
         'path',
@@ -9097,7 +9142,7 @@ var et = [
         },
     ],
 ];
-var rt = [
+var l1 = [
     [
         'path',
         { d: 'M12 17c5 0 8-2.69 8-6H4c0 3.31 3 6 8 6m-4 4h8m-4-3v3M5.14 11a3.5 3.5 0 1 1 6.71 0' },
@@ -9105,26 +9150,26 @@ var rt = [
     ['path', { d: 'M12.14 11a3.5 3.5 0 1 1 6.71 0' }],
     ['path', { d: 'M15.5 6.5a3.5 3.5 0 1 0-7 0' }],
 ];
-var ot = [
+var s1 = [
     ['path', { d: 'm7 11 4.08 10.35a1 1 0 0 0 1.84 0L17 11' }],
     ['path', { d: 'M17 7A5 5 0 0 0 7 7' }],
     ['path', { d: 'M17 7a2 2 0 0 1 0 4H7a2 2 0 0 1 0-4' }],
 ];
-var Z3 = [
+var an = [
     ['path', { d: 'M13.5 8h-3' }],
     ['path', { d: 'm15 2-1 2h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3' }],
     ['path', { d: 'M16.899 22A5 5 0 0 0 7.1 22' }],
     ['path', { d: 'm9 2 3 6' }],
     ['circle', { cx: '12', cy: '15', r: '3' }],
 ];
-var X3 = [
+var tn = [
     ['path', { d: 'M16 10h2' }],
     ['path', { d: 'M16 14h2' }],
     ['path', { d: 'M6.17 15a3 3 0 0 1 5.66 0' }],
     ['circle', { cx: '9', cy: '11', r: '2' }],
     ['rect', { x: '2', y: '5', width: '20', height: '14', rx: '2' }],
 ];
-var K3 = [
+var en = [
     [
         'path',
         {
@@ -9135,13 +9180,13 @@ var K3 = [
     ['path', { d: 'm17 22 3-3' }],
     ['circle', { cx: '9', cy: '9', r: '2' }],
 ];
-var J3 = [
+var rn = [
     ['path', { d: 'M21 9v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7' }],
     ['line', { x1: '16', x2: '22', y1: '5', y2: '5' }],
     ['circle', { cx: '9', cy: '9', r: '2' }],
     ['path', { d: 'm21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21' }],
 ];
-var $3 = [
+var on = [
     ['line', { x1: '2', x2: '22', y1: '2', y2: '22' }],
     ['path', { d: 'M10.41 10.41a2 2 0 1 1-2.83-2.83' }],
     ['line', { x1: '13.5', x2: '6', y1: '13.5', y2: '21' }],
@@ -9149,7 +9194,7 @@ var $3 = [
     ['path', { d: 'M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.052-.22 1.41-.59' }],
     ['path', { d: 'M21 15V5a2 2 0 0 0-2-2H9' }],
 ];
-var j3 = [
+var dn = [
     [
         'path',
         {
@@ -9160,14 +9205,14 @@ var j3 = [
     ['path', { d: 'm6 21 5-5' }],
     ['circle', { cx: '9', cy: '9', r: '2' }],
 ];
-var Q3 = [
+var pn = [
     ['path', { d: 'M16 5h6' }],
     ['path', { d: 'M19 2v6' }],
     ['path', { d: 'M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5' }],
     ['path', { d: 'm21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21' }],
     ['circle', { cx: '9', cy: '9', r: '2' }],
 ];
-var Y3 = [
+var ln = [
     [
         'path',
         {
@@ -9178,18 +9223,18 @@ var Y3 = [
     ['path', { d: 'M17 22v-5.5' }],
     ['circle', { cx: '9', cy: '9', r: '2' }],
 ];
-var ac = [
+var sn = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
     ['circle', { cx: '9', cy: '9', r: '2' }],
     ['path', { d: 'm21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21' }],
 ];
-var tc = [
+var hn = [
     ['path', { d: 'm22 11-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 16' }],
     ['path', { d: 'M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2' }],
     ['circle', { cx: '13', cy: '7', r: '1', fill: 'currentColor' }],
     ['rect', { x: '8', y: '2', width: '14', height: '14', rx: '2' }],
 ];
-var ec = [
+var fn = [
     ['path', { d: 'M16 3h5v5' }],
     ['path', { d: 'M17 21h2a2 2 0 0 0 2-2' }],
     ['path', { d: 'M21 12v3' }],
@@ -9199,7 +9244,7 @@ var ec = [
     ['path', { d: 'M9 3h3' }],
     ['rect', { x: '3', y: '11', width: '10', height: '10', rx: '1' }],
 ];
-var rc = [
+var un = [
     ['polyline', { points: '22 12 16 12 14 15 10 15 8 12 2 12' }],
     [
         'path',
@@ -9208,56 +9253,56 @@ var rc = [
         },
     ],
 ];
-var oc = [
+var cn = [
     ['path', { d: 'M12 3v12' }],
     ['path', { d: 'm8 11 4 4 4-4' }],
     ['path', { d: 'M8 5H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-4' }],
 ];
-var dc = [
+var nn = [
     ['path', { d: 'M6 3h12' }],
     ['path', { d: 'M6 8h12' }],
     ['path', { d: 'm6 13 8.5 8' }],
     ['path', { d: 'M6 13h3' }],
     ['path', { d: 'M9 13c6.667 0 6.667-10 0-10' }],
 ];
-var pc = [['path', { d: 'M6 16c5 0 7-8 12-8a4 4 0 0 1 0 8c-5 0-7-8-12-8a4 4 0 1 0 0 8' }]];
-var lc = [
+var xn = [['path', { d: 'M6 16c5 0 7-8 12-8a4 4 0 0 1 0 8c-5 0-7-8-12-8a4 4 0 1 0 0 8' }]];
+var mn = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M12 16v-4' }],
     ['path', { d: 'M12 8h.01' }],
 ];
-var sc = [
+var Mn = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M7 7h.01' }],
     ['path', { d: 'M17 7h.01' }],
     ['path', { d: 'M7 17h.01' }],
     ['path', { d: 'M17 17h.01' }],
 ];
-var hc = [
+var vn = [
     ['line', { x1: '19', x2: '10', y1: '4', y2: '4' }],
     ['line', { x1: '14', x2: '5', y1: '20', y2: '20' }],
     ['line', { x1: '15', x2: '9', y1: '4', y2: '20' }],
 ];
-var fc = [
+var gn = [
     ['path', { d: 'm16 14 4 4-4 4' }],
     ['path', { d: 'M20 10a8 8 0 1 0-8 8h8' }],
 ];
-var uc = [
+var yn = [
     ['path', { d: 'M4 10a8 8 0 1 1 8 8H4' }],
     ['path', { d: 'm8 22-4-4 4-4' }],
 ];
-var cc = [
+var Cn = [
     ['path', { d: 'M12 9.5V21m0-11.5L6 3m6 6.5L18 3' }],
     ['path', { d: 'M6 15h12' }],
     ['path', { d: 'M6 11h12' }],
 ];
-var nc = [
+var An = [
     ['path', { d: 'M21 17a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2Z' }],
     ['path', { d: 'M6 15v-2' }],
     ['path', { d: 'M12 15V9' }],
     ['circle', { cx: '12', cy: '6', r: '3' }],
 ];
-var xc = [
+var wn = [
     ['path', { d: 'M18 17a1 1 0 0 0-1 1v1a2 2 0 1 0 2-2z' }],
     [
         'path',
@@ -9268,12 +9313,12 @@ var xc = [
     ['path', { d: 'm6.707 6.707 10.586 10.586' }],
     ['path', { d: 'M7 5a2 2 0 1 0-2 2h1a1 1 0 0 0 1-1z' }],
 ];
-var ic = [
+var Sn = [
     ['path', { d: 'M5 3v14' }],
     ['path', { d: 'M12 3v8' }],
     ['path', { d: 'M19 3v18' }],
 ];
-var mc = [
+var Hn = [
     [
         'path',
         {
@@ -9282,7 +9327,7 @@ var mc = [
     ],
     ['circle', { cx: '16.5', cy: '7.5', r: '.5', fill: 'currentColor' }],
 ];
-var Mc = [
+var Ln = [
     [
         'path',
         {
@@ -9297,12 +9342,12 @@ var Mc = [
         },
     ],
 ];
-var vc = [
+var Vn = [
     ['path', { d: 'm15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4' }],
     ['path', { d: 'm21 2-9.6 9.6' }],
     ['circle', { cx: '7.5', cy: '15.5', r: '5.5' }],
 ];
-var gc = [
+var kn = [
     ['rect', { width: '20', height: '16', x: '2', y: '4', rx: '2' }],
     ['path', { d: 'M6 8h4' }],
     ['path', { d: 'M14 8h.01' }],
@@ -9313,7 +9358,7 @@ var gc = [
     ['path', { d: 'M14 12v4' }],
     ['path', { d: 'M18 12v4' }],
 ];
-var yc = [
+var Pn = [
     ['path', { d: 'M10 8h.01' }],
     ['path', { d: 'M12 12h.01' }],
     ['path', { d: 'M14 8h.01' }],
@@ -9324,7 +9369,7 @@ var yc = [
     ['path', { d: 'M8 12h.01' }],
     ['rect', { width: '20', height: '16', x: '2', y: '4', rx: '2' }],
 ];
-var Cc = [
+var bn = [
     ['path', { d: 'M 20 4 A2 2 0 0 1 22 6' }],
     ['path', { d: 'M 22 6 L 22 16.41' }],
     ['path', { d: 'M 7 16 L 16 16' }],
@@ -9336,7 +9381,7 @@ var Cc = [
     ['path', { d: 'M6 8h.01' }],
     ['path', { d: 'M8 12h.01' }],
 ];
-var Ac = [
+var Tn = [
     ['path', { d: 'M12 2v5' }],
     ['path', { d: 'M14.829 15.998a3 3 0 1 1-5.658 0' }],
     [
@@ -9346,7 +9391,7 @@ var Ac = [
         },
     ],
 ];
-var Sc = [
+var Bn = [
     [
         'path',
         {
@@ -9357,7 +9402,7 @@ var Sc = [
     ['path', { d: 'M3 20a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z' }],
     ['path', { d: 'm9.086 6.5-4.793 4.793a1 1 0 0 0-.18 1.17L7 18' }],
 ];
-var wc = [
+var Rn = [
     ['path', { d: 'M12 10v12' }],
     [
         'path',
@@ -9367,7 +9412,7 @@ var wc = [
     ],
     ['path', { d: 'M9 22h6' }],
 ];
-var Hc = [
+var Dn = [
     [
         'path',
         {
@@ -9377,7 +9422,7 @@ var Hc = [
     ['path', { d: 'M6 3a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z' }],
     ['path', { d: 'M8 6h4a2 2 0 0 1 2 2v5' }],
 ];
-var Lc = [
+var En = [
     [
         'path',
         {
@@ -9387,7 +9432,7 @@ var Lc = [
     ['path', { d: 'M6 15a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H5a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1z' }],
     ['path', { d: 'M8 18h4a2 2 0 0 0 2-2v-5' }],
 ];
-var Vc = [
+var Fn = [
     ['path', { d: 'M12 12v6' }],
     [
         'path',
@@ -9397,7 +9442,7 @@ var Vc = [
     ],
     ['path', { d: 'M8 20a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1z' }],
 ];
-var kc = [
+var On = [
     ['path', { d: 'm12 8 6-3-6-3v10' }],
     [
         'path',
@@ -9408,7 +9453,7 @@ var kc = [
     ['path', { d: 'm6.49 12.85 11.02 6.3' }],
     ['path', { d: 'M17.51 12.85 6.5 19.15' }],
 ];
-var Pc = [
+var qn = [
     ['path', { d: 'M10 18v-7' }],
     [
         'path',
@@ -9421,7 +9466,7 @@ var Pc = [
     ['path', { d: 'M3 22h18' }],
     ['path', { d: 'M6 18v-7' }],
 ];
-var Tc = [
+var zn = [
     ['path', { d: 'm5 8 6 6' }],
     ['path', { d: 'm4 14 6-6 2-3' }],
     ['path', { d: 'M2 5h12' }],
@@ -9429,16 +9474,16 @@ var Tc = [
     ['path', { d: 'm22 22-5-10-5 10' }],
     ['path', { d: 'M14 18h6' }],
 ];
-var Bc = [
+var Un = [
     ['path', { d: 'M2 20h20' }],
     ['path', { d: 'm9 10 2 2 4-4' }],
     ['rect', { x: '3', y: '4', width: '18', height: '12', rx: '2' }],
 ];
-var dt = [
+var h1 = [
     ['rect', { width: '18', height: '12', x: '3', y: '4', rx: '2', ry: '2' }],
     ['line', { x1: '2', x2: '22', y1: '20', y2: '20' }],
 ];
-var bc = [
+var _n = [
     [
         'path',
         {
@@ -9447,7 +9492,7 @@ var bc = [
     ],
     ['path', { d: 'M20.054 15.987H3.946' }],
 ];
-var Dc = [
+var Nn = [
     ['path', { d: 'M7 22a5 5 0 0 1-2-4' }],
     ['path', { d: 'M7 16.93c.96.43 1.96.74 2.99.91' }],
     [
@@ -9462,18 +9507,18 @@ var Dc = [
         },
     ],
 ];
-var Rc = [
+var In = [
     ['path', { d: 'M3.704 14.467a10 8 0 1 1 3.115 2.375' }],
     ['path', { d: 'M7 22a5 5 0 0 1-2-3.994' }],
     ['circle', { cx: '5', cy: '16', r: '2' }],
 ];
-var Fc = [
+var Gn = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M18 13a6 6 0 0 1-6 5 6 6 0 0 1-6-5h12Z' }],
     ['line', { x1: '9', x2: '9.01', y1: '9', y2: '9' }],
     ['line', { x1: '15', x2: '15.01', y1: '9', y2: '9' }],
 ];
-var Ec = [
+var Wn = [
     [
         'path',
         {
@@ -9487,7 +9532,7 @@ var Ec = [
         },
     ],
 ];
-var Oc = [
+var Zn = [
     [
         'path',
         {
@@ -9504,7 +9549,7 @@ var Oc = [
     ],
     ['path', { d: 'M22.018 12.004a1 1 0 0 1-.598.916l-.177.08' }],
 ];
-var pt = [
+var f1 = [
     [
         'path',
         {
@@ -9514,7 +9559,7 @@ var pt = [
     ['path', { d: 'M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12' }],
     ['path', { d: 'M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17' }],
 ];
-var qc = [
+var Xn = [
     [
         'path',
         {
@@ -9526,19 +9571,19 @@ var qc = [
     ['path', { d: 'M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 .825.178' }],
     ['path', { d: 'M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l2.116-.962' }],
 ];
-var zc = [
+var Kn = [
     ['rect', { width: '7', height: '9', x: '3', y: '3', rx: '1' }],
     ['rect', { width: '7', height: '5', x: '14', y: '3', rx: '1' }],
     ['rect', { width: '7', height: '9', x: '14', y: '12', rx: '1' }],
     ['rect', { width: '7', height: '5', x: '3', y: '16', rx: '1' }],
 ];
-var Uc = [
+var $n = [
     ['rect', { width: '7', height: '7', x: '3', y: '3', rx: '1' }],
     ['rect', { width: '7', height: '7', x: '14', y: '3', rx: '1' }],
     ['rect', { width: '7', height: '7', x: '14', y: '14', rx: '1' }],
     ['rect', { width: '7', height: '7', x: '3', y: '14', rx: '1' }],
 ];
-var Ic = [
+var Jn = [
     ['rect', { width: '7', height: '7', x: '3', y: '3', rx: '1' }],
     ['rect', { width: '7', height: '7', x: '3', y: '14', rx: '1' }],
     ['path', { d: 'M14 4h7' }],
@@ -9546,29 +9591,29 @@ var Ic = [
     ['path', { d: 'M14 15h7' }],
     ['path', { d: 'M14 20h7' }],
 ];
-var _c = [
+var jn = [
     ['rect', { width: '7', height: '18', x: '3', y: '3', rx: '1' }],
     ['rect', { width: '7', height: '7', x: '14', y: '3', rx: '1' }],
     ['rect', { width: '7', height: '7', x: '14', y: '14', rx: '1' }],
 ];
-var Nc = [
+var Qn = [
     ['rect', { width: '18', height: '7', x: '3', y: '3', rx: '1' }],
     ['rect', { width: '7', height: '7', x: '3', y: '14', rx: '1' }],
     ['rect', { width: '7', height: '7', x: '14', y: '14', rx: '1' }],
 ];
-var Gc = [
+var Yn = [
     ['rect', { width: '18', height: '7', x: '3', y: '3', rx: '1' }],
     ['rect', { width: '9', height: '7', x: '3', y: '14', rx: '1' }],
     ['rect', { width: '5', height: '7', x: '16', y: '14', rx: '1' }],
 ];
-var Wc = [
+var a3 = [
     [
         'path',
         { d: 'M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z' },
     ],
     ['path', { d: 'M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12' }],
 ];
-var Zc = [
+var t3 = [
     [
         'path',
         {
@@ -9577,7 +9622,7 @@ var Zc = [
     ],
     ['path', { d: 'M2 22 17 7' }],
 ];
-var Xc = [
+var e3 = [
     [
         'path',
         {
@@ -9587,7 +9632,7 @@ var Xc = [
     ['path', { d: 'M18 6V3a1 1 0 0 0-1-1h-3' }],
     ['rect', { width: '8', height: '12', x: '8', y: '10', rx: '1' }],
 ];
-var Kc = [
+var r3 = [
     [
         'path',
         {
@@ -9595,7 +9640,7 @@ var Kc = [
         },
     ],
 ];
-var Jc = [
+var o3 = [
     [
         'path',
         {
@@ -9603,7 +9648,7 @@ var Jc = [
         },
     ],
 ];
-var $c = [
+var d3 = [
     ['rect', { width: '8', height: '18', x: '3', y: '3', rx: '1' }],
     ['path', { d: 'M7 3v18' }],
     [
@@ -9613,13 +9658,13 @@ var $c = [
         },
     ],
 ];
-var jc = [
+var p3 = [
     ['path', { d: 'm16 6 4 14' }],
     ['path', { d: 'M12 6v14' }],
     ['path', { d: 'M8 8v12' }],
     ['path', { d: 'M4 4v16' }],
 ];
-var Qc = [
+var l3 = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'm4.93 4.93 4.24 4.24' }],
     ['path', { d: 'm14.83 9.17 4.24-4.24' }],
@@ -9627,21 +9672,21 @@ var Qc = [
     ['path', { d: 'm9.17 14.83-4.24 4.24' }],
     ['circle', { cx: '12', cy: '12', r: '4' }],
 ];
-var Yc = [
+var s3 = [
     ['path', { d: 'M14 12h2v8' }],
     ['path', { d: 'M14 20h4' }],
     ['path', { d: 'M6 12h4' }],
     ['path', { d: 'M6 20h4' }],
     ['path', { d: 'M8 20V8a4 4 0 0 1 7.464-2' }],
 ];
-var an = [
+var h3 = [
     ['path', { d: 'M16.8 11.2c.8-.9 1.2-2 1.2-3.2a6 6 0 0 0-9.3-5' }],
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M6.3 6.3a4.67 4.67 0 0 0 1.2 5.2c.7.7 1.3 1.5 1.5 2.5' }],
     ['path', { d: 'M9 18h6' }],
     ['path', { d: 'M10 22h4' }],
 ];
-var tn = [
+var f3 = [
     [
         'path',
         {
@@ -9651,23 +9696,23 @@ var tn = [
     ['path', { d: 'M9 18h6' }],
     ['path', { d: 'M10 22h4' }],
 ];
-var en = [
+var u3 = [
     [
         'path',
         { d: 'M7 3.5c5-2 7 2.5 3 4C1.5 10 2 15 5 16c5 2 9-10 14-7s.5 13.5-4 12c-5-2.5.5-11 6-2' },
     ],
 ];
-var rn = [
+var c3 = [
     ['path', { d: 'M 3 12 L 15 12' }],
     ['circle', { cx: '18', cy: '12', r: '3' }],
 ];
-var on = [
+var n3 = [
     ['path', { d: 'M9 17H7A5 5 0 0 1 7 7' }],
     ['path', { d: 'M15 7h2a5 5 0 0 1 4 8' }],
     ['line', { x1: '8', x2: '12', y1: '12', y2: '12' }],
     ['line', { x1: '2', x2: '22', y1: '2', y2: '22' }],
 ];
-var dn = [
+var i3 = [
     ['path', { d: 'M11 5h2' }],
     ['path', { d: 'M15 12h6' }],
     ['path', { d: 'M19 5h2' }],
@@ -9675,108 +9720,108 @@ var dn = [
     ['path', { d: 'M3 19h18' }],
     ['path', { d: 'M3 5h2' }],
 ];
-var pn = [
+var x3 = [
     ['path', { d: 'M9 17H7A5 5 0 0 1 7 7h2' }],
     ['path', { d: 'M15 7h2a5 5 0 1 1 0 10h-2' }],
     ['line', { x1: '8', x2: '16', y1: '12', y2: '12' }],
 ];
-var ln = [
+var m3 = [
     ['path', { d: 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71' }],
     ['path', { d: 'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71' }],
 ];
-var sn = [
+var M3 = [
     ['path', { d: 'M16 5H3' }],
     ['path', { d: 'M16 12H3' }],
     ['path', { d: 'M11 19H3' }],
     ['path', { d: 'm15 18 2 2 4-4' }],
 ];
-var hn = [
+var v3 = [
     ['path', { d: 'M13 5h8' }],
     ['path', { d: 'M13 12h8' }],
     ['path', { d: 'M13 19h8' }],
     ['path', { d: 'm3 17 2 2 4-4' }],
     ['path', { d: 'm3 7 2 2 4-4' }],
 ];
-var fn = [
+var g3 = [
     ['path', { d: 'M3 5h8' }],
     ['path', { d: 'M3 12h8' }],
     ['path', { d: 'M3 19h8' }],
     ['path', { d: 'm15 5 3 3 3-3' }],
     ['path', { d: 'm15 19 3-3 3 3' }],
 ];
-var un = [
+var y3 = [
     ['path', { d: 'M3 5h8' }],
     ['path', { d: 'M3 12h8' }],
     ['path', { d: 'M3 19h8' }],
     ['path', { d: 'm15 8 3-3 3 3' }],
     ['path', { d: 'm15 16 3 3 3-3' }],
 ];
-var cn = [
+var C3 = [
     ['path', { d: 'M10 5h11' }],
     ['path', { d: 'M10 12h11' }],
     ['path', { d: 'M10 19h11' }],
     ['path', { d: 'm3 10 3-3-3-3' }],
     ['path', { d: 'm3 20 3-3-3-3' }],
 ];
-var nn = [
+var A3 = [
     ['path', { d: 'M16 5H3' }],
     ['path', { d: 'M16 12H3' }],
     ['path', { d: 'M9 19H3' }],
     ['path', { d: 'm16 16-3 3 3 3' }],
     ['path', { d: 'M21 5v12a2 2 0 0 1-2 2h-6' }],
 ];
-var xn = [
+var w3 = [
     ['path', { d: 'M12 5H2' }],
     ['path', { d: 'M6 12h12' }],
     ['path', { d: 'M9 19h6' }],
     ['path', { d: 'M16 5h6' }],
     ['path', { d: 'M19 8V2' }],
 ];
-var G = [
+var Z = [
     ['path', { d: 'M21 5H11' }],
     ['path', { d: 'M21 12H11' }],
     ['path', { d: 'M21 19H11' }],
     ['path', { d: 'm7 8-4 4 4 4' }],
 ];
-var mn = [
+var S3 = [
     ['path', { d: 'M2 5h20' }],
     ['path', { d: 'M6 12h12' }],
     ['path', { d: 'M9 19h6' }],
 ];
-var W = [
+var X = [
     ['path', { d: 'M21 5H11' }],
     ['path', { d: 'M21 12H11' }],
     ['path', { d: 'M21 19H11' }],
     ['path', { d: 'm3 8 4 4-4 4' }],
 ];
-var Mn = [
+var H3 = [
     ['path', { d: 'M16 5H3' }],
     ['path', { d: 'M11 12H3' }],
     ['path', { d: 'M16 19H3' }],
     ['path', { d: 'M21 12h-6' }],
 ];
-var vn = [
+var L3 = [
     ['path', { d: 'M16 5H3' }],
     ['path', { d: 'M11 12H3' }],
     ['path', { d: 'M11 19H3' }],
     ['path', { d: 'M21 16V5' }],
     ['circle', { cx: '18', cy: '16', r: '3' }],
 ];
-var gn = [
+var V3 = [
     ['path', { d: 'M16 5H3' }],
     ['path', { d: 'M11 12H3' }],
     ['path', { d: 'M16 19H3' }],
     ['path', { d: 'M18 9v6' }],
     ['path', { d: 'M21 12h-6' }],
 ];
-var yn = [
+var k3 = [
     ['path', { d: 'M21 5H3' }],
     ['path', { d: 'M7 12H3' }],
     ['path', { d: 'M7 19H3' }],
     ['path', { d: 'M12 18a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L11 14' }],
     ['path', { d: 'M11 10v4h4' }],
 ];
-var Cn = [
+var P3 = [
     ['path', { d: 'M11 5h10' }],
     ['path', { d: 'M11 12h10' }],
     ['path', { d: 'M11 19h10' }],
@@ -9784,31 +9829,31 @@ var Cn = [
     ['path', { d: 'M4 9h2' }],
     ['path', { d: 'M6.5 20H3.4c0-1 2.6-1.925 2.6-3.5a1.5 1.5 0 0 0-2.6-1.02' }],
 ];
-var An = [
+var b3 = [
     ['path', { d: 'M3 19h18' }],
     ['path', { d: 'M15 12H3' }],
     ['path', { d: 'M9 5H3' }],
 ];
-var Sn = [
+var T3 = [
     ['path', { d: 'M15 12H3' }],
     ['path', { d: 'M3 5h18' }],
     ['path', { d: 'M9 19H3' }],
 ];
-var wn = [
+var B3 = [
     ['path', { d: 'M3 5h6' }],
     ['path', { d: 'M3 12h13' }],
     ['path', { d: 'M3 19h13' }],
     ['path', { d: 'm16 8-3-3 3-3' }],
     ['path', { d: 'M21 19V7a2 2 0 0 0-2-2h-6' }],
 ];
-var Hn = [
+var R3 = [
     ['path', { d: 'M8 5h13' }],
     ['path', { d: 'M13 12h8' }],
     ['path', { d: 'M13 19h8' }],
     ['path', { d: 'M3 10a2 2 0 0 0 2 2h3' }],
     ['path', { d: 'M3 5v12a2 2 0 0 0 2 2h3' }],
 ];
-var Ln = [
+var D3 = [
     ['path', { d: 'M21 5H3' }],
     ['path', { d: 'M10 12H3' }],
     ['path', { d: 'M10 19H3' }],
@@ -9819,21 +9864,21 @@ var Ln = [
         },
     ],
 ];
-var Vn = [
+var E3 = [
     ['path', { d: 'M13 5h8' }],
     ['path', { d: 'M13 12h8' }],
     ['path', { d: 'M13 19h8' }],
     ['path', { d: 'm3 17 2 2 4-4' }],
     ['rect', { x: '3', y: '4', width: '6', height: '6', rx: '1' }],
 ];
-var kn = [
+var F3 = [
     ['path', { d: 'M16 5H3' }],
     ['path', { d: 'M11 12H3' }],
     ['path', { d: 'M16 19H3' }],
     ['path', { d: 'm15.5 9.5 5 5' }],
     ['path', { d: 'm20.5 9.5-5 5' }],
 ];
-var Pn = [
+var O3 = [
     ['path', { d: 'M3 5h.01' }],
     ['path', { d: 'M3 12h.01' }],
     ['path', { d: 'M3 19h.01' }],
@@ -9841,14 +9886,14 @@ var Pn = [
     ['path', { d: 'M8 12h13' }],
     ['path', { d: 'M8 19h13' }],
 ];
-var lt = [['path', { d: 'M21 12a9 9 0 1 1-6.219-8.56' }]];
-var Tn = [
+var u1 = [['path', { d: 'M21 12a9 9 0 1 1-6.219-8.56' }]];
+var q3 = [
     ['path', { d: 'M22 12a1 1 0 0 1-10 0 1 1 0 0 0-10 0' }],
     ['path', { d: 'M7 20.7a1 1 0 1 1 5-8.7 1 1 0 1 0 5-8.6' }],
     ['path', { d: 'M7 3.3a1 1 0 1 1 5 8.6 1 1 0 1 0 5 8.6' }],
     ['circle', { cx: '12', cy: '12', r: '10' }],
 ];
-var Bn = [
+var z3 = [
     ['path', { d: 'M12 2v4' }],
     ['path', { d: 'm16.2 7.8 2.9-2.9' }],
     ['path', { d: 'M18 12h4' }],
@@ -9858,7 +9903,7 @@ var Bn = [
     ['path', { d: 'M2 12h4' }],
     ['path', { d: 'm4.9 4.9 2.9 2.9' }],
 ];
-var bn = [
+var U3 = [
     ['line', { x1: '2', x2: '5', y1: '12', y2: '12' }],
     ['line', { x1: '19', x2: '22', y1: '12', y2: '12' }],
     ['line', { x1: '12', x2: '12', y1: '2', y2: '5' }],
@@ -9866,7 +9911,7 @@ var bn = [
     ['circle', { cx: '12', cy: '12', r: '7' }],
     ['circle', { cx: '12', cy: '12', r: '3' }],
 ];
-var Dn = [
+var _3 = [
     ['path', { d: 'M12 19v3' }],
     ['path', { d: 'M12 2v3' }],
     ['path', { d: 'M18.89 13.24a7 7 0 0 0-8.13-8.13' }],
@@ -9875,42 +9920,42 @@ var Dn = [
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M7.05 7.05a7 7 0 0 0 9.9 9.9' }],
 ];
-var Rn = [
+var N3 = [
     ['line', { x1: '2', x2: '5', y1: '12', y2: '12' }],
     ['line', { x1: '19', x2: '22', y1: '12', y2: '12' }],
     ['line', { x1: '12', x2: '12', y1: '2', y2: '5' }],
     ['line', { x1: '12', x2: '12', y1: '19', y2: '22' }],
     ['circle', { cx: '12', cy: '12', r: '7' }],
 ];
-var st = [
+var c1 = [
     ['circle', { cx: '12', cy: '16', r: '1' }],
     ['rect', { width: '18', height: '12', x: '3', y: '10', rx: '2' }],
     ['path', { d: 'M7 10V7a5 5 0 0 1 9.33-2.5' }],
 ];
-var Fn = [
+var I3 = [
     ['circle', { cx: '12', cy: '16', r: '1' }],
     ['rect', { x: '3', y: '10', width: '18', height: '12', rx: '2' }],
     ['path', { d: 'M7 10V7a5 5 0 0 1 10 0v3' }],
 ];
-var ht = [
+var n1 = [
     ['rect', { width: '18', height: '11', x: '3', y: '11', rx: '2', ry: '2' }],
     ['path', { d: 'M7 11V7a5 5 0 0 1 9.9-1' }],
 ];
-var En = [
+var G3 = [
     ['rect', { width: '18', height: '11', x: '3', y: '11', rx: '2', ry: '2' }],
     ['path', { d: 'M7 11V7a5 5 0 0 1 10 0v4' }],
 ];
-var On = [
+var W3 = [
     ['path', { d: 'm10 17 5-5-5-5' }],
     ['path', { d: 'M15 12H3' }],
     ['path', { d: 'M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4' }],
 ];
-var qn = [
+var Z3 = [
     ['path', { d: 'm16 17 5-5-5-5' }],
     ['path', { d: 'M21 12H9' }],
     ['path', { d: 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4' }],
 ];
-var zn = [
+var X3 = [
     ['path', { d: 'M3 5h1' }],
     ['path', { d: 'M3 12h1' }],
     ['path', { d: 'M3 19h1' }],
@@ -9921,19 +9966,19 @@ var zn = [
     ['path', { d: 'M13 12h8' }],
     ['path', { d: 'M13 19h8' }],
 ];
-var Un = [
+var K3 = [
     ['circle', { cx: '11', cy: '11', r: '8' }],
     ['path', { d: 'm21 21-4.3-4.3' }],
     ['path', { d: 'M11 11a2 2 0 0 0 4 0 4 4 0 0 0-8 0 6 6 0 0 0 12 0' }],
 ];
-var In = [
+var $3 = [
     ['path', { d: 'M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2' }],
     ['path', { d: 'M8 18V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v14' }],
     ['path', { d: 'M10 20h4' }],
     ['circle', { cx: '16', cy: '20', r: '2' }],
     ['circle', { cx: '8', cy: '20', r: '2' }],
 ];
-var _n = [
+var J3 = [
     ['path', { d: 'm12 15 4 4' }],
     [
         'path',
@@ -9943,17 +9988,17 @@ var _n = [
     ],
     ['path', { d: 'm5 8 4 4' }],
 ];
-var Nn = [
+var j3 = [
     ['path', { d: 'M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8' }],
     ['path', { d: 'm22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7' }],
     ['path', { d: 'm16 19 2 2 4-4' }],
 ];
-var Gn = [
+var Q3 = [
     ['path', { d: 'M22 15V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8' }],
     ['path', { d: 'm22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7' }],
     ['path', { d: 'M16 19h6' }],
 ];
-var Wn = [
+var Y3 = [
     [
         'path',
         {
@@ -9962,53 +10007,53 @@ var Wn = [
     ],
     ['path', { d: 'm22 10-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 10' }],
 ];
-var Zn = [
+var ai = [
     ['path', { d: 'M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8' }],
     ['path', { d: 'm22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7' }],
     ['path', { d: 'M19 16v6' }],
     ['path', { d: 'M16 19h6' }],
 ];
-var ft = [
+var i1 = [
     ['path', { d: 'M22 10.5V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h12.5' }],
     ['path', { d: 'm22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7' }],
     ['path', { d: 'M18 15.28c.2-.4.5-.8.9-1a2.1 2.1 0 0 1 2.6.4c.3.4.5.8.5 1.3 0 1.3-2 2-2 2' }],
     ['path', { d: 'M20 22v.01' }],
 ];
-var Xn = [
+var ti = [
     ['path', { d: 'M22 12.5V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h7.5' }],
     ['path', { d: 'm22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7' }],
     ['path', { d: 'M18 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z' }],
     ['circle', { cx: '18', cy: '18', r: '3' }],
     ['path', { d: 'm22 22-1.5-1.5' }],
 ];
-var Kn = [
+var ei = [
     ['path', { d: 'M22 10.5V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h12.5' }],
     ['path', { d: 'm22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7' }],
     ['path', { d: 'M20 14v4' }],
     ['path', { d: 'M20 22v.01' }],
 ];
-var Jn = [
+var ri = [
     ['path', { d: 'm22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7' }],
     ['rect', { x: '2', y: '4', width: '20', height: '16', rx: '2' }],
 ];
-var $n = [
+var oi = [
     ['path', { d: 'M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h9' }],
     ['path', { d: 'm22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7' }],
     ['path', { d: 'm17 17 4 4' }],
     ['path', { d: 'm21 17-4 4' }],
 ];
-var jn = [
+var di = [
     ['path', { d: 'M22 17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9.5C2 7 4 5 6.5 5H18c2.2 0 4 1.8 4 4v8Z' }],
     ['polyline', { points: '15,9 18,9 18,11' }],
     ['path', { d: 'M6.5 5C9 5 11 7 11 9.5V17a2 2 0 0 1-2 2' }],
     ['line', { x1: '6', x2: '7', y1: '10', y2: '10' }],
 ];
-var Qn = [
+var pi = [
     ['path', { d: 'M17 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 1-1.732' }],
     ['path', { d: 'm22 5.5-6.419 4.179a2 2 0 0 1-2.162 0L7 5.5' }],
     ['rect', { x: '7', y: '3', width: '15', height: '12', rx: '2' }],
 ];
-var Yn = [
+var li = [
     [
         'path',
         {
@@ -10019,7 +10064,7 @@ var Yn = [
     ['path', { d: 'M21 18h-6' }],
     ['path', { d: 'M9 3.236v15' }],
 ];
-var ax = [
+var si = [
     [
         'path',
         {
@@ -10028,7 +10073,7 @@ var ax = [
     ],
     ['path', { d: 'm9 10 2 2 4-4' }],
 ];
-var tx = [
+var hi = [
     [
         'path',
         {
@@ -10038,7 +10083,7 @@ var tx = [
     ['circle', { cx: '12', cy: '10', r: '3' }],
     ['path', { d: 'm16 18 2 2 4-4' }],
 ];
-var ex = [
+var fi = [
     [
         'path',
         {
@@ -10049,7 +10094,7 @@ var ex = [
     ['path', { d: 'M18 22v-3' }],
     ['circle', { cx: '10', cy: '10', r: '3' }],
 ];
-var rx = [
+var ui = [
     [
         'path',
         {
@@ -10058,7 +10103,7 @@ var rx = [
     ],
     ['path', { d: 'M9 10h6' }],
 ];
-var ox = [
+var ci = [
     [
         'path',
         {
@@ -10068,7 +10113,7 @@ var ox = [
     ['circle', { cx: '12', cy: '10', r: '3' }],
     ['path', { d: 'M16 18h6' }],
 ];
-var dx = [
+var ni = [
     ['path', { d: 'M12.75 7.09a3 3 0 0 1 2.16 2.16' }],
     [
         'path',
@@ -10080,7 +10125,7 @@ var dx = [
     ['path', { d: 'M8.475 2.818A8 8 0 0 1 20 10c0 1.183-.31 2.377-.81 3.533' }],
     ['path', { d: 'M9.13 9.13a3 3 0 0 0 3.74 3.74' }],
 ];
-var ut = [
+var x1 = [
     ['path', { d: 'M17.97 9.304A8 8 0 0 0 2 10c0 4.69 4.887 9.562 7.022 11.468' }],
     [
         'path',
@@ -10090,7 +10135,7 @@ var ut = [
     ],
     ['circle', { cx: '10', cy: '10', r: '3' }],
 ];
-var px = [
+var ii = [
     [
         'path',
         {
@@ -10100,7 +10145,7 @@ var px = [
     ['path', { d: 'M12 7v6' }],
     ['path', { d: 'M9 10h6' }],
 ];
-var lx = [
+var xi = [
     [
         'path',
         {
@@ -10111,7 +10156,7 @@ var lx = [
     ['path', { d: 'M16 18h6' }],
     ['path', { d: 'M19 15v6' }],
 ];
-var sx = [
+var mi = [
     [
         'path',
         {
@@ -10122,7 +10167,7 @@ var sx = [
     ['circle', { cx: '12', cy: '10', r: '3' }],
     ['circle', { cx: '18', cy: '18', r: '3' }],
 ];
-var hx = [
+var Mi = [
     [
         'path',
         {
@@ -10132,7 +10177,7 @@ var hx = [
     ['path', { d: 'm14.5 7.5-5 5' }],
     ['path', { d: 'm9.5 7.5 5 5' }],
 ];
-var fx = [
+var vi = [
     [
         'path',
         {
@@ -10143,7 +10188,7 @@ var fx = [
     ['path', { d: 'm21.5 15.5-5 5' }],
     ['path', { d: 'm21.5 20.5-5-5' }],
 ];
-var ux = [
+var gi = [
     [
         'path',
         {
@@ -10152,7 +10197,7 @@ var ux = [
     ],
     ['circle', { cx: '12', cy: '10', r: '3' }],
 ];
-var cx = [
+var yi = [
     [
         'path',
         {
@@ -10167,7 +10212,7 @@ var cx = [
         },
     ],
 ];
-var nx = [
+var Ci = [
     [
         'path',
         {
@@ -10179,18 +10224,18 @@ var nx = [
     ['path', { d: 'M21 18h-6' }],
     ['path', { d: 'M9 3.236v15' }],
 ];
-var xx = [
+var Ai = [
     ['path', { d: 'm14 6 4 4' }],
     ['path', { d: 'M17 3h4v4' }],
     ['path', { d: 'm21 3-7.75 7.75' }],
     ['circle', { cx: '9', cy: '15', r: '6' }],
 ];
-var ix = [
+var wi = [
     ['path', { d: 'M16 3h5v5' }],
     ['path', { d: 'm21 3-6.75 6.75' }],
     ['circle', { cx: '10', cy: '14', r: '6' }],
 ];
-var mx = [
+var Si = [
     [
         'path',
         {
@@ -10200,18 +10245,18 @@ var mx = [
     ['path', { d: 'M15 5.764v15' }],
     ['path', { d: 'M9 3.236v15' }],
 ];
-var Mx = [
+var Hi = [
     ['path', { d: 'M12 12 4.207 4.207A.707.707 0 0 1 4.707 3h14.586a.707.707 0 0 1 .5 1.207z' }],
     ['path', { d: 'M12 12v10' }],
     ['path', { d: 'M7 22h10' }],
 ];
-var vx = [
+var Li = [
     ['path', { d: 'M15 3h6v6' }],
     ['path', { d: 'm21 3-7 7' }],
     ['path', { d: 'm3 21 7-7' }],
     ['path', { d: 'M9 21H3v-6' }],
 ];
-var gx = [
+var Vi = [
     [
         'path',
         {
@@ -10224,20 +10269,20 @@ var gx = [
     ['circle', { cx: '12', cy: '17', r: '5' }],
     ['path', { d: 'M12 18v-2h-.5' }],
 ];
-var yx = [
+var ki = [
     ['path', { d: 'M8 3H5a2 2 0 0 0-2 2v3' }],
     ['path', { d: 'M21 8V5a2 2 0 0 0-2-2h-3' }],
     ['path', { d: 'M3 16v3a2 2 0 0 0 2 2h3' }],
     ['path', { d: 'M16 21h3a2 2 0 0 0 2-2v-3' }],
 ];
-var Cx = [
+var Pi = [
     ['path', { d: 'M11.636 6A13 13 0 0 0 19.4 3.2 1 1 0 0 1 21 4v11.344' }],
     ['path', { d: 'M14.378 14.357A13 13 0 0 0 11 14H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h1' }],
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14' }],
     ['path', { d: 'M8 8v6' }],
 ];
-var Ax = [
+var bi = [
     [
         'path',
         {
@@ -10247,13 +10292,13 @@ var Ax = [
     ['path', { d: 'M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14' }],
     ['path', { d: 'M8 6v8' }],
 ];
-var Sx = [
+var Ti = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['line', { x1: '8', x2: '16', y1: '15', y2: '15' }],
     ['line', { x1: '9', x2: '9.01', y1: '9', y2: '9' }],
     ['line', { x1: '15', x2: '15.01', y1: '9', y2: '9' }],
 ];
-var wx = [
+var Bi = [
     ['path', { d: 'M12 12v-2' }],
     ['path', { d: 'M12 18v-2' }],
     ['path', { d: 'M16 12v-2' }],
@@ -10266,17 +10311,17 @@ var wx = [
     ['path', { d: 'M8 18v-2' }],
     ['rect', { x: '2', y: '6', width: '20', height: '10', rx: '2' }],
 ];
-var Hx = [
+var Ri = [
     ['path', { d: 'M4 5h16' }],
     ['path', { d: 'M4 12h16' }],
     ['path', { d: 'M4 19h16' }],
 ];
-var Lx = [
+var Di = [
     ['path', { d: 'm8 6 4-4 4 4' }],
     ['path', { d: 'M12 2v10.3a4 4 0 0 1-1.172 2.872L4 22' }],
     ['path', { d: 'm20 22-5-5' }],
 ];
-var Vx = [
+var Ei = [
     [
         'path',
         {
@@ -10285,7 +10330,7 @@ var Vx = [
     ],
     ['path', { d: 'm9 12 2 2 4-4' }],
 ];
-var kx = [
+var Fi = [
     ['path', { d: 'm10 9-3 3 3 3' }],
     ['path', { d: 'm14 15 3-3-3-3' }],
     [
@@ -10295,7 +10340,7 @@ var kx = [
         },
     ],
 ];
-var Px = [
+var Oi = [
     ['path', { d: 'M10.1 2.182a10 10 0 0 1 3.8 0' }],
     ['path', { d: 'M13.9 21.818a10 10 0 0 1-3.8 0' }],
     ['path', { d: 'M17.609 3.72a10 10 0 0 1 2.69 2.7' }],
@@ -10305,7 +10350,7 @@ var Px = [
     ['path', { d: 'M3.721 6.391a10 10 0 0 1 2.7-2.69' }],
     ['path', { d: 'm6.163 21.117-2.906.85a1 1 0 0 1-1.236-1.169l.965-2.98' }],
 ];
-var Tx = [
+var qi = [
     [
         'path',
         {
@@ -10319,7 +10364,7 @@ var Tx = [
         },
     ],
 ];
-var Bx = [
+var zi = [
     [
         'path',
         {
@@ -10330,7 +10375,7 @@ var Bx = [
     ['path', { d: 'M12 12h.01' }],
     ['path', { d: 'M16 12h.01' }],
 ];
-var bx = [
+var Ui = [
     ['path', { d: 'm2 2 20 20' }],
     [
         'path',
@@ -10340,7 +10385,7 @@ var bx = [
     ],
     ['path', { d: 'M8.35 2.69A10 10 0 0 1 21.3 15.65' }],
 ];
-var Dx = [
+var _i = [
     [
         'path',
         {
@@ -10350,7 +10395,7 @@ var Dx = [
     ['path', { d: 'M8 12h8' }],
     ['path', { d: 'M12 8v8' }],
 ];
-var ct = [
+var m1 = [
     [
         'path',
         {
@@ -10360,7 +10405,7 @@ var ct = [
     ['path', { d: 'M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3' }],
     ['path', { d: 'M12 17h.01' }],
 ];
-var Rx = [
+var Ni = [
     [
         'path',
         {
@@ -10370,7 +10415,7 @@ var Rx = [
     ['path', { d: 'm10 15-3-3 3-3' }],
     ['path', { d: 'M7 12h8a2 2 0 0 1 2 2v1' }],
 ];
-var Fx = [
+var Ii = [
     [
         'path',
         {
@@ -10380,7 +10425,7 @@ var Fx = [
     ['path', { d: 'M12 8v4' }],
     ['path', { d: 'M12 16h.01' }],
 ];
-var Ex = [
+var Gi = [
     [
         'path',
         {
@@ -10390,7 +10435,7 @@ var Ex = [
     ['path', { d: 'm15 9-6 6' }],
     ['path', { d: 'm9 9 6 6' }],
 ];
-var Ox = [
+var Wi = [
     [
         'path',
         {
@@ -10398,7 +10443,7 @@ var Ox = [
         },
     ],
 ];
-var qx = [
+var Zi = [
     [
         'path',
         {
@@ -10407,7 +10452,7 @@ var qx = [
     ],
     ['path', { d: 'm9 11 2 2 4-4' }],
 ];
-var zx = [
+var Xi = [
     [
         'path',
         {
@@ -10417,7 +10462,7 @@ var zx = [
     ['path', { d: 'm10 8-3 3 3 3' }],
     ['path', { d: 'm14 14 3-3-3-3' }],
 ];
-var Ux = [
+var Ki = [
     [
         'path',
         {
@@ -10428,7 +10473,7 @@ var Ux = [
     ['path', { d: 'M10 9h4' }],
     ['path', { d: 'M12 7v4' }],
 ];
-var Ix = [
+var $i = [
     ['path', { d: 'M14 3h2' }],
     ['path', { d: 'M16 19h-2' }],
     ['path', { d: 'M2 12v-2' }],
@@ -10440,7 +10485,7 @@ var Ix = [
     ['path', { d: 'M8 19h2' }],
     ['path', { d: 'M8 3h2' }],
 ];
-var _x = [
+var Ji = [
     [
         'path',
         {
@@ -10449,7 +10494,7 @@ var _x = [
     ],
     ['circle', { cx: '19', cy: '6', r: '3' }],
 ];
-var Nx = [
+var ji = [
     [
         'path',
         {
@@ -10463,7 +10508,7 @@ var Nx = [
         },
     ],
 ];
-var Gx = [
+var Qi = [
     [
         'path',
         {
@@ -10473,7 +10518,7 @@ var Gx = [
     ['path', { d: 'M20 15v-2a2 2 0 0 0-4 0v2' }],
     ['rect', { x: '14', y: '15', width: '8', height: '5', rx: '1' }],
 ];
-var Wx = [
+var Yi = [
     [
         'path',
         {
@@ -10484,7 +10529,7 @@ var Wx = [
     ['path', { d: 'M16 11h.01' }],
     ['path', { d: 'M8 11h.01' }],
 ];
-var Zx = [
+var ax = [
     [
         'path',
         {
@@ -10494,7 +10539,7 @@ var Zx = [
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M8.656 3H20a2 2 0 0 1 2 2v11.344' }],
 ];
-var Xx = [
+var tx = [
     [
         'path',
         {
@@ -10504,7 +10549,7 @@ var Xx = [
     ['path', { d: 'M12 8v6' }],
     ['path', { d: 'M9 11h6' }],
 ];
-var Kx = [
+var ex = [
     [
         'path',
         {
@@ -10514,7 +10559,7 @@ var Kx = [
     ['path', { d: 'm10 8-3 3 3 3' }],
     ['path', { d: 'M17 14v-1a2 2 0 0 0-2-2H7' }],
 ];
-var Jx = [
+var rx = [
     ['path', { d: 'M14 14a2 2 0 0 0 2-2V8h-2' }],
     [
         'path',
@@ -10524,7 +10569,7 @@ var Jx = [
     ],
     ['path', { d: 'M8 14a2 2 0 0 0 2-2V8H8' }],
 ];
-var $x = [
+var ox = [
     [
         'path',
         {
@@ -10535,7 +10580,7 @@ var $x = [
     ['path', { d: 'M7 15h6' }],
     ['path', { d: 'M7 7h8' }],
 ];
-var jx = [
+var dx = [
     [
         'path',
         {
@@ -10545,7 +10590,7 @@ var jx = [
     ['path', { d: 'M16 3h6v6' }],
     ['path', { d: 'm16 9 6-6' }],
 ];
-var Qx = [
+var px = [
     [
         'path',
         {
@@ -10555,7 +10600,7 @@ var Qx = [
     ['path', { d: 'M12 15h.01' }],
     ['path', { d: 'M12 7v4' }],
 ];
-var Yx = [
+var lx = [
     [
         'path',
         {
@@ -10565,7 +10610,7 @@ var Yx = [
     ['path', { d: 'm14.5 8.5-5 5' }],
     ['path', { d: 'm9.5 8.5 5 5' }],
 ];
-var ai = [
+var sx = [
     [
         'path',
         {
@@ -10573,7 +10618,7 @@ var ai = [
         },
     ],
 ];
-var ti = [
+var hx = [
     [
         'path',
         {
@@ -10587,7 +10632,7 @@ var ti = [
         },
     ],
 ];
-var ei = [
+var fx = [
     ['path', { d: 'M12 11.4V9.1' }],
     ['path', { d: 'm12 17 6.59-6.59' }],
     [
@@ -10598,7 +10643,7 @@ var ei = [
     ],
     ['circle', { cx: '20', cy: '9', r: '2' }],
 ];
-var ri = [
+var ux = [
     ['path', { d: 'M12 19v3' }],
     ['path', { d: 'M15 9.34V5a3 3 0 0 0-5.68-1.33' }],
     ['path', { d: 'M16.95 16.95A7 7 0 0 1 5 12v-2' }],
@@ -10606,12 +10651,12 @@ var ri = [
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M9 9v3a3 3 0 0 0 5.12 2.12' }],
 ];
-var oi = [
+var cx = [
     ['path', { d: 'M12 19v3' }],
     ['path', { d: 'M19 10v2a7 7 0 0 1-14 0v-2' }],
     ['rect', { x: '9', y: '2', width: '6', height: '13', rx: '3' }],
 ];
-var nt = [
+var M1 = [
     [
         'path',
         { d: 'm11 7.601-5.994 8.19a1 1 0 0 0 .1 1.298l.817.818a1 1 0 0 0 1.314.087L15.09 12' },
@@ -10624,7 +10669,7 @@ var nt = [
     ],
     ['circle', { cx: '16', cy: '7', r: '5' }],
 ];
-var di = [
+var nx = [
     ['path', { d: 'M10 12h4' }],
     ['path', { d: 'M10 17h4' }],
     ['path', { d: 'M10 7h4' }],
@@ -10636,7 +10681,7 @@ var di = [
     ['path', { d: 'M4 6h2' }],
     ['rect', { x: '6', y: '2', width: '12', height: '20', rx: '2' }],
 ];
-var pi = [
+var ix = [
     ['path', { d: 'M6 18h8' }],
     ['path', { d: 'M3 22h18' }],
     ['path', { d: 'M14 22a7 7 0 1 0 0-14h-1' }],
@@ -10644,14 +10689,14 @@ var pi = [
     ['path', { d: 'M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z' }],
     ['path', { d: 'M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3' }],
 ];
-var li = [
+var xx = [
     ['rect', { width: '20', height: '15', x: '2', y: '4', rx: '2' }],
     ['rect', { width: '8', height: '7', x: '6', y: '8', rx: '1' }],
     ['path', { d: 'M18 8v7' }],
     ['path', { d: 'M6 19v2' }],
     ['path', { d: 'M18 19v2' }],
 ];
-var si = [
+var mx = [
     ['path', { d: 'M12 13v8' }],
     ['path', { d: 'M12 3v3' }],
     [
@@ -10661,7 +10706,7 @@ var si = [
         },
     ],
 ];
-var hi = [
+var Mx = [
     ['path', { d: 'M8 2h8' }],
     [
         'path',
@@ -10672,7 +10717,7 @@ var hi = [
     ['path', { d: 'M7 15a6.47 6.47 0 0 1 5 0 6.472 6.472 0 0 0 3.435.435' }],
     ['line', { x1: '2', x2: '22', y1: '2', y2: '22' }],
 ];
-var fi = [
+var vx = [
     ['path', { d: 'M8 2h8' }],
     [
         'path',
@@ -10682,38 +10727,38 @@ var fi = [
     ],
     ['path', { d: 'M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0' }],
 ];
-var ui = [
+var gx = [
     ['path', { d: 'm14 10 7-7' }],
     ['path', { d: 'M20 10h-6V4' }],
     ['path', { d: 'm3 21 7-7' }],
     ['path', { d: 'M4 14h6v6' }],
 ];
-var ci = [
+var yx = [
     ['path', { d: 'M8 3v3a2 2 0 0 1-2 2H3' }],
     ['path', { d: 'M21 8h-3a2 2 0 0 1-2-2V3' }],
     ['path', { d: 'M3 16h3a2 2 0 0 1 2 2v3' }],
     ['path', { d: 'M16 21v-3a2 2 0 0 1 2-2h3' }],
 ];
-var ni = [['path', { d: 'M5 12h14' }]];
-var xi = [
+var Cx = [['path', { d: 'M5 12h14' }]];
+var Ax = [
     ['path', { d: 'M11 6 8 9' }],
     ['path', { d: 'm16 7-8 8' }],
     ['rect', { x: '4', y: '2', width: '16', height: '20', rx: '2' }],
 ];
-var ii = [
+var wx = [
     ['path', { d: 'M10 6.6 8.6 8' }],
     ['path', { d: 'M12 18v4' }],
     ['path', { d: 'M15 7.5 9.5 13' }],
     ['path', { d: 'M7 22h10' }],
     ['circle', { cx: '12', cy: '10', r: '8' }],
 ];
-var mi = [
+var Sx = [
     ['path', { d: 'm9 10 2 2 4-4' }],
     ['rect', { width: '20', height: '14', x: '2', y: '3', rx: '2' }],
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'M8 21h8' }],
 ];
-var Mi = [
+var Hx = [
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'm14.305 7.53.923-.382' }],
     ['path', { d: 'm15.228 4.852-.923-.383' }],
@@ -10727,40 +10772,40 @@ var Mi = [
     ['path', { d: 'M8 21h8' }],
     ['circle', { cx: '18', cy: '6', r: '3' }],
 ];
-var vi = [
+var Lx = [
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'M22 12.307V15a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8.693' }],
     ['path', { d: 'M8 21h8' }],
     ['circle', { cx: '19', cy: '6', r: '3' }],
 ];
-var gi = [
+var Vx = [
     ['path', { d: 'M11 13a3 3 0 1 1 2.83-4H14a2 2 0 0 1 0 4z' }],
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'M8 21h8' }],
     ['rect', { x: '2', y: '3', width: '20', height: '14', rx: '2' }],
 ];
-var yi = [
+var kx = [
     ['path', { d: 'M12 13V7' }],
     ['path', { d: 'm15 10-3 3-3-3' }],
     ['rect', { width: '20', height: '14', x: '2', y: '3', rx: '2' }],
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'M8 21h8' }],
 ];
-var Ci = [
+var Px = [
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'M17 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 1.184-1.826' }],
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M8 21h8' }],
     ['path', { d: 'M8.656 3H20a2 2 0 0 1 2 2v10a2 2 0 0 1-.293 1.042' }],
 ];
-var Ai = [
+var bx = [
     ['path', { d: 'M10 13V7' }],
     ['path', { d: 'M14 13V7' }],
     ['rect', { width: '20', height: '14', x: '2', y: '3', rx: '2' }],
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'M8 21h8' }],
 ];
-var Si = [
+var Tx = [
     [
         'path',
         {
@@ -10771,40 +10816,40 @@ var Si = [
     ['path', { d: 'M8 21h8' }],
     ['rect', { x: '2', y: '3', width: '20', height: '14', rx: '2' }],
 ];
-var wi = [
+var Bx = [
     ['path', { d: 'M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8' }],
     ['path', { d: 'M10 19v-3.96 3.15' }],
     ['path', { d: 'M7 19h5' }],
     ['rect', { width: '6', height: '10', x: '16', y: '12', rx: '2' }],
 ];
-var Hi = [
+var Rx = [
     ['path', { d: 'M5.5 20H8' }],
     ['path', { d: 'M17 9h.01' }],
     ['rect', { width: '10', height: '16', x: '12', y: '4', rx: '2' }],
     ['path', { d: 'M8 6H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h4' }],
     ['circle', { cx: '17', cy: '15', r: '1' }],
 ];
-var Li = [
+var Dx = [
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'M8 21h8' }],
     ['rect', { x: '2', y: '3', width: '20', height: '14', rx: '2' }],
     ['rect', { x: '9', y: '7', width: '6', height: '6', rx: '1' }],
 ];
-var Vi = [
+var Ex = [
     ['path', { d: 'm9 10 3-3 3 3' }],
     ['path', { d: 'M12 13V7' }],
     ['rect', { width: '20', height: '14', x: '2', y: '3', rx: '2' }],
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'M8 21h8' }],
 ];
-var ki = [
+var Fx = [
     ['path', { d: 'm14.5 12.5-5-5' }],
     ['path', { d: 'm9.5 12.5 5-5' }],
     ['rect', { width: '20', height: '14', x: '2', y: '3', rx: '2' }],
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'M8 21h8' }],
 ];
-var Pi = [
+var Ox = [
     ['path', { d: 'M18 5h4' }],
     ['path', { d: 'M20 3v4' }],
     [
@@ -10814,12 +10859,12 @@ var Pi = [
         },
     ],
 ];
-var Ti = [
+var qx = [
     ['rect', { width: '20', height: '14', x: '2', y: '3', rx: '2' }],
     ['line', { x1: '8', x2: '16', y1: '21', y2: '21' }],
     ['line', { x1: '12', x2: '12', y1: '17', y2: '21' }],
 ];
-var Bi = [
+var zx = [
     [
         'path',
         {
@@ -10827,30 +10872,30 @@ var Bi = [
         },
     ],
 ];
-var bi = [
+var Ux = [
     ['path', { d: 'm18 14-1-3' }],
     ['path', { d: 'm3 9 6 2a2 2 0 0 1 2-2h2a2 2 0 0 1 1.99 1.81' }],
     ['path', { d: 'M8 17h3a1 1 0 0 0 1-1 6 6 0 0 1 6-6 1 1 0 0 0 1-1v-.75A5 5 0 0 0 17 5' }],
     ['circle', { cx: '19', cy: '17', r: '3' }],
     ['circle', { cx: '5', cy: '17', r: '3' }],
 ];
-var Di = [
+var _x = [
     ['path', { d: 'm8 3 4 8 5-5 5 15H2L8 3z' }],
     ['path', { d: 'M4.14 15.08c2.62-1.57 5.24-1.43 7.86.42 2.74 1.94 5.49 2 8.23.19' }],
 ];
-var Ri = [['path', { d: 'm8 3 4 8 5-5 5 15H2L8 3z' }]];
-var Fi = [
+var Nx = [['path', { d: 'm8 3 4 8 5-5 5 15H2L8 3z' }]];
+var Ix = [
     ['path', { d: 'M12 7.318V10' }],
     ['path', { d: 'M5 10v5a7 7 0 0 0 14 0V9c0-3.527-2.608-6.515-6-7' }],
     ['circle', { cx: '7', cy: '4', r: '2' }],
 ];
-var Ei = [
+var Gx = [
     ['path', { d: 'M12 6v.343' }],
     ['path', { d: 'M18.218 18.218A7 7 0 0 1 5 15V9a7 7 0 0 1 .782-3.218' }],
     ['path', { d: 'M19 13.343V9A7 7 0 0 0 8.56 2.902' }],
     ['path', { d: 'M22 22 2 2' }],
 ];
-var Oi = [
+var Wx = [
     [
         'path',
         {
@@ -10860,7 +10905,7 @@ var Oi = [
     ['path', { d: 'M22 2 2 22' }],
     ['path', { d: 'm6.816 11.528-2.779-6.84a.495.495 0 0 1 .651-.651l6.84 2.779' }],
 ];
-var qi = [
+var Zx = [
     [
         'path',
         {
@@ -10870,7 +10915,7 @@ var qi = [
     ['circle', { cx: '16', cy: '16', r: '6' }],
     ['path', { d: 'm11.8 11.8 8.4 8.4' }],
 ];
-var zi = [
+var Xx = [
     [
         'path',
         {
@@ -10878,7 +10923,7 @@ var zi = [
         },
     ],
 ];
-var Ui = [
+var Kx = [
     ['path', { d: 'M12.586 12.586 19 19' }],
     [
         'path',
@@ -10887,7 +10932,7 @@ var Ui = [
         },
     ],
 ];
-var Ii = [
+var $x = [
     ['path', { d: 'M14 4.1 12 6' }],
     ['path', { d: 'm5.1 8-2.9-.8' }],
     ['path', { d: 'm6 12-1.9 2' }],
@@ -10899,74 +10944,74 @@ var Ii = [
         },
     ],
 ];
-var _i = [
+var Jx = [
     ['path', { d: 'M12 7.318V10' }],
     ['path', { d: 'M19 10v5a7 7 0 0 1-14 0V9c0-3.527 2.608-6.515 6-7' }],
     ['circle', { cx: '17', cy: '4', r: '2' }],
 ];
-var Ni = [
+var jx = [
     ['rect', { x: '5', y: '2', width: '14', height: '20', rx: '7' }],
     ['path', { d: 'M12 6v4' }],
 ];
-var xt = [
+var v1 = [
     ['path', { d: 'M5 3v16h16' }],
     ['path', { d: 'm5 19 6-6' }],
     ['path', { d: 'm2 6 3-3 3 3' }],
     ['path', { d: 'm18 16 3 3-3 3' }],
 ];
-var Gi = [
+var Qx = [
     ['path', { d: 'M19 13v6h-6' }],
     ['path', { d: 'M5 11V5h6' }],
     ['path', { d: 'm5 5 14 14' }],
 ];
-var Wi = [
+var Yx = [
     ['path', { d: 'M11 19H5v-6' }],
     ['path', { d: 'M13 5h6v6' }],
     ['path', { d: 'M19 5 5 19' }],
 ];
-var Zi = [
+var a6 = [
     ['path', { d: 'M11 19H5V13' }],
     ['path', { d: 'M19 5L5 19' }],
 ];
-var Xi = [
+var t6 = [
     ['path', { d: 'M19 13V19H13' }],
     ['path', { d: 'M5 5L19 19' }],
 ];
-var Ki = [
+var e6 = [
     ['path', { d: 'M8 18L12 22L16 18' }],
     ['path', { d: 'M12 2V22' }],
 ];
-var Ji = [
+var r6 = [
     ['path', { d: 'm18 8 4 4-4 4' }],
     ['path', { d: 'M2 12h20' }],
     ['path', { d: 'm6 8-4 4 4 4' }],
 ];
-var $i = [
+var o6 = [
     ['path', { d: 'M6 8L2 12L6 16' }],
     ['path', { d: 'M2 12H22' }],
 ];
-var ji = [
+var d6 = [
     ['path', { d: 'M18 8L22 12L18 16' }],
     ['path', { d: 'M2 12H22' }],
 ];
-var Qi = [
+var p6 = [
     ['path', { d: 'M5 11V5H11' }],
     ['path', { d: 'M5 5L19 19' }],
 ];
-var Yi = [
+var l6 = [
     ['path', { d: 'M13 5H19V11' }],
     ['path', { d: 'M19 5L5 19' }],
 ];
-var a6 = [
+var s6 = [
     ['path', { d: 'M8 6L12 2L16 6' }],
     ['path', { d: 'M12 2V22' }],
 ];
-var t6 = [
+var h6 = [
     ['path', { d: 'M12 2v20' }],
     ['path', { d: 'm8 18 4 4 4-4' }],
     ['path', { d: 'm8 6 4-4 4 4' }],
 ];
-var e6 = [
+var f6 = [
     ['path', { d: 'M12 2v20' }],
     ['path', { d: 'm15 19-3 3-3-3' }],
     ['path', { d: 'm19 9 3 3-3 3' }],
@@ -10974,45 +11019,45 @@ var e6 = [
     ['path', { d: 'm5 9-3 3 3 3' }],
     ['path', { d: 'm9 5 3-3 3 3' }],
 ];
-var r6 = [
+var u6 = [
     ['circle', { cx: '8', cy: '18', r: '4' }],
     ['path', { d: 'M12 18V2l7 4' }],
 ];
-var o6 = [
+var c6 = [
     ['circle', { cx: '12', cy: '18', r: '4' }],
     ['path', { d: 'M16 18V2' }],
 ];
-var d6 = [
+var n6 = [
     ['path', { d: 'M9 18V5l12-2v13' }],
     ['path', { d: 'm9 9 12-2' }],
     ['circle', { cx: '6', cy: '18', r: '3' }],
     ['circle', { cx: '18', cy: '16', r: '3' }],
 ];
-var p6 = [
+var i6 = [
     ['path', { d: 'M9 18V5l12-2v13' }],
     ['circle', { cx: '6', cy: '18', r: '3' }],
     ['circle', { cx: '18', cy: '16', r: '3' }],
 ];
-var l6 = [
+var x6 = [
     ['path', { d: 'M9.31 9.31 5 21l7-4 7 4-1.17-3.17' }],
     ['path', { d: 'M14.53 8.88 12 2l-1.17 3.17' }],
     ['line', { x1: '2', x2: '22', y1: '2', y2: '22' }],
 ];
-var s6 = [['polygon', { points: '12 2 19 21 12 17 5 21 12 2' }]];
-var h6 = [
+var m6 = [['polygon', { points: '12 2 19 21 12 17 5 21 12 2' }]];
+var M6 = [
     ['path', { d: 'M8.43 8.43 3 11l8 2 2 8 2.57-5.43' }],
     ['path', { d: 'M17.39 11.73 22 2l-9.73 4.61' }],
     ['line', { x1: '2', x2: '22', y1: '2', y2: '22' }],
 ];
-var f6 = [['polygon', { points: '3 11 22 2 13 21 11 13 3 11' }]];
-var u6 = [
+var v6 = [['polygon', { points: '3 11 22 2 13 21 11 13 3 11' }]];
+var g6 = [
     ['rect', { x: '16', y: '16', width: '6', height: '6', rx: '1' }],
     ['rect', { x: '2', y: '16', width: '6', height: '6', rx: '1' }],
     ['rect', { x: '9', y: '2', width: '6', height: '6', rx: '1' }],
     ['path', { d: 'M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3' }],
     ['path', { d: 'M12 12V8' }],
 ];
-var c6 = [
+var y6 = [
     ['path', { d: 'M15 18h-5' }],
     ['path', { d: 'M18 14h-8' }],
     [
@@ -11023,19 +11068,19 @@ var c6 = [
     ],
     ['rect', { width: '8', height: '4', x: '10', y: '6', rx: '1' }],
 ];
-var n6 = [
+var C6 = [
     ['path', { d: 'M6 8.32a7.43 7.43 0 0 1 0 7.36' }],
     ['path', { d: 'M9.46 6.21a11.76 11.76 0 0 1 0 11.58' }],
     ['path', { d: 'M12.91 4.1a15.91 15.91 0 0 1 .01 15.8' }],
     ['path', { d: 'M16.37 2a20.16 20.16 0 0 1 0 20' }],
 ];
-var x6 = [
+var A6 = [
     ['path', { d: 'M12 2v10' }],
     ['path', { d: 'm8.5 4 7 4' }],
     ['path', { d: 'm8.5 8 7-4' }],
     ['circle', { cx: '12', cy: '17', r: '5' }],
 ];
-var i6 = [
+var w6 = [
     ['path', { d: 'M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4' }],
     ['path', { d: 'M2 6h4' }],
     ['path', { d: 'M2 10h4' }],
@@ -11048,7 +11093,7 @@ var i6 = [
         },
     ],
 ];
-var m6 = [
+var S6 = [
     ['path', { d: 'M2 6h4' }],
     ['path', { d: 'M2 10h4' }],
     ['path', { d: 'M2 14h4' }],
@@ -11059,7 +11104,7 @@ var m6 = [
     ['path', { d: 'M15 12h5' }],
     ['path', { d: 'M15 17h5' }],
 ];
-var M6 = [
+var H6 = [
     ['path', { d: 'M2 6h4' }],
     ['path', { d: 'M2 10h4' }],
     ['path', { d: 'M2 14h4' }],
@@ -11069,7 +11114,7 @@ var M6 = [
     ['path', { d: 'M9.5 12H16' }],
     ['path', { d: 'M9.5 16H14' }],
 ];
-var v6 = [
+var L6 = [
     ['path', { d: 'M2 6h4' }],
     ['path', { d: 'M2 10h4' }],
     ['path', { d: 'M2 14h4' }],
@@ -11077,7 +11122,7 @@ var v6 = [
     ['rect', { width: '16', height: '20', x: '4', y: '2', rx: '2' }],
     ['path', { d: 'M16 2v20' }],
 ];
-var g6 = [
+var V6 = [
     ['path', { d: 'M8 2v4' }],
     ['path', { d: 'M12 2v4' }],
     ['path', { d: 'M16 2v4' }],
@@ -11092,7 +11137,7 @@ var g6 = [
     ['path', { d: 'M8 14h8' }],
     ['path', { d: 'M8 18h5' }],
 ];
-var y6 = [
+var k6 = [
     ['path', { d: 'M8 2v4' }],
     ['path', { d: 'M12 2v4' }],
     ['path', { d: 'M16 2v4' }],
@@ -11101,7 +11146,7 @@ var y6 = [
     ['path', { d: 'M8 14h8' }],
     ['path', { d: 'M8 18h5' }],
 ];
-var C6 = [
+var P6 = [
     ['path', { d: 'M12 4V2' }],
     [
         'path',
@@ -11118,7 +11163,7 @@ var C6 = [
     ],
     ['line', { x1: '2', x2: '22', y1: '2', y2: '22' }],
 ];
-var A6 = [
+var b6 = [
     ['path', { d: 'M12 4V2' }],
     [
         'path',
@@ -11133,7 +11178,7 @@ var A6 = [
         },
     ],
 ];
-var it = [
+var g1 = [
     ['path', { d: 'M12 16h.01' }],
     ['path', { d: 'M12 8v4' }],
     [
@@ -11143,7 +11188,7 @@ var it = [
         },
     ],
 ];
-var S6 = [
+var T6 = [
     [
         'path',
         {
@@ -11152,7 +11197,7 @@ var S6 = [
     ],
     ['path', { d: 'M8 12h8' }],
 ];
-var mt = [
+var y1 = [
     ['path', { d: 'M10 15V9' }],
     ['path', { d: 'M14 15V9' }],
     [
@@ -11162,7 +11207,7 @@ var mt = [
         },
     ],
 ];
-var Mt = [
+var C1 = [
     ['path', { d: 'm15 9-6 6' }],
     [
         'path',
@@ -11172,7 +11217,7 @@ var Mt = [
     ],
     ['path', { d: 'm9 9 6 6' }],
 ];
-var w6 = [
+var B6 = [
     [
         'path',
         {
@@ -11180,7 +11225,7 @@ var w6 = [
         },
     ],
 ];
-var H6 = [
+var R6 = [
     [
         'path',
         {
@@ -11188,18 +11233,18 @@ var H6 = [
         },
     ],
 ];
-var L6 = [
+var D6 = [
     ['path', { d: 'M14 3h7' }],
     ['path', { d: 'M3 3h5.28a1 1 0 0 1 .948.684l5.544 16.632a1 1 0 0 0 .949.684H21' }],
 ];
-var V6 = [
+var E6 = [
     ['path', { d: 'M20.341 6.484A10 10 0 0 1 10.266 21.85' }],
     ['path', { d: 'M3.659 17.516A10 10 0 0 1 13.74 2.152' }],
     ['circle', { cx: '12', cy: '12', r: '3' }],
     ['circle', { cx: '19', cy: '5', r: '2' }],
     ['circle', { cx: '5', cy: '19', r: '2' }],
 ];
-var k6 = [
+var F6 = [
     ['path', { d: 'M12 12V4a1 1 0 0 1 1-1h6.297a1 1 0 0 1 .651 1.759l-4.696 4.025' }],
     [
         'path',
@@ -11212,7 +11257,7 @@ var k6 = [
         },
     ],
 ];
-var P6 = [
+var O6 = [
     ['path', { d: 'M12 3v6' }],
     [
         'path',
@@ -11222,7 +11267,7 @@ var P6 = [
     ],
     ['path', { d: 'M3.054 9.013h17.893' }],
 ];
-var T6 = [
+var q6 = [
     ['path', { d: 'M12 22V12' }],
     ['path', { d: 'm16 17 2 2 4-4' }],
     [
@@ -11234,7 +11279,7 @@ var T6 = [
     ['path', { d: 'M3.29 7 12 12l8.71-5' }],
     ['path', { d: 'm7.5 4.27 8.997 5.148' }],
 ];
-var B6 = [
+var z6 = [
     ['path', { d: 'M12 22V12' }],
     ['path', { d: 'M16 17h6' }],
     [
@@ -11246,7 +11291,7 @@ var B6 = [
     ['path', { d: 'M3.29 7 12 12l8.71-5' }],
     ['path', { d: 'm7.5 4.27 8.997 5.148' }],
 ];
-var b6 = [
+var U6 = [
     ['path', { d: 'M12 22V12' }],
     ['path', { d: 'M16 17h6' }],
     ['path', { d: 'M19 14v6' }],
@@ -11259,7 +11304,7 @@ var b6 = [
     ['path', { d: 'M3.29 7 12 12l8.71-5' }],
     ['path', { d: 'm7.5 4.27 8.997 5.148' }],
 ];
-var D6 = [
+var _6 = [
     ['path', { d: 'M12 22v-9' }],
     [
         'path',
@@ -11280,7 +11325,7 @@ var D6 = [
         },
     ],
 ];
-var R6 = [
+var N6 = [
     ['path', { d: 'M12 22V12' }],
     ['path', { d: 'M20.27 18.27 22 20' }],
     [
@@ -11293,7 +11338,7 @@ var R6 = [
     ['path', { d: 'm7.5 4.27 8.997 5.148' }],
     ['circle', { cx: '18.5', cy: '16.5', r: '2.5' }],
 ];
-var F6 = [
+var I6 = [
     ['path', { d: 'M12 22V12' }],
     ['path', { d: 'm16.5 14.5 5 5' }],
     ['path', { d: 'm16.5 19.5 5-5' }],
@@ -11306,7 +11351,7 @@ var F6 = [
     ['path', { d: 'M3.29 7 12 12l8.71-5' }],
     ['path', { d: 'm7.5 4.27 8.997 5.148' }],
 ];
-var E6 = [
+var G6 = [
     [
         'path',
         {
@@ -11317,7 +11362,7 @@ var E6 = [
     ['polyline', { points: '3.29 7 12 12 20.71 7' }],
     ['path', { d: 'm7.5 4.27 9 5.15' }],
 ];
-var O6 = [
+var W6 = [
     ['path', { d: 'M11 7 6 2' }],
     ['path', { d: 'M18.992 12H2.041' }],
     [
@@ -11333,12 +11378,12 @@ var O6 = [
         },
     ],
 ];
-var q6 = [
+var Z6 = [
     ['rect', { width: '16', height: '6', x: '2', y: '2', rx: '2' }],
     ['path', { d: 'M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2' }],
     ['rect', { width: '4', height: '6', x: '8', y: '16', rx: '1' }],
 ];
-var vt = [
+var A1 = [
     ['path', { d: 'M10 2v2' }],
     ['path', { d: 'M14 2v4' }],
     ['path', { d: 'M17 2a1 1 0 0 1 1 1v9H6V3a1 1 0 0 1 1-1z' }],
@@ -11349,7 +11394,7 @@ var vt = [
         },
     ],
 ];
-var z6 = [
+var X6 = [
     ['path', { d: 'm14.622 17.897-10.68-2.913' }],
     [
         'path',
@@ -11364,7 +11409,7 @@ var z6 = [
         },
     ],
 ];
-var U6 = [
+var K6 = [
     [
         'path',
         {
@@ -11376,7 +11421,7 @@ var U6 = [
     ['circle', { cx: '6.5', cy: '12.5', r: '.5', fill: 'currentColor' }],
     ['circle', { cx: '8.5', cy: '7.5', r: '.5', fill: 'currentColor' }],
 ];
-var I6 = [
+var $6 = [
     ['path', { d: 'M11.25 17.25h1.5L12 18z' }],
     ['path', { d: 'm15 12 2 2' }],
     ['path', { d: 'M18 6.5a.5.5 0 0 0-.5-.5' }],
@@ -11389,45 +11434,45 @@ var I6 = [
     ['path', { d: 'M6 6.5a.495.495 0 0 1 .5-.5' }],
     ['path', { d: 'm9 12-2 2' }],
 ];
-var _6 = [
+var J6 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M3 15h18' }],
     ['path', { d: 'm15 8-3 3-3-3' }],
 ];
-var gt = [
+var w1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M14 15h1' }],
     ['path', { d: 'M19 15h2' }],
     ['path', { d: 'M3 15h2' }],
     ['path', { d: 'M9 15h1' }],
 ];
-var N6 = [
+var j6 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M3 15h18' }],
     ['path', { d: 'm9 10 3-3 3 3' }],
 ];
-var G6 = [
+var Q6 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M3 15h18' }],
 ];
-var yt = [
+var S1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M9 3v18' }],
     ['path', { d: 'm16 15-3-3 3-3' }],
 ];
-var Ct = [
+var H1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M9 14v1' }],
     ['path', { d: 'M9 19v2' }],
     ['path', { d: 'M9 3v2' }],
     ['path', { d: 'M9 9v1' }],
 ];
-var At = [
+var L1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M9 3v18' }],
     ['path', { d: 'm14 9 3 3-3 3' }],
 ];
-var W6 = [
+var Y6 = [
     ['path', { d: 'M15 10V9' }],
     ['path', { d: 'M15 15v-1' }],
     ['path', { d: 'M15 21v-2' }],
@@ -11438,32 +11483,32 @@ var W6 = [
     ['path', { d: 'M9 5V3' }],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var St = [
+var V1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M9 3v18' }],
 ];
-var Z6 = [
+var a8 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M15 3v18' }],
     ['path', { d: 'm8 9 3 3-3 3' }],
 ];
-var wt = [
+var k1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M15 14v1' }],
     ['path', { d: 'M15 19v2' }],
     ['path', { d: 'M15 3v2' }],
     ['path', { d: 'M15 9v1' }],
 ];
-var X6 = [
+var t8 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M15 3v18' }],
     ['path', { d: 'm10 15-3-3 3-3' }],
 ];
-var K6 = [
+var e8 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M15 3v18' }],
 ];
-var J6 = [
+var r8 = [
     ['path', { d: 'M14 15h1' }],
     ['path', { d: 'M14 9h1' }],
     ['path', { d: 'M19 15h2' }],
@@ -11474,43 +11519,43 @@ var J6 = [
     ['path', { d: 'M9 9h1' }],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var $6 = [
+var o8 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M3 9h18' }],
     ['path', { d: 'm9 16 3-3 3 3' }],
 ];
-var j6 = [
+var d8 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M3 9h18' }],
     ['path', { d: 'm15 14-3 3-3-3' }],
 ];
-var Ht = [
+var P1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M14 9h1' }],
     ['path', { d: 'M19 9h2' }],
     ['path', { d: 'M3 9h2' }],
     ['path', { d: 'M9 9h1' }],
 ];
-var Q6 = [
+var p8 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M3 9h18' }],
 ];
-var Y6 = [
+var l8 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M9 3v18' }],
     ['path', { d: 'M9 15h12' }],
 ];
-var a8 = [
+var s8 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M3 15h12' }],
     ['path', { d: 'M15 3v18' }],
 ];
-var Lt = [
+var b1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M3 9h18' }],
     ['path', { d: 'M9 21V9' }],
 ];
-var t8 = [
+var h8 = [
     [
         'path',
         {
@@ -11524,7 +11569,7 @@ var t8 = [
         },
     ],
 ];
-var e8 = [
+var f8 = [
     [
         'path',
         {
@@ -11532,7 +11577,7 @@ var e8 = [
         },
     ],
 ];
-var r8 = [
+var u8 = [
     ['path', { d: 'M12.5 11.134 18.196 21' }],
     [
         'path',
@@ -11542,11 +11587,11 @@ var r8 = [
     ],
     ['path', { d: 'M21 21H3' }],
 ];
-var o8 = [
+var c8 = [
     ['path', { d: 'M8 21s-4-3-4-9 4-9 4-9' }],
     ['path', { d: 'M16 3s4 3 4 9-4 9-4 9' }],
 ];
-var d8 = [
+var n8 = [
     ['path', { d: 'M11 15h2' }],
     ['path', { d: 'M12 12v3' }],
     ['path', { d: 'M12 19v3' }],
@@ -11558,11 +11603,11 @@ var d8 = [
     ],
     ['path', { d: 'M9 9a3 3 0 1 1 6 0' }],
 ];
-var p8 = [
+var i8 = [
     ['rect', { x: '14', y: '3', width: '5', height: '18', rx: '1' }],
     ['rect', { x: '5', y: '3', width: '5', height: '18', rx: '1' }],
 ];
-var l8 = [
+var x8 = [
     ['path', { d: 'M5.8 11.3 2 22l10.7-3.79' }],
     ['path', { d: 'M4 3h.01' }],
     ['path', { d: 'M22 8h.01' }],
@@ -11583,13 +11628,13 @@ var l8 = [
         },
     ],
 ];
-var s8 = [
+var m8 = [
     ['rect', { width: '14', height: '20', x: '5', y: '2', rx: '2' }],
     ['path', { d: 'M15 14h.01' }],
     ['path', { d: 'M9 6h6' }],
     ['path', { d: 'M9 10h6' }],
 ];
-var h8 = [
+var M8 = [
     ['circle', { cx: '11', cy: '4', r: '2' }],
     ['circle', { cx: '18', cy: '8', r: '2' }],
     ['circle', { cx: '20', cy: '16', r: '2' }],
@@ -11600,7 +11645,7 @@ var h8 = [
         },
     ],
 ];
-var Vt = [
+var T1 = [
     ['path', { d: 'M13 21h8' }],
     [
         'path',
@@ -11609,7 +11654,7 @@ var Vt = [
         },
     ],
 ];
-var f8 = [
+var v8 = [
     [
         'path',
         {
@@ -11619,7 +11664,7 @@ var f8 = [
     ['path', { d: 'm12.829 7.172 4.359-4.346a1 1 0 1 1 3.986 3.986l-4.353 4.353' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var u8 = [
+var g8 = [
     [
         'path',
         {
@@ -11635,7 +11680,7 @@ var u8 = [
     ['path', { d: 'm2.3 2.3 7.286 7.286' }],
     ['circle', { cx: '11', cy: '11', r: '2' }],
 ];
-var kt = [
+var B1 = [
     [
         'path',
         {
@@ -11643,7 +11688,7 @@ var kt = [
         },
     ],
 ];
-var c8 = [
+var y8 = [
     ['path', { d: 'M13 21h8' }],
     ['path', { d: 'm15 5 4 4' }],
     [
@@ -11653,7 +11698,7 @@ var c8 = [
         },
     ],
 ];
-var n8 = [
+var C8 = [
     [
         'path',
         {
@@ -11664,7 +11709,7 @@ var n8 = [
     ['path', { d: 'm15 5 4 4' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var x8 = [
+var A8 = [
     ['path', { d: 'M13 7 8.7 2.7a2.41 2.41 0 0 0-3.4 0L2.7 5.3a2.41 2.41 0 0 0 0 3.4L7 13' }],
     ['path', { d: 'm8 6 2-2' }],
     ['path', { d: 'm18 16 2-2' }],
@@ -11677,7 +11722,7 @@ var x8 = [
     ],
     ['path', { d: 'm15 5 4 4' }],
 ];
-var i8 = [
+var w8 = [
     ['path', { d: 'M10 3H8' }],
     ['path', { d: 'm15.007 5.008 3.987 3.986' }],
     ['path', { d: 'M20 15v4' }],
@@ -11692,7 +11737,7 @@ var i8 = [
     ['path', { d: 'M6 7H2' }],
     ['path', { d: 'M9 2v2' }],
 ];
-var m8 = [
+var S8 = [
     [
         'path',
         {
@@ -11701,7 +11746,7 @@ var m8 = [
     ],
     ['path', { d: 'm15 5 4 4' }],
 ];
-var M8 = [
+var H8 = [
     [
         'path',
         {
@@ -11709,27 +11754,27 @@ var M8 = [
         },
     ],
 ];
-var v8 = [
+var L8 = [
     ['line', { x1: '19', x2: '5', y1: '5', y2: '19' }],
     ['circle', { cx: '6.5', cy: '6.5', r: '2.5' }],
     ['circle', { cx: '17.5', cy: '17.5', r: '2.5' }],
 ];
-var g8 = [
+var V8 = [
     ['circle', { cx: '12', cy: '5', r: '1' }],
     ['path', { d: 'm9 20 3-6 3 6' }],
     ['path', { d: 'm6 8 6 2 6-2' }],
     ['path', { d: 'M12 10v4' }],
 ];
-var y8 = [
+var k8 = [
     ['path', { d: 'M12 2v20' }],
     ['circle', { cx: '12', cy: '12', r: '7' }],
 ];
-var C8 = [
+var P8 = [
     ['path', { d: 'M20 11H4' }],
     ['path', { d: 'M20 7H4' }],
     ['path', { d: 'M7 21V4a1 1 0 0 1 1-1h4a1 1 0 0 1 0 12H7' }],
 ];
-var A8 = [
+var b8 = [
     ['path', { d: 'M13 2a9 9 0 0 1 9 9' }],
     ['path', { d: 'M13 6a5 5 0 0 1 5 5' }],
     [
@@ -11739,7 +11784,7 @@ var A8 = [
         },
     ],
 ];
-var S8 = [
+var T8 = [
     ['path', { d: 'M14 6h8' }],
     ['path', { d: 'm18 2 4 4-4 4' }],
     [
@@ -11749,7 +11794,7 @@ var S8 = [
         },
     ],
 ];
-var w8 = [
+var B8 = [
     ['path', { d: 'M16 2v6h6' }],
     ['path', { d: 'm22 2-6 6' }],
     [
@@ -11759,7 +11804,7 @@ var w8 = [
         },
     ],
 ];
-var H8 = [
+var R8 = [
     ['path', { d: 'm16 2 6 6' }],
     ['path', { d: 'm22 2-6 6' }],
     [
@@ -11769,7 +11814,7 @@ var H8 = [
         },
     ],
 ];
-var L8 = [
+var D8 = [
     [
         'path',
         {
@@ -11784,7 +11829,7 @@ var L8 = [
         },
     ],
 ];
-var V8 = [
+var E8 = [
     ['path', { d: 'm16 8 6-6' }],
     ['path', { d: 'M22 8V2h-6' }],
     [
@@ -11794,7 +11839,7 @@ var V8 = [
         },
     ],
 ];
-var k8 = [
+var F8 = [
     [
         'path',
         {
@@ -11802,12 +11847,12 @@ var k8 = [
         },
     ],
 ];
-var P8 = [
+var O8 = [
     ['line', { x1: '9', x2: '9', y1: '4', y2: '20' }],
     ['path', { d: 'M4 7c0-1.7 1.3-3 3-3h13' }],
     ['path', { d: 'M18 20c-1.7 0-3-1.3-3-3V4' }],
 ];
-var T8 = [
+var q8 = [
     [
         'path',
         {
@@ -11820,7 +11865,7 @@ var T8 = [
     ['path', { d: 'M14 14v4' }],
     ['path', { d: 'M18 14v4' }],
 ];
-var B8 = [
+var z8 = [
     ['path', { d: 'm14 13-8.381 8.38a1 1 0 0 1-3.001-3L11 9.999' }],
     [
         'path',
@@ -11841,18 +11886,18 @@ var B8 = [
         },
     ],
 ];
-var b8 = [
+var U8 = [
     ['path', { d: 'M21 9V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10c0 1.1.9 2 2 2h4' }],
     ['rect', { width: '10', height: '7', x: '12', y: '13', rx: '2' }],
 ];
-var D8 = [
+var _8 = [
     ['path', { d: 'M2 10h6V4' }],
     ['path', { d: 'm2 4 6 6' }],
     ['path', { d: 'M21 10V7a2 2 0 0 0-2-2h-7' }],
     ['path', { d: 'M3 14v2a2 2 0 0 0 2 2h3' }],
     ['rect', { x: '12', y: '14', width: '10', height: '7', rx: '1' }],
 ];
-var R8 = [
+var N8 = [
     [
         'path',
         {
@@ -11862,41 +11907,41 @@ var R8 = [
     ['path', { d: 'M16 10h.01' }],
     ['path', { d: 'M2 8v1a2 2 0 0 0 2 2h1' }],
 ];
-var F8 = [
+var I8 = [
     ['path', { d: 'M14 3v11' }],
     ['path', { d: 'M14 9h-3a3 3 0 0 1 0-6h9' }],
     ['path', { d: 'M18 3v11' }],
     ['path', { d: 'M22 18H2l4-4' }],
     ['path', { d: 'm6 22-4-4' }],
 ];
-var E8 = [
+var G8 = [
     ['path', { d: 'M10 3v11' }],
     ['path', { d: 'M10 9H7a1 1 0 0 1 0-6h8' }],
     ['path', { d: 'M14 3v11' }],
     ['path', { d: 'm18 14 4 4H2' }],
     ['path', { d: 'm22 18-4 4' }],
 ];
-var O8 = [
+var W8 = [
     ['path', { d: 'M13 4v16' }],
     ['path', { d: 'M17 4v16' }],
     ['path', { d: 'M19 4H9.5a4.5 4.5 0 0 0 0 9H13' }],
 ];
-var q8 = [
+var Z8 = [
     ['path', { d: 'M18 11h-4a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h4' }],
     ['path', { d: 'M6 7v13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7' }],
     ['rect', { width: '16', height: '5', x: '4', y: '2', rx: '1' }],
 ];
-var z8 = [
+var X8 = [
     ['path', { d: 'm10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z' }],
     ['path', { d: 'm8.5 8.5 7 7' }],
 ];
-var U8 = [
+var K8 = [
     ['path', { d: 'M12 17v5' }],
     ['path', { d: 'M15 9.34V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H7.89' }],
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M9 9v1.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h11' }],
 ];
-var I8 = [
+var $8 = [
     ['path', { d: 'M12 17v5' }],
     [
         'path',
@@ -11905,7 +11950,7 @@ var I8 = [
         },
     ],
 ];
-var _8 = [
+var J8 = [
     [
         'path',
         {
@@ -11915,7 +11960,7 @@ var _8 = [
     ['path', { d: 'm18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z' }],
     ['path', { d: 'm2 22 .414-.414' }],
 ];
-var N8 = [
+var j8 = [
     ['path', { d: 'm12 14-1 1' }],
     ['path', { d: 'm13.75 18.25-1.25 1.42' }],
     ['path', { d: 'M17.775 5.654a15.68 15.68 0 0 0-12.121 12.12' }],
@@ -11927,7 +11972,7 @@ var N8 = [
         },
     ],
 ];
-var G8 = [
+var Q8 = [
     ['path', { d: 'M2 22h20' }],
     [
         'path',
@@ -11936,7 +11981,7 @@ var G8 = [
         },
     ],
 ];
-var W8 = [
+var Y8 = [
     ['path', { d: 'M2 22h20' }],
     [
         'path',
@@ -11945,7 +11990,7 @@ var W8 = [
         },
     ],
 ];
-var Z8 = [
+var am = [
     [
         'path',
         {
@@ -11953,55 +11998,55 @@ var Z8 = [
         },
     ],
 ];
-var X8 = [
+var tm = [
     ['path', { d: 'm10.215 4.56 9.79 5.71a2 2 0 0 1 .003 3.458l-.393.23' }],
     ['path', { d: 'm16.042 16.042-8.034 4.686A2 2 0 0 1 5 19V5' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var K8 = [
+var em = [
     [
         'path',
         { d: 'M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z' },
     ],
 ];
-var J8 = [
+var rm = [
     ['path', { d: 'M9 2v6' }],
     ['path', { d: 'M15 2v6' }],
     ['path', { d: 'M12 17v5' }],
     ['path', { d: 'M5 8h14' }],
     ['path', { d: 'M6 11V8h12v3a6 6 0 1 1-12 0Z' }],
 ];
-var Pt = [
+var R1 = [
     ['path', { d: 'M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z' }],
     ['path', { d: 'm2 22 3-3' }],
     ['path', { d: 'M7.5 13.5 10 11' }],
     ['path', { d: 'M10.5 16.5 13 14' }],
     ['path', { d: 'm18 3-4 4h6l-4 4' }],
 ];
-var $8 = [
+var om = [
     ['path', { d: 'M12 22v-5' }],
     ['path', { d: 'M15 8V2' }],
     ['path', { d: 'M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z' }],
     ['path', { d: 'M9 8V2' }],
 ];
-var j8 = [
+var dm = [
     ['path', { d: 'M3 2v1c0 1 2 1 2 2S3 6 3 7s2 1 2 2-2 1-2 2 2 1 2 2' }],
     ['path', { d: 'M18 6h.01' }],
     ['path', { d: 'M6 18h.01' }],
     ['path', { d: 'M20.83 8.83a4 4 0 0 0-5.66-5.66l-12 12a4 4 0 1 0 5.66 5.66Z' }],
     ['path', { d: 'M18 11.66V22a4 4 0 0 0 4-4V6' }],
 ];
-var Q8 = [
+var pm = [
     ['path', { d: 'M5 12h14' }],
     ['path', { d: 'M12 5v14' }],
 ];
-var Y8 = [
+var lm = [
     ['path', { d: 'M13 17a1 1 0 1 0-2 0l.5 4.5a0.5 0.5 0 0 0 1 0z', fill: 'currentColor' }],
     ['path', { d: 'M16.85 18.58a9 9 0 1 0-9.7 0' }],
     ['path', { d: 'M8 14a5 5 0 1 1 8 0' }],
     ['circle', { cx: '12', cy: '11', r: '1', fill: 'currentColor' }],
 ];
-var am = [
+var sm = [
     ['path', { d: 'M12 6V2h-1' }],
     [
         'path',
@@ -12011,7 +12056,7 @@ var am = [
     ],
     ['path', { d: 'M9 21V11a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v10' }],
 ];
-var tm = [
+var hm = [
     ['path', { d: 'M10 4.5V4a2 2 0 0 0-2.41-1.957' }],
     ['path', { d: 'M13.9 8.4a2 2 0 0 0-1.26-1.295' }],
     ['path', { d: 'M21.7 16.2A8 8 0 0 0 22 14v-3a2 2 0 1 0-4 0v-1a2 2 0 0 0-3.63-1.158' }],
@@ -12024,7 +12069,7 @@ var tm = [
     ['path', { d: 'M6 6v8' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var em = [
+var fm = [
     ['path', { d: 'M22 14a8 8 0 0 1-8 8' }],
     ['path', { d: 'M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2' }],
     ['path', { d: 'M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1' }],
@@ -12036,7 +12081,7 @@ var em = [
         },
     ],
 ];
-var rm = [
+var um = [
     ['path', { d: 'M18 8a2 2 0 0 0 0-4 2 2 0 0 0-4 0 2 2 0 0 0-4 0 2 2 0 0 0-4 0 2 2 0 0 0 0 4' }],
     ['path', { d: 'M10 22 9 8' }],
     ['path', { d: 'm14 22 1-14' }],
@@ -12047,7 +12092,7 @@ var rm = [
         },
     ],
 ];
-var om = [
+var cm = [
     [
         'path',
         {
@@ -12056,46 +12101,46 @@ var om = [
     ],
     ['path', { d: 'm22 22-5.5-5.5' }],
 ];
-var dm = [
+var nm = [
     ['path', { d: 'M18 7c0-5.333-8-5.333-8 0' }],
     ['path', { d: 'M10 7v14' }],
     ['path', { d: 'M6 21h12' }],
     ['path', { d: 'M6 13h10' }],
 ];
-var pm = [
+var im = [
     ['path', { d: 'M18.36 6.64A9 9 0 0 1 20.77 15' }],
     ['path', { d: 'M6.16 6.16a9 9 0 1 0 12.68 12.68' }],
     ['path', { d: 'M12 2v4' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var lm = [
+var xm = [
     ['path', { d: 'M12 2v10' }],
     ['path', { d: 'M18.4 6.6a9 9 0 1 1-12.77.04' }],
 ];
-var sm = [
+var mm = [
     ['path', { d: 'M2 3h20' }],
     ['path', { d: 'M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3' }],
     ['path', { d: 'm7 21 5-5 5 5' }],
 ];
-var hm = [
+var Mm = [
     ['path', { d: 'M13.5 22H7a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v.5' }],
     ['path', { d: 'm16 19 2 2 4-4' }],
     ['path', { d: 'M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6' }],
 ];
-var fm = [
+var vm = [
     ['path', { d: 'M12.531 22H7a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h6.377' }],
     ['path', { d: 'm16.5 16.5 5 5' }],
     ['path', { d: 'm16.5 21.5 5-5' }],
     ['path', { d: 'M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v1.5' }],
     ['path', { d: 'M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6' }],
 ];
-var um = [
+var gm = [
     ['path', { d: 'M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2' }],
     ['path', { d: 'M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6' }],
     ['rect', { x: '6', y: '14', width: '12', height: '8', rx: '1' }],
 ];
-var cm = [
+var ym = [
     ['path', { d: 'M5 7 3 5' }],
     ['path', { d: 'M9 6V3' }],
     ['path', { d: 'm13 7 2-2' }],
@@ -12106,12 +12151,12 @@ var cm = [
     ],
     ['path', { d: 'M16 16h2' }],
 ];
-var nm = [
+var Cm = [
     ['rect', { width: '20', height: '16', x: '2', y: '4', rx: '2' }],
     ['path', { d: 'M12 9v11' }],
     ['path', { d: 'M2 9h13a2 2 0 0 1 2 2v9' }],
 ];
-var xm = [
+var Am = [
     [
         'path',
         {
@@ -12119,7 +12164,7 @@ var xm = [
         },
     ],
 ];
-var im = [
+var wm = [
     [
         'path',
         {
@@ -12128,7 +12173,7 @@ var im = [
     ],
     ['path', { d: 'M12 2v20' }],
 ];
-var mm = [
+var Sm = [
     ['rect', { width: '5', height: '5', x: '3', y: '3', rx: '1' }],
     ['rect', { width: '5', height: '5', x: '16', y: '3', rx: '1' }],
     ['rect', { width: '5', height: '5', x: '3', y: '16', rx: '1' }],
@@ -12142,7 +12187,7 @@ var mm = [
     ['path', { d: 'M21 12v.01' }],
     ['path', { d: 'M12 21v-1' }],
 ];
-var Mm = [
+var Hm = [
     [
         'path',
         {
@@ -12156,7 +12201,7 @@ var Mm = [
         },
     ],
 ];
-var vm = [
+var Lm = [
     ['path', { d: 'M19.07 4.93A10 10 0 0 0 6.99 3.34' }],
     ['path', { d: 'M4 6h.01' }],
     ['path', { d: 'M2.29 9.62A10 10 0 1 0 21.31 8.35' }],
@@ -12166,7 +12211,7 @@ var vm = [
     ['circle', { cx: '12', cy: '12', r: '2' }],
     ['path', { d: 'm13.41 10.59 5.66-5.66' }],
 ];
-var gm = [
+var Vm = [
     ['path', { d: 'M12 12h.01' }],
     [
         'path',
@@ -12187,7 +12232,7 @@ var gm = [
         },
     ],
 ];
-var ym = [
+var km = [
     ['path', { d: 'M13 16a3 3 0 0 1 2.24 5' }],
     ['path', { d: 'M18 12h.01' }],
     [
@@ -12199,7 +12244,7 @@ var ym = [
     ['path', { d: 'M20 8.54V4a2 2 0 1 0-4 0v3' }],
     ['path', { d: 'M7.612 12.524a3 3 0 1 0-1.6 4.3' }],
 ];
-var Cm = [
+var Pm = [
     [
         'path',
         {
@@ -12207,7 +12252,7 @@ var Cm = [
         },
     ],
 ];
-var Am = [
+var bm = [
     ['path', { d: 'M13.414 13.414a2 2 0 1 1-2.828-2.828' }],
     ['path', { d: 'M16.247 7.761a6 6 0 0 1 1.744 4.572' }],
     ['path', { d: 'M19.075 4.933a10 10 0 0 1 2.234 10.72' }],
@@ -12215,13 +12260,13 @@ var Am = [
     ['path', { d: 'M4.925 19.067a10 10 0 0 1 0-14.134' }],
     ['path', { d: 'M7.753 16.239a6 6 0 0 1 0-8.478' }],
 ];
-var Sm = [
+var Tm = [
     ['path', { d: 'M5 16v2' }],
     ['path', { d: 'M19 16v2' }],
     ['rect', { width: '20', height: '8', x: '2', y: '8', rx: '2' }],
     ['path', { d: 'M18 12h.01' }],
 ];
-var wm = [
+var Bm = [
     ['path', { d: 'M4.9 16.1C1 12.2 1 5.8 4.9 1.9' }],
     ['path', { d: 'M7.8 4.7a6.14 6.14 0 0 0-.8 7.5' }],
     ['circle', { cx: '12', cy: '9', r: '2' }],
@@ -12230,25 +12275,25 @@ var wm = [
     ['path', { d: 'M9.5 18h5' }],
     ['path', { d: 'm8 22 4-11 4 11' }],
 ];
-var Hm = [
+var Rm = [
     ['path', { d: 'M16.247 7.761a6 6 0 0 1 0 8.478' }],
     ['path', { d: 'M19.075 4.933a10 10 0 0 1 0 14.134' }],
     ['path', { d: 'M4.925 19.067a10 10 0 0 1 0-14.134' }],
     ['path', { d: 'M7.753 16.239a6 6 0 0 1 0-8.478' }],
     ['circle', { cx: '12', cy: '12', r: '2' }],
 ];
-var Lm = [
+var Dm = [
     ['path', { d: 'M20.34 17.52a10 10 0 1 0-2.82 2.82' }],
     ['circle', { cx: '19', cy: '19', r: '2' }],
     ['path', { d: 'm13.41 13.41 4.18 4.18' }],
     ['circle', { cx: '12', cy: '12', r: '2' }],
 ];
-var Vm = [
+var Em = [
     ['path', { d: 'M22 17a10 10 0 0 0-20 0' }],
     ['path', { d: 'M6 17a6 6 0 0 1 12 0' }],
     ['path', { d: 'M10 17a2 2 0 0 1 4 0' }],
 ];
-var km = [
+var Fm = [
     ['path', { d: 'M13 22H4a2 2 0 0 1 0-4h12' }],
     ['path', { d: 'M13.236 18a3 3 0 0 0-2.2-5' }],
     ['path', { d: 'M16 9h.01' }],
@@ -12260,11 +12305,11 @@ var km = [
     ],
     ['path', { d: 'M17 4.988a3 3 0 1 0-5.2 2.052A7 7 0 0 0 4 14.015 4 4 0 0 0 8 18' }],
 ];
-var Pm = [
+var Om = [
     ['rect', { width: '12', height: '20', x: '6', y: '2', rx: '2' }],
     ['rect', { width: '20', height: '12', x: '2', y: '6', rx: '2' }],
 ];
-var Tm = [
+var qm = [
     ['path', { d: 'M12 7v10' }],
     ['path', { d: 'M14.828 14.829a4 4 0 0 1-5.656 0 4 4 0 0 1 0-5.657 4 4 0 0 1 5.656 0' }],
     [
@@ -12274,7 +12319,7 @@ var Tm = [
         },
     ],
 ];
-var Bm = [
+var zm = [
     ['path', { d: 'M15.828 14.829a4 4 0 0 1-5.656 0 4 4 0 0 1 0-5.657 4 4 0 0 1 5.656 0' }],
     [
         'path',
@@ -12284,7 +12329,7 @@ var Bm = [
     ],
     ['path', { d: 'M8 12h5' }],
 ];
-var bm = [
+var Um = [
     [
         'path',
         {
@@ -12295,7 +12340,7 @@ var bm = [
     ['path', { d: 'M8 7h8' }],
     ['path', { d: 'M9 7a4 4 0 0 1 0 8H8l3 2' }],
 ];
-var Dm = [
+var _m = [
     ['path', { d: 'm12 10 3-3' }],
     [
         'path',
@@ -12307,7 +12352,7 @@ var Dm = [
     ['path', { d: 'M9 15h6' }],
     ['path', { d: 'm9 7 3 3v7' }],
 ];
-var Rm = [
+var Nm = [
     ['path', { d: 'M10 17V9.5a1 1 0 0 1 5 0' }],
     [
         'path',
@@ -12318,7 +12363,7 @@ var Rm = [
     ['path', { d: 'M8 13h5' }],
     ['path', { d: 'M8 17h7' }],
 ];
-var Fm = [
+var Im = [
     [
         'path',
         {
@@ -12328,7 +12373,7 @@ var Fm = [
     ['path', { d: 'M8 11h5a2 2 0 0 0 0-4h-3v10' }],
     ['path', { d: 'M8 15h5' }],
 ];
-var Em = [
+var Gm = [
     ['path', { d: 'M10 11h4' }],
     ['path', { d: 'M10 17V7h5' }],
     [
@@ -12339,7 +12384,7 @@ var Em = [
     ],
     ['path', { d: 'M8 15h5' }],
 ];
-var Om = [
+var Wm = [
     ['path', { d: 'M13 16H8' }],
     ['path', { d: 'M14 8H8' }],
     ['path', { d: 'M16 12H8' }],
@@ -12350,7 +12395,7 @@ var Om = [
         },
     ],
 ];
-var qm = [
+var Zm = [
     ['path', { d: 'M10 7v10a5 5 0 0 0 5-5' }],
     ['path', { d: 'm14 8-6 3' }],
     [
@@ -12360,11 +12405,11 @@ var qm = [
         },
     ],
 ];
-var zm = [
+var Xm = [
     ['path', { d: 'M14 4v16H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z' }],
     ['circle', { cx: '14', cy: '12', r: '8' }],
 ];
-var Um = [
+var Km = [
     ['path', { d: 'M12 17V7' }],
     ['path', { d: 'M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8' }],
     [
@@ -12374,7 +12419,7 @@ var Um = [
         },
     ],
 ];
-var Im = [
+var $m = [
     [
         'path',
         {
@@ -12382,15 +12427,15 @@ var Im = [
         },
     ],
 ];
-var Tt = [
+var D1 = [
     ['rect', { width: '20', height: '12', x: '2', y: '6', rx: '2' }],
     ['path', { d: 'M12 12h.01' }],
     ['path', { d: 'M17 12h.01' }],
     ['path', { d: 'M7 12h.01' }],
 ];
-var _m = [['rect', { width: '12', height: '20', x: '6', y: '2', rx: '2' }]];
-var Nm = [['rect', { width: '20', height: '12', x: '2', y: '6', rx: '2' }]];
-var Gm = [
+var Jm = [['rect', { width: '12', height: '20', x: '6', y: '2', rx: '2' }]];
+var jm = [['rect', { width: '20', height: '12', x: '2', y: '6', rx: '2' }]];
+var Qm = [
     ['path', { d: 'M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5' }],
     ['path', { d: 'M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12' }],
     ['path', { d: 'm14 16-3 3 3 3' }],
@@ -12403,33 +12448,33 @@ var Gm = [
     ],
     ['path', { d: 'm13.378 9.633 4.096 1.098 1.097-4.096' }],
 ];
-var Wm = [
+var Ym = [
     ['path', { d: 'm15 14 5-5-5-5' }],
     ['path', { d: 'M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13' }],
 ];
-var Zm = [
+var a7 = [
     ['circle', { cx: '12', cy: '17', r: '1' }],
     ['path', { d: 'M21 7v6h-6' }],
     ['path', { d: 'M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7' }],
 ];
-var Xm = [
+var t7 = [
     ['path', { d: 'M21 7v6h-6' }],
     ['path', { d: 'M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7' }],
 ];
-var Km = [
+var e7 = [
     ['path', { d: 'M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8' }],
     ['path', { d: 'M3 3v5h5' }],
     ['path', { d: 'M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16' }],
     ['path', { d: 'M16 16h5v5' }],
     ['circle', { cx: '12', cy: '12', r: '1' }],
 ];
-var Jm = [
+var r7 = [
     ['path', { d: 'M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8' }],
     ['path', { d: 'M3 3v5h5' }],
     ['path', { d: 'M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16' }],
     ['path', { d: 'M16 16h5v5' }],
 ];
-var $m = [
+var o7 = [
     ['path', { d: 'M21 8L18.74 5.74A9.75 9.75 0 0 0 12 3C11 3 10.03 3.16 9.13 3.47' }],
     ['path', { d: 'M8 16H3v5' }],
     ['path', { d: 'M3 12C3 9.51 4 7.26 5.64 5.64' }],
@@ -12438,44 +12483,44 @@ var $m = [
     ['path', { d: 'M21 3v5h-5' }],
     ['path', { d: 'M22 22 2 2' }],
 ];
-var jm = [
+var d7 = [
     ['path', { d: 'M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8' }],
     ['path', { d: 'M21 3v5h-5' }],
     ['path', { d: 'M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16' }],
     ['path', { d: 'M8 16H3v5' }],
 ];
-var Qm = [
+var p7 = [
     ['path', { d: 'M5 6a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6Z' }],
     ['path', { d: 'M5 10h14' }],
     ['path', { d: 'M15 7v6' }],
 ];
-var Ym = [
+var l7 = [
     ['path', { d: 'M17 3v10' }],
     ['path', { d: 'm12.67 5.5 8.66 5' }],
     ['path', { d: 'm12.67 10.5 8.66-5' }],
     ['path', { d: 'M9 17a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2z' }],
 ];
-var a7 = [
+var s7 = [
     ['path', { d: 'M4 7V4h16v3' }],
     ['path', { d: 'M5 20h6' }],
     ['path', { d: 'M13 4 8 20' }],
     ['path', { d: 'm15 15 5 5' }],
     ['path', { d: 'm20 15-5 5' }],
 ];
-var t7 = [
+var h7 = [
     ['path', { d: 'm2 9 3-3 3 3' }],
     ['path', { d: 'M13 18H7a2 2 0 0 1-2-2V6' }],
     ['path', { d: 'm22 15-3 3-3-3' }],
     ['path', { d: 'M11 6h6a2 2 0 0 1 2 2v10' }],
 ];
-var e7 = [
+var f7 = [
     ['path', { d: 'm17 2 4 4-4 4' }],
     ['path', { d: 'M3 11v-1a4 4 0 0 1 4-4h14' }],
     ['path', { d: 'm7 22-4-4 4-4' }],
     ['path', { d: 'M21 13v1a4 4 0 0 1-4 4H3' }],
     ['path', { d: 'M11 10h1v4' }],
 ];
-var r7 = [
+var u7 = [
     ['path', { d: 'M11.656 6H21l-4-4' }],
     ['path', { d: 'M17.898 17.898A4 4 0 0 1 17 18H3l4-4' }],
     ['path', { d: 'm2 2 20 20' }],
@@ -12484,13 +12529,13 @@ var r7 = [
     ['path', { d: 'M3 11v-1a4 4 0 0 1 3.102-3.898' }],
     ['path', { d: 'm7 22-4-4' }],
 ];
-var o7 = [
+var c7 = [
     ['path', { d: 'm17 2 4 4-4 4' }],
     ['path', { d: 'M3 11v-1a4 4 0 0 1 4-4h14' }],
     ['path', { d: 'm7 22-4-4 4-4' }],
     ['path', { d: 'M21 13v1a4 4 0 0 1-4 4H3' }],
 ];
-var d7 = [
+var n7 = [
     ['path', { d: 'M14 14a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1' }],
     ['path', { d: 'M14 4a1 1 0 0 1 1-1' }],
     ['path', { d: 'M15 10a1 1 0 0 1-1-1' }],
@@ -12501,7 +12546,7 @@ var d7 = [
     ['path', { d: 'M6 10V5a2 2 0 0 1 2-2h2' }],
     ['rect', { x: '3', y: '14', width: '7', height: '7', rx: '1' }],
 ];
-var p7 = [
+var i7 = [
     ['path', { d: 'M14 4a1 1 0 0 1 1-1' }],
     ['path', { d: 'M15 10a1 1 0 0 1-1-1' }],
     ['path', { d: 'M21 4a1 1 0 0 0-1-1' }],
@@ -12510,20 +12555,20 @@ var p7 = [
     ['path', { d: 'M6 10V5a2 2 0 0 1 2-2h2' }],
     ['rect', { x: '3', y: '14', width: '7', height: '7', rx: '1' }],
 ];
-var l7 = [
+var x7 = [
     ['path', { d: 'm12 17-5-5 5-5' }],
     ['path', { d: 'M22 18v-2a4 4 0 0 0-4-4H7' }],
     ['path', { d: 'm7 17-5-5 5-5' }],
 ];
-var s7 = [
+var m7 = [
     ['path', { d: 'M20 18v-2a4 4 0 0 0-4-4H4' }],
     ['path', { d: 'm9 17-5-5 5-5' }],
 ];
-var h7 = [
+var M7 = [
     ['path', { d: 'M12 6a2 2 0 0 0-3.414-1.414l-6 6a2 2 0 0 0 0 2.828l6 6A2 2 0 0 0 12 18z' }],
     ['path', { d: 'M22 6a2 2 0 0 0-3.414-1.414l-6 6a2 2 0 0 0 0 2.828l6 6A2 2 0 0 0 22 18z' }],
 ];
-var f7 = [
+var v7 = [
     ['path', { d: 'M12 11.22C11 9.997 10 9 10 8a2 2 0 0 1 4 0c0 1-.998 2.002-2.01 3.22' }],
     ['path', { d: 'm12 18 2.57-3.5' }],
     ['path', { d: 'M6.243 9.016a7 7 0 0 1 11.507-.009' }],
@@ -12535,7 +12580,7 @@ var f7 = [
         },
     ],
 ];
-var u7 = [
+var g7 = [
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'M12 5V3' }],
     ['path', { d: 'M12 9v3' }],
@@ -12546,7 +12591,7 @@ var u7 = [
         },
     ],
 ];
-var c7 = [
+var y7 = [
     ['path', { d: 'M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5' }],
     [
         'path',
@@ -12562,13 +12607,13 @@ var c7 = [
     ],
     ['path', { d: 'M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05' }],
 ];
-var n7 = [
+var C7 = [
     ['path', { d: 'm15 13 3.708 7.416' }],
     ['path', { d: 'M3 19a15 15 0 0 0 18 0' }],
     ['path', { d: 'm3 2 3.21 9.633A2 2 0 0 0 8.109 13H18' }],
     ['path', { d: 'm9 13-3.708 7.416' }],
 ];
-var x7 = [
+var A7 = [
     ['path', { d: 'M6 19V5' }],
     ['path', { d: 'M10 19V6.8' }],
     ['path', { d: 'M14 19v-7.8' }],
@@ -12577,7 +12622,7 @@ var x7 = [
     ['path', { d: 'M22 19V9' }],
     ['path', { d: 'M2 19V9a4 4 0 0 1 4-4c2 0 4 1.33 6 4s4 4 6 4a4 4 0 1 0-3-6.65' }],
 ];
-var i7 = [
+var w7 = [
     ['path', { d: 'M17 10h-1a4 4 0 1 1 4-4v.534' }],
     ['path', { d: 'M17 6h1a4 4 0 0 1 1.42 7.74l-2.29.87a6 6 0 0 1-5.339-10.68l2.069-1.31' }],
     [
@@ -12587,42 +12632,42 @@ var i7 = [
     ['path', { d: 'M9.77 12C4 15 2 22 2 22' }],
     ['circle', { cx: '17', cy: '8', r: '2' }],
 ];
-var Bt = [
+var E1 = [
     ['path', { d: 'm15.194 13.707 3.814 1.86-1.86 3.814' }],
     ['path', { d: 'M16.47214 7.52786 A 5 10 0 1 0 13 21.79796' }],
     ['path', { d: 'M21.79796 11 A 10 5 0 1 0 19 15.57071' }],
 ];
-var m7 = [
+var S7 = [
     ['path', { d: 'M12 7v6' }],
     ['path', { d: 'M12 9h2' }],
     ['path', { d: 'M3 12a9 9 0 1 0 9-9 9.74 9.74 0 0 0-6.74 2.74L3 8' }],
     ['path', { d: 'M3 3v5h5' }],
     ['circle', { cx: '12', cy: '15', r: '2' }],
 ];
-var M7 = [
+var H7 = [
     ['path', { d: 'M20 9V7a2 2 0 0 0-2-2h-6' }],
     ['path', { d: 'm15 2-3 3 3 3' }],
     ['path', { d: 'M20 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2' }],
 ];
-var v7 = [
+var L7 = [
     ['path', { d: 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8' }],
     ['path', { d: 'M3 3v5h5' }],
 ];
-var g7 = [
+var V7 = [
     ['path', { d: 'M12 5H6a2 2 0 0 0-2 2v3' }],
     ['path', { d: 'm9 8 3-3-3-3' }],
     ['path', { d: 'M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2' }],
 ];
-var y7 = [
+var k7 = [
     ['path', { d: 'M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8' }],
     ['path', { d: 'M21 3v5h-5' }],
 ];
-var C7 = [
+var P7 = [
     ['circle', { cx: '6', cy: '19', r: '3' }],
     ['path', { d: 'M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15' }],
     ['circle', { cx: '18', cy: '5', r: '3' }],
 ];
-var A7 = [
+var b7 = [
     ['circle', { cx: '6', cy: '19', r: '3' }],
     ['path', { d: 'M9 19h8.5c.4 0 .9-.1 1.3-.2' }],
     ['path', { d: 'M5.2 5.2A3.5 3.53 0 0 0 6.5 12H12' }],
@@ -12631,7 +12676,7 @@ var A7 = [
     ['path', { d: 'M15 5h-4.3' }],
     ['circle', { cx: '18', cy: '5', r: '3' }],
 ];
-var S7 = [
+var T7 = [
     ['rect', { width: '20', height: '8', x: '2', y: '14', rx: '2' }],
     ['path', { d: 'M6.01 18H6' }],
     ['path', { d: 'M10.01 18H10' }],
@@ -12639,27 +12684,27 @@ var S7 = [
     ['path', { d: 'M17.84 7.17a4 4 0 0 0-5.66 0' }],
     ['path', { d: 'M20.66 4.34a8 8 0 0 0-11.31 0' }],
 ];
-var bt = [
+var F1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M3 12h18' }],
 ];
-var Dt = [
+var O1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M21 9H3' }],
     ['path', { d: 'M21 15H3' }],
 ];
-var w7 = [
+var B7 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M21 7.5H3' }],
     ['path', { d: 'M21 12H3' }],
     ['path', { d: 'M21 16.5H3' }],
 ];
-var H7 = [
+var R7 = [
     ['path', { d: 'M4 11a9 9 0 0 1 9 9' }],
     ['path', { d: 'M4 4a16 16 0 0 1 16 16' }],
     ['circle', { cx: '5', cy: '19', r: '1' }],
 ];
-var L7 = [
+var D7 = [
     ['path', { d: 'M10 15v-3' }],
     ['path', { d: 'M14 15v-3' }],
     ['path', { d: 'M18 15v-3' }],
@@ -12669,7 +12714,7 @@ var L7 = [
     ['path', { d: 'M6 15v-3' }],
     ['rect', { x: '2', y: '12', width: '20', height: '8', rx: '2' }],
 ];
-var V7 = [
+var E7 = [
     [
         'path',
         {
@@ -12681,11 +12726,11 @@ var V7 = [
     ['path', { d: 'm8.5 6.5 2-2' }],
     ['path', { d: 'm17.5 15.5 2-2' }],
 ];
-var k7 = [
+var F7 = [
     ['path', { d: 'M6 11h8a4 4 0 0 0 0-8H9v18' }],
     ['path', { d: 'M6 15h8' }],
 ];
-var P7 = [
+var O7 = [
     ['path', { d: 'M10 2v15' }],
     ['path', { d: 'M7 22a4 4 0 0 1-4-4 1 1 0 0 1 1-1h16a1 1 0 0 1 1 1 4 4 0 0 1-4 4z' }],
     [
@@ -12695,7 +12740,7 @@ var P7 = [
         },
     ],
 ];
-var T7 = [
+var q7 = [
     ['path', { d: 'M7 21h10' }],
     ['path', { d: 'M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z' }],
     [
@@ -12707,20 +12752,20 @@ var T7 = [
     ['path', { d: 'm13 12 4-4' }],
     ['path', { d: 'M10.9 7.25A3.99 3.99 0 0 0 4 10c0 .73.2 1.41.54 2' }],
 ];
-var B7 = [
+var z7 = [
     ['path', { d: 'm2.37 11.223 8.372-6.777a2 2 0 0 1 2.516 0l8.371 6.777' }],
     ['path', { d: 'M21 15a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-5.25' }],
     ['path', { d: 'M3 15a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h9' }],
     ['path', { d: 'm6.67 15 6.13 4.6a2 2 0 0 0 2.8-.4l3.15-4.2' }],
     ['rect', { width: '20', height: '4', x: '2', y: '11', rx: '1' }],
 ];
-var b7 = [
+var U7 = [
     ['path', { d: 'M4 10a7.31 7.31 0 0 0 10 10Z' }],
     ['path', { d: 'm9 15 3-3' }],
     ['path', { d: 'M17 13a6 6 0 0 0-6-6' }],
     ['path', { d: 'M21 13A10 10 0 0 0 11 3' }],
 ];
-var D7 = [
+var _7 = [
     [
         'path',
         {
@@ -12742,13 +12787,13 @@ var D7 = [
         },
     ],
 ];
-var R7 = [
+var N7 = [
     ['path', { d: 'm20 19.5-5.5 1.2' }],
     ['path', { d: 'M14.5 4v11.22a1 1 0 0 0 1.242.97L20 15.2' }],
     ['path', { d: 'm2.978 19.351 5.549-1.363A2 2 0 0 0 10 16V2' }],
     ['path', { d: 'M20 10 4 13.5' }],
 ];
-var F7 = [
+var I7 = [
     ['path', { d: 'M10 2v3a1 1 0 0 0 1 1h5' }],
     ['path', { d: 'M18 18v-6a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6' }],
     ['path', { d: 'M18 22H4a2 2 0 0 1-2-2V6' }],
@@ -12759,7 +12804,7 @@ var F7 = [
         },
     ],
 ];
-var E7 = [
+var G7 = [
     [
         'path',
         {
@@ -12770,7 +12815,7 @@ var E7 = [
     ['path', { d: 'M17 15.13V14a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7' }],
     ['path', { d: 'M7 3v4a1 1 0 0 0 1 1h7' }],
 ];
-var O7 = [
+var W7 = [
     ['path', { d: 'M13 13H8a1 1 0 0 0-1 1v7' }],
     ['path', { d: 'M14 8h1' }],
     ['path', { d: 'M17 21v-4' }],
@@ -12779,7 +12824,7 @@ var O7 = [
     ['path', { d: 'M29.5 11.5s5 5 4 5' }],
     ['path', { d: 'M9 3h6.2a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V15' }],
 ];
-var q7 = [
+var Z7 = [
     ['path', { d: 'M13.33 13H8a1 1 0 00-1 1v7' }],
     [
         'path',
@@ -12793,7 +12838,7 @@ var q7 = [
         { d: 'M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h10.2a2 2 0 011.4.6l3.8 3.8a2 2 0 01.6 1.4v.3' },
     ],
 ];
-var z7 = [
+var X7 = [
     [
         'path',
         {
@@ -12805,7 +12850,7 @@ var z7 = [
     ['path', { d: 'M22 19h-6' }],
     ['path', { d: 'M7 3v4a1 1 0 0 0 1 1h7' }],
 ];
-var U7 = [
+var K7 = [
     [
         'path',
         {
@@ -12815,20 +12860,20 @@ var U7 = [
     ['path', { d: 'M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7' }],
     ['path', { d: 'M7 3v4a1 1 0 0 0 1 1h7' }],
 ];
-var Rt = [
+var q1 = [
     ['path', { d: 'M5 7v11a1 1 0 0 0 1 1h11' }],
     ['path', { d: 'M5.293 18.707 11 13' }],
     ['circle', { cx: '19', cy: '19', r: '2' }],
     ['circle', { cx: '5', cy: '5', r: '2' }],
 ];
-var I7 = [
+var $7 = [
     ['path', { d: 'M12 3v18' }],
     ['path', { d: 'm19 8 3 8a5 5 0 0 1-6 0zV7' }],
     ['path', { d: 'M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1' }],
     ['path', { d: 'm5 8 3 8a5 5 0 0 1-6 0zV7' }],
     ['path', { d: 'M7 21h10' }],
 ];
-var _7 = [
+var J7 = [
     ['path', { d: 'M3 7V5a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M21 17v2a2 2 0 0 1-2 2h-2' }],
@@ -12837,13 +12882,13 @@ var _7 = [
     ['path', { d: 'M12 7v10' }],
     ['path', { d: 'M17 7v10' }],
 ];
-var N7 = [
+var j7 = [
     ['path', { d: 'M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' }],
     ['path', { d: 'M14 15H9v-5' }],
     ['path', { d: 'M16 3h5v5' }],
     ['path', { d: 'M21 3 9 15' }],
 ];
-var G7 = [
+var Q7 = [
     ['path', { d: 'M12 12v5.5' }],
     ['path', { d: 'M17 3h2a2 2 0 012 2v2' }],
     ['path', { d: 'M21 17v2a2 2 0 01-2 2h-2' }],
@@ -12857,7 +12902,7 @@ var G7 = [
         },
     ],
 ];
-var W7 = [
+var Y7 = [
     ['path', { d: 'M3 7V5a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M21 17v2a2 2 0 0 1-2 2h-2' }],
@@ -12870,7 +12915,7 @@ var W7 = [
         },
     ],
 ];
-var Z7 = [
+var aM = [
     ['path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M21 17v2a2 2 0 0 1-2 2h-2' }],
     ['path', { d: 'M3 7V5a2 2 0 0 1 2-2h2' }],
@@ -12882,7 +12927,7 @@ var Z7 = [
         },
     ],
 ];
-var X7 = [
+var tM = [
     ['path', { d: 'M3 7V5a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M21 17v2a2 2 0 0 1-2 2h-2' }],
@@ -12891,14 +12936,14 @@ var X7 = [
     ['path', { d: 'M9 9h.01' }],
     ['path', { d: 'M15 9h.01' }],
 ];
-var K7 = [
+var eM = [
     ['path', { d: 'M3 7V5a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M21 17v2a2 2 0 0 1-2 2h-2' }],
     ['path', { d: 'M7 21H5a2 2 0 0 1-2-2v-2' }],
     ['path', { d: 'M7 12h10' }],
 ];
-var J7 = [
+var rM = [
     ['path', { d: 'M17 12v4a1 1 0 0 1-1 1h-4' }],
     ['path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M17 8V7' }],
@@ -12908,7 +12953,7 @@ var J7 = [
     ['path', { d: 'M7 21H5a2 2 0 0 1-2-2v-2' }],
     ['rect', { x: '7', y: '7', width: '5', height: '5', rx: '1' }],
 ];
-var $7 = [
+var oM = [
     ['path', { d: 'M3 7V5a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M21 17v2a2 2 0 0 1-2 2h-2' }],
@@ -12916,7 +12961,7 @@ var $7 = [
     ['circle', { cx: '12', cy: '12', r: '3' }],
     ['path', { d: 'm16 16-1.9-1.9' }],
 ];
-var j7 = [
+var dM = [
     ['path', { d: 'M3 7V5a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M21 17v2a2 2 0 0 1-2 2h-2' }],
@@ -12925,13 +12970,13 @@ var j7 = [
     ['path', { d: 'M7 12h10' }],
     ['path', { d: 'M7 16h6' }],
 ];
-var Q7 = [
+var pM = [
     ['path', { d: 'M3 7V5a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M21 17v2a2 2 0 0 1-2 2h-2' }],
     ['path', { d: 'M7 21H5a2 2 0 0 1-2-2v-2' }],
 ];
-var Y7 = [
+var lM = [
     ['path', { d: 'M14 21v-3a2 2 0 0 0-4 0v3' }],
     ['path', { d: 'M18 4.933V21' }],
     ['path', { d: 'm4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6' }],
@@ -12944,7 +12989,7 @@ var Y7 = [
     ['path', { d: 'M6 4.933V21' }],
     ['circle', { cx: '12', cy: '9', r: '2' }],
 ];
-var aM = [
+var sM = [
     ['path', { d: 'M5.42 9.42 8 12' }],
     ['circle', { cx: '4', cy: '8', r: '2' }],
     ['path', { d: 'm14 6-8.58 8.58' }],
@@ -12953,27 +12998,27 @@ var aM = [
     ['path', { d: 'M16 12h-2' }],
     ['path', { d: 'M22 12h-2' }],
 ];
-var tM = [
+var hM = [
     ['circle', { cx: '6', cy: '6', r: '3' }],
     ['path', { d: 'M8.12 8.12 12 12' }],
     ['path', { d: 'M20 4 8.12 15.88' }],
     ['circle', { cx: '6', cy: '18', r: '3' }],
     ['path', { d: 'M14.8 14.8 20 20' }],
 ];
-var eM = [
+var fM = [
     ['path', { d: 'M21 4h-3.5l2 11.05' }],
     ['path', { d: 'M6.95 17h5.142c.523 0 .95-.406 1.063-.916a6.5 6.5 0 0 1 5.345-5.009' }],
     ['circle', { cx: '19.5', cy: '17.5', r: '2.5' }],
     ['circle', { cx: '4.5', cy: '17.5', r: '2.5' }],
 ];
-var rM = [
+var uM = [
     ['path', { d: 'M13 3H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-3' }],
     ['path', { d: 'M8 21h8' }],
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'm22 3-5 5' }],
     ['path', { d: 'm17 3 5 5' }],
 ];
-var oM = [
+var cM = [
     ['path', { d: 'M15 12h-5' }],
     ['path', { d: 'M15 8h-5' }],
     ['path', { d: 'M19 17V5a2 2 0 0 0-2-2H4' }],
@@ -12984,14 +13029,14 @@ var oM = [
         },
     ],
 ];
-var dM = [
+var nM = [
     ['path', { d: 'M13 3H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-3' }],
     ['path', { d: 'M8 21h8' }],
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'm17 8 5-5' }],
     ['path', { d: 'M17 3h5v5' }],
 ];
-var pM = [
+var iM = [
     ['path', { d: 'M19 17V5a2 2 0 0 0-2-2H4' }],
     [
         'path',
@@ -13000,43 +13045,43 @@ var pM = [
         },
     ],
 ];
-var lM = [
+var xM = [
     ['circle', { cx: '11', cy: '11', r: '8' }],
     ['path', { d: 'm21 21-4.3-4.3' }],
     ['path', { d: 'M11 7v4' }],
     ['path', { d: 'M11 15h.01' }],
 ];
-var sM = [
+var mM = [
     ['path', { d: 'm8 11 2 2 4-4' }],
     ['circle', { cx: '11', cy: '11', r: '8' }],
     ['path', { d: 'm21 21-4.3-4.3' }],
 ];
-var hM = [
+var MM = [
     ['path', { d: 'm13 13.5 2-2.5-2-2.5' }],
     ['path', { d: 'm21 21-4.3-4.3' }],
     ['path', { d: 'M9 8.5 7 11l2 2.5' }],
     ['circle', { cx: '11', cy: '11', r: '8' }],
 ];
-var fM = [
+var vM = [
     ['path', { d: 'm13.5 8.5-5 5' }],
     ['circle', { cx: '11', cy: '11', r: '8' }],
     ['path', { d: 'm21 21-4.3-4.3' }],
 ];
-var uM = [
+var gM = [
     ['path', { d: 'm13.5 8.5-5 5' }],
     ['path', { d: 'm8.5 8.5 5 5' }],
     ['circle', { cx: '11', cy: '11', r: '8' }],
     ['path', { d: 'm21 21-4.3-4.3' }],
 ];
-var cM = [
+var yM = [
     ['path', { d: 'm21 21-4.34-4.34' }],
     ['circle', { cx: '11', cy: '11', r: '8' }],
 ];
-var nM = [
+var CM = [
     ['path', { d: 'M16 5a4 3 0 0 0-8 0c0 4 8 3 8 7a4 3 0 0 1-8 0' }],
     ['path', { d: 'M8 19a4 3 0 0 0 8 0c0-4-8-3-8-7a4 3 0 0 1 8 0' }],
 ];
-var Ft = [
+var z1 = [
     [
         'path',
         {
@@ -13045,13 +13090,13 @@ var Ft = [
     ],
     ['path', { d: 'M6 12h16' }],
 ];
-var xM = [
+var AM = [
     ['rect', { x: '14', y: '14', width: '8', height: '8', rx: '2' }],
     ['rect', { x: '2', y: '2', width: '8', height: '8', rx: '2' }],
     ['path', { d: 'M7 14v1a2 2 0 0 0 2 2h1' }],
     ['path', { d: 'M14 7h1a2 2 0 0 1 2 2v1' }],
 ];
-var iM = [
+var wM = [
     [
         'path',
         {
@@ -13060,17 +13105,17 @@ var iM = [
     ],
     ['path', { d: 'm21.854 2.147-10.94 10.939' }],
 ];
-var mM = [
+var SM = [
     ['path', { d: 'm16 16-4 4-4-4' }],
     ['path', { d: 'M3 12h18' }],
     ['path', { d: 'm8 8 4-4 4 4' }],
 ];
-var MM = [
+var HM = [
     ['path', { d: 'M12 3v18' }],
     ['path', { d: 'm16 16 4-4-4-4' }],
     ['path', { d: 'm8 8-4 4 4 4' }],
 ];
-var vM = [
+var LM = [
     ['path', { d: 'm10.852 14.772-.383.923' }],
     ['path', { d: 'M13.148 14.772a3 3 0 1 0-2.296-5.544l-.383-.923' }],
     ['path', { d: 'm13.148 9.228.383-.923' }],
@@ -13087,14 +13132,14 @@ var vM = [
     ['path', { d: 'm9.228 10.852-.923-.383' }],
     ['path', { d: 'm9.228 13.148-.923.383' }],
 ];
-var gM = [
+var VM = [
     ['path', { d: 'M6 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2' }],
     ['path', { d: 'M6 14H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2' }],
     ['path', { d: 'M6 6h.01' }],
     ['path', { d: 'M6 18h.01' }],
     ['path', { d: 'm13 6-4 6h6l-4 6' }],
 ];
-var yM = [
+var kM = [
     ['path', { d: 'M7 2h13a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-5' }],
     ['path', { d: 'M10 10 2.5 2.5C2 2 2 2.5 2 5v3a2 2 0 0 0 2 2h6z' }],
     ['path', { d: 'M22 17v-1a2 2 0 0 0-2-2h-1' }],
@@ -13102,7 +13147,7 @@ var yM = [
     ['path', { d: 'M6 18h.01' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var CM = [
+var PM = [
     ['path', { d: 'M12.5 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2' }],
     ['path', { d: 'M16 12h6' }],
     ['path', { d: 'M19 9v6' }],
@@ -13110,19 +13155,19 @@ var CM = [
     ['path', { d: 'M6 18h.01' }],
     ['path', { d: 'M6 6h.01' }],
 ];
-var AM = [
+var bM = [
     ['rect', { width: '20', height: '8', x: '2', y: '2', rx: '2', ry: '2' }],
     ['rect', { width: '20', height: '8', x: '2', y: '14', rx: '2', ry: '2' }],
     ['line', { x1: '6', x2: '6.01', y1: '6', y2: '6' }],
     ['line', { x1: '6', x2: '6.01', y1: '18', y2: '18' }],
 ];
-var SM = [
+var TM = [
     ['path', { d: 'M14 17H5' }],
     ['path', { d: 'M19 7h-9' }],
     ['circle', { cx: '17', cy: '17', r: '3' }],
     ['circle', { cx: '7', cy: '7', r: '3' }],
 ];
-var wM = [
+var BM = [
     [
         'path',
         {
@@ -13131,7 +13176,7 @@ var wM = [
     ],
     ['circle', { cx: '12', cy: '12', r: '3' }],
 ];
-var HM = [
+var RM = [
     [
         'path',
         {
@@ -13141,19 +13186,19 @@ var HM = [
     ['rect', { x: '3', y: '14', width: '7', height: '7', rx: '1' }],
     ['circle', { cx: '17.5', cy: '17.5', r: '3.5' }],
 ];
-var LM = [
+var DM = [
     ['circle', { cx: '18', cy: '5', r: '3' }],
     ['circle', { cx: '6', cy: '12', r: '3' }],
     ['circle', { cx: '18', cy: '19', r: '3' }],
     ['line', { x1: '8.59', x2: '15.42', y1: '13.51', y2: '17.49' }],
     ['line', { x1: '15.41', x2: '8.59', y1: '6.51', y2: '10.49' }],
 ];
-var VM = [
+var EM = [
     ['path', { d: 'M12 2v13' }],
     ['path', { d: 'm16 6-4-4-4 4' }],
     ['path', { d: 'M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8' }],
 ];
-var kM = [
+var FM = [
     [
         'path',
         {
@@ -13161,14 +13206,14 @@ var kM = [
         },
     ],
 ];
-var PM = [
+var OM = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
     ['line', { x1: '3', x2: '21', y1: '9', y2: '9' }],
     ['line', { x1: '3', x2: '21', y1: '15', y2: '15' }],
     ['line', { x1: '9', x2: '9', y1: '9', y2: '21' }],
     ['line', { x1: '15', x2: '15', y1: '9', y2: '21' }],
 ];
-var TM = [
+var qM = [
     ['path', { d: 'M12 12V9a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3' }],
     ['path', { d: 'M16 20v-3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3' }],
     ['path', { d: 'M20 22V2' }],
@@ -13177,7 +13222,7 @@ var TM = [
     ['path', { d: 'M4 2v20' }],
     ['path', { d: 'M4 4h16' }],
 ];
-var BM = [
+var zM = [
     [
         'path',
         {
@@ -13187,7 +13232,7 @@ var BM = [
     ['path', { d: 'M12 8v4' }],
     ['path', { d: 'M12 16h.01' }],
 ];
-var bM = [
+var UM = [
     [
         'path',
         {
@@ -13196,7 +13241,7 @@ var bM = [
     ],
     ['path', { d: 'm4.243 5.21 14.39 12.472' }],
 ];
-var DM = [
+var _M = [
     [
         'path',
         {
@@ -13205,7 +13250,7 @@ var DM = [
     ],
     ['path', { d: 'm9 12 2 2 4-4' }],
 ];
-var RM = [
+var NM = [
     [
         'path',
         {
@@ -13222,7 +13267,7 @@ var RM = [
     ['path', { d: 'm20.467 18.843.923.383' }],
     ['circle', { cx: '17.695', cy: '17.695', r: '3' }],
 ];
-var FM = [
+var IM = [
     ['path', { d: 'm10.929 14.467-.383.924' }],
     ['path', { d: 'M10.929 8.923 10.546 8' }],
     ['path', { d: 'M13.225 8.923 13.608 8' }],
@@ -13239,7 +13284,7 @@ var FM = [
     ['path', { d: 'm9.305 12.843-.923.383' }],
     ['circle', { cx: '12.077', cy: '11.695', r: '3' }],
 ];
-var EM = [
+var GM = [
     [
         'path',
         {
@@ -13250,7 +13295,7 @@ var EM = [
     ['path', { d: 'M12 12h.01' }],
     ['path', { d: 'M16 12h.01' }],
 ];
-var OM = [
+var WM = [
     [
         'path',
         {
@@ -13259,7 +13304,7 @@ var OM = [
     ],
     ['path', { d: 'M12 22V2' }],
 ];
-var qM = [
+var ZM = [
     ['path', { d: 'M12 13v3' }],
     [
         'path',
@@ -13269,7 +13314,7 @@ var qM = [
     ],
     ['circle', { cx: '12', cy: '11', r: '2' }],
 ];
-var zM = [
+var XM = [
     [
         'path',
         {
@@ -13278,7 +13323,7 @@ var zM = [
     ],
     ['path', { d: 'M9 12h6' }],
 ];
-var UM = [
+var KM = [
     ['path', { d: 'm2 2 20 20' }],
     [
         'path',
@@ -13293,7 +13338,7 @@ var UM = [
         },
     ],
 ];
-var IM = [
+var $M = [
     [
         'path',
         {
@@ -13303,7 +13348,7 @@ var IM = [
     ['path', { d: 'M9 12h6' }],
     ['path', { d: 'M12 9v6' }],
 ];
-var Et = [
+var U1 = [
     [
         'path',
         {
@@ -13313,7 +13358,7 @@ var Et = [
     ['path', { d: 'M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3' }],
     ['path', { d: 'M12 17h.01' }],
 ];
-var _M = [
+var JM = [
     [
         'path',
         {
@@ -13323,7 +13368,7 @@ var _M = [
     ['path', { d: 'M6.376 18.91a6 6 0 0 1 11.249.003' }],
     ['circle', { cx: '12', cy: '11', r: '4' }],
 ];
-var Ot = [
+var _1 = [
     [
         'path',
         {
@@ -13333,7 +13378,7 @@ var Ot = [
     ['path', { d: 'm14.5 9.5-5 5' }],
     ['path', { d: 'm9.5 9.5 5 5' }],
 ];
-var NM = [
+var jM = [
     [
         'path',
         {
@@ -13341,7 +13386,7 @@ var NM = [
         },
     ],
 ];
-var GM = [
+var QM = [
     ['circle', { cx: '12', cy: '12', r: '8' }],
     ['path', { d: 'M12 2v7.5' }],
     ['path', { d: 'm19 5-5.23 5.23' }],
@@ -13353,7 +13398,7 @@ var GM = [
     ['path', { d: 'M10.23 10.23 5 5' }],
     ['circle', { cx: '12', cy: '12', r: '2.5' }],
 ];
-var WM = [
+var YM = [
     [
         'path',
         {
@@ -13361,7 +13406,7 @@ var WM = [
         },
     ],
 ];
-var ZM = [
+var a9 = [
     ['path', { d: 'M12 10.189V14' }],
     ['path', { d: 'M12 2v3' }],
     ['path', { d: 'M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6' }],
@@ -13378,7 +13423,7 @@ var ZM = [
         },
     ],
 ];
-var XM = [
+var t9 = [
     ['path', { d: 'M16 10a4 4 0 0 1-8 0' }],
     ['path', { d: 'M3.103 6.034h17.794' }],
     [
@@ -13388,7 +13433,7 @@ var XM = [
         },
     ],
 ];
-var KM = [
+var e9 = [
     ['path', { d: 'm15 11-1 9' }],
     ['path', { d: 'm19 11-4-7' }],
     ['path', { d: 'M2 11h20' }],
@@ -13397,7 +13442,7 @@ var KM = [
     ['path', { d: 'm5 11 4-7' }],
     ['path', { d: 'm9 11 1 9' }],
 ];
-var JM = [
+var r9 = [
     ['circle', { cx: '8', cy: '21', r: '1' }],
     ['circle', { cx: '19', cy: '21', r: '1' }],
     [
@@ -13405,7 +13450,7 @@ var JM = [
         { d: 'M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12' },
     ],
 ];
-var $M = [
+var o9 = [
     [
         'path',
         {
@@ -13420,7 +13465,7 @@ var $M = [
     ],
     ['path', { d: 'm9 15 7.879-7.878' }],
 ];
-var jM = [
+var d9 = [
     ['path', { d: 'm4 4 2.5 2.5' }],
     ['path', { d: 'M13.5 6.5a4.95 4.95 0 0 0-7 7' }],
     ['path', { d: 'M15 5 5 15' }],
@@ -13432,7 +13477,7 @@ var jM = [
     ['path', { d: 'M17 14v.01' }],
     ['path', { d: 'M20 11v.01' }],
 ];
-var QM = [
+var p9 = [
     [
         'path',
         { d: 'M4 13V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v5' },
@@ -13444,13 +13489,13 @@ var QM = [
     ['path', { d: 'M2 13h20' }],
     ['path', { d: 'M6 20v-3' }],
 ];
-var YM = [
+var l9 = [
     ['path', { d: 'm15 15 6 6m-6-6v4.8m0-4.8h4.8' }],
     ['path', { d: 'M9 19.8V15m0 0H4.2M9 15l-6 6' }],
     ['path', { d: 'M15 4.2V9m0 0h4.8M15 9l6-6' }],
     ['path', { d: 'M9 4.2V9m0 0H4.2M9 9 3 3' }],
 ];
-var a9 = [
+var s9 = [
     ['path', { d: 'M11 12h.01' }],
     ['path', { d: 'M13 22c.5-.5 1.12-1 2.5-1-1.38 0-2-.5-2.5-1' }],
     [
@@ -13462,19 +13507,19 @@ var a9 = [
     ['path', { d: 'M14 8a8.5 8.5 0 0 1 0 8' }],
     ['path', { d: 'M16 16c2 0 4.5-4 4-6' }],
 ];
-var t9 = [
+var h9 = [
     ['path', { d: 'M12 22v-5.172a2 2 0 0 0-.586-1.414L9.5 13.5' }],
     ['path', { d: 'M14.5 14.5 12 17' }],
     ['path', { d: 'M17 8.8A6 6 0 0 1 13.8 20H10A6.5 6.5 0 0 1 7 8a5 5 0 0 1 10 0z' }],
 ];
-var e9 = [
+var f9 = [
     ['path', { d: 'm18 14 4 4-4 4' }],
     ['path', { d: 'm18 2 4 4-4 4' }],
     ['path', { d: 'M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22' }],
     ['path', { d: 'M2 6h1.972a4 4 0 0 1 3.6 2.2' }],
     ['path', { d: 'M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45' }],
 ];
-var r9 = [
+var u9 = [
     [
         'path',
         {
@@ -13482,30 +13527,30 @@ var r9 = [
         },
     ],
 ];
-var o9 = [
+var c9 = [
     ['path', { d: 'M2 20h.01' }],
     ['path', { d: 'M7 20v-4' }],
     ['path', { d: 'M12 20v-8' }],
     ['path', { d: 'M17 20V8' }],
 ];
-var d9 = [
+var n9 = [
     ['path', { d: 'M2 20h.01' }],
     ['path', { d: 'M7 20v-4' }],
 ];
-var p9 = [
+var i9 = [
     ['path', { d: 'M2 20h.01' }],
     ['path', { d: 'M7 20v-4' }],
     ['path', { d: 'M12 20v-8' }],
 ];
-var l9 = [['path', { d: 'M2 20h.01' }]];
-var s9 = [
+var x9 = [['path', { d: 'M2 20h.01' }]];
+var m9 = [
     ['path', { d: 'M2 20h.01' }],
     ['path', { d: 'M7 20v-4' }],
     ['path', { d: 'M12 20v-8' }],
     ['path', { d: 'M17 20V8' }],
     ['path', { d: 'M22 4v16' }],
 ];
-var h9 = [
+var M9 = [
     [
         'path',
         {
@@ -13514,13 +13559,13 @@ var h9 = [
     ],
     ['path', { d: 'M3 21h18' }],
 ];
-var f9 = [
+var v9 = [
     ['path', { d: 'M10 9H4L2 7l2-2h6' }],
     ['path', { d: 'M14 5h6l2 2-2 2h-6' }],
     ['path', { d: 'M10 22V4a2 2 0 1 1 4 0v18' }],
     ['path', { d: 'M8 22h8' }],
 ];
-var u9 = [
+var g9 = [
     ['path', { d: 'M12 13v8' }],
     ['path', { d: 'M12 3v3' }],
     [
@@ -13530,7 +13575,7 @@ var u9 = [
         },
     ],
 ];
-var c9 = [
+var y9 = [
     [
         'path',
         {
@@ -13539,7 +13584,7 @@ var c9 = [
     ],
     ['path', { d: 'M3 20V4' }],
 ];
-var n9 = [
+var C9 = [
     ['path', { d: 'M7 18v-6a5 5 0 1 1 10 0v6' }],
     ['path', { d: 'M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z' }],
     ['path', { d: 'M21 12h1' }],
@@ -13549,7 +13594,7 @@ var n9 = [
     ['path', { d: 'm4.929 4.929.707.707' }],
     ['path', { d: 'M12 12v6' }],
 ];
-var x9 = [
+var A9 = [
     ['path', { d: 'M21 4v16' }],
     [
         'path',
@@ -13558,7 +13603,7 @@ var x9 = [
         },
     ],
 ];
-var i9 = [
+var w9 = [
     ['path', { d: 'm12.5 17-.5-1-.5 1h1z' }],
     [
         'path',
@@ -13569,8 +13614,8 @@ var i9 = [
     ['circle', { cx: '15', cy: '12', r: '1' }],
     ['circle', { cx: '9', cy: '12', r: '1' }],
 ];
-var m9 = [['path', { d: 'M22 2 2 22' }]];
-var M9 = [
+var S9 = [['path', { d: 'M22 2 2 22' }]];
+var H9 = [
     [
         'path',
         {
@@ -13578,7 +13623,7 @@ var M9 = [
         },
     ],
 ];
-var v9 = [
+var L9 = [
     ['path', { d: 'M10 5H3' }],
     ['path', { d: 'M12 19H3' }],
     ['path', { d: 'M14 3v4' }],
@@ -13589,11 +13634,11 @@ var v9 = [
     ['path', { d: 'M8 10v4' }],
     ['path', { d: 'M8 12H3' }],
 ];
-var g9 = [
+var V9 = [
     ['rect', { width: '14', height: '20', x: '5', y: '2', rx: '2', ry: '2' }],
     ['path', { d: 'M12.667 8 10 12h4l-2.667 4' }],
 ];
-var qt = [
+var N1 = [
     ['path', { d: 'M10 8h4' }],
     ['path', { d: 'M12 21v-9' }],
     ['path', { d: 'M12 8V3' }],
@@ -13604,17 +13649,17 @@ var qt = [
     ['path', { d: 'M5 10V3' }],
     ['path', { d: 'M5 21v-7' }],
 ];
-var y9 = [
+var k9 = [
     ['rect', { width: '7', height: '12', x: '2', y: '6', rx: '1' }],
     ['path', { d: 'M13 8.32a7.43 7.43 0 0 1 0 7.36' }],
     ['path', { d: 'M16.46 6.21a11.76 11.76 0 0 1 0 11.58' }],
     ['path', { d: 'M19.91 4.1a15.91 15.91 0 0 1 .01 15.8' }],
 ];
-var C9 = [
+var P9 = [
     ['rect', { width: '14', height: '20', x: '5', y: '2', rx: '2', ry: '2' }],
     ['path', { d: 'M12 18h.01' }],
 ];
-var A9 = [
+var b9 = [
     ['path', { d: 'M22 11v1a10 10 0 1 1-9-10' }],
     ['path', { d: 'M8 14s1.5 2 4 2 4-2 4-2' }],
     ['line', { x1: '9', x2: '9.01', y1: '9', y2: '9' }],
@@ -13622,20 +13667,20 @@ var A9 = [
     ['path', { d: 'M16 5h6' }],
     ['path', { d: 'M19 2v6' }],
 ];
-var S9 = [
+var T9 = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M8 14s1.5 2 4 2 4-2 4-2' }],
     ['line', { x1: '9', x2: '9.01', y1: '9', y2: '9' }],
     ['line', { x1: '15', x2: '15.01', y1: '9', y2: '9' }],
 ];
-var w9 = [
+var B9 = [
     ['path', { d: 'M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0' }],
     ['circle', { cx: '10', cy: '13', r: '8' }],
     ['path', { d: 'M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6' }],
     ['path', { d: 'M18 3 19.1 5.2' }],
     ['path', { d: 'M22 3 20.9 5.2' }],
 ];
-var H9 = [
+var R9 = [
     ['path', { d: 'm10 20-1.25-2.5L6 18' }],
     ['path', { d: 'M10 4 8.75 6.5 6 6' }],
     ['path', { d: 'm14 20 1.25-2.5L18 18' }],
@@ -13649,7 +13694,7 @@ var H9 = [
     ['path', { d: 'm7 21 3-6-1.5-3' }],
     ['path', { d: 'm7 3 3 6h4' }],
 ];
-var L9 = [
+var D9 = [
     ['path', { d: 'M10.5 2v4' }],
     ['path', { d: 'M14 2H7a2 2 0 0 0-2 2' }],
     [
@@ -13663,7 +13708,7 @@ var L9 = [
         { d: 'M9.607 21H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h7V7a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3' },
     ],
 ];
-var V9 = [
+var E9 = [
     ['path', { d: 'M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3' }],
     [
         'path',
@@ -13675,7 +13720,7 @@ var V9 = [
     ['path', { d: 'M20 18v2' }],
     ['path', { d: 'M12 4v9' }],
 ];
-var k9 = [
+var F9 = [
     ['path', { d: 'M11 2h2' }],
     ['path', { d: 'm14.28 14-4.56 8' }],
     ['path', { d: 'm21 22-1.558-4H4.558' }],
@@ -13689,7 +13734,7 @@ var k9 = [
     ['path', { d: 'M7 2a4 4 0 0 1-4 4' }],
     ['path', { d: 'm8.66 7.66 1.41 1.41' }],
 ];
-var P9 = [
+var O9 = [
     ['path', { d: 'M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z' }],
     ['path', { d: 'M7 21h10' }],
     ['path', { d: 'M19.5 12 22 6' }],
@@ -13697,8 +13742,8 @@ var P9 = [
     ['path', { d: 'M11.25 3c.27.1.8.53.74 1.36-.05.83-.93 1.2-.98 2.02-.06.78.33 1.24.72 1.62' }],
     ['path', { d: 'M6.25 3c.27.1.8.53.75 1.36-.06.83-.93 1.2-1 2.02-.05.78.34 1.24.74 1.62' }],
 ];
-var T9 = [['path', { d: 'M22 17v1c0 .5-.5 1-1 1H3c-.5 0-1-.5-1-1v-1' }]];
-var B9 = [
+var q9 = [['path', { d: 'M22 17v1c0 .5-.5 1-1 1H3c-.5 0-1-.5-1-1v-1' }]];
+var z9 = [
     [
         'path',
         {
@@ -13706,7 +13751,7 @@ var B9 = [
         },
     ],
 ];
-var b9 = [
+var U9 = [
     ['path', { d: 'M12 18v4' }],
     [
         'path',
@@ -13715,7 +13760,7 @@ var b9 = [
         },
     ],
 ];
-var zt = [
+var I1 = [
     [
         'path',
         {
@@ -13726,13 +13771,13 @@ var zt = [
     ['path', { d: 'M22 4h-4' }],
     ['circle', { cx: '4', cy: '20', r: '2' }],
 ];
-var D9 = [
+var _9 = [
     ['rect', { width: '16', height: '20', x: '4', y: '2', rx: '2' }],
     ['path', { d: 'M12 6h.01' }],
     ['circle', { cx: '12', cy: '14', r: '4' }],
     ['path', { d: 'M12 14h.01' }],
 ];
-var R9 = [
+var N9 = [
     [
         'path',
         {
@@ -13742,7 +13787,7 @@ var R9 = [
     ['path', { d: 'M19.8 17.8a7.5 7.5 0 0 0 .003-10.603' }],
     ['path', { d: 'M17 15a3.5 3.5 0 0 0-.025-4.975' }],
 ];
-var F9 = [
+var I9 = [
     ['path', { d: 'm6 16 6-12 6 12' }],
     ['path', { d: 'M8 12h8' }],
     [
@@ -13752,12 +13797,12 @@ var F9 = [
         },
     ],
 ];
-var E9 = [
+var G9 = [
     ['path', { d: 'm6 16 6-12 6 12' }],
     ['path', { d: 'M8 12h8' }],
     ['path', { d: 'm16 20 2 2 4-4' }],
 ];
-var O9 = [
+var W9 = [
     [
         'path',
         {
@@ -13768,18 +13813,18 @@ var O9 = [
     ['circle', { cx: '19', cy: '5', r: '2' }],
     ['circle', { cx: '5', cy: '19', r: '2' }],
 ];
-var q9 = [
+var Z9 = [
     ['circle', { cx: '19', cy: '5', r: '2' }],
     ['circle', { cx: '5', cy: '19', r: '2' }],
     ['path', { d: 'M5 17A12 12 0 0 1 17 5' }],
 ];
-var z9 = [
+var X9 = [
     ['path', { d: 'M16 3h5v5' }],
     ['path', { d: 'M8 3H3v5' }],
     ['path', { d: 'M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3' }],
     ['path', { d: 'm15 9 6-6' }],
 ];
-var U9 = [
+var K9 = [
     ['path', { d: 'm15 10.42 4.8-5.07' }],
     ['path', { d: 'M19 18h3' }],
     [
@@ -13789,7 +13834,7 @@ var U9 = [
         },
     ],
 ];
-var I9 = [
+var $9 = [
     [
         'path',
         {
@@ -13803,7 +13848,7 @@ var I9 = [
         },
     ],
 ];
-var _9 = [
+var J9 = [
     ['path', { d: 'M15.295 19.562 16 22' }],
     ['path', { d: 'm17 16 3.758 2.098' }],
     ['path', { d: 'm19 12.5 3.026-.598' }],
@@ -13815,7 +13860,7 @@ var _9 = [
     ],
     ['path', { d: 'M8 9V2' }],
 ];
-var N9 = [
+var j9 = [
     ['path', { d: 'M3 3h.01' }],
     ['path', { d: 'M7 5h.01' }],
     ['path', { d: 'M11 7h.01' }],
@@ -13827,7 +13872,7 @@ var N9 = [
     ['path', { d: 'm13 14 8-2' }],
     ['path', { d: 'm13 19 8-2' }],
 ];
-var G9 = [
+var Q9 = [
     [
         'path',
         {
@@ -13837,56 +13882,56 @@ var G9 = [
     ['path', { d: 'M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4' }],
     ['path', { d: 'M5 21h14' }],
 ];
-var Ut = [
+var G1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M17 12h-2l-2 5-2-10-2 5H7' }],
 ];
-var It = [
+var W1 = [
     ['path', { d: 'M15 15H9l6-6' }],
     ['path', { d: 'M9 15V9' }],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var _t = [
+var Z1 = [
     ['path', { d: 'M15 15 9 9' }],
     ['path', { d: 'M9 15h6V9' }],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var Nt = [
+var X1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M12 8v8' }],
     ['path', { d: 'm8 12 4 4 4-4' }],
 ];
-var Gt = [
+var K1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'm12 8-4 4 4 4' }],
     ['path', { d: 'M16 12H8' }],
 ];
-var Wt = [
+var $1 = [
     ['path', { d: 'M13 21h6a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6' }],
     ['path', { d: 'm3 21 9-9' }],
     ['path', { d: 'M9 21H3v-6' }],
 ];
-var Zt = [
+var J1 = [
     ['path', { d: 'M21 11V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6' }],
     ['path', { d: 'm21 21-9-9' }],
     ['path', { d: 'M21 15v6h-6' }],
 ];
-var Xt = [
+var j1 = [
     ['path', { d: 'M13 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6' }],
     ['path', { d: 'm3 3 9 9' }],
     ['path', { d: 'M3 9V3h6' }],
 ];
-var Kt = [
+var Q1 = [
     ['path', { d: 'M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6' }],
     ['path', { d: 'm21 3-9 9' }],
     ['path', { d: 'M15 3h6v6' }],
 ];
-var W9 = [
+var Y9 = [
     ['path', { d: 'm10 16 4-4-4-4' }],
     ['path', { d: 'M3 12h11' }],
     ['path', { d: 'M3 8V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3' }],
 ];
-var Z9 = [
+var av = [
     ['path', { d: 'M10 12h11' }],
     ['path', { d: 'm17 16 4-4-4-4' }],
     [
@@ -13894,33 +13939,33 @@ var Z9 = [
         { d: 'M21 6.344V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1.344' },
     ],
 ];
-var Jt = [
+var Y1 = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M8 12h8' }],
     ['path', { d: 'm12 16 4-4-4-4' }],
 ];
-var $t = [
+var ae = [
     ['path', { d: 'M15 15 9 9' }],
     ['path', { d: 'M9 15V9h6' }],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var jt = [
+var te = [
     ['path', { d: 'M15 15V9H9' }],
     ['path', { d: 'm9 15 6-6' }],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var Qt = [
+var ee = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'm16 12-4-4-4 4' }],
     ['path', { d: 'M12 16V8' }],
 ];
-var Yt = [
+var re = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M12 8v8' }],
     ['path', { d: 'm8.5 14 7-4' }],
     ['path', { d: 'm8.5 10 7 4' }],
 ];
-var ae = [
+var oe = [
     ['line', { x1: '5', y1: '3', x2: '19', y2: '3' }],
     ['line', { x1: '3', y1: '5', x2: '3', y2: '19' }],
     ['line', { x1: '21', y1: '5', x2: '21', y2: '19' }],
@@ -13936,7 +13981,7 @@ var ae = [
     ['circle', { cx: '8.5', cy: '15.5', r: '1.5' }],
     ['line', { x1: '9.56066', y1: '14.43934', x2: '17', y2: '7' }],
 ];
-var te = [
+var de = [
     ['path', { d: 'M8 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h3' }],
     ['path', { d: 'M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3' }],
     ['path', { d: 'M12 20v2' }],
@@ -13944,7 +13989,7 @@ var te = [
     ['path', { d: 'M12 8v2' }],
     ['path', { d: 'M12 2v2' }],
 ];
-var ee = [
+var pe = [
     ['path', { d: 'M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3' }],
     ['path', { d: 'M21 16v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3' }],
     ['path', { d: 'M4 12H2' }],
@@ -13952,54 +13997,54 @@ var ee = [
     ['path', { d: 'M16 12h-2' }],
     ['path', { d: 'M22 12h-2' }],
 ];
-var Z = [
+var K = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M9 8h7' }],
     ['path', { d: 'M8 12h6' }],
     ['path', { d: 'M11 16h5' }],
 ];
-var re = [
+var le = [
     ['path', { d: 'M21 10.656V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.344' }],
     ['path', { d: 'm9 11 3 3L22 4' }],
 ];
-var oe = [
+var se = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'm9 12 2 2 4-4' }],
 ];
-var de = [
+var he = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'm16 10-4 4-4-4' }],
 ];
-var pe = [
+var fe = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'm14 16-4-4 4-4' }],
 ];
-var le = [
+var ue = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'm10 8 4 4-4 4' }],
 ];
-var se = [
+var ce = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'm8 14 4-4 4 4' }],
 ];
-var he = [
+var ne = [
     ['path', { d: 'm10 9-3 3 3 3' }],
     ['path', { d: 'm14 15 3-3-3-3' }],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var X9 = [
+var tv = [
     ['path', { d: 'M10 9.5 8 12l2 2.5' }],
     ['path', { d: 'M14 21h1' }],
     ['path', { d: 'm14 9.5 2 2.5-2 2.5' }],
     ['path', { d: 'M5 21a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2' }],
     ['path', { d: 'M9 21h1' }],
 ];
-var K9 = [
+var ev = [
     ['path', { d: 'M5 21a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2' }],
     ['path', { d: 'M9 21h1' }],
     ['path', { d: 'M14 21h1' }],
 ];
-var fe = [
+var ie = [
     ['path', { d: 'M8 7v7' }],
     ['path', { d: 'M12 7v4' }],
     ['path', { d: 'M16 7v9' }],
@@ -14016,7 +14061,7 @@ var fe = [
     ['path', { d: 'M3 14v1' }],
     ['path', { d: 'M3 9v1' }],
 ];
-var X = [
+var $ = [
     ['path', { d: 'M14 21h1' }],
     ['path', { d: 'M14 3h1' }],
     ['path', { d: 'M19 3a2 2 0 0 1 2 2' }],
@@ -14033,7 +14078,7 @@ var X = [
     ['path', { d: 'M9 21h1' }],
     ['path', { d: 'M9 3h1' }],
 ];
-var ue = [
+var xe = [
     [
         'path',
         {
@@ -14050,7 +14095,7 @@ var ue = [
     ['path', { d: 'M21 9v2' }],
     ['path', { d: 'M3 14v1' }],
 ];
-var J9 = [
+var rv = [
     ['path', { d: 'M14 21h1' }],
     ['path', { d: 'M21 14v1' }],
     ['path', { d: 'M21 19a2 2 0 0 1-2 2' }],
@@ -14061,7 +14106,7 @@ var J9 = [
     ['path', { d: 'M5 21a2 2 0 0 1-2-2' }],
     ['path', { d: 'M9 21h1' }],
 ];
-var ce = [
+var me = [
     ['path', { d: 'M5 3a2 2 0 0 0-2 2' }],
     ['path', { d: 'M19 3a2 2 0 0 1 2 2' }],
     ['path', { d: 'M21 19a2 2 0 0 1-2 2' }],
@@ -14075,56 +14120,56 @@ var ce = [
     ['path', { d: 'M3 14v1' }],
     ['path', { d: 'M21 14v1' }],
 ];
-var ne = [
+var Me = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
     ['line', { x1: '8', x2: '16', y1: '12', y2: '12' }],
     ['line', { x1: '12', x2: '12', y1: '16', y2: '16' }],
     ['line', { x1: '12', x2: '12', y1: '8', y2: '8' }],
 ];
-var xe = [
+var ve = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['circle', { cx: '12', cy: '12', r: '1' }],
 ];
-var ie = [
+var ge = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M7 10h10' }],
     ['path', { d: 'M7 14h10' }],
 ];
-var me = [
+var ye = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
     ['path', { d: 'M9 17c2 0 2.8-1 2.8-2.8V10c0-2 1-3.3 3.2-3' }],
     ['path', { d: 'M9 11.2h5.7' }],
 ];
-var Me = [
+var Ce = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M8 7v7' }],
     ['path', { d: 'M12 7v4' }],
     ['path', { d: 'M16 7v9' }],
 ];
-var ve = [
+var Ae = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M7 7v10' }],
     ['path', { d: 'M11 7v10' }],
     ['path', { d: 'm15 7 2 10' }],
 ];
-var ge = [
+var we = [
     [
         'path',
         { d: 'M8 16V8.5a.5.5 0 0 1 .9-.3l2.7 3.599a.5.5 0 0 0 .8 0l2.7-3.6a.5.5 0 0 1 .9.3V16' },
     ],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var ye = [
+var Se = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M7 8h10' }],
     ['path', { d: 'M7 12h10' }],
     ['path', { d: 'M7 16h10' }],
 ];
-var Ce = [
+var He = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M8 12h8' }],
 ];
-var Ae = [
+var Le = [
     [
         'path',
         {
@@ -14133,23 +14178,23 @@ var Ae = [
     ],
     ['path', { d: 'M21 11V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6' }],
 ];
-var Se = [
+var Ve = [
     ['path', { d: 'M3.6 3.6A2 2 0 0 1 5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-.59 1.41' }],
     ['path', { d: 'M3 8.7V19a2 2 0 0 0 2 2h10.3' }],
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M13 13a3 3 0 1 0 0-6H9v2' }],
     ['path', { d: 'M9 17v-2.3' }],
 ];
-var we = [
+var ke = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M9 17V7h4a3 3 0 0 1 0 6H9' }],
 ];
-var $9 = [
+var ov = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['line', { x1: '10', x2: '10', y1: '15', y2: '9' }],
     ['line', { x1: '14', x2: '14', y1: '15', y2: '9' }],
 ];
-var R = [
+var E = [
     ['path', { d: 'M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' }],
     [
         'path',
@@ -14158,25 +14203,25 @@ var R = [
         },
     ],
 ];
-var He = [
+var Pe = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M7 7h10' }],
     ['path', { d: 'M10 7v10' }],
     ['path', { d: 'M16 17a2 2 0 0 1-2-2V7' }],
 ];
-var Le = [
+var be = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'm15 9-6 6' }],
     ['path', { d: 'M9 9h.01' }],
     ['path', { d: 'M15 15h.01' }],
 ];
-var Ve = [
+var Te = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M12 12H9.5a2.5 2.5 0 0 1 0-5H17' }],
     ['path', { d: 'M12 7v10' }],
     ['path', { d: 'M16 7v10' }],
 ];
-var ke = [
+var Be = [
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
     [
         'path',
@@ -14185,25 +14230,25 @@ var ke = [
         },
     ],
 ];
-var Pe = [
+var Re = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M8 12h8' }],
     ['path', { d: 'M12 8v8' }],
 ];
-var Te = [
+var De = [
     ['path', { d: 'M12 7v4' }],
     ['path', { d: 'M7.998 9.003a5 5 0 1 0 8-.005' }],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var j9 = [
+var dv = [
     ['path', { d: 'M7 12h2l2 5 2-10h4' }],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var Q9 = [
+var pv = [
     ['path', { d: 'M21 11a8 8 0 0 0-8-8' }],
     ['path', { d: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4' }],
 ];
-var Be = [
+var Ee = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['circle', { cx: '8.5', cy: '8.5', r: '1.5' }],
     ['line', { x1: '9.56066', y1: '9.56066', x2: '12', y2: '12' }],
@@ -14211,34 +14256,34 @@ var Be = [
     ['circle', { cx: '8.5', cy: '15.5', r: '1.5' }],
     ['line', { x1: '9.56066', y1: '14.43934', x2: '17', y2: '7' }],
 ];
-var be = [
+var Fe = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M16 8.9V7H8l4 5-4 5h8v-1.9' }],
 ];
-var De = [
+var Oe = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['line', { x1: '9', x2: '15', y1: '15', y2: '9' }],
 ];
-var Re = [
+var qe = [
     ['path', { d: 'M8 19H5c-1 0-2-1-2-2V7c0-1 1-2 2-2h3' }],
     ['path', { d: 'M16 5h3c1 0 2 1 2 2v10c0 1-1 2-2 2h-3' }],
     ['line', { x1: '12', x2: '12', y1: '4', y2: '20' }],
 ];
-var Fe = [
+var ze = [
     ['path', { d: 'M5 8V5c0-1 1-2 2-2h10c1 0 2 1 2 2v3' }],
     ['path', { d: 'M19 16v3c0 1-1 2-2 2H7c-1 0-2-1-2-2v-3' }],
     ['line', { x1: '4', x2: '20', y1: '12', y2: '12' }],
 ];
-var Y9 = [
+var lv = [
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
     ['rect', { x: '8', y: '8', width: '8', height: '8', rx: '1' }],
 ];
-var av = [
+var sv = [
     ['path', { d: 'M4 10c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2' }],
     ['path', { d: 'M10 16c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2' }],
     ['rect', { width: '8', height: '8', x: '14', y: '14', rx: '2' }],
 ];
-var tv = [
+var hv = [
     [
         'path',
         {
@@ -14247,32 +14292,32 @@ var tv = [
     ],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var ev = [
+var fv = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['rect', { x: '9', y: '9', width: '6', height: '6', rx: '1' }],
 ];
-var Ee = [
+var Ue = [
     ['path', { d: 'm7 11 2-2-2-2' }],
     ['path', { d: 'M11 13h4' }],
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
 ];
-var Oe = [
+var _e = [
     ['path', { d: 'M18 21a6 6 0 0 0-12 0' }],
     ['circle', { cx: '12', cy: '11', r: '4' }],
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
 ];
-var qe = [
+var Ne = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['circle', { cx: '12', cy: '10', r: '3' }],
     ['path', { d: 'M7 21v-2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2' }],
 ];
-var ze = [
+var Ie = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2', ry: '2' }],
     ['path', { d: 'm15 9-6 6' }],
     ['path', { d: 'm9 9 6 6' }],
 ];
-var rv = [['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }]];
-var ov = [
+var uv = [['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }]];
+var cv = [
     [
         'path',
         {
@@ -14286,7 +14331,7 @@ var ov = [
         },
     ],
 ];
-var dv = [
+var nv = [
     ['path', { d: 'M10 22a2 2 0 0 1-2-2' }],
     ['path', { d: 'M14 2a2 2 0 0 1 2 2' }],
     ['path', { d: 'M16 22h-2' }],
@@ -14299,7 +14344,7 @@ var dv = [
     ['path', { d: 'M8 10a2 2 0 0 1 2-2h5a1 1 0 0 1 1 1v5a2 2 0 0 1-2 2H9a1 1 0 0 1-1-1z' }],
     ['path', { d: 'M8 2h2' }],
 ];
-var pv = [
+var iv = [
     ['path', { d: 'M10 22a2 2 0 0 1-2-2' }],
     ['path', { d: 'M16 22h-2' }],
     [
@@ -14312,7 +14357,7 @@ var pv = [
     ['path', { d: 'M22 14v2' }],
     ['path', { d: 'M22 20a2 2 0 0 1-2 2' }],
 ];
-var lv = [
+var xv = [
     [
         'path',
         {
@@ -14320,7 +14365,7 @@ var lv = [
         },
     ],
 ];
-var sv = [
+var mv = [
     ['path', { d: 'M13.77 3.043a34 34 0 0 0-3.54 0' }],
     ['path', { d: 'M13.771 20.956a33 33 0 0 1-3.541.001' }],
     ['path', { d: 'M20.18 17.74c-.51 1.15-1.29 1.93-2.439 2.44' }],
@@ -14330,8 +14375,8 @@ var sv = [
     ['path', { d: 'M6.26 20.179c-1.15-.508-1.93-1.29-2.44-2.438' }],
     ['path', { d: 'M6.26 3.82c-1.149.51-1.93 1.291-2.44 2.44' }],
 ];
-var hv = [['path', { d: 'M12 3c7.2 0 9 1.8 9 9s-1.8 9-9 9-9-1.8-9-9 1.8-9 9-9' }]];
-var fv = [
+var Mv = [['path', { d: 'M12 3c7.2 0 9 1.8 9 9s-1.8 9-9 9-9-1.8-9-9 1.8-9 9-9' }]];
+var vv = [
     ['path', { d: 'M15.236 22a3 3 0 0 0-2.2-5' }],
     ['path', { d: 'M16 20a3 3 0 0 1 3-3h1a2 2 0 0 0 2-2v-2a4 4 0 0 0-4-4V4' }],
     ['path', { d: 'M18 13h.01' }],
@@ -14342,7 +14387,7 @@ var fv = [
         },
     ],
 ];
-var uv = [
+var gv = [
     ['path', { d: 'M14 13V8.5C14 7 15 7 15 5a3 3 0 0 0-6 0c0 2 1 2 1 3.5V13' }],
     [
         'path',
@@ -14352,7 +14397,7 @@ var uv = [
     ],
     ['path', { d: 'M5 22h14' }],
 ];
-var cv = [
+var yv = [
     [
         'path',
         {
@@ -14361,7 +14406,7 @@ var cv = [
     ],
     ['path', { d: 'm15 18 2 2 4-4' }],
 ];
-var nv = [
+var Cv = [
     [
         'path',
         {
@@ -14369,7 +14414,7 @@ var nv = [
         },
     ],
 ];
-var xv = [
+var Av = [
     ['path', { d: 'M15 18h6' }],
     [
         'path',
@@ -14378,7 +14423,7 @@ var xv = [
         },
     ],
 ];
-var iv = [
+var wv = [
     [
         'path',
         {
@@ -14393,7 +14438,7 @@ var iv = [
     ],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var mv = [
+var Sv = [
     [
         'path',
         {
@@ -14403,7 +14448,7 @@ var mv = [
     ['path', { d: 'M15 18h6' }],
     ['path', { d: 'M18 15v6' }],
 ];
-var Mv = [
+var Hv = [
     ['path', { d: 'm15.5 15.5 5 5' }],
     [
         'path',
@@ -14413,7 +14458,7 @@ var Mv = [
     ],
     ['path', { d: 'm20.5 15.5-5 5' }],
 ];
-var vv = [
+var Lv = [
     [
         'path',
         {
@@ -14421,7 +14466,7 @@ var vv = [
         },
     ],
 ];
-var gv = [
+var Vv = [
     [
         'path',
         {
@@ -14430,7 +14475,7 @@ var gv = [
     ],
     ['path', { d: 'M21 20V4' }],
 ];
-var yv = [
+var kv = [
     [
         'path',
         {
@@ -14439,7 +14484,7 @@ var yv = [
     ],
     ['path', { d: 'M3 4v16' }],
 ];
-var Cv = [
+var Pv = [
     [
         'path',
         {
@@ -14451,14 +14496,14 @@ var Cv = [
     ['path', { d: 'M16 13h.01' }],
     ['path', { d: 'M10 16s.8 1 2 1c1.3 0 2-1 2-1' }],
 ];
-var Av = [
+var bv = [
     ['path', { d: 'M11 2v2' }],
     ['path', { d: 'M5 2v2' }],
     ['path', { d: 'M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1' }],
     ['path', { d: 'M8 15a6 6 0 0 0 12 0v-3' }],
     ['circle', { cx: '20', cy: '10', r: '2' }],
 ];
-var Sv = [
+var Tv = [
     ['path', { d: 'm15 19 2 2 4-4' }],
     ['path', { d: 'M15 3v5a1 1 0 0 0 1 1h5' }],
     [
@@ -14468,7 +14513,7 @@ var Sv = [
         },
     ],
 ];
-var wv = [
+var Bv = [
     ['path', { d: 'M15 3v5a1 1 0 0 0 1 1h5' }],
     [
         'path',
@@ -14478,13 +14523,13 @@ var wv = [
     ],
     ['path', { d: 'M21 18h-6' }],
 ];
-var Hv = [
+var Rv = [
     ['path', { d: 'M15 3v5a1 1 0 0 0 1 1h5' }],
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M3.586 3.586A2 2 0 0 0 3 5v14a2 2 0 0 0 2 2h14a2 2 0 0 0 1.414-.586' }],
     ['path', { d: 'M8.656 3H15a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 21 9v6.344' }],
 ];
-var Lv = [
+var Dv = [
     ['path', { d: 'M15 3v5a1 1 0 0 0 1 1h5' }],
     ['path', { d: 'm16 16 5 5' }],
     [
@@ -14495,7 +14540,7 @@ var Lv = [
     ],
     ['path', { d: 'm21 16-5 5' }],
 ];
-var Vv = [
+var Ev = [
     ['path', { d: 'M15 3v5a1 1 0 0 0 1 1h5' }],
     ['path', { d: 'M18 15v6' }],
     [
@@ -14506,7 +14551,7 @@ var Vv = [
     ],
     ['path', { d: 'M21 18h-6' }],
 ];
-var kv = [
+var Fv = [
     [
         'path',
         {
@@ -14515,7 +14560,7 @@ var kv = [
     ],
     ['path', { d: 'M15 3v5a1 1 0 0 0 1 1h5' }],
 ];
-var Pv = [
+var Ov = [
     [
         'path',
         {
@@ -14531,7 +14576,7 @@ var Pv = [
     ],
     ['path', { d: 'M16 2v5a1 1 0 0 0 1 1h5' }],
 ];
-var Tv = [
+var qv = [
     [
         'path',
         {
@@ -14541,7 +14586,7 @@ var Tv = [
     ['path', { d: 'M11.99 22 14 12l7.822 3.184' }],
     ['path', { d: 'M14 12 8.47 2.302' }],
 ];
-var Bv = [
+var zv = [
     ['path', { d: 'M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5' }],
     [
         'path',
@@ -14551,20 +14596,20 @@ var Bv = [
     ],
     ['path', { d: 'M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05' }],
 ];
-var bv = [
+var Uv = [
     ['rect', { width: '20', height: '6', x: '2', y: '4', rx: '2' }],
     ['rect', { width: '20', height: '6', x: '2', y: '14', rx: '2' }],
 ];
-var Dv = [
+var _v = [
     ['rect', { width: '6', height: '20', x: '4', y: '2', rx: '2' }],
     ['rect', { width: '6', height: '20', x: '14', y: '2', rx: '2' }],
 ];
-var Rv = [
+var Nv = [
     ['path', { d: 'M16 4H9a3 3 0 0 0-2.83 4' }],
     ['path', { d: 'M14 12a4 4 0 0 1 0 8H6' }],
     ['line', { x1: '4', x2: '20', y1: '12', y2: '12' }],
 ];
-var Fv = [
+var Iv = [
     ['path', { d: 'm4 5 8 8' }],
     ['path', { d: 'm12 5-8 8' }],
     [
@@ -14574,14 +14619,14 @@ var Fv = [
         },
     ],
 ];
-var Ev = [
+var Gv = [
     ['path', { d: 'M15 4H7' }],
     ['path', { d: 'm18 16 3 3-3 3' }],
     ['path', { d: 'M3 4v13a2 2 0 0 0 2 2h16' }],
     ['path', { d: 'M7 14h7' }],
     ['path', { d: 'M7 9h12' }],
 ];
-var Ov = [
+var Wv = [
     ['circle', { cx: '12', cy: '12', r: '4' }],
     ['path', { d: 'M12 4h.01' }],
     ['path', { d: 'M20 12h.01' }],
@@ -14592,7 +14637,7 @@ var Ov = [
     ['path', { d: 'M6.343 17.657h.01' }],
     ['path', { d: 'M6.343 6.343h.01' }],
 ];
-var qv = [
+var Zv = [
     ['circle', { cx: '12', cy: '12', r: '4' }],
     ['path', { d: 'M12 3v1' }],
     ['path', { d: 'M12 20v1' }],
@@ -14603,7 +14648,7 @@ var qv = [
     ['path', { d: 'm5.636 5.636.707.707' }],
     ['path', { d: 'm17.657 17.657.707.707' }],
 ];
-var zv = [
+var Xv = [
     ['path', { d: 'M12 2v2' }],
     [
         'path',
@@ -14615,7 +14660,7 @@ var zv = [
     ['path', { d: 'm19 5-1.256 1.256' }],
     ['path', { d: 'M20 12h2' }],
 ];
-var Uv = [
+var Kv = [
     ['path', { d: 'M10 21v-1' }],
     ['path', { d: 'M10 4V3' }],
     ['path', { d: 'M10 9a3 3 0 0 0 0 6' }],
@@ -14628,7 +14673,7 @@ var Uv = [
     ['path', { d: 'm3.64 18.36.7-.7' }],
     ['path', { d: 'm4.34 6.34-.7-.7' }],
 ];
-var Iv = [
+var $v = [
     ['circle', { cx: '12', cy: '12', r: '4' }],
     ['path', { d: 'M12 2v2' }],
     ['path', { d: 'M12 20v2' }],
@@ -14639,7 +14684,7 @@ var Iv = [
     ['path', { d: 'm6.34 17.66-1.41 1.41' }],
     ['path', { d: 'm19.07 4.93-1.41 1.41' }],
 ];
-var _v = [
+var Jv = [
     ['path', { d: 'M12 2v8' }],
     ['path', { d: 'm4.93 10.93 1.41 1.41' }],
     ['path', { d: 'M2 18h2' }],
@@ -14649,7 +14694,7 @@ var _v = [
     ['path', { d: 'm8 6 4-4 4 4' }],
     ['path', { d: 'M16 18a4 4 0 0 0-8 0' }],
 ];
-var Nv = [
+var jv = [
     ['path', { d: 'M12 10V2' }],
     ['path', { d: 'm4.93 10.93 1.41 1.41' }],
     ['path', { d: 'M2 18h2' }],
@@ -14659,7 +14704,7 @@ var Nv = [
     ['path', { d: 'm16 6-4 4-4-4' }],
     ['path', { d: 'M16 18a4 4 0 0 0-8 0' }],
 ];
-var Gv = [
+var Qv = [
     ['path', { d: 'M11 17a4 4 0 0 1-8 0V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2Z' }],
     ['path', { d: 'M16.7 13H19a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H7' }],
     ['path', { d: 'M 7 17h.01' }],
@@ -14668,7 +14713,7 @@ var Gv = [
         { d: 'm11 8 2.3-2.3a2.4 2.4 0 0 1 3.404.004L18.6 7.6a2.4 2.4 0 0 1 .026 3.434L9.9 19.8' },
     ],
 ];
-var Wv = [
+var Yv = [
     ['path', { d: 'm4 19 8-8' }],
     ['path', { d: 'm12 19-8-8' }],
     [
@@ -14678,25 +14723,25 @@ var Wv = [
         },
     ],
 ];
-var Zv = [
+var ag = [
     ['path', { d: 'M10 21V3h8' }],
     ['path', { d: 'M6 16h9' }],
     ['path', { d: 'M10 9.5h7' }],
 ];
-var Xv = [
+var tg = [
     ['path', { d: 'M11 19H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5' }],
     ['path', { d: 'M13 5h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5' }],
     ['circle', { cx: '12', cy: '12', r: '3' }],
     ['path', { d: 'm18 22-3-3 3-3' }],
     ['path', { d: 'm6 2 3 3-3 3' }],
 ];
-var Kv = [
+var eg = [
     ['path', { d: 'm11 19-6-6' }],
     ['path', { d: 'm5 21-2-2' }],
     ['path', { d: 'm8 16-4 4' }],
     ['path', { d: 'M9.5 17.5 21 6V3h-3L6.5 14.5' }],
 ];
-var Jv = [
+var rg = [
     ['path', { d: 'm18 2 4 4' }],
     ['path', { d: 'm17 7 3-3' }],
     ['path', { d: 'M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5' }],
@@ -14704,7 +14749,7 @@ var Jv = [
     ['path', { d: 'm5 19-3 3' }],
     ['path', { d: 'm14 4 6 6' }],
 ];
-var $v = [
+var og = [
     ['polyline', { points: '14.5 17.5 3 6 3 3 6 3 17.5 14.5' }],
     ['line', { x1: '13', x2: '19', y1: '19', y2: '13' }],
     ['line', { x1: '16', x2: '20', y1: '16', y2: '20' }],
@@ -14714,7 +14759,7 @@ var $v = [
     ['line', { x1: '7', x2: '4', y1: '17', y2: '20' }],
     ['line', { x1: '3', x2: '5', y1: '19', y2: '21' }],
 ];
-var jv = [
+var dg = [
     [
         'path',
         {
@@ -14722,20 +14767,20 @@ var jv = [
         },
     ],
 ];
-var Qv = [
+var pg = [
     ['path', { d: 'M12 21v-6' }],
     ['path', { d: 'M12 9V3' }],
     ['path', { d: 'M3 15h18' }],
     ['path', { d: 'M3 9h18' }],
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
 ];
-var Yv = [
+var lg = [
     ['path', { d: 'M12 15V9' }],
     ['path', { d: 'M3 15h18' }],
     ['path', { d: 'M3 9h18' }],
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
 ];
-var ag = [
+var sg = [
     ['path', { d: 'M14 14v2' }],
     ['path', { d: 'M14 20v2' }],
     ['path', { d: 'M14 2v2' }],
@@ -14748,7 +14793,7 @@ var ag = [
     ['path', { d: 'M22 9h-4' }],
     ['path', { d: 'M5 3v18' }],
 ];
-var tg = [
+var hg = [
     ['path', { d: 'M16 5H3' }],
     ['path', { d: 'M16 12H3' }],
     ['path', { d: 'M16 19H3' }],
@@ -14756,13 +14801,13 @@ var tg = [
     ['path', { d: 'M21 12h.01' }],
     ['path', { d: 'M21 19h.01' }],
 ];
-var eg = [
+var fg = [
     ['path', { d: 'M15 3v18' }],
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M21 9H3' }],
     ['path', { d: 'M21 15H3' }],
 ];
-var rg = [
+var ug = [
     ['path', { d: 'M14 10h2' }],
     ['path', { d: 'M15 22v-8' }],
     ['path', { d: 'M15 2v4' }],
@@ -14775,28 +14820,28 @@ var rg = [
     ['path', { d: 'M9 22v-8' }],
     ['path', { d: 'M9 2v4' }],
 ];
-var og = [
+var cg = [
     ['path', { d: 'M12 3v18' }],
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M3 9h18' }],
     ['path', { d: 'M3 15h18' }],
 ];
-var dg = [
+var ng = [
     ['rect', { width: '10', height: '14', x: '3', y: '8', rx: '2' }],
     ['path', { d: 'M5 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2h-2.4' }],
     ['path', { d: 'M8 18h.01' }],
 ];
-var pg = [
+var ig = [
     ['rect', { width: '16', height: '20', x: '4', y: '2', rx: '2', ry: '2' }],
     ['line', { x1: '12', x2: '12.01', y1: '18', y2: '18' }],
 ];
-var lg = [
+var xg = [
     ['circle', { cx: '7', cy: '7', r: '5' }],
     ['circle', { cx: '17', cy: '17', r: '5' }],
     ['path', { d: 'M12 17h10' }],
     ['path', { d: 'm3.46 10.54 7.08-7.08' }],
 ];
-var sg = [
+var mg = [
     ['path', { d: 'M16 13h6' }],
     [
         'path',
@@ -14807,7 +14852,7 @@ var sg = [
     ['path', { d: 'M19 10v6' }],
     ['circle', { cx: '7.5', cy: '7.5', r: '.5', fill: 'currentColor' }],
 ];
-var hg = [
+var Mg = [
     [
         'path',
         {
@@ -14818,7 +14863,7 @@ var hg = [
     ['path', { d: 'm21.5 10.5-5 5' }],
     ['circle', { cx: '7.5', cy: '7.5', r: '.5', fill: 'currentColor' }],
 ];
-var fg = [
+var vg = [
     [
         'path',
         {
@@ -14827,7 +14872,7 @@ var fg = [
     ],
     ['circle', { cx: '7.5', cy: '7.5', r: '.5', fill: 'currentColor' }],
 ];
-var ug = [
+var gg = [
     [
         'path',
         {
@@ -14837,36 +14882,36 @@ var ug = [
     ['path', { d: 'M2 7v6.172a2 2 0 0 0 .586 1.414l6.71 6.71a2.4 2.4 0 0 0 3.191.193' }],
     ['circle', { cx: '10.5', cy: '6.5', r: '.5', fill: 'currentColor' }],
 ];
-var cg = [
+var yg = [
     ['path', { d: 'M4 4v16' }],
     ['path', { d: 'M9 4v16' }],
 ];
-var ng = [['path', { d: 'M4 4v16' }]];
-var xg = [
+var Cg = [['path', { d: 'M4 4v16' }]];
+var Ag = [
     ['path', { d: 'M4 4v16' }],
     ['path', { d: 'M9 4v16' }],
     ['path', { d: 'M14 4v16' }],
 ];
-var ig = [
+var wg = [
     ['path', { d: 'M4 4v16' }],
     ['path', { d: 'M9 4v16' }],
     ['path', { d: 'M14 4v16' }],
     ['path', { d: 'M19 4v16' }],
 ];
-var mg = [
+var Sg = [
     ['circle', { cx: '17', cy: '4', r: '2' }],
     ['path', { d: 'M15.59 5.41 5.41 15.59' }],
     ['circle', { cx: '4', cy: '17', r: '2' }],
     ['path', { d: 'M12 22s-4-9-1.5-11.5S22 12 22 12' }],
 ];
-var Mg = [
+var Hg = [
     ['path', { d: 'M4 4v16' }],
     ['path', { d: 'M9 4v16' }],
     ['path', { d: 'M14 4v16' }],
     ['path', { d: 'M19 4v16' }],
     ['path', { d: 'M22 6 2 18' }],
 ];
-var vg = [
+var Lg = [
     [
         'path',
         {
@@ -14885,7 +14930,7 @@ var vg = [
     ['path', { d: 'm8 21 3.105-6.21' }],
     ['circle', { cx: '12', cy: '13', r: '2' }],
 ];
-var gg = [
+var Vg = [
     ['circle', { cx: '4', cy: '4', r: '2' }],
     ['path', { d: 'm14 5 3-3 3 3' }],
     ['path', { d: 'm14 10 3-3 3 3' }],
@@ -14894,32 +14939,32 @@ var gg = [
     ['path', { d: 'M8 14v8' }],
     ['path', { d: 'm9 14 5 8' }],
 ];
-var yg = [
+var kg = [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['circle', { cx: '12', cy: '12', r: '6' }],
     ['circle', { cx: '12', cy: '12', r: '2' }],
 ];
-var Cg = [
+var Pg = [
     ['path', { d: 'M3.5 21 14 3' }],
     ['path', { d: 'M20.5 21 10 3' }],
     ['path', { d: 'M15.5 21 12 15l-3.5 6' }],
     ['path', { d: 'M2 21h20' }],
 ];
-var Ag = [
+var bg = [
     ['path', { d: 'M12 19h8' }],
     ['path', { d: 'm4 17 6-6-6-6' }],
 ];
-var Ue = [
+var Ge = [
     ['path', { d: 'M21 7 6.82 21.18a2.83 2.83 0 0 1-3.99-.01a2.83 2.83 0 0 1 0-4L17 3' }],
     ['path', { d: 'm16 2 6 6' }],
     ['path', { d: 'M12 16H4' }],
 ];
-var Sg = [
+var Tg = [
     ['path', { d: 'M14.5 2v17.5c0 1.4-1.1 2.5-2.5 2.5c-1.4 0-2.5-1.1-2.5-2.5V2' }],
     ['path', { d: 'M8.5 2h7' }],
     ['path', { d: 'M14.5 16h-5' }],
 ];
-var wg = [
+var Bg = [
     ['path', { d: 'M9 2v17.5A2.5 2.5 0 0 1 6.5 22A2.5 2.5 0 0 1 4 19.5V2' }],
     ['path', { d: 'M20 2v17.5a2.5 2.5 0 0 1-2.5 2.5a2.5 2.5 0 0 1-2.5-2.5V2' }],
     ['path', { d: 'M3 2h7' }],
@@ -14927,65 +14972,65 @@ var wg = [
     ['path', { d: 'M9 16H4' }],
     ['path', { d: 'M20 16h-5' }],
 ];
-var Ie = [
+var We = [
     ['path', { d: 'M21 5H3' }],
     ['path', { d: 'M17 12H7' }],
     ['path', { d: 'M19 19H5' }],
 ];
-var _e = [
+var Ze = [
     ['path', { d: 'M21 5H3' }],
     ['path', { d: 'M21 12H9' }],
     ['path', { d: 'M21 19H7' }],
 ];
-var Ne = [
+var Xe = [
     ['path', { d: 'M3 5h18' }],
     ['path', { d: 'M3 12h18' }],
     ['path', { d: 'M3 19h18' }],
 ];
-var K = [
+var J = [
     ['path', { d: 'M21 5H3' }],
     ['path', { d: 'M15 12H3' }],
     ['path', { d: 'M17 19H3' }],
 ];
-var Hg = [
+var Rg = [
     ['path', { d: 'M12 20h-1a2 2 0 0 1-2-2 2 2 0 0 1-2 2H6' }],
     ['path', { d: 'M13 8h7a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-7' }],
     ['path', { d: 'M5 16H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1' }],
     ['path', { d: 'M6 4h1a2 2 0 0 1 2 2 2 2 0 0 1 2-2h1' }],
     ['path', { d: 'M9 6v12' }],
 ];
-var Lg = [
+var Dg = [
     ['path', { d: 'M17 22h-1a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4h1' }],
     ['path', { d: 'M7 22h1a4 4 0 0 0 4-4' }],
     ['path', { d: 'M7 2h1a4 4 0 0 1 4 4' }],
 ];
-var Ge = [
+var Ke = [
     ['path', { d: 'M15 5h6' }],
     ['path', { d: 'M15 12h6' }],
     ['path', { d: 'M3 19h18' }],
     ['path', { d: 'm3 12 3.553-7.724a.5.5 0 0 1 .894 0L11 12' }],
     ['path', { d: 'M3.92 10h6.16' }],
 ];
-var Vg = [
+var Eg = [
     ['path', { d: 'M21 5H3' }],
     ['path', { d: 'M10 12H3' }],
     ['path', { d: 'M10 19H3' }],
     ['circle', { cx: '17', cy: '15', r: '3' }],
     ['path', { d: 'm21 19-1.9-1.9' }],
 ];
-var kg = [
+var Fg = [
     ['path', { d: 'M17 5H3' }],
     ['path', { d: 'M21 12H8' }],
     ['path', { d: 'M21 19H8' }],
     ['path', { d: 'M3 12v7' }],
 ];
-var We = [
+var $e = [
     ['path', { d: 'm16 16-3 3 3 3' }],
     ['path', { d: 'M3 12h14.5a1 1 0 0 1 0 7H13' }],
     ['path', { d: 'M3 19h6' }],
     ['path', { d: 'M3 5h18' }],
 ];
-var Pg = [
+var Og = [
     ['path', { d: 'M2 10s3-3 3-8' }],
     ['path', { d: 'M22 10s-3-3-3-8' }],
     ['path', { d: 'M10 2c0 4.4-3.6 8-8 8' }],
@@ -14996,7 +15041,7 @@ var Pg = [
     ['path', { d: 'M2 22v-1a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1' }],
     ['path', { d: 'M14 22v-1a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1' }],
 ];
-var Tg = [
+var qg = [
     ['path', { d: 'm10 20-1.25-2.5L6 18' }],
     ['path', { d: 'M10 4 8.75 6.5 6 6' }],
     ['path', { d: 'M10.585 15H10' }],
@@ -15006,7 +15051,7 @@ var Tg = [
     ['path', { d: 'm7 21 3-6-1.5-3' }],
     ['path', { d: 'm7 3 3 6h2' }],
 ];
-var Bg = [
+var zg = [
     ['path', { d: 'M12 2v2' }],
     ['path', { d: 'M12 8a4 4 0 0 0-1.645 7.647' }],
     ['path', { d: 'M2 12h2' }],
@@ -15014,8 +15059,8 @@ var Bg = [
     ['path', { d: 'm4.93 4.93 1.41 1.41' }],
     ['path', { d: 'm6.34 17.66-1.41 1.41' }],
 ];
-var bg = [['path', { d: 'M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z' }]];
-var Dg = [
+var Ug = [['path', { d: 'M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z' }]];
+var _g = [
     [
         'path',
         {
@@ -15024,7 +15069,7 @@ var Dg = [
     ],
     ['path', { d: 'M17 14V2' }],
 ];
-var Rg = [
+var Ng = [
     [
         'path',
         {
@@ -15033,7 +15078,7 @@ var Rg = [
     ],
     ['path', { d: 'M7 10v12' }],
 ];
-var Fg = [
+var Ig = [
     [
         'path',
         {
@@ -15042,7 +15087,7 @@ var Fg = [
     ],
     ['path', { d: 'm9 12 2 2 4-4' }],
 ];
-var Eg = [
+var Gg = [
     [
         'path',
         {
@@ -15051,7 +15096,7 @@ var Eg = [
     ],
     ['path', { d: 'M9 12h6' }],
 ];
-var Og = [
+var Wg = [
     [
         'path',
         {
@@ -15062,7 +15107,7 @@ var Og = [
     ['path', { d: 'm15 9-6 6' }],
     ['path', { d: 'M15 15h.01' }],
 ];
-var qg = [
+var Zg = [
     [
         'path',
         {
@@ -15072,7 +15117,7 @@ var qg = [
     ['path', { d: 'M9 12h6' }],
     ['path', { d: 'M12 9v6' }],
 ];
-var zg = [
+var Xg = [
     [
         'path',
         {
@@ -15081,7 +15126,7 @@ var zg = [
     ],
     ['path', { d: 'm9.5 14.5 5-5' }],
 ];
-var Ug = [
+var Kg = [
     [
         'path',
         {
@@ -15091,7 +15136,7 @@ var Ug = [
     ['path', { d: 'm9.5 14.5 5-5' }],
     ['path', { d: 'm9.5 9.5 5 5' }],
 ];
-var Ig = [
+var $g = [
     [
         'path',
         {
@@ -15102,7 +15147,7 @@ var Ig = [
     ['path', { d: 'M13 17v2' }],
     ['path', { d: 'M13 11v2' }],
 ];
-var _g = [
+var Jg = [
     ['path', { d: 'M10.5 17h1.227a2 2 0 0 0 1.345-.52L18 12' }],
     ['path', { d: 'm12 13.5 3.794.506' }],
     ['path', { d: 'm3.173 8.18 11-5a2 2 0 0 1 2.647.993L18.56 8' }],
@@ -15111,14 +15156,14 @@ var _g = [
     ['path', { d: 'M6 19v2' }],
     ['rect', { x: '2', y: '8', width: '20', height: '13', rx: '2' }],
 ];
-var Ng = [
+var jg = [
     ['path', { d: 'm3.173 8.18 11-5a2 2 0 0 1 2.647.993L18.56 8' }],
     ['path', { d: 'M6 10V8' }],
     ['path', { d: 'M6 14v1' }],
     ['path', { d: 'M6 19v2' }],
     ['rect', { x: '2', y: '8', width: '20', height: '13', rx: '2' }],
 ];
-var Gg = [
+var Qg = [
     ['path', { d: 'M4 12h.01' }],
     ['path', { d: 'M4 16h.01' }],
     ['path', { d: 'M4 20h.01' }],
@@ -15143,33 +15188,33 @@ var Gg = [
         },
     ],
 ];
-var Wg = [
+var Yg = [
     ['path', { d: 'M10 2h4' }],
     ['path', { d: 'M4.6 11a8 8 0 0 0 1.7 8.7 8 8 0 0 0 8.7 1.7' }],
     ['path', { d: 'M7.4 7.4a8 8 0 0 1 10.3 1 8 8 0 0 1 .9 10.2' }],
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M12 12v-2' }],
 ];
-var Zg = [
+var ay = [
     ['path', { d: 'M10 2h4' }],
     ['path', { d: 'M12 14v-4' }],
     ['path', { d: 'M4 13a8 8 0 0 1 8-7 8 8 0 1 1-5.3 14L4 17.6' }],
     ['path', { d: 'M9 17H4v5' }],
 ];
-var Xg = [
+var ty = [
     ['line', { x1: '10', x2: '14', y1: '2', y2: '2' }],
     ['line', { x1: '12', x2: '15', y1: '14', y2: '11' }],
     ['circle', { cx: '12', cy: '14', r: '8' }],
 ];
-var Kg = [
+var ey = [
     ['circle', { cx: '9', cy: '12', r: '3' }],
     ['rect', { width: '20', height: '14', x: '2', y: '5', rx: '7' }],
 ];
-var Jg = [
+var ry = [
     ['circle', { cx: '15', cy: '12', r: '3' }],
     ['rect', { width: '20', height: '14', x: '2', y: '5', rx: '7' }],
 ];
-var $g = [
+var oy = [
     [
         'path',
         {
@@ -15178,7 +15223,7 @@ var $g = [
     ],
     ['path', { d: 'M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8' }],
 ];
-var jg = [
+var dy = [
     ['path', { d: 'M10 15h4' }],
     [
         'path',
@@ -15197,7 +15242,7 @@ var jg = [
         { d: 'M4 12.006A1 1 0 0 1 4.994 11H19a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z' },
     ],
 ];
-var Qg = [
+var py = [
     ['path', { d: 'M16 12v4' }],
     [
         'path',
@@ -15209,18 +15254,18 @@ var Qg = [
     ['path', { d: 'M2 14h20' }],
     ['path', { d: 'M8 12v4' }],
 ];
-var Yg = [
+var ly = [
     ['ellipse', { cx: '12', cy: '11', rx: '3', ry: '2' }],
     ['ellipse', { cx: '12', cy: '12.5', rx: '10', ry: '8.5' }],
 ];
-var ay = [
+var sy = [
     ['path', { d: 'M21 4H3' }],
     ['path', { d: 'M18 8H6' }],
     ['path', { d: 'M19 12H9' }],
     ['path', { d: 'M16 16h-6' }],
     ['path', { d: 'M11 20H9' }],
 ];
-var ty = [
+var hy = [
     ['path', { d: 'M12 20v-6' }],
     ['path', { d: 'M19.656 14H22' }],
     ['path', { d: 'M2 14h12' }],
@@ -15228,12 +15273,12 @@ var ty = [
     ['path', { d: 'M20 20H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2' }],
     ['path', { d: 'M9.656 4H20a2 2 0 0 1 2 2v10.344' }],
 ];
-var ey = [
+var fy = [
     ['rect', { width: '20', height: '16', x: '2', y: '4', rx: '2' }],
     ['path', { d: 'M2 14h20' }],
     ['path', { d: 'M12 20v-6' }],
 ];
-var ry = [
+var uy = [
     ['path', { d: 'M22 7h-2' }],
     [
         'path',
@@ -15243,7 +15288,7 @@ var ry = [
     ],
     ['path', { d: 'M9 7H2' }],
 ];
-var oy = [
+var cy = [
     ['path', { d: 'M18.2 12.27 20 6H4l1.8 6.27a1 1 0 0 0 .95.73h10.5a1 1 0 0 0 .96-.73Z' }],
     ['path', { d: 'M8 13v9' }],
     ['path', { d: 'M16 22v-9' }],
@@ -15252,12 +15297,12 @@ var oy = [
     ['path', { d: 'M12 6V2' }],
     ['path', { d: 'M13 2h-2' }],
 ];
-var dy = [
+var ny = [
     ['rect', { width: '18', height: '12', x: '3', y: '8', rx: '1' }],
     ['path', { d: 'M10 8V5c0-.6-.4-1-1-1H6a1 1 0 0 0-1 1v3' }],
     ['path', { d: 'M19 8V5c0-.6-.4-1-1-1h-3a1 1 0 0 0-1 1v3' }],
 ];
-var py = [
+var iy = [
     ['path', { d: 'm10 11 11 .9a1 1 0 0 1 .8 1.1l-.665 4.158a1 1 0 0 1-.988.842H20' }],
     ['path', { d: 'M16 18h-5' }],
     ['path', { d: 'M18 5a1 1 0 0 0-1 1v5.573' }],
@@ -15268,7 +15313,7 @@ var py = [
     ['circle', { cx: '18', cy: '18', r: '2' }],
     ['circle', { cx: '7', cy: '15', r: '5' }],
 ];
-var ly = [
+var xy = [
     ['path', { d: 'M16.05 10.966a5 2.5 0 0 1-8.1 0' }],
     [
         'path',
@@ -15279,7 +15324,7 @@ var ly = [
     ['path', { d: 'M16.949 14.14a5 2.5 0 1 1-9.9 0L10.063 3.5a2 2 0 0 1 3.874 0z' }],
     ['path', { d: 'M9.194 6.57a5 2.5 0 0 0 5.61 0' }],
 ];
-var sy = [
+var my = [
     ['path', { d: 'M2 22V12a10 10 0 1 1 20 0v10' }],
     ['path', { d: 'M15 6.8v1.4a3 2.8 0 1 1-6 0V6.8' }],
     ['path', { d: 'M10 15h.01' }],
@@ -15288,7 +15333,7 @@ var sy = [
     ['path', { d: 'm9 19-2 3' }],
     ['path', { d: 'm15 19 2 3' }],
 ];
-var hy = [
+var My = [
     ['path', { d: 'M8 3.1V7a4 4 0 0 0 8 0V3.1' }],
     ['path', { d: 'm9 15-1-1' }],
     ['path', { d: 'm15 15 1-1' }],
@@ -15296,7 +15341,7 @@ var hy = [
     ['path', { d: 'm8 19-2 3' }],
     ['path', { d: 'm16 19 2 3' }],
 ];
-var fy = [
+var vy = [
     ['path', { d: 'M2 17 17 2' }],
     ['path', { d: 'm2 14 8 8' }],
     ['path', { d: 'm5 11 8 8' }],
@@ -15305,7 +15350,7 @@ var fy = [
     ['path', { d: 'm14 2 8 8' }],
     ['path', { d: 'M7 22 22 7' }],
 ];
-var Ze = [
+var Je = [
     ['rect', { width: '16', height: '16', x: '4', y: '3', rx: '2' }],
     ['path', { d: 'M4 11h16' }],
     ['path', { d: 'M12 3v8' }],
@@ -15314,7 +15359,7 @@ var Ze = [
     ['path', { d: 'M8 15h.01' }],
     ['path', { d: 'M16 15h.01' }],
 ];
-var uy = [
+var gy = [
     ['path', { d: 'M12 16v6' }],
     ['path', { d: 'M14 20h-4' }],
     ['path', { d: 'M18 2h4v4' }],
@@ -15324,19 +15369,19 @@ var uy = [
     ['path', { d: 'M8 5 5 8' }],
     ['circle', { cx: '12', cy: '12', r: '4' }],
 ];
-var cy = [
+var yy = [
     ['path', { d: 'M10 11v6' }],
     ['path', { d: 'M14 11v6' }],
     ['path', { d: 'M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6' }],
     ['path', { d: 'M3 6h18' }],
     ['path', { d: 'M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2' }],
 ];
-var ny = [
+var Cy = [
     ['path', { d: 'M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6' }],
     ['path', { d: 'M3 6h18' }],
     ['path', { d: 'M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2' }],
 ];
-var xy = [
+var Ay = [
     [
         'path',
         {
@@ -15345,7 +15390,7 @@ var xy = [
     ],
     ['path', { d: 'M12 19v3' }],
 ];
-var Xe = [
+var je = [
     ['path', { d: 'M13 8c0-2.76-2.46-5-5.5-5S2 5.24 2 8h2l1-1 1 1h4' }],
     ['path', { d: 'M13 7.14A5.82 5.82 0 0 1 16.5 6c3.04 0 5.5 2.24 5.5 5h-3l-1-1-1 1h-3' }],
     [
@@ -15356,7 +15401,7 @@ var Xe = [
     ],
     ['path', { d: 'M11 15.5c.5 2.5-.17 4.5-1 6.5h4c2-5.5-.5-12-1-14' }],
 ];
-var iy = [
+var wy = [
     [
         'path',
         {
@@ -15365,7 +15410,7 @@ var iy = [
     ],
     ['path', { d: 'M12 22v-3' }],
 ];
-var my = [
+var Sy = [
     ['path', { d: 'M10 10v.2A3 3 0 0 1 8.9 16H5a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z' }],
     ['path', { d: 'M7 16v6' }],
     ['path', { d: 'M13 19v3' }],
@@ -15376,26 +15421,26 @@ var my = [
         },
     ],
 ];
-var My = [
+var Hy = [
     ['path', { d: 'M16 17h6v-6' }],
     ['path', { d: 'm22 17-8.5-8.5-5 5L2 7' }],
 ];
-var vy = [
+var Ly = [
     ['path', { d: 'M14.828 14.828 21 21' }],
     ['path', { d: 'M21 16v5h-5' }],
     ['path', { d: 'm21 3-9 9-4-4-6 6' }],
     ['path', { d: 'M21 8V3h-5' }],
 ];
-var gy = [
+var Vy = [
     ['path', { d: 'M16 7h6v6' }],
     ['path', { d: 'm22 7-8.5 8.5-5-5L2 17' }],
 ];
-var Ke = [
+var Qe = [
     ['path', { d: 'm21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3' }],
     ['path', { d: 'M12 9v4' }],
     ['path', { d: 'M12 17h.01' }],
 ];
-var yy = [
+var ky = [
     ['path', { d: 'M10.17 4.193a2 2 0 0 1 3.666.013' }],
     ['path', { d: 'M14 21h2' }],
     ['path', { d: 'm15.874 7.743 1 1.732' }],
@@ -15406,11 +15451,11 @@ var yy = [
     ['path', { d: 'M8 21h2' }],
     ['path', { d: 'm8.102 7.743-1 1.732' }],
 ];
-var Cy = [
+var Py = [
     ['path', { d: 'M22 18a2 2 0 0 1-2 2H3c-1.1 0-1.3-.6-.4-1.3L20.4 4.3c.9-.7 1.6-.4 1.6.7Z' }],
 ];
-var Ay = [['path', { d: 'M13.73 4a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z' }]];
-var Sy = [
+var by = [['path', { d: 'M13.73 4a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z' }]];
+var Ty = [
     ['path', { d: 'M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978' }],
     ['path', { d: 'M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978' }],
     ['path', { d: 'M18 9h1.5a1 1 0 0 0 0-5H18' }],
@@ -15418,7 +15463,7 @@ var Sy = [
     ['path', { d: 'M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z' }],
     ['path', { d: 'M6 9H4.5a1 1 0 0 1 0-5H6' }],
 ];
-var wy = [
+var By = [
     ['path', { d: 'M14 19V7a2 2 0 0 0-2-2H9' }],
     ['path', { d: 'M15 19H9' }],
     [
@@ -15430,7 +15475,7 @@ var wy = [
     ['circle', { cx: '17', cy: '19', r: '2' }],
     ['circle', { cx: '7', cy: '19', r: '2' }],
 ];
-var Hy = [
+var Ry = [
     ['path', { d: 'M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2' }],
     ['path', { d: 'M15 18H9' }],
     [
@@ -15440,12 +15485,12 @@ var Hy = [
     ['circle', { cx: '17', cy: '18', r: '2' }],
     ['circle', { cx: '7', cy: '18', r: '2' }],
 ];
-var Ly = [
+var Dy = [
     ['path', { d: 'M15 4 5 9' }],
     ['path', { d: 'm15 8.5-10 5' }],
     ['path', { d: 'M18 12a9 9 0 0 1-9 9V3' }],
 ];
-var Vy = [
+var Ey = [
     [
         'path',
         {
@@ -15456,13 +15501,13 @@ var Vy = [
     ['path', { d: 'M15.18 7.9 12 10' }],
     ['path', { d: 'M16.93 10H20a2 2 0 0 1 0 4H2' }],
 ];
-var ky = [
+var Fy = [
     ['path', { d: 'M10 12.01h.01' }],
     ['path', { d: 'M18 8v4a8 8 0 0 1-1.07 4' }],
     ['circle', { cx: '10', cy: '12', r: '4' }],
     ['rect', { x: '2', y: '4', width: '20', height: '16', rx: '2' }],
 ];
-var Py = [
+var Oy = [
     [
         'path',
         {
@@ -15472,20 +15517,20 @@ var Py = [
     ['path', { d: 'M7 21h10' }],
     ['rect', { width: '20', height: '14', x: '2', y: '3', rx: '2' }],
 ];
-var Je = [
+var Ye = [
     ['path', { d: 'M7 21h10' }],
     ['rect', { width: '20', height: '14', x: '2', y: '3', rx: '2' }],
 ];
-var Ty = [
+var qy = [
     ['path', { d: 'm17 2-5 5-5-5' }],
     ['rect', { width: '20', height: '15', x: '2', y: '7', rx: '2' }],
 ];
-var By = [
+var zy = [
     ['path', { d: 'M12 4v16' }],
     ['path', { d: 'M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2' }],
     ['path', { d: 'M9 20h6' }],
 ];
-var by = [
+var Uy = [
     [
         'path',
         {
@@ -15493,36 +15538,36 @@ var by = [
         },
     ],
 ];
-var Dy = [
+var _y = [
     ['path', { d: 'M12 13v7a2 2 0 0 0 4 0' }],
     ['path', { d: 'M12 2v2' }],
     ['path', { d: 'M18.656 13h2.336a1 1 0 0 0 .97-1.274 10.284 10.284 0 0 0-12.07-7.51' }],
     ['path', { d: 'm2 2 20 20' }],
     ['path', { d: 'M5.961 5.957a10.28 10.28 0 0 0-3.922 5.769A1 1 0 0 0 3 13h10' }],
 ];
-var Ry = [
+var Ny = [
     ['path', { d: 'M12 13v7a2 2 0 0 0 4 0' }],
     ['path', { d: 'M12 2v2' }],
     ['path', { d: 'M20.992 13a1 1 0 0 0 .97-1.274 10.284 10.284 0 0 0-19.923 0A1 1 0 0 0 3 13z' }],
 ];
-var Fy = [
+var Iy = [
     ['path', { d: 'M6 4v6a6 6 0 0 0 12 0V4' }],
     ['line', { x1: '4', x2: '20', y1: '20', y2: '20' }],
 ];
-var Ey = [
+var Gy = [
     ['path', { d: 'M9 14 4 9l5-5' }],
     ['path', { d: 'M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11' }],
 ];
-var Oy = [
+var Wy = [
     ['path', { d: 'M21 17a9 9 0 0 0-15-6.7L3 13' }],
     ['path', { d: 'M3 7v6h6' }],
     ['circle', { cx: '12', cy: '17', r: '1' }],
 ];
-var qy = [
+var Zy = [
     ['path', { d: 'M3 7v6h6' }],
     ['path', { d: 'M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13' }],
 ];
-var zy = [
+var Xy = [
     ['path', { d: 'M16 12h6' }],
     ['path', { d: 'M8 12H2' }],
     ['path', { d: 'M12 2v2' }],
@@ -15532,7 +15577,7 @@ var zy = [
     ['path', { d: 'm19 15 3-3-3-3' }],
     ['path', { d: 'm5 9-3 3 3 3' }],
 ];
-var Uy = [
+var Ky = [
     ['path', { d: 'M12 22v-6' }],
     ['path', { d: 'M12 8V2' }],
     ['path', { d: 'M4 12H2' }],
@@ -15542,11 +15587,11 @@ var Uy = [
     ['path', { d: 'm15 19-3 3-3-3' }],
     ['path', { d: 'm15 5-3-3-3 3' }],
 ];
-var Iy = [
+var $y = [
     ['rect', { x: '11', y: '14', width: '10', height: '7', rx: '2' }],
     ['rect', { x: '3', y: '3', width: '10', height: '7', rx: '2' }],
 ];
-var $e = [
+var a2 = [
     ['path', { d: 'M14 21v-3a2 2 0 0 0-4 0v3' }],
     ['path', { d: 'M18 12h.01' }],
     ['path', { d: 'M18 16h.01' }],
@@ -15560,7 +15605,7 @@ var $e = [
     ['path', { d: 'M6 16h.01' }],
     ['circle', { cx: '12', cy: '10', r: '2' }],
 ];
-var _y = [
+var Jy = [
     [
         'path',
         {
@@ -15578,8 +15623,8 @@ var _y = [
     ['line', { x1: '16', x2: '16', y1: '19', y2: '22' }],
     ['line', { x1: '19', x2: '22', y1: '16', y2: '16' }],
 ];
-var Ny = [['path', { d: 'M15 7h2a5 5 0 0 1 0 10h-2m-6 0H7A5 5 0 0 1 7 7h2' }]];
-var Gy = [
+var jy = [['path', { d: 'M15 7h2a5 5 0 0 1 0 10h-2m-6 0H7A5 5 0 0 1 7 7h2' }]];
+var Qy = [
     ['path', { d: 'm19 5 3-3' }],
     ['path', { d: 'm2 22 3-3' }],
     ['path', { d: 'M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z' }],
@@ -15587,12 +15632,12 @@ var Gy = [
     ['path', { d: 'M10.5 16.5 13 14' }],
     ['path', { d: 'm12 6 6 6 2.3-2.3a2.4 2.4 0 0 0 0-3.4l-2.6-2.6a2.4 2.4 0 0 0-3.4 0Z' }],
 ];
-var Wy = [
+var Yy = [
     ['path', { d: 'M12 3v12' }],
     ['path', { d: 'm17 8-5-5-5 5' }],
     ['path', { d: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' }],
 ];
-var Zy = [
+var aC = [
     ['circle', { cx: '10', cy: '7', r: '1' }],
     ['circle', { cx: '4', cy: '20', r: '1' }],
     ['path', { d: 'M4.7 19.3 19 5' }],
@@ -15601,12 +15646,12 @@ var Zy = [
     ['path', { d: 'm10 14 5 2 3.5-3.5' }],
     ['path', { d: 'm18 12 1-1 1 1-1 1Z' }],
 ];
-var Xy = [
+var tC = [
     ['path', { d: 'm16 11 2 2 4-4' }],
     ['path', { d: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2' }],
     ['circle', { cx: '9', cy: '7', r: '4' }],
 ];
-var Ky = [
+var eC = [
     ['path', { d: 'M10 15H6a4 4 0 0 0-4 4v2' }],
     ['path', { d: 'm14.305 16.53.923-.382' }],
     ['path', { d: 'm15.228 13.852-.923-.383' }],
@@ -15619,25 +15664,25 @@ var Ky = [
     ['circle', { cx: '18', cy: '15', r: '3' }],
     ['circle', { cx: '9', cy: '7', r: '4' }],
 ];
-var Jy = [
+var rC = [
     ['path', { d: 'M19 16v-2a2 2 0 0 0-4 0v2' }],
     ['path', { d: 'M9.5 15H7a4 4 0 0 0-4 4v2' }],
     ['circle', { cx: '10', cy: '7', r: '4' }],
     ['rect', { x: '13', y: '16', width: '8', height: '5', rx: '.899' }],
 ];
-var $y = [
+var oC = [
     ['path', { d: 'M20 11v6' }],
     ['path', { d: 'M20 13h2' }],
     ['path', { d: 'M3 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 2.072.578' }],
     ['circle', { cx: '10', cy: '7', r: '4' }],
     ['circle', { cx: '20', cy: '19', r: '2' }],
 ];
-var jy = [
+var dC = [
     ['path', { d: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2' }],
     ['circle', { cx: '9', cy: '7', r: '4' }],
     ['line', { x1: '22', x2: '16', y1: '11', y2: '11' }],
 ];
-var Qy = [
+var pC = [
     ['path', { d: 'M11.5 15H7a4 4 0 0 0-4 4v2' }],
     [
         'path',
@@ -15647,24 +15692,24 @@ var Qy = [
     ],
     ['circle', { cx: '10', cy: '7', r: '4' }],
 ];
-var Yy = [
+var lC = [
     ['path', { d: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2' }],
     ['circle', { cx: '9', cy: '7', r: '4' }],
     ['line', { x1: '19', x2: '19', y1: '8', y2: '14' }],
     ['line', { x1: '22', x2: '16', y1: '11', y2: '11' }],
 ];
-var aC = [
+var sC = [
     ['path', { d: 'm19 16-3 3' }],
     ['path', { d: 'M2 21a8 8 0 0 1 12.664-6.5' }],
     ['path', { d: 'M22 19h-6l3 3' }],
     ['circle', { cx: '10', cy: '8', r: '5' }],
 ];
-var je = [
+var t2 = [
     ['path', { d: 'M2 21a8 8 0 0 1 13.292-6' }],
     ['circle', { cx: '10', cy: '8', r: '5' }],
     ['path', { d: 'm16 19 2 2 4-4' }],
 ];
-var Qe = [
+var e2 = [
     ['path', { d: 'm14.305 19.53.923-.382' }],
     ['path', { d: 'm15.228 16.852-.923-.383' }],
     ['path', { d: 'm16.852 15.228-.383-.923' }],
@@ -15677,19 +15722,19 @@ var Qe = [
     ['circle', { cx: '10', cy: '8', r: '5' }],
     ['circle', { cx: '18', cy: '18', r: '3' }],
 ];
-var tC = [
+var hC = [
     ['path', { d: 'M19 11v6' }],
     ['path', { d: 'M19 13h2' }],
     ['path', { d: 'M2 21a8 8 0 0 1 12.868-6.349' }],
     ['circle', { cx: '10', cy: '8', r: '5' }],
     ['circle', { cx: '19', cy: '19', r: '2' }],
 ];
-var Ye = [
+var r2 = [
     ['path', { d: 'M2 21a8 8 0 0 1 13.292-6' }],
     ['circle', { cx: '10', cy: '8', r: '5' }],
     ['path', { d: 'M22 19h-6' }],
 ];
-var eC = [
+var fC = [
     ['path', { d: 'M2 21a8 8 0 0 1 10.821-7.487' }],
     [
         'path',
@@ -15699,35 +15744,35 @@ var eC = [
     ],
     ['circle', { cx: '10', cy: '8', r: '5' }],
 ];
-var rC = [
+var uC = [
     ['circle', { cx: '10', cy: '8', r: '5' }],
     ['path', { d: 'M2 21a8 8 0 0 1 10.434-7.62' }],
     ['circle', { cx: '18', cy: '18', r: '3' }],
     ['path', { d: 'm22 22-1.9-1.9' }],
 ];
-var a2 = [
+var o2 = [
     ['path', { d: 'M2 21a8 8 0 0 1 13.292-6' }],
     ['circle', { cx: '10', cy: '8', r: '5' }],
     ['path', { d: 'M19 16v6' }],
     ['path', { d: 'M22 19h-6' }],
 ];
-var t2 = [
+var d2 = [
     ['path', { d: 'M2 21a8 8 0 0 1 11.873-7' }],
     ['circle', { cx: '10', cy: '8', r: '5' }],
     ['path', { d: 'm17 17 5 5' }],
     ['path', { d: 'm22 17-5 5' }],
 ];
-var e2 = [
+var p2 = [
     ['circle', { cx: '12', cy: '8', r: '5' }],
     ['path', { d: 'M20 21a8 8 0 0 0-16 0' }],
 ];
-var oC = [
+var cC = [
     ['circle', { cx: '10', cy: '7', r: '4' }],
     ['path', { d: 'M10.3 15H7a4 4 0 0 0-4 4v2' }],
     ['circle', { cx: '17', cy: '17', r: '3' }],
     ['path', { d: 'm21 21-1.9-1.9' }],
 ];
-var dC = [
+var nC = [
     [
         'path',
         {
@@ -15737,34 +15782,34 @@ var dC = [
     ['path', { d: 'M8 15H7a4 4 0 0 0-4 4v2' }],
     ['circle', { cx: '10', cy: '7', r: '4' }],
 ];
-var pC = [
+var iC = [
     ['path', { d: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2' }],
     ['circle', { cx: '9', cy: '7', r: '4' }],
     ['line', { x1: '17', x2: '22', y1: '8', y2: '13' }],
     ['line', { x1: '22', x2: '17', y1: '8', y2: '13' }],
 ];
-var r2 = [
+var l2 = [
     ['path', { d: 'M18 21a8 8 0 0 0-16 0' }],
     ['circle', { cx: '10', cy: '8', r: '5' }],
     ['path', { d: 'M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3' }],
 ];
-var lC = [
+var xC = [
     ['path', { d: 'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2' }],
     ['circle', { cx: '12', cy: '7', r: '4' }],
 ];
-var sC = [
+var mC = [
     ['path', { d: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2' }],
     ['path', { d: 'M16 3.128a4 4 0 0 1 0 7.744' }],
     ['path', { d: 'M22 21v-2a4 4 0 0 0-3-3.87' }],
     ['circle', { cx: '9', cy: '7', r: '4' }],
 ];
-var o2 = [
+var s2 = [
     ['path', { d: 'm16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8' }],
     ['path', { d: 'M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7' }],
     ['path', { d: 'm2.1 21.8 6.4-6.3' }],
     ['path', { d: 'm19 5-7 7' }],
 ];
-var hC = [
+var MC = [
     ['path', { d: 'M12 2v20' }],
     ['path', { d: 'M2 5h20' }],
     ['path', { d: 'M3 3v2' }],
@@ -15773,12 +15818,12 @@ var hC = [
     ['path', { d: 'M21 3v2' }],
     ['path', { d: 'm19 5-7 7-7-7' }],
 ];
-var d2 = [
+var h2 = [
     ['path', { d: 'M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2' }],
     ['path', { d: 'M7 2v20' }],
     ['path', { d: 'M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7' }],
 ];
-var fC = [
+var vC = [
     [
         'path',
         {
@@ -15790,13 +15835,13 @@ var fC = [
     ['circle', { cx: '16', cy: '18', r: '2' }],
     ['circle', { cx: '7', cy: '18', r: '2' }],
 ];
-var uC = [
+var gC = [
     ['path', { d: 'M8 21s-4-3-4-9 4-9 4-9' }],
     ['path', { d: 'M16 3s4 3 4 9-4 9-4 9' }],
     ['line', { x1: '15', x2: '9', y1: '9', y2: '15' }],
     ['line', { x1: '9', x2: '15', y1: '9', y2: '15' }],
 ];
-var cC = [
+var yC = [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['circle', { cx: '7.5', cy: '7.5', r: '.5', fill: 'currentColor' }],
     ['path', { d: 'm7.9 7.9 2.7 2.7' }],
@@ -15808,7 +15853,7 @@ var cC = [
     ['path', { d: 'm13.4 13.4 2.7 2.7' }],
     ['circle', { cx: '12', cy: '12', r: '2' }],
 ];
-var nC = [
+var CC = [
     ['path', { d: 'M19.5 7a24 24 0 0 1 0 10' }],
     ['path', { d: 'M4.5 7a24 24 0 0 0 0 10' }],
     ['path', { d: 'M7 19.5a24 24 0 0 0 10 0' }],
@@ -15818,12 +15863,12 @@ var nC = [
     ['rect', { x: '2', y: '17', width: '5', height: '5', rx: '1' }],
     ['rect', { x: '2', y: '2', width: '5', height: '5', rx: '1' }],
 ];
-var xC = [
+var AC = [
     ['path', { d: 'M16 8q6 0 6-6-6 0-6 6' }],
     ['path', { d: 'M17.41 3.59a10 10 0 1 0 3 3' }],
     ['path', { d: 'M2 2a26.6 26.6 0 0 1 10 20c.9-6.82 1.5-9.5 4-14' }],
 ];
-var iC = [
+var wC = [
     ['path', { d: 'M18 11c-1.5 0-2.5.5-3 2' }],
     [
         'path',
@@ -15833,47 +15878,47 @@ var iC = [
     ],
     ['path', { d: 'M6 11c1.5 0 2.5.5 3 2' }],
 ];
-var mC = [
+var SC = [
     ['path', { d: 'M10 20h4' }],
     ['path', { d: 'M12 16v6' }],
     ['path', { d: 'M17 2h4v4' }],
     ['path', { d: 'm21 2-5.46 5.46' }],
     ['circle', { cx: '12', cy: '11', r: '5' }],
 ];
-var MC = [
+var HC = [
     ['path', { d: 'M12 15v7' }],
     ['path', { d: 'M9 19h6' }],
     ['circle', { cx: '12', cy: '9', r: '6' }],
 ];
-var vC = [
+var LC = [
     ['path', { d: 'm2 8 2 2-2 2 2 2-2 2' }],
     ['path', { d: 'm22 8-2 2 2 2-2 2 2 2' }],
     ['path', { d: 'M8 8v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2' }],
     ['path', { d: 'M16 10.34V6c0-.55-.45-1-1-1h-4.34' }],
     ['line', { x1: '2', x2: '22', y1: '2', y2: '22' }],
 ];
-var gC = [
+var VC = [
     ['path', { d: 'm2 8 2 2-2 2 2 2-2 2' }],
     ['path', { d: 'm22 8-2 2 2 2-2 2 2 2' }],
     ['rect', { width: '8', height: '14', x: '8', y: '5', rx: '1' }],
 ];
-var yC = [
+var kC = [
     ['path', { d: 'M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196' }],
     ['path', { d: 'M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var CC = [
+var PC = [
     ['path', { d: 'm16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5' }],
     ['rect', { x: '2', y: '6', width: '14', height: '12', rx: '2' }],
 ];
-var AC = [
+var bC = [
     ['rect', { width: '20', height: '16', x: '2', y: '4', rx: '2' }],
     ['path', { d: 'M2 8h20' }],
     ['circle', { cx: '8', cy: '14', r: '2' }],
     ['path', { d: 'M8 12h8' }],
     ['circle', { cx: '16', cy: '14', r: '2' }],
 ];
-var SC = [
+var TC = [
     ['path', { d: 'M21 17v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2' }],
     ['path', { d: 'M21 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2' }],
     ['circle', { cx: '12', cy: '12', r: '1' }],
@@ -15884,12 +15929,12 @@ var SC = [
         },
     ],
 ];
-var wC = [
+var BC = [
     ['circle', { cx: '6', cy: '12', r: '4' }],
     ['circle', { cx: '18', cy: '12', r: '4' }],
     ['line', { x1: '6', x2: '18', y1: '16', y2: '16' }],
 ];
-var HC = [
+var RC = [
     ['path', { d: 'M11 7a16 16 20 0 1 10.98 4.362' }],
     ['path', { d: 'M12 12a13 13 0 0 1-8.66 5' }],
     ['path', { d: 'M16.83 13.634a16 16 0 0 1-9.267 7.328' }],
@@ -15897,7 +15942,7 @@ var HC = [
     ['path', { d: 'M8.17 15.366a16 16 0 0 1-1.713-11.69' }],
     ['circle', { cx: '12', cy: '12', r: '10' }],
 ];
-var LC = [
+var DC = [
     [
         'path',
         {
@@ -15906,7 +15951,7 @@ var LC = [
     ],
     ['path', { d: 'M16 9a5 5 0 0 1 0 6' }],
 ];
-var VC = [
+var EC = [
     ['path', { d: 'M16 9a5 5 0 0 1 .95 2.293' }],
     ['path', { d: 'M19.364 5.636a9 9 0 0 1 1.889 9.96' }],
     ['path', { d: 'm2 2 20 20' }],
@@ -15918,7 +15963,7 @@ var VC = [
     ],
     ['path', { d: 'M9.828 4.172A.686.686 0 0 1 11 4.657v.686' }],
 ];
-var kC = [
+var FC = [
     [
         'path',
         {
@@ -15928,7 +15973,7 @@ var kC = [
     ['path', { d: 'M16 9a5 5 0 0 1 0 6' }],
     ['path', { d: 'M19.364 18.364a9 9 0 0 0 0-12.728' }],
 ];
-var PC = [
+var OC = [
     [
         'path',
         {
@@ -15938,7 +15983,7 @@ var PC = [
     ['line', { x1: '22', x2: '16', y1: '9', y2: '15' }],
     ['line', { x1: '16', x2: '22', y1: '9', y2: '15' }],
 ];
-var TC = [
+var qC = [
     [
         'path',
         {
@@ -15946,21 +15991,21 @@ var TC = [
         },
     ],
 ];
-var BC = [
+var zC = [
     ['path', { d: 'm9 12 2 2 4-4' }],
     ['path', { d: 'M5 7c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v12H5V7Z' }],
     ['path', { d: 'M22 19H2' }],
 ];
-var bC = [
+var UC = [
     ['path', { d: 'M3 11h3.75a2 2 0 0 1 1.6.8l.45.6a4 4 0 0 0 6.4 0l.45-.6a2 2 0 0 1 1.6-.8H21' }],
     ['path', { d: 'M3 7h18' }],
     ['rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }],
 ];
-var p2 = [
+var f2 = [
     ['path', { d: 'M17 14h.01' }],
     ['path', { d: 'M7 7h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14' }],
 ];
-var DC = [
+var _C = [
     [
         'path',
         {
@@ -15969,14 +16014,14 @@ var DC = [
     ],
     ['path', { d: 'M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4' }],
 ];
-var RC = [
+var NC = [
     ['path', { d: 'M12 17v4' }],
     ['path', { d: 'M8 21h8' }],
     ['path', { d: 'm9 17 6.1-6.1a2 2 0 0 1 2.81.01L22 15' }],
     ['circle', { cx: '8', cy: '9', r: '2' }],
     ['rect', { x: '2', y: '3', width: '20', height: '14', rx: '2' }],
 ];
-var FC = [
+var IC = [
     ['path', { d: 'M18 21V10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v11' }],
     [
         'path',
@@ -15987,7 +16032,7 @@ var FC = [
     ['path', { d: 'M6 13h12' }],
     ['path', { d: 'M6 17h12' }],
 ];
-var l2 = [
+var u2 = [
     [
         'path',
         {
@@ -16002,7 +16047,7 @@ var l2 = [
     ['path', { d: 'M21 16h-4' }],
     ['path', { d: 'M11 3H9' }],
 ];
-var EC = [
+var GC = [
     ['path', { d: 'M15 4V2' }],
     ['path', { d: 'M15 16v-2' }],
     ['path', { d: 'M8 9h2' }],
@@ -16013,20 +16058,20 @@ var EC = [
     ['path', { d: 'm3 21 9-9' }],
     ['path', { d: 'M12.2 6.2 11 5' }],
 ];
-var OC = [
+var WC = [
     ['path', { d: 'M3 6h3' }],
     ['path', { d: 'M17 6h.01' }],
     ['rect', { width: '18', height: '20', x: '3', y: '2', rx: '2' }],
     ['circle', { cx: '12', cy: '13', r: '5' }],
     ['path', { d: 'M12 18a2.5 2.5 0 0 0 0-5 2.5 2.5 0 0 1 0-5' }],
 ];
-var qC = [
+var ZC = [
     ['path', { d: 'M12 10v2.2l1.6 1' }],
     ['path', { d: 'm16.13 7.66-.81-4.05a2 2 0 0 0-2-1.61h-2.68a2 2 0 0 0-2 1.61l-.78 4.05' }],
     ['path', { d: 'm7.88 16.36.8 4a2 2 0 0 0 2 1.61h2.72a2 2 0 0 0 2-1.61l.81-4.05' }],
     ['circle', { cx: '12', cy: '12', r: '6' }],
 ];
-var zC = [
+var XC = [
     ['path', { d: 'M12 10L12 2' }],
     ['path', { d: 'M16 6L12 10L8 6' }],
     [
@@ -16042,7 +16087,7 @@ var zC = [
         },
     ],
 ];
-var UC = [
+var KC = [
     ['path', { d: 'M12 2v8' }],
     [
         'path',
@@ -16058,12 +16103,12 @@ var UC = [
     ],
     ['path', { d: 'm8 6 4-4 4 4' }],
 ];
-var s2 = [
+var c2 = [
     ['path', { d: 'M2 12q2.5 2 5 0t5 0 5 0 5 0' }],
     ['path', { d: 'M2 19q2.5 2 5 0t5 0 5 0 5 0' }],
     ['path', { d: 'M2 5q2.5 2 5 0t5 0 5 0 5 0' }],
 ];
-var IC = [
+var $C = [
     ['path', { d: 'M19 5a2 2 0 0 0-2 2v11' }],
     [
         'path',
@@ -16075,12 +16120,12 @@ var IC = [
     ['path', { d: 'M7 9h10' }],
     ['path', { d: 'M9 5a2 2 0 0 0-2 2v11' }],
 ];
-var _C = [
+var JC = [
     ['path', { d: 'M12 2q2 2.5 0 5t0 5 0 5 0 5' }],
     ['path', { d: 'M19 2q2 2.5 0 5t0 5 0 5 0 5' }],
     ['path', { d: 'M5 2q2 2.5 0 5t0 5 0 5 0 5' }],
 ];
-var NC = [
+var jC = [
     ['path', { d: 'm10.586 5.414-5.172 5.172' }],
     ['path', { d: 'm18.586 13.414-5.172 5.172' }],
     ['path', { d: 'M6 12h12' }],
@@ -16089,7 +16134,7 @@ var NC = [
     ['circle', { cx: '20', cy: '12', r: '2' }],
     ['circle', { cx: '4', cy: '12', r: '2' }],
 ];
-var GC = [
+var QC = [
     ['path', { d: 'M12 22v-4' }],
     ['path', { d: 'M12.754 7.096a3 3 0 0 1 2.15 2.15' }],
     ['path', { d: 'M12.863 12.873a3 3 0 0 1-3.736-3.735' }],
@@ -16098,13 +16143,13 @@ var GC = [
     ['path', { d: 'M7 22h10' }],
     ['path', { d: 'M8.478 2.817a8 8 0 0 1 10.705 10.705' }],
 ];
-var WC = [
+var YC = [
     ['circle', { cx: '12', cy: '10', r: '8' }],
     ['circle', { cx: '12', cy: '10', r: '3' }],
     ['path', { d: 'M7 22h10' }],
     ['path', { d: 'M12 22v-4' }],
 ];
-var ZC = [
+var aA = [
     ['path', { d: 'M17 17h-5c-1.09-.02-1.94.92-2.5 1.9A3 3 0 1 1 2.57 15' }],
     ['path', { d: 'M9 3.4a4 4 0 0 1 6.52.66' }],
     ['path', { d: 'm6 17 3.1-5.8a2.5 2.5 0 0 0 .057-2.05' }],
@@ -16113,12 +16158,12 @@ var ZC = [
     ['path', { d: 'm12 6 .6 1' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var XC = [
+var tA = [
     ['path', { d: 'M18 16.98h-5.99c-1.1 0-1.95.94-2.48 1.9A4 4 0 0 1 2 17c.01-.7.2-1.4.57-2' }],
     ['path', { d: 'm6 17 3.13-5.78c.53-.97.1-2.18-.5-3.1a4 4 0 1 1 6.89-4.06' }],
     ['path', { d: 'm12 6 3.13 5.73C15.66 12.7 16.9 13 18 13a4 4 0 0 1 0 8' }],
 ];
-var KC = [
+var eA = [
     [
         'path',
         {
@@ -16128,7 +16173,7 @@ var KC = [
     ['path', { d: 'M7.999 15a2.5 2.5 0 0 1 4 0 2.5 2.5 0 0 0 4 0' }],
     ['circle', { cx: '12', cy: '5', r: '3' }],
 ];
-var JC = [
+var rA = [
     ['circle', { cx: '12', cy: '5', r: '3' }],
     [
         'path',
@@ -16137,7 +16182,7 @@ var JC = [
         },
     ],
 ];
-var $C = [
+var oA = [
     ['path', { d: 'M2 22 16 8' }],
     [
         'path',
@@ -16177,7 +16222,7 @@ var $C = [
         },
     ],
 ];
-var jC = [
+var dA = [
     ['path', { d: 'm2 22 10-10' }],
     ['path', { d: 'm16 8-1.17 1.17' }],
     [
@@ -16199,14 +16244,14 @@ var jC = [
     ['path', { d: 'M18.74 13.09c.26-.15.51-.34.73-.56L21 11l-1.53-1.53a3.5 3.5 0 0 0-4.62-.28' }],
     ['line', { x1: '2', x2: '22', y1: '2', y2: '22' }],
 ];
-var QC = [
+var pA = [
     ['circle', { cx: '7', cy: '12', r: '3' }],
     ['path', { d: 'M10 9v6' }],
     ['circle', { cx: '17', cy: '12', r: '3' }],
     ['path', { d: 'M14 7v8' }],
     ['path', { d: 'M22 17v1c0 .5-.5 1-1 1H3c-.5 0-1-.5-1-1v-1' }],
 ];
-var YC = [
+var lA = [
     ['path', { d: 'm14.305 19.53.923-.382' }],
     ['path', { d: 'm15.228 16.852-.923-.383' }],
     ['path', { d: 'm16.852 15.228-.383-.923' }],
@@ -16220,16 +16265,16 @@ var YC = [
     ['path', { d: 'M8.5 15.429a5 5 0 0 1 2.413-1.31' }],
     ['circle', { cx: '18', cy: '18', r: '3' }],
 ];
-var aA = [
+var sA = [
     ['path', { d: 'M12 20h.01' }],
     ['path', { d: 'M5 12.859a10 10 0 0 1 14 0' }],
     ['path', { d: 'M8.5 16.429a5 5 0 0 1 7 0' }],
 ];
-var tA = [
+var hA = [
     ['path', { d: 'M12 20h.01' }],
     ['path', { d: 'M8.5 16.429a5 5 0 0 1 7 0' }],
 ];
-var eA = [
+var fA = [
     ['path', { d: 'M12 20h.01' }],
     ['path', { d: 'M8.5 16.429a5 5 0 0 1 7 0' }],
     ['path', { d: 'M5 12.859a10 10 0 0 1 5.17-2.69' }],
@@ -16238,7 +16283,7 @@ var eA = [
     ['path', { d: 'M22 8.82a15 15 0 0 0-11.288-3.764' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var rA = [
+var uA = [
     ['path', { d: 'M2 8.82a15 15 0 0 1 20 0' }],
     [
         'path',
@@ -16249,7 +16294,7 @@ var rA = [
     ['path', { d: 'M5 12.859a10 10 0 0 1 10.5-2.222' }],
     ['path', { d: 'M8.5 16.429a5 5 0 0 1 3-1.406' }],
 ];
-var oA = [
+var cA = [
     ['path', { d: 'M11.965 10.105v4L13.5 12.5a5 5 0 0 1 8 1.5' }],
     ['path', { d: 'M11.965 14.105h4' }],
     ['path', { d: 'M17.965 18.105h4L20.43 19.71a5 5 0 0 1-8-1.5' }],
@@ -16258,25 +16303,25 @@ var oA = [
     ['path', { d: 'M5 12.86a10 10 0 0 1 3-2.032' }],
     ['path', { d: 'M8.5 16.429h.01' }],
 ];
-var dA = [['path', { d: 'M12 20h.01' }]];
-var pA = [
+var nA = [['path', { d: 'M12 20h.01' }]];
+var iA = [
     ['path', { d: 'M12 20h.01' }],
     ['path', { d: 'M2 8.82a15 15 0 0 1 20 0' }],
     ['path', { d: 'M5 12.859a10 10 0 0 1 14 0' }],
     ['path', { d: 'M8.5 16.429a5 5 0 0 1 7 0' }],
 ];
-var lA = [
+var xA = [
     ['path', { d: 'M10 2v8' }],
     ['path', { d: 'M12.8 21.6A2 2 0 1 0 14 18H2' }],
     ['path', { d: 'M17.5 10a2.5 2.5 0 1 1 2 4H2' }],
     ['path', { d: 'm6 6 4 4 4-4' }],
 ];
-var sA = [
+var mA = [
     ['path', { d: 'M12.8 19.6A2 2 0 1 0 14 16H2' }],
     ['path', { d: 'M17.5 8a2.5 2.5 0 1 1 2 4H2' }],
     ['path', { d: 'M9.8 4.4A2 2 0 1 1 11 8H2' }],
 ];
-var hA = [
+var MA = [
     ['path', { d: 'M8 22h8' }],
     ['path', { d: 'M7 10h3m7 0h-1.343' }],
     ['path', { d: 'M12 15v7' }],
@@ -16288,18 +16333,18 @@ var hA = [
     ],
     ['line', { x1: '2', x2: '22', y1: '2', y2: '22' }],
 ];
-var fA = [
+var vA = [
     ['path', { d: 'M8 22h8' }],
     ['path', { d: 'M7 10h10' }],
     ['path', { d: 'M12 15v7' }],
     ['path', { d: 'M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z' }],
 ];
-var uA = [
+var gA = [
     ['rect', { width: '8', height: '8', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M7 11v4a2 2 0 0 0 2 2h4' }],
     ['rect', { width: '8', height: '8', x: '13', y: '13', rx: '2' }],
 ];
-var cA = [
+var yA = [
     ['path', { d: 'm19 12-1.5 3' }],
     ['path', { d: 'M19.63 18.81 22 20' }],
     [
@@ -16309,7 +16354,7 @@ var cA = [
         },
     ],
 ];
-var nA = [
+var CA = [
     [
         'path',
         {
@@ -16317,7 +16362,7 @@ var nA = [
         },
     ],
 ];
-var xA = [
+var AA = [
     [
         'path',
         {
@@ -16327,16 +16372,16 @@ var xA = [
     ['path', { d: 'm13.5 13.5-7.88 7.88a1 1 0 0 1-2.999-3l7.88-7.88' }],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var iA = [
+var wA = [
     ['path', { d: 'M18 4H6' }],
     ['path', { d: 'M18 8 6 20' }],
     ['path', { d: 'm6 8 12 12' }],
 ];
-var mA = [
+var SA = [
     ['path', { d: 'M18 6 6 18' }],
     ['path', { d: 'm6 6 12 12' }],
 ];
-var MA = [
+var HA = [
     ['path', { d: 'M10.513 4.856 13.12 2.17a.5.5 0 0 1 .86.46l-1.377 4.317' }],
     ['path', { d: 'M15.656 10H20a1 1 0 0 1 .78 1.63l-1.72 1.773' }],
     [
@@ -16347,7 +16392,7 @@ var MA = [
     ],
     ['path', { d: 'm2 2 20 20' }],
 ];
-var vA = [
+var LA = [
     [
         'path',
         {
@@ -16355,7 +16400,7 @@ var vA = [
         },
     ],
 ];
-var gA = [
+var VA = [
     [
         'path',
         {
@@ -16369,28 +16414,28 @@ var gA = [
         },
     ],
 ];
-var yA = [
+var kA = [
     ['path', { d: 'M12 7.5a4.5 4.5 0 1 1 5 4.5' }],
     ['path', { d: 'M7 12a4.5 4.5 0 1 1 5-4.5V21' }],
 ];
-var CA = [
+var PA = [
     ['path', { d: 'M21 14.5A9 6.5 0 0 1 5.5 19' }],
     ['path', { d: 'M3 9.5A9 6.5 0 0 1 18.5 5' }],
     ['circle', { cx: '17.5', cy: '14.5', r: '3.5' }],
     ['circle', { cx: '6.5', cy: '9.5', r: '3.5' }],
 ];
-var AA = [
+var bA = [
     ['path', { d: 'M16 4.525v14.948' }],
     ['path', { d: 'M20 3A17 17 0 0 1 4 3' }],
     ['path', { d: 'M4 21a17 17 0 0 1 16 0' }],
     ['path', { d: 'M8 4.525v14.948' }],
 ];
-var SA = [
+var TA = [
     ['path', { d: 'M11 21a3 3 0 0 0 3-3V6.5a1 1 0 0 0-7 0' }],
     ['path', { d: 'M7 19V6a3 3 0 0 0-3-3h0' }],
     ['circle', { cx: '17', cy: '17', r: '3' }],
 ];
-var wA = [
+var BA = [
     [
         'path',
         {
@@ -16399,57 +16444,57 @@ var wA = [
     ],
     ['path', { d: 'M3 20h18' }],
 ];
-var HA = [
+var RA = [
     ['path', { d: 'M10 16c0-4-3-4.5-3-8a5 5 0 0 1 10 0c0 3.466-3 6.196-3 10a3 3 0 0 0 6 0' }],
     ['circle', { cx: '7', cy: '16', r: '3' }],
 ];
-var LA = [
+var DA = [
     ['path', { d: 'M3 10A6.06 6.06 0 0 1 12 10 A6.06 6.06 0 0 0 21 10' }],
     ['path', { d: 'M6 3v12a6 6 0 0 0 12 0V3' }],
 ];
-var VA = [
+var EA = [
     ['path', { d: 'M19 21a15 15 0 0 1 0-18' }],
     ['path', { d: 'M20 12H4' }],
     ['path', { d: 'M5 3a15 15 0 0 1 0 18' }],
 ];
-var kA = [
+var FA = [
     ['path', { d: 'M15 3h6v6' }],
     ['path', { d: 'M21 3 3 21' }],
     ['path', { d: 'm9 9 6 6' }],
 ];
-var PA = [
+var OA = [
     ['circle', { cx: '12', cy: '15', r: '6' }],
     ['path', { d: 'M18 3A6 6 0 0 1 6 3' }],
 ];
-var TA = [
+var qA = [
     ['path', { d: 'M10 19V5.5a1 1 0 0 1 5 0V17a2 2 0 0 0 2 2h5l-3-3' }],
     ['path', { d: 'm22 19-3 3' }],
     ['path', { d: 'M5 19V5.5a1 1 0 0 1 5 0' }],
     ['path', { d: 'M5 5.5A2.5 2.5 0 0 0 2.5 3' }],
 ];
-var BA = [
+var zA = [
     ['path', { d: 'M11 5.5a1 1 0 0 1 5 0V16a5 5 0 0 0 5 5' }],
     ['path', { d: 'M16 11.5a1 1 0 0 1 5 0V16a5 5 0 0 1-5 5' }],
     ['path', { d: 'M6 19V6a3 3 0 0 0-3-3h0' }],
     ['path', { d: 'M6 5.5a1 1 0 0 1 5 0V19' }],
 ];
-var bA = [
+var UA = [
     ['circle', { cx: '11', cy: '11', r: '8' }],
     ['line', { x1: '21', x2: '16.65', y1: '21', y2: '16.65' }],
     ['line', { x1: '11', x2: '11', y1: '8', y2: '14' }],
     ['line', { x1: '8', x2: '14', y1: '11', y2: '11' }],
 ];
-var DA = [
+var _A = [
     ['circle', { cx: '11', cy: '11', r: '8' }],
     ['line', { x1: '21', x2: '16.65', y1: '21', y2: '16.65' }],
     ['line', { x1: '8', x2: '14', y1: '11', y2: '11' }],
 ];
-var L = ({
+var A = ({
     icons: a = {},
     nameAttr: t = 'data-lucide',
     attrs: e = {},
     root: r = document,
-    inTemplates: d,
+    inTemplates: o,
 } = {}) => {
     if (!Object.values(a).length)
         throw new Error(`Please provide an icons object.
@@ -16458,53 +16503,60 @@ If you want to use all the icons you can import it like:
 lucide.createIcons({icons});\``);
     if (typeof r > 'u') throw new Error('`createIcons()` only works in a browser environment.');
     if (
-        (Array.from(r.querySelectorAll(`[${t}]`)).forEach(l =>
-            aa(l, { nameAttr: t, icons: a, attrs: e })
+        (Array.from(r.querySelectorAll(`[${t}]`)).forEach(p =>
+            oa(p, { nameAttr: t, icons: a, attrs: e })
         ),
-        d &&
-            Array.from(r.querySelectorAll('template')).forEach(c =>
-                L({ icons: a, nameAttr: t, attrs: e, root: c.content, inTemplates: d })
+        o &&
+            Array.from(r.querySelectorAll('template')).forEach(l =>
+                A({ icons: a, nameAttr: t, attrs: e, root: l.content, inTemplates: o })
             ),
         t === 'data-lucide')
     ) {
-        let l = r.querySelectorAll('[icon-name]');
-        l.length > 0 &&
+        let p = r.querySelectorAll('[icon-name]');
+        p.length > 0 &&
             (console.warn(
                 '[Lucide] Some icons were found with the now deprecated icon-name attribute. These will still be replaced for backwards compatibility, but will no longer be supported in v1.0 and you should switch to data-lucide'
             ),
-            Array.from(l).forEach(c => aa(c, { nameAttr: 'icon-name', icons: a, attrs: e })));
+            Array.from(p).forEach(l => oa(l, { nameAttr: 'icon-name', icons: a, attrs: e })));
     }
 };
-function RA({ title: a, description: t, illustration: e, actions: r = [] } = {}) {
-    let d = document.createElement('div');
-    if (((d.className = 'empty-state'), d.setAttribute('role', 'status'), e)) {
-        let o = document.createElement('div');
-        ((o.className = 'empty-state__illustration'),
-            o.setAttribute('aria-hidden', 'true'),
-            (o.innerHTML = e),
-            d.appendChild(o));
+function j({ title: a, description: t, illustration: e, actions: r = [] } = {}) {
+    let o = document.createElement('div');
+    if (((o.className = 'empty-state'), o.setAttribute('role', 'status'), e)) {
+        let d = document.createElement('div');
+        ((d.className = 'empty-state__illustration'),
+            d.setAttribute('aria-hidden', 'true'),
+            (d.innerHTML = e),
+            o.appendChild(d));
     }
     if (a) {
-        let o = document.createElement('h2');
-        ((o.className = 'empty-state__title'), (o.textContent = a), d.appendChild(o));
+        let d = document.createElement('h2');
+        ((d.className = 'empty-state__title'), (d.textContent = a), o.appendChild(d));
     }
     if (t) {
-        let o = document.createElement('p');
-        ((o.className = 'empty-state__description'), (o.textContent = t), d.appendChild(o));
+        let d = document.createElement('p');
+        ((d.className = 'empty-state__description'), (d.textContent = t), o.appendChild(d));
     }
     if (r.length > 0) {
-        let o = document.createElement('div');
-        ((o.className = 'empty-state__actions'),
-            r.forEach(l => {
-                typeof l == 'string'
-                    ? o.insertAdjacentHTML('beforeend', l)
-                    : l instanceof HTMLElement && o.appendChild(l);
+        let d = document.createElement('div');
+        ((d.className = 'empty-state__actions'),
+            r.forEach(p => {
+                typeof p == 'string'
+                    ? d.insertAdjacentHTML('beforeend', p)
+                    : p instanceof HTMLElement && d.appendChild(p);
             }),
-            d.appendChild(o));
+            o.appendChild(d));
     }
-    return d;
+    return o;
 }
-function AS({
+var NA = {
+    search: '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
+    data: '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    course: '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>',
+    grade: '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',
+    error: '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
+};
+function Uw({
     title: a = 'Something went wrong',
     message: t = 'An unexpected error occurred. Please try again.',
     onRetry: e = null,
@@ -16528,31 +16580,31 @@ function AS({
   `),
         e)
     ) {
-        let d = document.createElement('div');
-        d.className = 'error-boundary__actions';
-        let o = document.createElement('button');
-        ((o.className = 'btn btn--primary'),
-            (o.textContent = 'Try again'),
-            o.addEventListener('click', async () => {
-                ((o.disabled = !0),
-                    (o.innerHTML =
+        let o = document.createElement('div');
+        o.className = 'error-boundary__actions';
+        let d = document.createElement('button');
+        ((d.className = 'btn btn--primary'),
+            (d.textContent = 'Try again'),
+            d.addEventListener('click', async () => {
+                ((d.disabled = !0),
+                    (d.innerHTML =
                         '<span class="spinner spinner--sm"><svg class="spinner__circle" viewBox="0 0 24 24"><circle class="spinner__path" cx="12" cy="12" r="10" fill="none" stroke-width="3"/></svg></span> Retrying...'));
                 try {
                     await e();
                 } finally {
-                    ((o.disabled = !1), (o.textContent = 'Try again'));
+                    ((d.disabled = !1), (d.textContent = 'Try again'));
                 }
             }),
-            d.appendChild(o),
-            r.appendChild(d));
+            o.appendChild(d),
+            r.appendChild(o));
     }
     return r;
 }
-function FA(a, { title: t, message: e, onRetry: r } = {}) {
-    let d = AS({ title: t, message: e, onRetry: r });
-    return ((a.innerHTML = ''), a.appendChild(d), d);
+function IA(a, { title: t, message: e, onRetry: r } = {}) {
+    let o = Uw({ title: t, message: e, onRetry: r });
+    return ((a.innerHTML = ''), a.appendChild(o), o);
 }
-function EA({ size: a = 'md', label: t = 'Loading...' } = {}) {
+function GA({ size: a = 'md', label: t = 'Loading...' } = {}) {
     let e = document.createElement('div');
     ((e.className = `spinner spinner--${a}`),
         e.setAttribute('role', 'status'),
@@ -16565,28 +16617,28 @@ function EA({ size: a = 'md', label: t = 'Loading...' } = {}) {
     let r = document.createElement('span');
     return ((r.className = 'sr-only'), (r.textContent = t), e.appendChild(r), e);
 }
-var OA =
+var WA =
         'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
     F = null,
-    SS = 0;
-function h2({ title: a, body: t, footer: e, onClose: r, size: d = 'md', ariaDescription: o } = {}) {
+    _w = 0;
+function n2({ title: a, body: t, footer: e, onClose: r, size: o = 'md', ariaDescription: d } = {}) {
     F && F.close();
-    let l = `modal-${++SS}`,
-        c = `${l}-title`,
-        u = `${l}-desc`,
-        s = document.createElement('div');
-    ((s.className = 'modal-overlay'),
-        s.setAttribute('role', 'dialog'),
-        s.setAttribute('aria-modal', 'true'),
-        s.setAttribute('aria-labelledby', c),
-        o && s.setAttribute('aria-describedby', u));
-    let h = document.createElement('div');
-    ((h.className = 'modal'),
-        d === 'lg' && (h.style.maxWidth = '700px'),
-        d === 'sm' && (h.style.maxWidth = '360px'),
-        (h.innerHTML = `
+    let p = `modal-${++_w}`,
+        l = `${p}-title`,
+        s = `${p}-desc`,
+        h = document.createElement('div');
+    ((h.className = 'modal-overlay'),
+        h.setAttribute('role', 'dialog'),
+        h.setAttribute('aria-modal', 'true'),
+        h.setAttribute('aria-labelledby', l),
+        d && h.setAttribute('aria-describedby', s));
+    let u = document.createElement('div');
+    ((u.className = 'modal'),
+        o === 'lg' && (u.style.maxWidth = '700px'),
+        o === 'sm' && (u.style.maxWidth = '360px'),
+        (u.innerHTML = `
     <div class="modal__header">
-      <h2 class="modal__title" id="${c}">${a || ''}</h2>
+      <h2 class="modal__title" id="${l}">${a || ''}</h2>
       <button class="modal__close" aria-label="Close dialog">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
@@ -16597,75 +16649,75 @@ function h2({ title: a, body: t, footer: e, onClose: r, size: d = 'md', ariaDesc
     let n = document.createElement('div');
     if (
         ((n.className = 'modal__body'),
-        o && (n.id = u),
+        d && (n.id = s),
         typeof t == 'string' ? (n.innerHTML = t) : t instanceof HTMLElement && n.appendChild(t),
-        h.appendChild(n),
+        u.appendChild(n),
         e)
     ) {
-        let p = document.createElement('div');
-        ((p.className = 'modal__footer'),
+        let f = document.createElement('div');
+        ((f.className = 'modal__footer'),
             typeof e == 'string'
-                ? (p.innerHTML = e)
+                ? (f.innerHTML = e)
                 : e instanceof HTMLElement
-                  ? p.appendChild(e)
-                  : Array.isArray(e) && e.forEach(m => p.appendChild(m)),
-            h.appendChild(p));
+                  ? f.appendChild(e)
+                  : Array.isArray(e) && e.forEach(x => f.appendChild(x)),
+            u.appendChild(f));
     }
-    (s.appendChild(h),
-        document.body.appendChild(s),
+    (h.appendChild(u),
+        document.body.appendChild(h),
         requestAnimationFrame(() => {
-            s.classList.add('modal-overlay--open');
+            h.classList.add('modal-overlay--open');
         }));
-    let f = {
-        element: s,
+    let c = {
+        element: h,
         close: () => {
-            (s.classList.remove('modal-overlay--open'),
-                s.addEventListener(
+            (h.classList.remove('modal-overlay--open'),
+                h.addEventListener(
                     'transitionend',
                     () => {
-                        s.parentNode && s.parentNode.removeChild(s);
+                        h.parentNode && h.parentNode.removeChild(h);
                     },
                     { once: !0 }
                 ),
-                F === f && (F = null),
+                F === c && (F = null),
                 r && r(),
-                document.removeEventListener('keydown', x),
+                document.removeEventListener('keydown', i),
                 (document.body.style.overflow = ''));
         },
     };
-    F = f;
-    function x(p) {
-        if ((p.key === 'Escape' && (p.preventDefault(), f.close()), p.key === 'Tab')) {
-            let m = h.querySelectorAll(OA);
-            if (m.length === 0) return;
-            let v = m[0],
-                M = m[m.length - 1];
-            p.shiftKey && document.activeElement === v
-                ? (p.preventDefault(), M.focus())
-                : !p.shiftKey && document.activeElement === M && (p.preventDefault(), v.focus());
+    F = c;
+    function i(f) {
+        if ((f.key === 'Escape' && (f.preventDefault(), c.close()), f.key === 'Tab')) {
+            let x = u.querySelectorAll(WA);
+            if (x.length === 0) return;
+            let v = x[0],
+                M = x[x.length - 1];
+            f.shiftKey && document.activeElement === v
+                ? (f.preventDefault(), M.focus())
+                : !f.shiftKey && document.activeElement === M && (f.preventDefault(), v.focus());
         }
     }
     return (
-        document.addEventListener('keydown', x),
-        h.querySelector('.modal__close').addEventListener('click', () => f.close()),
-        s.addEventListener('mousedown', p => {
-            p.target === s && f.close();
+        document.addEventListener('keydown', i),
+        u.querySelector('.modal__close').addEventListener('click', () => c.close()),
+        h.addEventListener('mousedown', f => {
+            f.target === h && c.close();
         }),
         requestAnimationFrame(() => {
-            let p = h.querySelector(OA);
-            p && p.focus();
+            let f = u.querySelector(WA);
+            f && f.focus();
         }),
         (document.body.style.overflow = 'hidden'),
-        f
+        c
     );
 }
-function f2(a) {
+function i2(a) {
     a.querySelectorAll('.skeleton-card, .skeleton-chart, .skeleton-text-group').forEach(e =>
         e.remove()
     );
 }
-var qA = { type: 'info', duration: 5e3 },
-    zA = {
+var ZA = { type: 'info', duration: 5e3 },
+    XA = {
         success:
             '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>',
         error: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>',
@@ -16673,30 +16725,30 @@ var qA = { type: 'info', duration: 5e3 },
             '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
         info: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>',
     },
-    V = null;
-function wS() {
+    k = null;
+function Nw() {
     let a = document.getElementById('toast-root');
     return a && document.body.contains(a)
         ? ((a.className = 'toast-container'),
           a.removeAttribute('aria-live'),
           a.removeAttribute('aria-atomic'),
           a)
-        : ((!V || !document.body.contains(V)) &&
-              ((V = document.createElement('div')),
-              (V.className = 'toast-container'),
-              V.setAttribute('aria-live', 'polite'),
-              V.setAttribute('aria-atomic', 'true'),
-              document.body.appendChild(V)),
-          V);
+        : ((!k || !document.body.contains(k)) &&
+              ((k = document.createElement('div')),
+              (k.className = 'toast-container'),
+              k.setAttribute('aria-live', 'polite'),
+              k.setAttribute('aria-atomic', 'true'),
+              document.body.appendChild(k)),
+          k);
 }
-function IA({ title: a, message: t, type: e = qA.type, duration: r = qA.duration }) {
-    let d = wS(),
-        o = document.createElement('div');
+function $A({ title: a, message: t, type: e = ZA.type, duration: r = ZA.duration }) {
+    let o = Nw(),
+        d = document.createElement('div');
     return (
-        (o.className = `toast toast--${e}`),
-        o.setAttribute('role', 'alert'),
-        (o.innerHTML = `
-    <span class="toast__icon">${zA[e] || zA.info}</span>
+        (d.className = `toast toast--${e}`),
+        d.setAttribute('role', 'alert'),
+        (d.innerHTML = `
+    <span class="toast__icon">${XA[e] || XA.info}</span>
     <div class="toast__content">
       <p class="toast__title">${a}</p>
       ${t ? `<p class="toast__message">${t}</p>` : ''}
@@ -16705,13 +16757,13 @@ function IA({ title: a, message: t, type: e = qA.type, duration: r = qA.duration
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
     </button>
   `),
-        o.querySelector('.toast__close').addEventListener('click', () => UA(o)),
-        d.appendChild(o),
-        r > 0 && (o._timeout = setTimeout(() => UA(o), r)),
-        o
+        d.querySelector('.toast__close').addEventListener('click', () => KA(d)),
+        o.appendChild(d),
+        r > 0 && (d._timeout = setTimeout(() => KA(d), r)),
+        d
     );
 }
-function UA(a) {
+function KA(a) {
     (a._timeout && clearTimeout(a._timeout),
         a.classList.add('toast--removing'),
         a.addEventListener(
@@ -16722,83 +16774,83 @@ function UA(a) {
             { once: !0 }
         ));
 }
-function _A(a, t) {
-    return IA({ type: 'error', title: a, message: t });
+function JA(a, t) {
+    return $A({ type: 'error', title: a, message: t });
 }
-function J(a, t) {
-    return IA({ type: 'info', title: a, message: t });
+function Q(a, t) {
+    return $A({ type: 'info', title: a, message: t });
 }
-var HS = 0;
-function NA(a, { content: t, position: e = 'top', delay: r = 200 } = {}) {
-    let d = `tooltip-${++HS}`,
-        o = document.createElement('span');
-    ((o.className = 'tooltip-wrapper'),
-        a.parentNode.insertBefore(o, a),
-        o.appendChild(a),
-        a.setAttribute('aria-describedby', d));
-    let l = document.createElement('span');
-    ((l.className = `tooltip tooltip--${e}`),
-        l.setAttribute('role', 'tooltip'),
-        (l.id = d),
-        (l.textContent = t),
-        document.body.appendChild(l));
-    let c = null,
-        u = null;
-    function s() {
-        (u && (clearTimeout(u), (u = null)),
-            (c = setTimeout(() => {
-                (n(), l.classList.add('tooltip--visible'));
+var Iw = 0;
+function jA(a, { content: t, position: e = 'top', delay: r = 200 } = {}) {
+    let o = `tooltip-${++Iw}`,
+        d = document.createElement('span');
+    ((d.className = 'tooltip-wrapper'),
+        a.parentNode.insertBefore(d, a),
+        d.appendChild(a),
+        a.setAttribute('aria-describedby', o));
+    let p = document.createElement('span');
+    ((p.className = `tooltip tooltip--${e}`),
+        p.setAttribute('role', 'tooltip'),
+        (p.id = o),
+        (p.textContent = t),
+        document.body.appendChild(p));
+    let l = null,
+        s = null;
+    function h() {
+        (s && (clearTimeout(s), (s = null)),
+            (l = setTimeout(() => {
+                (n(), p.classList.add('tooltip--visible'));
             }, r)));
     }
-    function h() {
-        (c && (clearTimeout(c), (c = null)),
-            (u = setTimeout(() => {
-                l.classList.remove('tooltip--visible');
+    function u() {
+        (l && (clearTimeout(l), (l = null)),
+            (s = setTimeout(() => {
+                p.classList.remove('tooltip--visible');
             }, 100)));
     }
     function n() {
-        let f = a.getBoundingClientRect(),
-            x = l.getBoundingClientRect(),
-            i = 8,
-            p,
-            m;
+        let c = a.getBoundingClientRect(),
+            i = p.getBoundingClientRect(),
+            m = 8,
+            f,
+            x;
         switch (e) {
             case 'top':
-                ((p = f.top - x.height - i), (m = f.left + f.width / 2 - x.width / 2));
+                ((f = c.top - i.height - m), (x = c.left + c.width / 2 - i.width / 2));
                 break;
             case 'bottom':
-                ((p = f.bottom + i), (m = f.left + f.width / 2 - x.width / 2));
+                ((f = c.bottom + m), (x = c.left + c.width / 2 - i.width / 2));
                 break;
             case 'left':
-                ((p = f.top + f.height / 2 - x.height / 2), (m = f.left - x.width - i));
+                ((f = c.top + c.height / 2 - i.height / 2), (x = c.left - i.width - m));
                 break;
             case 'right':
-                ((p = f.top + f.height / 2 - x.height / 2), (m = f.right + i));
+                ((f = c.top + c.height / 2 - i.height / 2), (x = c.right + m));
                 break;
         }
         let v = 8;
-        (m < v && (m = v),
-            m + x.width > window.innerWidth - v && (m = window.innerWidth - x.width - v),
-            p < v && (p = v),
-            p + x.height > window.innerHeight - v && (p = window.innerHeight - x.height - v),
-            (l.style.top = `${p}px`),
-            (l.style.left = `${m}px`));
+        (x < v && (x = v),
+            x + i.width > window.innerWidth - v && (x = window.innerWidth - i.width - v),
+            f < v && (f = v),
+            f + i.height > window.innerHeight - v && (f = window.innerHeight - i.height - v),
+            (p.style.top = `${f}px`),
+            (p.style.left = `${x}px`));
     }
     return (
-        a.addEventListener('mouseenter', s),
-        a.addEventListener('mouseleave', h),
-        a.addEventListener('focus', s),
-        a.addEventListener('blur', h),
+        a.addEventListener('mouseenter', h),
+        a.addEventListener('mouseleave', u),
+        a.addEventListener('focus', h),
+        a.addEventListener('blur', u),
         {
             destroy: () => {
-                (a.removeEventListener('mouseenter', s),
-                    a.removeEventListener('mouseleave', h),
-                    a.removeEventListener('focus', s),
-                    a.removeEventListener('blur', h),
-                    l.remove());
+                (a.removeEventListener('mouseenter', h),
+                    a.removeEventListener('mouseleave', u),
+                    a.removeEventListener('focus', h),
+                    a.removeEventListener('blur', u),
+                    p.remove());
             },
-            update: f => {
-                l.textContent = f;
+            update: c => {
+                p.textContent = c;
             },
         }
     );
@@ -16845,72 +16897,54 @@ var S = {
     CHART_RESPONSIVE: C('VITE_CHART_RESPONSIVE', y.CHART_RESPONSIVE),
 };
 S.API_BASE_URL || console.warn('[Config] VITE_API_BASE_URL not set, using default');
-var GA = { LOGIN: '/login', DASHBOARD: '/dashboard', NOT_FOUND: '/404' },
-    WA = {
-        AUTH_LOGIN: '/auth/login',
-        STUDENT: a => `/students/${a}`,
-        STUDENT_COURSES: a => `/students/${a}/courses`,
-        STUDENT_GRADES: a => `/students/${a}/grades`,
-        COURSE: a => `/courses/${a}`,
-        COURSE_PROGRESS: a => `/courses/${a}/progress`,
-    },
-    k = {
-        DEMO_EMAIL: 'student@demo.com',
-        DEMO_PASSWORD: 'demo123',
-        TOKEN_EXPIRY_MS: 720 * 60 * 60 * 1e3,
-        MIN_PASSWORD_LENGTH: 6,
-    };
-var T = {
-    INVALID_CREDENTIALS: 'INVALID_CREDENTIALS',
-    SESSION_EXPIRED: 'SESSION_EXPIRED',
-    NETWORK_ERROR: 'NETWORK_ERROR',
-    VALIDATION_ERROR: 'VALIDATION_ERROR',
-    UNKNOWN: 'UNKNOWN',
-};
-var $;
+B();
+var Y;
 try {
-    $ = typeof import.meta < 'u' ? import.meta.env : void 0;
+    Y = typeof import.meta < 'u' ? import.meta.env : void 0;
 } catch {
-    $ = void 0;
+    Y = void 0;
 }
-var w = (a, t) => {
+var L = (a, t) => {
         try {
-            let e = $ ? $[a] : void 0;
+            let e = Y ? Y[a] : void 0;
             return e !== void 0 ? e : t;
         } catch {
             return t;
         }
     },
-    LS = {
-        appName: w('VITE_APP_NAME', 'Student Progress Tracker'),
-        appEnv: w('VITE_APP_ENV', 'development'),
-        apiBaseUrl: w('VITE_API_BASE_URL', 'http://localhost:3001/api'),
+    YA = {
+        appName: L('VITE_APP_NAME', 'Student Progress Tracker'),
+        appEnv: L('VITE_APP_ENV', 'development'),
+        apiBaseUrl: L('VITE_API_BASE_URL', 'http://localhost:3001/api'),
         apiMockEnabled: (() => {
-            let a = w('VITE_ENABLE_MOCK_API', void 0);
+            let a = L('VITE_ENABLE_MOCK_API', void 0);
             return a === void 0 ? !0 : a === !0 || a === 'true';
         })(),
-        authTokenKey: w('VITE_AUTH_TOKEN_KEY', 'auth_token'),
-        sessionTimeoutMinutes: parseInt(w('VITE_SESSION_TIMEOUT_MINUTES', '60'), 10),
+        authTokenKey: L('VITE_AUTH_TOKEN_KEY', 'auth_token'),
+        sessionTimeoutMinutes: parseInt(L('VITE_SESSION_TIMEOUT_MINUTES', '60'), 10),
         enableAnalytics: (() => {
-            let a = w('VITE_ENABLE_ANALYTICS', void 0);
+            let a = L('VITE_ENABLE_ANALYTICS', void 0);
             return a === !0 || a === 'true';
         })(),
         enableNotifications: (() => {
-            let a = w('VITE_ENABLE_NOTIFICATIONS', void 0);
+            let a = L('VITE_ENABLE_NOTIFICATIONS', void 0);
             return a === void 0 ? !0 : a !== !1 && a !== 'false';
         })(),
-        cacheTtlSeconds: parseInt(w('VITE_CACHE_TTL_SECONDS', '300'), 10),
+        cacheTtlSeconds: parseInt(L('VITE_CACHE_TTL_SECONDS', '300'), 10),
     };
-function ZA() {
-    return { ...LS };
+function M2() {
+    return { ...YA };
 }
-var j = class extends Error {
-    constructor(t, { status: e, code: r, data: d } = {}) {
-        (super(t), (this.name = 'AppError'), (this.status = e), (this.code = r), (this.data = d));
+function O() {
+    return YA.appEnv === 'development';
+}
+var aa = class extends Error {
+    constructor(t, { status: e, code: r, data: o } = {}) {
+        (super(t), (this.name = 'AppError'), (this.status = e), (this.code = r), (this.data = o));
     }
 };
-function XA(a) {
-    if (a instanceof j) return a;
+function aw(a) {
+    if (a instanceof aa) return a;
     let t = a.status || 0,
         r = {
             0: {
@@ -16943,9 +16977,9 @@ function XA(a) {
                 message: 'The service is temporarily unavailable. Please try again later.',
             },
         }[t] || { title: 'Error', message: a.message || 'An unexpected error occurred.' };
-    return new j(r.message, { status: t, data: a.data });
+    return new aa(r.message, { status: t, data: a.data });
 }
-function KA(a) {
+function tw(a) {
     (window.addEventListener('error', t => {
         (console.error('Global error caught:', t.error || t.message),
             a && a(t.error || { message: t.message }),
@@ -16957,10 +16991,10 @@ function KA(a) {
                 t.preventDefault());
         }));
 }
-var B = S.AUTH_TOKEN_KEY,
-    E = S.AUTH_REDIRECT_KEY,
-    O = new Map();
-function JA(a, t) {
+var T = S.AUTH_TOKEN_KEY,
+    q = S.AUTH_REDIRECT_KEY,
+    z = new Map();
+function ew(a, t) {
     try {
         let e = a.getItem(t);
         return e === null || e === '' ? null : JSON.parse(e);
@@ -16968,30 +17002,30 @@ function JA(a, t) {
         return null;
     }
 }
-function $A(a, t, e) {
+function rw(a, t, e) {
     try {
         return (a.setItem(t, JSON.stringify(e)), !0);
     } catch {
-        return (O.set(t, JSON.stringify(e)), !1);
+        return (z.set(t, JSON.stringify(e)), !1);
     }
 }
-function u2(a, t) {
+function v2(a, t) {
     try {
         a.removeItem(t);
     } catch {}
-    O.delete(t);
+    z.delete(t);
 }
-function c2({ token: a, expiresAt: t, user: e, rememberMe: r = !1 }) {
-    let d = typeof t == 'string' ? new Date(t).getTime() : Number(t),
-        o = { token: a, expiresAt: d, user: e };
-    $A(r ? localStorage : sessionStorage, B, o);
+function g2({ token: a, expiresAt: t, user: e, rememberMe: r = !1 }) {
+    let o = typeof t == 'string' ? new Date(t).getTime() : Number(t),
+        d = { token: a, expiresAt: o, user: e };
+    rw(r ? localStorage : sessionStorage, T, d);
 }
-function Q() {
-    let a = JA(localStorage, B);
+function ta() {
+    let a = ew(localStorage, T);
     if (a) return a;
-    let t = JA(sessionStorage, B);
+    let t = ew(sessionStorage, T);
     if (t) return t;
-    let e = O.get(B);
+    let e = z.get(T);
     if (!e) return null;
     try {
         return JSON.parse(e);
@@ -16999,30 +17033,31 @@ function Q() {
         return null;
     }
 }
-function b() {
-    (u2(localStorage, B), u2(sessionStorage, B), u2(sessionStorage, E));
+function R() {
+    (v2(localStorage, T), v2(sessionStorage, T), v2(sessionStorage, q));
 }
-function jA() {
+function ow() {
     let a = null;
     try {
-        ((a = sessionStorage.getItem(E)), sessionStorage.removeItem(E));
+        ((a = sessionStorage.getItem(q)), sessionStorage.removeItem(q));
     } catch {}
-    return (a || ((a = O.get(E) ?? null), O.delete(E)), a ?? '/dashboard');
+    return (a || ((a = z.get(q) ?? null), z.delete(q)), a ?? '/dashboard');
 }
-var ES = null;
-async function tS() {
+var tS = null;
+async function sw() {
     try {
-        if (ZA().apiMockEnabled) {
-            let { setupMockServer: t } = await Promise.resolve().then(() => (aS(), YA));
-            ES = t();
+        if (M2().apiMockEnabled) {
+            let { setupMockServer: t } = await Promise.resolve().then(() => (lw(), pw));
+            tS = t();
         }
     } catch (a) {
         console.warn('[API] Failed to initialize mock server:', a);
     }
 }
-var x2 = class {
+var C2 = class {
         constructor(t = '') {
-            ((this.baseUrl = t || (window.CONFIG && window.CONFIG.API_BASE_URL) || '/api'),
+            ((this.baseUrl =
+                t || (window.CONFIG && window.CONFIG.API_BASE_URL) || M2().apiBaseUrl || '/api'),
                 (this.pendingRequests = new Map()),
                 (this.timeoutMs = 1e4),
                 (this.maxRetries = 3));
@@ -17032,31 +17067,32 @@ var x2 = class {
             if (
                 (r.set('Content-Type', 'application/json'), !t.noToken && !e.startsWith('/auth/'))
             ) {
-                let d = Q();
-                d?.token && r.set('Authorization', `Bearer ${d.token}`);
+                let o = ta();
+                o?.token && r.set('Authorization', `Bearer ${o.token}`);
             }
             return { ...t, headers: r };
         }
         async _responseInterceptor(t) {
             if (!t.ok) {
-                let r = new Error(`HTTP ${t.status}`);
-                r.status = t.status;
+                let o = new Error(`HTTP ${t.status}`);
+                o.status = t.status;
+                let d = t.clone();
                 try {
-                    let o = await t.json();
-                    ((r.message = o.message || r.message), (r.data = o));
+                    let l = await d.json();
+                    ((o.message = l.message || o.message), (o.data = l));
                 } catch {
-                    let l = await t.text();
-                    r.message = l || r.message;
+                    let s = await t.text();
+                    o.message = s || o.message;
                 }
-                let d = XA(r);
+                let p = aw(o);
                 throw (
                     t.status === 401 &&
                         window.dispatchEvent(new window.CustomEvent('auth:unauthorized')),
-                    d
+                    p
                 );
             }
             let e = t.headers.get('content-type');
-            return e && e.includes('application/json') ? t.json() : t.text();
+            return e && e.includes('application/json') ? await t.json() : await t.text();
         }
         _getRequestKey(t, e, r) {
             return `${t}:${e}:${r || ''}`;
@@ -17069,46 +17105,65 @@ var x2 = class {
             );
         }
         async request(t, e = {}) {
-            let { method: r = 'GET', body: d, retryCount: o = 0, skipDedup: l = !1, ...c } = e,
-                u = `${this.baseUrl}${t}`,
-                s = !l && this._getRequestKey(r, u, d);
-            if (s && this.pendingRequests.has(s)) return this.pendingRequests.get(s);
-            let h = this._requestInterceptor({ method: r, body: d, ...c }, t),
-                n = new AbortController();
-            h.signal = n.signal;
-            let f = new Promise((p, m) => {
+            let { method: r = 'GET', body: o, retryCount: d = 0, skipDedup: p = !1, ...l } = e,
+                s = `${this.baseUrl}${t}`,
+                h = !p && this._getRequestKey(r, s, o);
+            if (h && this.pendingRequests.has(h))
+                return (
+                    O() && console.log(`[API Dedup] Returning existing request for ${r} ${s}`),
+                    this.pendingRequests.get(h)
+                );
+            O() && console.log(`[API Request] ${r} ${s}`, { body: o ? JSON.parse(o) : null, ...l });
+            let u = Date.now(),
+                n = this._requestInterceptor({ method: r, body: o, ...l }, t),
+                c = new AbortController();
+            (l.signal && l.signal.addEventListener('abort', () => c.abort()),
+                (n.signal = c.signal));
+            let i = new Promise((x, v) => {
                     setTimeout(() => {
-                        (n.abort(), m(new Error('Request timeout')));
+                        (c.abort(), v(new Error('Request timeout')));
                     }, this.timeoutMs);
                 }),
-                x = fetch(u, h)
+                m = fetch(s, n)
                     .then(
-                        async p => (
-                            s && this.pendingRequests.delete(s),
-                            await this._responseInterceptor(p)
+                        async x => (
+                            h && this.pendingRequests.delete(h),
+                            O() &&
+                                console.log(
+                                    `[API Response] ${r} ${s} (${x.status}) took ${Date.now() - u}ms`
+                                ),
+                            await this._responseInterceptor(x)
                         )
                     )
-                    .catch(p => {
-                        if ((s && this.pendingRequests.delete(s), p.name === 'AbortError'))
+                    .catch(x => {
+                        if (
+                            (h && this.pendingRequests.delete(h),
+                            O() &&
+                                console.error(
+                                    `[API Error] ${r} ${s} failed after ${Date.now() - u}ms`,
+                                    x
+                                ),
+                            x.name === 'AbortError')
+                        )
                             throw new Error(
-                                p.message === 'The user aborted a request.'
+                                x.message === 'The user aborted a request.'
                                     ? 'Request cancelled'
                                     : 'Request timeout'
                             );
-                        if (o < this.maxRetries && this._isNetworkError(p)) {
-                            let m = Math.pow(2, o) * 1e3;
-                            return new Promise(v =>
-                                setTimeout(() => v(this.request(t, { ...e, retryCount: o + 1 })), m)
+                        if (d < this.maxRetries && this._isNetworkError(x)) {
+                            let v = Math.pow(2, d) * 1e3;
+                            return new Promise(M =>
+                                setTimeout(() => M(this.request(t, { ...e, retryCount: d + 1 })), v)
                             );
                         }
-                        throw (console.error(`API Error on ${t}:`, p), p);
+                        throw (console.error(`API Error on ${t}:`, x), x);
                     }),
-                i = Promise.race([x, f]);
+                f = Promise.race([m, i]);
             return (
-                s &&
-                    (this.pendingRequests.set(s, i),
-                    i.finally(() => this.pendingRequests.delete(s))),
-                i
+                h &&
+                    (this.pendingRequests.set(h, f),
+                    f.finally(() => this.pendingRequests.delete(h))),
+                f
             );
         }
         get(t, e = {}) {
@@ -17126,283 +17181,656 @@ var x2 = class {
         delete(t, e = {}) {
             return this.request(t, { method: 'DELETE', ...e });
         }
+        async batch(t) {
+            if (!Array.isArray(t)) throw new Error('batch() expects an array of requests');
+            return Promise.all(
+                t.map(e =>
+                    typeof e == 'string' ? this.get(e) : this.request(e.endpoint, e.options || {})
+                )
+            );
+        }
     },
-    eS = new x2();
-async function rS({ email: a, password: t }) {
+    A2 = new C2();
+async function hw(a) {
+    try {
+        let { API_ENDPOINTS: t } = await Promise.resolve().then(() => (B(), QA));
+        return await A2.get(t.STUDENT_COURSES(a));
+    } catch (t) {
+        throw { code: t.code || 'UNKNOWN', message: t.message || 'Failed to fetch courses' };
+    }
+}
+async function fw({ email: a, password: t }) {
     let e = new AbortController(),
         r = setTimeout(() => e.abort(), S.API_TIMEOUT || 1e4);
     try {
-        let d = await eS.post(WA.AUTH_LOGIN, { email: a, password: t }, { signal: e.signal });
-        return (clearTimeout(r), d);
-    } catch (d) {
+        let o = await A2.post(m2.AUTH_LOGIN, { email: a, password: t }, { signal: e.signal });
+        return (clearTimeout(r), o);
+    } catch (o) {
         throw (
             clearTimeout(r),
-            d.name === 'AbortError' || d instanceof TypeError
+            o.name === 'AbortError' || o instanceof TypeError
                 ? {
-                      code: T.NETWORK_ERROR,
+                      code: P.NETWORK_ERROR,
                       message: 'Unable to connect. Please check your internet connection.',
                   }
-                : d.status === 400
+                : o.status === 400
                   ? {
-                        code: T.VALIDATION_ERROR,
-                        message: d.data?.message ?? 'The request contained invalid data.',
+                        code: P.VALIDATION_ERROR,
+                        message: o.data?.message ?? 'The request contained invalid data.',
                     }
-                  : d.status === 401
+                  : o.status === 401
                     ? {
-                          code: T.INVALID_CREDENTIALS,
-                          message: d.data?.message ?? 'Invalid email or password.',
+                          code: P.INVALID_CREDENTIALS,
+                          message: o.data?.message ?? 'Invalid email or password.',
                       }
                     : {
-                          code: T.UNKNOWN,
-                          message: d.data?.message ?? d.message ?? 'An unexpected error occurred.',
+                          code: P.UNKNOWN,
+                          message: o.data?.message ?? o.message ?? 'An unexpected error occurred.',
                       }
         );
     }
 }
-function oS(a) {
+function uw(a) {
     return !a || typeof a != 'number' || isNaN(a) ? !0 : Date.now() > a;
 }
-function qS(a, t) {
+B();
+function rS(a, t) {
     if (a && typeof a == 'object' && 'code' in a) return a;
     let e = a instanceof Error ? a.message : typeof a == 'string' ? a : t;
-    return { code: T.UNKNOWN, message: e };
+    return { code: P.UNKNOWN, message: e };
 }
-var zS = Object.freeze({
+var oS = Object.freeze({
         user: null,
         token: null,
         isAuthenticated: !1,
         isLoading: !0,
         error: null,
     }),
-    US = (() => {
-        let a = { ...zS },
+    dS = (() => {
+        let a = { ...oS },
             t = new Set();
-        function e(h) {
-            return typeof h != 'function'
+        function e(u) {
+            return typeof u != 'function'
                 ? (console.warn(
                       '[AuthContext] subscribe() expects a function, received:',
-                      typeof h
+                      typeof u
                   ),
                   () => {})
-                : (t.add(h), () => r(h));
+                : (t.add(u), () => r(u));
         }
-        function r(h) {
-            t.delete(h);
+        function r(u) {
+            t.delete(u);
         }
-        function d() {
-            let h = Object.freeze({ ...a });
+        function o() {
+            let u = Object.freeze({ ...a });
             t.forEach(n => {
                 try {
-                    n(h);
-                } catch (f) {
-                    console.error('[AuthContext] A subscriber threw an error:', f);
+                    n(u);
+                } catch (c) {
+                    console.error('[AuthContext] A subscriber threw an error:', c);
                 }
             });
         }
-        function o(h) {
-            ((a = { ...a, ...h }), d());
+        function d(u) {
+            ((a = { ...a, ...u }), o());
         }
-        function l() {
+        function p() {
             return Object.freeze({ ...a });
         }
-        async function c() {
-            o({ isLoading: !0, error: null });
+        async function l() {
+            d({ isLoading: !0, error: null });
             try {
-                let h = Q();
-                if (!h) {
+                let u = ta();
+                if (!u) {
                     if (S.ENABLE_MOCK_API) {
-                        let i = { id: 'mock-001', name: 'Sai Shendge', email: 'sai@example.com' },
-                            p = 'mock-jwt-token-dev';
-                        (c2({ token: p, expiresAt: Date.now() + 864e5, user: i, rememberMe: !0 }),
-                            o({
-                                user: i,
-                                token: p,
+                        let m = { id: 'mock-001', name: 'Sai Shendge', email: 'sai@example.com' },
+                            f = 'mock-jwt-token-dev';
+                        (g2({ token: f, expiresAt: Date.now() + 864e5, user: m, rememberMe: !0 }),
+                            d({
+                                user: m,
+                                token: f,
                                 isAuthenticated: !0,
                                 isLoading: !1,
                                 error: null,
                             }));
                         return;
                     }
-                    o({ isLoading: !1 });
+                    d({ isLoading: !1 });
                     return;
                 }
-                let { token: n, expiresAt: f, user: x } = h;
-                if (!n || !x || typeof x != 'object') {
+                let { token: n, expiresAt: c, user: i } = u;
+                if (!n || !i || typeof i != 'object') {
                     (console.warn(
                         '[AuthContext] Malformed session payload found in storage \u2014 clearing.'
                     ),
-                        b(),
-                        o({ isLoading: !1 }));
+                        R(),
+                        d({ isLoading: !1 }));
                     return;
                 }
-                if (oS(f)) {
+                if (uw(c)) {
                     (console.warn(
                         '[AuthContext] Stored token has expired \u2014 clearing session.'
                     ),
-                        b(),
-                        o({ isLoading: !1 }));
+                        R(),
+                        d({ isLoading: !1 }));
                     return;
                 }
-                (o({ user: x, token: n, isAuthenticated: !0, isLoading: !1, error: null }),
+                (d({ user: i, token: n, isAuthenticated: !0, isLoading: !1, error: null }),
                     S.ENABLE_ANALYTICS ||
-                        console.warn('[AuthContext] Session restored for user ID:', x.id));
-            } catch (h) {
+                        console.warn('[AuthContext] Session restored for user ID:', i.id));
+            } catch (u) {
                 (console.error(
                     '[AuthContext] restoreSession() encountered an unexpected error:',
-                    h
+                    u
                 ),
-                    b(),
-                    o({ isLoading: !1, error: null }));
+                    R(),
+                    d({ isLoading: !1, error: null }));
             }
         }
-        async function u(h) {
-            o({ isLoading: !0, error: null });
+        async function s(u) {
+            d({ isLoading: !0, error: null });
             try {
-                let n = await rS(h),
-                    { token: f, expiresAt: x, user: i } = n;
-                if (!f || !i || !x)
+                let n = await fw(u),
+                    { token: c, expiresAt: i, user: m } = n;
+                if (!c || !m || !i)
                     throw new Error(
                         'Auth response is missing required fields: token, expiresAt, user.'
                     );
-                let p = h.rememberMe === !0;
+                let f = u.rememberMe === !0;
                 return (
-                    c2({ token: f, expiresAt: x, user: i, rememberMe: p }),
-                    o({ user: i, token: f, isAuthenticated: !0, isLoading: !1, error: null }),
-                    { success: !0, user: i }
+                    g2({ token: c, expiresAt: i, user: m, rememberMe: f }),
+                    d({ user: m, token: c, isAuthenticated: !0, isLoading: !1, error: null }),
+                    { success: !0, user: m }
                 );
             } catch (n) {
-                let f = qS(n, 'Login failed. Please try again.');
+                let c = rS(n, 'Login failed. Please try again.');
                 return (
-                    o({ isLoading: !1, error: f, isAuthenticated: !1, user: null, token: null }),
-                    { success: !1, error: f.message }
+                    d({ isLoading: !1, error: c, isAuthenticated: !1, user: null, token: null }),
+                    { success: !1, error: c.message }
                 );
             }
         }
-        function s() {
-            (b(),
-                o({ user: null, token: null, isAuthenticated: !1, isLoading: !1, error: null }),
+        function h() {
+            (R(),
+                d({ user: null, token: null, isAuthenticated: !1, isLoading: !1, error: null }),
                 console.warn(
-                    `[AuthContext] Session ended. Navigate to ${GA.LOGIN} via the router.`
+                    `[AuthContext] Session ended. Navigate to ${x2.LOGIN} via the router.`
                 ));
         }
         return (
             window.addEventListener('auth:unauthorized', () => {
                 a.isAuthenticated &&
                     (console.warn('[AuthContext] 401 Unauthorized detected globally. Logging out.'),
-                    s());
+                    h());
             }),
             {
                 subscribe: e,
                 unsubscribe: r,
-                notify: d,
-                getState: l,
-                setState: o,
-                restoreSession: c,
-                login: u,
-                logout: s,
-                clearStorage: b,
+                notify: o,
+                getState: p,
+                setState: d,
+                restoreSession: l,
+                login: s,
+                logout: h,
+                clearStorage: R,
             }
         );
     })(),
-    H = US;
-var IS = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-function _S(a) {
-    let t = (a ?? '').trim();
-    return t ? (IS.test(t) ? null : 'Enter a valid email address') : 'Email is required';
+    V = dS;
+function cw(a, t) {
+    return !t || t === 0 ? 0 : Math.round((a / t) * 100);
 }
-function NS(a) {
+function nw(a) {
+    let t = {
+        completed: { className: 'course-status-badge--completed', label: 'Completed' },
+        'in-progress': { className: 'course-status-badge--in-progress', label: 'In Progress' },
+        'not-started': { className: 'course-status-badge--not-started', label: 'Not Started' },
+    };
+    return t[a] || t['not-started'];
+}
+function iw(a) {
+    if (a == null) return 'N/A';
+    if (typeof a == 'string') return a;
+    let t = 'F';
+    return (
+        a >= 97
+            ? (t = 'A+')
+            : a >= 93
+              ? (t = 'A')
+              : a >= 90
+                ? (t = 'A-')
+                : a >= 87
+                  ? (t = 'B+')
+                  : a >= 83
+                    ? (t = 'B')
+                    : a >= 80
+                      ? (t = 'B-')
+                      : a >= 77
+                        ? (t = 'C+')
+                        : a >= 73
+                          ? (t = 'C')
+                          : a >= 70
+                            ? (t = 'C-')
+                            : a >= 60 && (t = 'D'),
+        `${t} (${Math.round(a)}%)`
+    );
+}
+function xw(a, t) {
+    let e = document.createElement('div');
+    e.className = 'course-thumbnail';
+    let r = document.createElement('div');
+    if (((r.className = 'course-thumbnail__container'), a)) {
+        let o = document.createElement('img');
+        ((o.className = 'course-thumbnail__img'),
+            (o.src = a),
+            (o.alt = `${t} thumbnail`),
+            (o.loading = 'lazy'),
+            (o.onerror = () => {
+                o.style.display = 'none';
+            }),
+            r.appendChild(o));
+    }
+    return (e.appendChild(r), e);
+}
+function mw(a, t, e) {
+    let r = cw(a, t),
+        o = document.createElement('div');
+    o.className = 'course-progress-section';
+    let d = document.createElement('div');
+    d.className = 'course-progress-header';
+    let p = document.createElement('span');
+    ((p.className = 'course-progress-label'), (p.textContent = 'Progress'));
+    let l = document.createElement('span');
+    ((l.className = 'course-progress-percentage'),
+        (l.textContent = `${r}%`),
+        d.appendChild(p),
+        d.appendChild(l));
+    let s = document.createElement('div');
+    s.className = 'course-progress-bar';
+    let h = document.createElement('div');
+    h.className = 'course-progress-bar__track';
+    let u = document.createElement('div');
+    return (
+        (u.className = 'course-progress-bar__fill'),
+        e === 'completed' || r === 100
+            ? u.classList.add('course-progress-bar__fill--completed')
+            : (e === 'not-started' || r === 0) &&
+              u.classList.add('course-progress-bar__fill--not-started'),
+        (u.style.width = '0%'),
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                u.style.width = `${r}%`;
+            }, 50);
+        }),
+        h.appendChild(u),
+        s.appendChild(h),
+        o.appendChild(d),
+        o.appendChild(s),
+        o
+    );
+}
+function Mw(a) {
+    let t = nw(a),
+        e = document.createElement('span');
+    return ((e.className = `course-status-badge ${t.className}`), (e.textContent = t.label), e);
+}
+function vw(a) {
+    let t = document.createElement('div');
+    ((t.className = 'course-card'),
+        t.setAttribute('tabindex', '0'),
+        t.appendChild(xw(a.thumbnailUrl, a.title)));
+    let e = document.createElement('div');
+    e.className = 'course-card__content';
+    let r = document.createElement('div');
+    r.className = 'course-card__header';
+    let o = document.createElement('h3');
+    ((o.className = 'course-card__title'), (o.textContent = a.title));
+    let d = document.createElement('p');
+    ((d.className = 'course-card__instructor'),
+        (d.textContent = a.instructor),
+        r.appendChild(o),
+        r.appendChild(d),
+        e.appendChild(r));
+    let p = document.createElement('div');
+    ((p.className = 'course-card__status-wrapper'), p.appendChild(Mw(a.status)), e.appendChild(p));
+    let l = document.createElement('div');
+    l.className = 'course-card__details';
+    let s = document.createElement('div');
+    s.className = 'course-card__detail-row';
+    let h = document.createElement('span');
+    ((h.className = 'course-card__detail-label'), (h.textContent = 'Modules'));
+    let u = document.createElement('span');
+    ((u.className = 'course-card__detail-value'),
+        (u.textContent = `${a.completedModules} / ${a.totalModules}`),
+        s.appendChild(h),
+        s.appendChild(u),
+        l.appendChild(s));
+    let n = document.createElement('div');
+    n.className = 'course-card__detail-row';
+    let c = document.createElement('span');
+    ((c.className = 'course-card__detail-label'), (c.textContent = 'Grade'));
+    let i = document.createElement('span');
+    ((i.className = 'course-card__detail-value'),
+        a.currentGrade !== null && a.currentGrade !== void 0
+            ? (i.textContent = iw(a.currentGrade))
+            : (i.textContent = 'N/A'),
+        n.appendChild(c),
+        n.appendChild(i),
+        l.appendChild(n));
+    let m = document.createElement('div');
+    m.className = 'course-card__detail-row';
+    let f = document.createElement('span');
+    ((f.className = 'course-card__detail-label'), (f.textContent = 'Next'));
+    let x = document.createElement('span');
+    return (
+        (x.className = 'course-card__detail-value'),
+        a.status === 'completed'
+            ? ((x.textContent = '-'), x.classList.add('course-card__detail-value--muted'))
+            : a.nextModule
+              ? (x.textContent = a.nextModule)
+              : (x.textContent = 'N/A'),
+        m.appendChild(f),
+        m.appendChild(x),
+        l.appendChild(m),
+        e.appendChild(l),
+        e.appendChild(mw(a.completedModules, a.totalModules, a.status)),
+        t.appendChild(e),
+        t
+    );
+}
+function gw(a, t) {
+    if (!a) return;
+    a.innerHTML = '';
+    let e = document.createElement('div');
+    if (((e.className = 'course-progress-grid'), !t || t.length === 0)) {
+        let r = document.createElement('div');
+        ((r.className = 'course-progress-grid__empty'),
+            (r.textContent = 'No courses found.'),
+            a.appendChild(r));
+        return;
+    }
+    (t.forEach(r => {
+        let o = vw(r);
+        e.appendChild(o);
+    }),
+        a.appendChild(e));
+}
+function yw({ title: a = 'Something went wrong', message: t, onRetry: e }) {
+    let r = document.createElement('div');
+    ((r.className = 'course-progress-grid__error'),
+        (r.style.display = 'flex'),
+        (r.style.flexDirection = 'column'),
+        (r.style.alignItems = 'center'),
+        (r.style.justifyContent = 'center'),
+        (r.style.padding = '4rem 2rem'),
+        (r.style.textAlign = 'center'),
+        (r.style.gap = '1rem'),
+        (r.style.gridColumn = '1 / -1'));
+    let o = document.createElement('div');
+    ((o.style.color = 'var(--error-default, #ef4444)'),
+        (o.style.marginBottom = '1rem'),
+        (o.innerHTML = '<i data-lucide="alert-triangle" style="width: 48px; height: 48px;"></i>'));
+    let d = document.createElement('h3');
+    ((d.textContent = a),
+        (d.style.fontSize = '1.25rem'),
+        (d.style.fontWeight = '600'),
+        (d.style.margin = '0'),
+        (d.style.color = 'var(--text-primary, #f8fafc)'));
+    let p = document.createElement('p');
+    ((p.textContent = t || 'There was an error loading the data. Please try again.'),
+        (p.style.color = 'var(--text-secondary, #94a3b8)'),
+        (p.style.margin = '0 0 1rem 0'),
+        (p.style.maxWidth = '400px'));
+    let l = document.createElement('button');
+    return (
+        (l.textContent = 'Retry'),
+        (l.className = 'btn btn-primary'),
+        (l.style.padding = '0.5rem 1.5rem'),
+        (l.style.borderRadius = 'var(--radius-md, 8px)'),
+        (l.style.backgroundColor = 'var(--primary-main, #3b82f6)'),
+        (l.style.color = '#fff'),
+        (l.style.border = 'none'),
+        (l.style.cursor = 'pointer'),
+        (l.style.fontWeight = '500'),
+        e && l.addEventListener('click', e),
+        r.append(o, d, p, l),
+        typeof lucide < 'u' && lucide.createIcons
+            ? lucide.createIcons({ icons: lucide.icons, root: r })
+            : A({ root: r }),
+        r
+    );
+}
+function Cw() {
+    let a = document.createElement('article');
+    a.className = 'skeleton-card';
+    let t = document.createElement('div');
+    ((t.className = 'skeleton-card__thumbnail skeleton-bone'), a.appendChild(t));
+    let e = document.createElement('div');
+    e.className = 'skeleton-card__content';
+    let r = document.createElement('div');
+    r.className = 'skeleton-card__title skeleton-bone';
+    let o = document.createElement('div');
+    o.className = 'skeleton-card__subtitle skeleton-bone';
+    let d = document.createElement('div');
+    d.className = 'skeleton-card__badge skeleton-bone';
+    let p = document.createElement('div');
+    p.className = 'skeleton-card__row';
+    let l = document.createElement('div');
+    l.className = 'skeleton-card__label skeleton-bone';
+    let s = document.createElement('div');
+    ((s.className = 'skeleton-card__value skeleton-bone'), p.append(l, s));
+    let h = document.createElement('div');
+    h.className = 'skeleton-card__row';
+    let u = document.createElement('div');
+    u.className = 'skeleton-card__label skeleton-bone';
+    let n = document.createElement('div');
+    ((n.className = 'skeleton-card__value skeleton-bone'), h.append(u, n));
+    let c = document.createElement('div');
+    c.className = 'skeleton-card__row';
+    let i = document.createElement('div');
+    i.className = 'skeleton-card__label skeleton-bone';
+    let m = document.createElement('div');
+    ((m.className = 'skeleton-card__title skeleton-bone'), (m.style.width = '60%'), c.append(i, m));
+    let f = document.createElement('div');
+    ((f.className = 'skeleton-card__row'), (f.style.marginTop = '0.5rem'));
+    let x = document.createElement('div');
+    x.className = 'skeleton-card__label skeleton-bone';
+    let v = document.createElement('div');
+    ((v.className = 'skeleton-card__value skeleton-bone'), f.append(x, v));
+    let M = document.createElement('div');
+    return (
+        (M.className = 'skeleton-card__bar skeleton-bone'),
+        e.append(r, o, d, p, h, c, f, M),
+        a.appendChild(e),
+        a
+    );
+}
+function Aw({ onLoading: a, onSuccess: t, onError: e }) {
+    let r = null,
+        o = async p => {
+            ((r = p), a && a());
+            try {
+                let l = await hw(p);
+                t && t(l);
+            } catch (l) {
+                e && e(l);
+            }
+        };
+    return {
+        fetch: o,
+        retry: () => {
+            r && o(r);
+        },
+    };
+}
+function ww() {
+    let a = document.querySelector('[data-page-content]');
+    if (!a) return;
+    let t = null,
+        e = null,
+        r = () => {
+            let s = a.querySelector('.route-placeholder');
+            (s ? s.remove() : (a.innerHTML = ''),
+                (e = document.createElement('h1')),
+                (e.className = 'dashboard-title'),
+                (e.textContent = 'Courses'),
+                (e.style.marginBottom = '2rem'),
+                (e.style.fontSize = '2.25rem'),
+                (e.style.fontWeight = '700'),
+                (t = document.createElement('div')),
+                a.append(e, t));
+        },
+        o = Aw({
+            onLoading: () => {
+                ((!t || !document.body.contains(t)) && r(), (t.innerHTML = ''));
+                let s = document.createElement('div');
+                s.className = 'course-progress-grid';
+                for (let h = 0; h < 3; h++) s.appendChild(Cw());
+                t.appendChild(s);
+            },
+            onSuccess: s => {
+                if (t) {
+                    if (((t.innerHTML = ''), !s || s.length === 0)) {
+                        t.appendChild(
+                            j({
+                                title: 'No Courses Yet',
+                                description:
+                                    "You haven't been enrolled in any courses for this term.",
+                                illustration: NA.course,
+                            })
+                        );
+                        return;
+                    }
+                    gw(t, s);
+                }
+            },
+            onError: s => {
+                t &&
+                    ((t.innerHTML = ''),
+                    t.appendChild(
+                        yw({
+                            title: 'Failed to load courses',
+                            message: s.message || 'There was a problem fetching your courses.',
+                            onRetry: () => o.retry(),
+                        })
+                    ));
+            },
+        }),
+        d = !1,
+        p = async () => {
+            if (!d) {
+                d = !0;
+                try {
+                    await o.fetch('stu_001');
+                } finally {
+                    d = !1;
+                }
+            }
+        };
+    (document.addEventListener('pathway:route', s => {
+        s.detail.route === 'courses' && p();
+    }),
+        window.location.hash.replace(/^#\/?/, '').split('?')[0].trim() === 'courses' && p());
+}
+B();
+var pS = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function lS(a) {
+    let t = (a ?? '').trim();
+    return t ? (pS.test(t) ? null : 'Enter a valid email address') : 'Email is required';
+}
+function sS(a) {
     let t = a ?? '';
     return t
-        ? t.length < k.MIN_PASSWORD_LENGTH
-            ? `Password must be at least ${k.MIN_PASSWORD_LENGTH} characters`
+        ? t.length < H.MIN_PASSWORD_LENGTH
+            ? `Password must be at least ${H.MIN_PASSWORD_LENGTH} characters`
             : null
         : 'Password is required';
 }
-function dS({ email: a, password: t }) {
-    let e = { email: _S(a), password: NS(t) };
-    return GS(e) ? null : e;
+function Sw({ email: a, password: t }) {
+    let e = { email: lS(a), password: sS(t) };
+    return hS(e) ? null : e;
 }
-function GS(a) {
+function hS(a) {
     return !a || typeof a != 'object' ? !1 : Object.values(a).every(t => t === null);
 }
-var pS = {
+var Hw = {
     sm: { size: 16, stroke: 2 },
     md: { size: 24, stroke: 2.5 },
     lg: { size: 40, stroke: 3 },
 };
-function i2({
+function w2({
     size: a = 'md',
     label: t = 'Loading',
     color: e = 'currentColor',
     className: r = '',
 } = {}) {
-    let { size: d, stroke: o } = pS[a] ?? pS.md,
-        l = (d - o) / 2,
-        c = d / 2,
-        u = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    (u.setAttribute('class', `spinner spinner--${a}${r ? ` ${r}` : ''}`),
-        u.setAttribute('width', String(d)),
-        u.setAttribute('height', String(d)),
-        u.setAttribute('viewBox', `0 0 ${d} ${d}`),
-        u.setAttribute('fill', 'none'),
-        u.setAttribute('role', 'status'),
-        u.setAttribute('aria-live', 'polite'),
-        u.setAttribute('aria-label', t));
-    let s = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    (s.setAttribute('cx', String(c)),
-        s.setAttribute('cy', String(c)),
-        s.setAttribute('r', String(l)),
-        s.setAttribute('stroke', e),
-        s.setAttribute('stroke-width', String(o)),
-        s.setAttribute('opacity', '0.2'),
-        u.appendChild(s));
+    let { size: o, stroke: d } = Hw[a] ?? Hw.md,
+        p = (o - d) / 2,
+        l = o / 2,
+        s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    (s.setAttribute('class', `spinner spinner--${a}${r ? ` ${r}` : ''}`),
+        s.setAttribute('width', String(o)),
+        s.setAttribute('height', String(o)),
+        s.setAttribute('viewBox', `0 0 ${o} ${o}`),
+        s.setAttribute('fill', 'none'),
+        s.setAttribute('role', 'status'),
+        s.setAttribute('aria-live', 'polite'),
+        s.setAttribute('aria-label', t));
     let h = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    (h.setAttribute('class', 'spinner__arc'),
-        h.setAttribute('cx', String(c)),
-        h.setAttribute('cy', String(c)),
-        h.setAttribute('r', String(l)),
+    (h.setAttribute('cx', String(l)),
+        h.setAttribute('cy', String(l)),
+        h.setAttribute('r', String(p)),
         h.setAttribute('stroke', e),
-        h.setAttribute('stroke-width', String(o)),
-        h.setAttribute('stroke-linecap', 'round'));
-    let n = 2 * Math.PI * l;
+        h.setAttribute('stroke-width', String(d)),
+        h.setAttribute('opacity', '0.2'),
+        s.appendChild(h));
+    let u = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    (u.setAttribute('class', 'spinner__arc'),
+        u.setAttribute('cx', String(l)),
+        u.setAttribute('cy', String(l)),
+        u.setAttribute('r', String(p)),
+        u.setAttribute('stroke', e),
+        u.setAttribute('stroke-width', String(d)),
+        u.setAttribute('stroke-linecap', 'round'));
+    let n = 2 * Math.PI * p;
     return (
-        h.setAttribute('stroke-dasharray', String(n)),
-        h.setAttribute('stroke-dashoffset', String(n * 0.75)),
-        u.appendChild(h),
-        u
+        u.setAttribute('stroke-dasharray', String(n)),
+        u.setAttribute('stroke-dashoffset', String(n * 0.75)),
+        s.appendChild(u),
+        s
     );
 }
-var WS = ['primary', 'secondary', 'outline', 'ghost', 'destructive'],
-    ZS = ['sm', 'md', 'lg'];
-function lS({
+var fS = ['primary', 'secondary', 'outline', 'ghost', 'destructive'],
+    uS = ['sm', 'md', 'lg'];
+function Lw({
     label: a,
     id: t,
     variant: e = 'primary',
     size: r = 'md',
-    type: d = 'button',
-    disabled: o = !1,
-    loading: l = !1,
-    className: c = '',
-    onClick: u,
+    type: o = 'button',
+    disabled: d = !1,
+    loading: p = !1,
+    className: l = '',
+    onClick: s,
 } = {}) {
-    let s = WS.includes(e) ? e : 'primary',
-        h = ZS.includes(r) ? r : 'md',
+    let h = fS.includes(e) ? e : 'primary',
+        u = uS.includes(r) ? r : 'md',
         n = document.createElement('button');
-    ((n.type = d), t && (n.id = t));
-    let f = ['btn', `btn--${s}`, `btn--${h}`, ...(l ? ['btn--loading'] : []), ...(c ? [c] : [])];
-    n.className = f.join(' ');
-    let x = o || l;
-    ((n.disabled = x),
-        n.setAttribute('aria-disabled', String(x)),
-        l && n.setAttribute('aria-busy', 'true'));
-    let i = document.createElement('span');
-    if (((i.className = 'btn__label'), (i.textContent = a ?? ''), n.appendChild(i), l)) {
-        let p = i2({ size: h === 'lg' ? 'md' : 'sm' });
-        (p.setAttribute('aria-hidden', 'true'), n.appendChild(p));
+    ((n.type = o), t && (n.id = t));
+    let c = ['btn', `btn--${h}`, `btn--${u}`, ...(p ? ['btn--loading'] : []), ...(l ? [l] : [])];
+    n.className = c.join(' ');
+    let i = d || p;
+    ((n.disabled = i),
+        n.setAttribute('aria-disabled', String(i)),
+        p && n.setAttribute('aria-busy', 'true'));
+    let m = document.createElement('span');
+    if (((m.className = 'btn__label'), (m.textContent = a ?? ''), n.appendChild(m), p)) {
+        let f = w2({ size: u === 'lg' ? 'md' : 'sm' });
+        (f.setAttribute('aria-hidden', 'true'), n.appendChild(f));
     }
-    return (typeof u == 'function' && !x && n.addEventListener('click', u), n);
+    return (typeof s == 'function' && !i && n.addEventListener('click', s), n);
 }
-function m2(a, t) {
+function S2(a, t) {
     if (!(!a || !(a instanceof HTMLButtonElement)))
         if (((a.disabled = t), a.setAttribute('aria-disabled', String(t)), t)) {
             if (
@@ -17410,7 +17838,7 @@ function m2(a, t) {
                 a.classList.add('btn--loading'),
                 !a.querySelector('.spinner'))
             ) {
-                let e = i2({ size: 'sm' });
+                let e = w2({ size: 'sm' });
                 (e.setAttribute('aria-hidden', 'true'), a.appendChild(e));
             }
         } else
@@ -17418,13 +17846,13 @@ function m2(a, t) {
                 a.classList.remove('btn--loading'),
                 a.querySelector('.spinner')?.remove());
 }
-var sS = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+var Vw = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
   viewBox="0 0 24 24" fill="none" stroke="currentColor"
   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
   <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
   <circle cx="12" cy="12" r="3"/>
 </svg>`,
-    XS = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+    cS = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
   viewBox="0 0 24 24" fill="none" stroke="currentColor"
   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
   <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
@@ -17432,49 +17860,49 @@ var sS = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
   <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/>
   <line x1="2" x2="22" y1="2" y2="22"/>
 </svg>`;
-function M2({
+function H2({
     id: a,
     name: t,
     type: e = 'text',
     label: r,
-    value: d = '',
-    placeholder: o = '',
-    error: l,
-    required: c = !1,
-    disabled: u = !1,
-    autocomplete: s,
-    onChange: h,
+    value: o = '',
+    placeholder: d = '',
+    error: p,
+    required: l = !1,
+    disabled: s = !1,
+    autocomplete: h,
+    onChange: u,
 } = {}) {
     let n = e === 'password',
-        f = `${a}-error`,
-        x = document.createElement('div');
-    if (((x.className = 'input-field'), r)) {
+        c = `${a}-error`,
+        i = document.createElement('div');
+    if (((i.className = 'input-field'), r)) {
         let M = document.createElement('label');
-        if (((M.htmlFor = a), (M.className = 'input-field__label'), (M.textContent = r), c)) {
+        if (((M.htmlFor = a), (M.className = 'input-field__label'), (M.textContent = r), l)) {
             let g = document.createElement('span');
             (g.setAttribute('aria-hidden', 'true'),
                 (g.className = 'input-field__required'),
                 (g.textContent = ' *'),
                 M.appendChild(g));
         }
-        x.appendChild(M);
+        i.appendChild(M);
     }
-    let i = document.createElement('div');
-    i.className = `input-field__row${n ? ' input-field__row--password' : ''}`;
-    let p = document.createElement('input');
+    let m = document.createElement('div');
+    m.className = `input-field__row${n ? ' input-field__row--password' : ''}`;
+    let f = document.createElement('input');
     if (
-        ((p.id = a),
-        (p.name = t),
-        (p.type = e),
-        (p.value = d),
-        (p.placeholder = o),
-        (p.required = c),
-        (p.disabled = u),
-        (p.className = `input-field__input${l ? ' input-field__input--error' : ''}`),
-        s && p.setAttribute('autocomplete', s),
-        l && (p.setAttribute('aria-invalid', 'true'), p.setAttribute('aria-describedby', f)),
-        typeof h == 'function' && p.addEventListener('input', h),
-        i.appendChild(p),
+        ((f.id = a),
+        (f.name = t),
+        (f.type = e),
+        (f.value = o),
+        (f.placeholder = d),
+        (f.required = l),
+        (f.disabled = s),
+        (f.className = `input-field__input${p ? ' input-field__input--error' : ''}`),
+        h && f.setAttribute('autocomplete', h),
+        p && (f.setAttribute('aria-invalid', 'true'), f.setAttribute('aria-describedby', c)),
+        typeof u == 'function' && f.addEventListener('input', u),
+        m.appendChild(f),
         n)
     ) {
         let M = document.createElement('button');
@@ -17482,37 +17910,38 @@ function M2({
             (M.className = 'input-field__toggle'),
             M.setAttribute('aria-label', 'Show password'),
             M.setAttribute('aria-pressed', 'false'),
-            (M.innerHTML = sS),
+            (M.innerHTML = Vw),
             M.addEventListener('click', () => {
-                let g = p.type === 'text';
-                ((p.type = g ? 'password' : 'text'),
+                let g = f.type === 'text';
+                ((f.type = g ? 'password' : 'text'),
                     M.setAttribute('aria-pressed', String(!g)),
                     M.setAttribute('aria-label', g ? 'Show password' : 'Hide password'),
-                    (M.innerHTML = g ? sS : XS));
+                    (M.innerHTML = g ? Vw : cS));
             }),
-            i.appendChild(M));
+            m.appendChild(M));
     }
-    x.appendChild(i);
-    let m = document.createElement('span');
-    ((m.id = f),
-        (m.className = 'input-field__error'),
-        m.setAttribute('role', 'alert'),
-        m.setAttribute('aria-live', 'polite'),
-        (m.textContent = l ?? ''),
-        x.appendChild(m));
+    i.appendChild(m);
+    let x = document.createElement('span');
+    ((x.id = c),
+        (x.className = 'input-field__error'),
+        x.setAttribute('role', 'alert'),
+        x.setAttribute('aria-live', 'polite'),
+        (x.textContent = p ?? ''),
+        i.appendChild(x));
     function v(M) {
-        ((m.textContent = M ?? ''),
+        ((x.textContent = M ?? ''),
             M
-                ? (p.setAttribute('aria-invalid', 'true'),
-                  p.setAttribute('aria-describedby', f),
-                  p.classList.add('input-field__input--error'))
-                : (p.removeAttribute('aria-invalid'),
-                  p.removeAttribute('aria-describedby'),
-                  p.classList.remove('input-field__input--error')));
+                ? (f.setAttribute('aria-invalid', 'true'),
+                  f.setAttribute('aria-describedby', c),
+                  f.classList.add('input-field__input--error'))
+                : (f.removeAttribute('aria-invalid'),
+                  f.removeAttribute('aria-describedby'),
+                  f.classList.remove('input-field__input--error')));
     }
-    return { wrapper: x, input: p, setError: v };
+    return { wrapper: i, input: f, setError: v };
 }
-function hS({ onFill: a } = {}) {
+B();
+function kw({ onFill: a } = {}) {
     let t = document.createElement('div');
     ((t.className = 'demo-credentials'),
         t.setAttribute('role', 'note'),
@@ -17524,87 +17953,87 @@ function hS({ onFill: a } = {}) {
     let r = document.createElement('p');
     ((r.className = 'demo-credentials__row'),
         (r.innerHTML = `<span class="demo-credentials__key">Email:</span>
-      <code class="demo-credentials__value">${k.DEMO_EMAIL}</code>`),
+      <code class="demo-credentials__value">${H.DEMO_EMAIL}</code>`),
         t.appendChild(r));
-    let d = document.createElement('p');
+    let o = document.createElement('p');
     if (
-        ((d.className = 'demo-credentials__row'),
-        (d.innerHTML = `<span class="demo-credentials__key">Password:</span>
-      <code class="demo-credentials__value">${k.DEMO_PASSWORD}</code>`),
-        t.appendChild(d),
+        ((o.className = 'demo-credentials__row'),
+        (o.innerHTML = `<span class="demo-credentials__key">Password:</span>
+      <code class="demo-credentials__value">${H.DEMO_PASSWORD}</code>`),
+        t.appendChild(o),
         typeof a == 'function')
     ) {
-        let o = document.createElement('button');
-        ((o.type = 'button'),
-            (o.className = 'demo-credentials__fill-btn'),
-            (o.textContent = 'Use demo credentials'),
-            o.addEventListener('click', () => {
-                a({ email: k.DEMO_EMAIL, password: k.DEMO_PASSWORD });
+        let d = document.createElement('button');
+        ((d.type = 'button'),
+            (d.className = 'demo-credentials__fill-btn'),
+            (d.textContent = 'Use demo credentials'),
+            d.addEventListener('click', () => {
+                a({ email: H.DEMO_EMAIL, password: H.DEMO_PASSWORD });
             }),
-            t.appendChild(o));
+            t.appendChild(d));
     }
     return t;
 }
-function fS({
+function Pw({
     id: a,
     name: t,
     label: e,
     checked: r = !1,
-    disabled: d = !1,
-    className: o = '',
-    onChange: l,
+    disabled: o = !1,
+    className: d = '',
+    onChange: p,
 } = {}) {
-    let c = document.createElement('div');
-    c.className = `checkbox${o ? ` ${o}` : ''}`;
-    let u = document.createElement('input');
-    ((u.type = 'checkbox'),
-        (u.id = a),
-        (u.name = t),
-        (u.checked = r),
-        (u.disabled = d),
-        (u.className = 'checkbox__input'),
-        typeof l == 'function' && u.addEventListener('change', l));
-    let s = document.createElement('label');
+    let l = document.createElement('div');
+    l.className = `checkbox${d ? ` ${d}` : ''}`;
+    let s = document.createElement('input');
+    ((s.type = 'checkbox'),
+        (s.id = a),
+        (s.name = t),
+        (s.checked = r),
+        (s.disabled = o),
+        (s.className = 'checkbox__input'),
+        typeof p == 'function' && s.addEventListener('change', p));
+    let h = document.createElement('label');
     return (
-        (s.htmlFor = a),
-        (s.className = 'checkbox__label'),
-        (s.textContent = e ?? ''),
-        c.appendChild(u),
-        c.appendChild(s),
-        { wrapper: c, input: u }
+        (h.htmlFor = a),
+        (h.className = 'checkbox__label'),
+        (h.textContent = e ?? ''),
+        l.appendChild(s),
+        l.appendChild(h),
+        { wrapper: l, input: s }
     );
 }
-function uS({ checked: a = !1, onChange: t } = {}) {
-    let { wrapper: e, input: r } = fS({
+function bw({ checked: a = !1, onChange: t } = {}) {
+    let { wrapper: e, input: r } = Pw({
         id: 'remember-me',
         name: 'rememberMe',
         label: 'Remember me',
         checked: a,
         className: 'remember-me',
-        onChange: typeof t == 'function' ? d => t(d.target.checked) : void 0,
+        onChange: typeof t == 'function' ? o => t(o.target.checked) : void 0,
     });
     return { wrapper: e, getValue: () => r.checked };
 }
-function cS(a, { onSuccess: t } = {}) {
+function Tw(a, { onSuccess: t } = {}) {
     let e = document.createElement('form');
     ((e.id = 'login-form'), (e.className = 'login-form'), e.setAttribute('novalidate', ''));
     let r = document.createElement('h1');
     ((r.className = 'login-form__title'), (r.textContent = 'Sign in'), e.appendChild(r));
-    let d = document.createElement('p');
-    ((d.className = 'login-form__subtitle'),
-        (d.textContent = 'Access your Student Progress Dashboard'),
-        e.appendChild(d));
-    let o = document.createElement('div');
-    ((o.className = 'login-form__error-banner'),
-        o.setAttribute('role', 'alert'),
-        o.setAttribute('aria-live', 'assertive'),
-        (o.hidden = !0),
+    let o = document.createElement('p');
+    ((o.className = 'login-form__subtitle'),
+        (o.textContent = 'Access your Student Progress Dashboard'),
         e.appendChild(o));
+    let d = document.createElement('div');
+    ((d.className = 'login-form__error-banner'),
+        d.setAttribute('role', 'alert'),
+        d.setAttribute('aria-live', 'assertive'),
+        (d.hidden = !0),
+        e.appendChild(d));
     let {
-        wrapper: l,
-        input: c,
-        setError: u,
-    } = M2({
+        wrapper: p,
+        input: l,
+        setError: s,
+    } = H2({
         id: 'login-email',
         name: 'email',
         type: 'email',
@@ -17612,14 +18041,14 @@ function cS(a, { onSuccess: t } = {}) {
         placeholder: 'student@demo.com',
         required: !0,
         autocomplete: 'email',
-        onChange: () => u(null),
+        onChange: () => s(null),
     });
-    e.appendChild(l);
+    e.appendChild(p);
     let {
-        wrapper: s,
-        input: h,
+        wrapper: h,
+        input: u,
         setError: n,
-    } = M2({
+    } = H2({
         id: 'login-password',
         name: 'password',
         type: 'password',
@@ -17629,47 +18058,47 @@ function cS(a, { onSuccess: t } = {}) {
         autocomplete: 'current-password',
         onChange: () => n(null),
     });
-    e.appendChild(s);
-    let f = uS({ checked: !1 });
-    e.appendChild(f.wrapper);
-    let x = lS({
+    e.appendChild(h);
+    let c = bw({ checked: !1 });
+    e.appendChild(c.wrapper);
+    let i = Lw({
         id: 'login-submit',
         label: 'Sign In',
         variant: 'primary',
         size: 'lg',
         type: 'submit',
     });
-    ((x.className += ' login-form__submit'), e.appendChild(x));
-    let i = hS({
+    ((i.className += ' login-form__submit'), e.appendChild(i));
+    let m = kw({
         onFill: ({ email: M, password: g }) => {
-            ((c.value = M), (h.value = g), u(null), n(null));
+            ((l.value = M), (u.value = g), s(null), n(null));
         },
     });
-    (e.appendChild(i), a.appendChild(e));
-    function p(M) {
-        ((o.textContent = M), (o.hidden = !1));
+    (e.appendChild(m), a.appendChild(e));
+    function f(M) {
+        ((d.textContent = M), (d.hidden = !1));
     }
-    function m() {
-        ((o.textContent = ''), (o.hidden = !0));
+    function x() {
+        ((d.textContent = ''), (d.hidden = !0));
     }
     async function v(M) {
-        (M.preventDefault(), m());
-        let g = c.value.trim(),
-            g2 = h.value,
-            MS = f.getValue(),
-            P = dS({ email: g, password: g2 });
-        if (P) {
-            (P.email && u(P.email),
-                P.password && n(P.password),
-                P.email ? c.focus() : P.password && h.focus());
+        (M.preventDefault(), x());
+        let g = l.value.trim(),
+            V2 = u.value,
+            Fw = c.getValue(),
+            b = Sw({ email: g, password: V2 });
+        if (b) {
+            (b.email && s(b.email),
+                b.password && n(b.password),
+                b.email ? l.focus() : b.password && u.focus());
             return;
         }
-        m2(x, !0);
-        let Y = await H.login({ email: g, password: g2, rememberMe: MS });
-        if ((m2(x, !1), Y.success)) {
-            let vS = jA();
-            typeof t == 'function' && t(Y.user, vS);
-        } else (p(Y.error ?? 'Login failed. Please try again.'), c.focus());
+        S2(i, !0);
+        let ea = await V.login({ email: g, password: V2, rememberMe: Fw });
+        if ((S2(i, !1), ea.success)) {
+            let Ow = ow();
+            typeof t == 'function' && t(ea.user, Ow);
+        } else (f(ea.error ?? 'Login failed. Please try again.'), l.focus());
     }
     return (
         e.addEventListener('submit', v),
@@ -17680,171 +18109,171 @@ function cS(a, { onSuccess: t } = {}) {
         }
     );
 }
-var KS = 'Sign In | Student Progress Tracker';
-function nS(a) {
-    let { isAuthenticated: t, isLoading: e } = H.getState();
+var nS = 'Sign In | Student Progress Tracker';
+function Bw(a) {
+    let { isAuthenticated: t, isLoading: e } = V.getState();
     if (!e && t) return ((window.location.hash = '/dashboard'), { destroy: () => {} });
-    document.title = KS;
+    document.title = nS;
     let r = document.createElement('div');
     ((r.className = 'login-page'), (r.id = 'login-page'));
-    let d = document.createElement('div');
-    ((d.className = 'login-page__hero'), d.setAttribute('aria-hidden', 'true'));
     let o = document.createElement('div');
-    o.className = 'login-page__logo-area';
-    let l = document.createElement('img');
-    ((l.src = '/src/assets/auth/logo.svg'),
-        (l.alt = 'Student Progress Tracker logo'),
-        (l.className = 'login-page__logo'),
-        (l.width = 48),
-        (l.height = 48),
-        (l.onerror = () => {
-            l.style.display = 'none';
+    ((o.className = 'login-page__hero'), o.setAttribute('aria-hidden', 'true'));
+    let d = document.createElement('div');
+    d.className = 'login-page__logo-area';
+    let p = document.createElement('img');
+    ((p.src = '/src/assets/auth/logo.svg'),
+        (p.alt = 'Student Progress Tracker logo'),
+        (p.className = 'login-page__logo'),
+        (p.width = 48),
+        (p.height = 48),
+        (p.onerror = () => {
+            p.style.display = 'none';
         }));
-    let c = document.createElement('span');
-    ((c.className = 'login-page__app-name'),
-        (c.textContent = 'Student Progress Tracker'),
-        o.appendChild(l),
-        o.appendChild(c));
-    let u = document.createElement('p');
-    ((u.className = 'login-page__tagline'),
-        (u.textContent = 'Track your learning journey, one course at a time.'));
-    let s = document.createElement('img');
-    ((s.src = '/src/assets/auth/login.svg'),
-        (s.alt = ''),
-        s.setAttribute('aria-hidden', 'true'),
-        (s.className = 'login-page__illustration'),
-        (s.onerror = () => {
-            s.style.display = 'none';
+    let l = document.createElement('span');
+    ((l.className = 'login-page__app-name'),
+        (l.textContent = 'Student Progress Tracker'),
+        d.appendChild(p),
+        d.appendChild(l));
+    let s = document.createElement('p');
+    ((s.className = 'login-page__tagline'),
+        (s.textContent = 'Track your learning journey, one course at a time.'));
+    let h = document.createElement('img');
+    ((h.src = '/src/assets/auth/login.svg'),
+        (h.alt = ''),
+        h.setAttribute('aria-hidden', 'true'),
+        (h.className = 'login-page__illustration'),
+        (h.onerror = () => {
+            h.style.display = 'none';
         }),
-        d.appendChild(o),
-        d.appendChild(u),
-        d.appendChild(s));
-    let h = document.createElement('div');
-    h.className = 'login-page__form-panel';
+        o.appendChild(d),
+        o.appendChild(s),
+        o.appendChild(h));
+    let u = document.createElement('div');
+    u.className = 'login-page__form-panel';
     let n = document.createElement('div');
     ((n.className = 'login-page__form-card'),
-        h.appendChild(n),
-        r.appendChild(d),
-        r.appendChild(h),
+        u.appendChild(n),
+        r.appendChild(o),
+        r.appendChild(u),
         a.appendChild(r));
-    let f = cS(n, {
-            onSuccess: (i, p) => {
-                window.location.hash = p;
+    let c = Tw(n, {
+            onSuccess: (m, f) => {
+                window.location.hash = f;
             },
         }),
-        x = H.subscribe(({ isAuthenticated: i }) => {
-            i && (window.location.hash = '/dashboard');
+        i = V.subscribe(({ isAuthenticated: m }) => {
+            m && (window.location.hash = '/dashboard');
         });
     return {
         destroy() {
-            (x(),
-                f.destroy(),
+            (i(),
+                c.destroy(),
                 a.contains(r) && a.removeChild(r),
                 (document.title = 'Student Progress Tracker'));
         },
     };
 }
-var v2 = !1;
-function xS() {
+var L2 = !1;
+function Rw() {
     let a = window.matchMedia('(prefers-reduced-motion: reduce)');
-    ((v2 = a.matches),
+    ((L2 = a.matches),
         a.addEventListener('change', t => {
-            ((v2 = t.matches),
+            ((L2 = t.matches),
                 document.documentElement.classList.toggle('reduced-motion', t.matches));
         }),
-        document.documentElement.classList.toggle('reduced-motion', v2));
+        document.documentElement.classList.toggle('reduced-motion', L2));
 }
-var JS = new Map();
-function $S(a) {
-    JS.set(a, window.scrollY);
+var iS = new Map();
+function xS(a) {
+    iS.set(a, window.scrollY);
 }
-function iS() {
+function Dw() {
     ('scrollRestoration' in window.history && (window.history.scrollRestoration = 'manual'),
         window.addEventListener('beforeunload', () => {
-            $S(window.location.pathname);
+            xS(window.location.pathname);
         }));
 }
-function jS() {
-    KA(a => {
+function mS() {
+    tw(a => {
         let t = a?.message || a?.reason?.message || 'An unexpected error occurred.';
-        _A('Error', t);
+        JA('Error', t);
     });
 }
-function QS() {
+function MS() {
     (window.addEventListener('offline', () => {
-        J('Offline', 'You are currently offline. Some features may be unavailable.');
+        Q('Offline', 'You are currently offline. Some features may be unavailable.');
     }),
         window.addEventListener('online', () => {
-            J('Back Online', 'Your internet connection has been restored.');
+            Q('Back Online', 'Your internet connection has been restored.');
         }));
 }
-function YS() {
+function vS() {
     let a = document.querySelector('[data-page-content]');
     a &&
         (document.addEventListener('pathway:route', () => {
             window._pageContent = a;
         }),
         (window._showErrorBoundary = ({ title: t, message: e, onRetry: r } = {}) => {
-            FA(a, { title: t, message: e, onRetry: r });
+            IA(a, { title: t, message: e, onRetry: r });
         }));
 }
-var q = null;
-function aw() {
-    if (q) return;
+var U = null;
+function gS() {
+    if (U) return;
     let a = document.getElementById('auth-root');
     if (!a) return;
     let t = document.querySelector('.app-shell');
-    (t && (t.style.display = 'none'), (a.style.display = ''), (q = nS(a)));
+    (t && (t.style.display = 'none'), (a.style.display = ''), (U = Bw(a)));
 }
-function tw() {
-    q && (q.destroy(), (q = null));
+function yS() {
+    U && (U.destroy(), (U = null));
     let a = document.getElementById('auth-root');
     a && (a.style.display = 'none');
     let t = document.querySelector('.app-shell');
-    t && ((t.style.display = ''), L({ icons: A }));
+    t && ((t.style.display = ''), A({ icons: w }));
 }
-function ew() {
-    H.subscribe(({ isAuthenticated: t, isLoading: e }) => {
-        e || (t ? tw() : aw());
+function CS() {
+    V.subscribe(({ isAuthenticated: t, isLoading: e }) => {
+        e || (t ? yS() : gS());
     });
     let a = document.querySelector('.profile-dropdown-item--danger');
     a &&
         a.addEventListener('click', () => {
-            (H.logout(), J('Signed Out', 'You have been signed out successfully.'));
+            (V.logout(), Q('Signed Out', 'You have been signed out successfully.'));
         });
 }
-function rw() {
+function AS() {
     let a = document.querySelector('[data-page-content]');
     a &&
         (document.addEventListener('pathway:route', () => {
-            f2(a);
+            i2(a);
         }),
         (window._removePageSkeletons = () => {
-            f2(a);
+            i2(a);
         }));
 }
-function ow() {
+function wS() {
     document.querySelectorAll('.icon-button, .action-btn-circle').forEach(a => {
         let t = a.getAttribute('aria-label') || a.querySelector('.nav-label')?.textContent?.trim();
-        t && NA(a, { content: t, position: 'bottom' });
+        t && jA(a, { content: t, position: 'bottom' });
     });
 }
-function dw() {
+function SS() {
     let a = document.querySelector('[data-page-content]');
     a &&
         (document.addEventListener('pathway:route', () => {
-            (L({ icons: A }), a.querySelector('.route-placeholder, .settings-page'));
+            (A({ icons: w }), a.querySelector('.route-placeholder, .settings-page'));
         }),
         (window._showEmptyState = t => {
-            let e = RA(t);
-            ((a.innerHTML = ''), a.appendChild(e), L({ icons: A }));
+            let e = j(t);
+            ((a.innerHTML = ''), a.appendChild(e), A({ icons: w }));
         }),
         (window._showModal = t => {
-            let e = h2(t);
-            return (L({ icons: A }), e);
+            let e = n2(t);
+            return (A({ icons: w }), e);
         }),
         document.querySelector('[data-notification-clear]')?.addEventListener('click', () => {
-            h2({
+            n2({
                 title: 'Clear Notifications',
                 body: 'Mark all notifications as read?',
                 footer: '<button class="btn btn--primary" data-confirm-clear>Clear all</button>',
@@ -17852,17 +18281,18 @@ function dw() {
             });
         }));
 }
-async function mS() {
-    (xS(), iS(), jS(), QS(), YS(), ew(), rw(), ow(), dw(), L({ icons: A }));
-    let a = EA({ size: 'lg', label: 'Loading application...' });
+async function Ew() {
+    (Rw(), Dw(), mS(), MS(), vS(), CS(), AS(), wS(), SS(), A({ icons: w }));
+    let a = GA({ size: 'lg', label: 'Loading application...' });
     ((a.style.cssText =
         'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;'),
         document.body.appendChild(a),
-        await H.restoreSession(),
-        await tS(),
+        await V.restoreSession(),
+        await sw(),
+        ww(),
         a.parentNode && a.parentNode.removeChild(a));
     let t = document.querySelector('.app-shell');
-    (t && t.classList.add('app--ready'), L({ icons: A }));
+    (t && t.classList.add('app--ready'), A({ icons: w }));
 }
-document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', mS) : mS();
+document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', Ew) : Ew();
 //# sourceMappingURL=/main.js.map
