@@ -35,26 +35,9 @@ await build({
     define: {
         'import.meta.env.DEV': 'false',
         'import.meta.env.PROD': 'true',
-        'import.meta.env.VITE_APP_NAME': '"Student Progress Tracker"',
-        'import.meta.env.VITE_APP_VERSION': '"0.1.0"',
-        'import.meta.env.VITE_APP_ENV': '"production"',
         'import.meta.env.VITE_API_URL': '"https://api.example.com/api"',
-        'import.meta.env.VITE_API_BASE_URL': '"https://api.example.com/api"',
-        'import.meta.env.VITE_API_TIMEOUT': '"10000"',
+        'import.meta.env.VITE_ENABLE_MOCK_API': '"false"',
         'import.meta.env.VITE_API_MOCK_ENABLED': '"false"',
-        'import.meta.env.VITE_AUTH_TOKEN_KEY': '"student_tracker_auth"',
-        'import.meta.env.VITE_AUTH_REDIRECT_KEY': '"student_tracker_redirect"',
-        'import.meta.env.VITE_AUTH_REMEMBER_DAYS': '"30"',
-        'import.meta.env.VITE_SESSION_TIMEOUT_MINUTES': '"60"',
-        'import.meta.env.VITE_ENABLE_MOCK_API': process.env.VITE_ENABLE_MOCK_API
-            ? '"true"'
-            : '"false"',
-        'import.meta.env.VITE_ENABLE_PWA': '"true"',
-        'import.meta.env.VITE_ENABLE_ANALYTICS': '"true"',
-        'import.meta.env.VITE_ENABLE_NOTIFICATIONS': '"true"',
-        'import.meta.env.VITE_CACHE_TTL_SECONDS': '"3600"',
-        'import.meta.env.VITE_CHART_ANIMATION_DURATION': '"750"',
-        'import.meta.env.VITE_CHART_RESPONSIVE': '"true"',
     },
     treeShaking: true,
     legalComments: 'none',
@@ -86,7 +69,7 @@ if (existsSync(resolve(publicDir, 'assets'))) {
 // Copy standalone source files referenced by index.html
 const srcDir = resolve(rootDir, 'src');
 copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(distDir, 'style.css'));
-copyFileSync(resolve(publicDir, 'script.js'), resolve(distDir, 'script.js'));
+copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(distDir, 'script.js'));
 
 // Copy standalone JS files from public root
 if (existsSync(resolve(publicDir, 'attendance.js'))) {

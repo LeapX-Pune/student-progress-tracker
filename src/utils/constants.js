@@ -17,7 +17,7 @@
 /** Hash-router path constants used across the application. */
 export const ROUTES = /** @type {const} */ ({
     LOGIN: '/login',
-    DASHBOARD: '/overview',
+    DASHBOARD: '/dashboard',
     NOT_FOUND: '/404',
 });
 
@@ -54,32 +54,6 @@ export const API_ENDPOINTS = /** @type {const} */ ({
 
 /** Authentication-specific constants. */
 export const AUTH_CONSTANTS = /** @type {const} */ ({
-    DEMO_STUDENT: {
-        id: 'stu_001',
-        studentId: 'STU-2024-001',
-        name: 'Alex Johnson',
-        email: 'student@demo.com',
-        password: 'demo123',
-        role: 'student',
-        avatar: 'https://i.pravatar.cc/150?u=stu_001',
-        avatarUrl: 'https://i.pravatar.cc/150?u=stu_001',
-        class: 'Class 10-A',
-        rollNumber: '24',
-        status: 'active',
-    },
-    DEMO_TEACHER: {
-        id: 'tch_001',
-        teacherId: 'TCH-2024-001',
-        name: 'Dr. Sarah Jenkins',
-        email: 'teacher@demo.com',
-        password: 'teacher123',
-        role: 'teacher',
-        avatar: 'https://i.pravatar.cc/150?u=tch_001',
-        avatarUrl: 'https://i.pravatar.cc/150?u=tch_001',
-        department: 'Mathematics & Computer Science',
-        designation: 'Senior Educator',
-        status: 'active',
-    },
     DEMO_EMAIL: 'student@demo.com',
     DEMO_PASSWORD: 'demo123',
 
