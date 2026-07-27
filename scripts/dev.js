@@ -93,31 +93,20 @@ const ctx = await context({
         'import.meta.env.VITE_APP_NAME': '"Student Progress Tracker"',
         'import.meta.env.VITE_APP_VERSION': '"0.1.0"',
         'import.meta.env.VITE_APP_ENV': '"development"',
-        'import.meta.env.VITE_API_TIMEOUT': '"10000"',
-        'import.meta.env.VITE_API_MOCK_ENABLED': '"true"',
+        'import.meta.env.VITE_API_TIMEOUT': '10000',
         'import.meta.env.VITE_AUTH_TOKEN_KEY': '"student_tracker_auth"',
         'import.meta.env.VITE_AUTH_REDIRECT_KEY': '"student_tracker_redirect"',
-        'import.meta.env.VITE_AUTH_REMEMBER_DAYS': '"30"',
-        'import.meta.env.VITE_SESSION_TIMEOUT_MINUTES': '"60"',
-        'import.meta.env.VITE_ENABLE_MOCK_API': '"true"',
-        'import.meta.env.VITE_ENABLE_PWA': '"false"',
-        'import.meta.env.VITE_ENABLE_ANALYTICS': '"false"',
-        'import.meta.env.VITE_ENABLE_NOTIFICATIONS': '"true"',
-        'import.meta.env.VITE_CACHE_TTL_SECONDS': '"300"',
-        'import.meta.env.VITE_CHART_ANIMATION_DURATION': '"750"',
-        'import.meta.env.VITE_CHART_RESPONSIVE': '"true"',
+        'import.meta.env.VITE_AUTH_REMEMBER_DAYS': '30',
+        'import.meta.env.VITE_ENABLE_MOCK_API': '"false"',
+        'import.meta.env.VITE_API_MOCK_ENABLED': '"false"',
+        'import.meta.env.VITE_ENABLE_PWA': 'false',
+        'import.meta.env.VITE_ENABLE_ANALYTICS': 'false',
+        'import.meta.env.VITE_ENABLE_NOTIFICATIONS': 'true',
+        'import.meta.env.VITE_CHART_ANIMATION_DURATION': '750',
+        'import.meta.env.VITE_CHART_RESPONSIVE': 'true',
+        'import.meta.env.VITE_SESSION_TIMEOUT_MINUTES': '60',
+        'import.meta.env.VITE_CACHE_TTL_SECONDS': '300',
     },
-    plugins: [
-        {
-            name: 'watch-plugin',
-            setup(build) {
-                build.onEnd(result => {
-                    if (result.errors.length > 0) console.error('Rebuild failed:', result.errors);
-                    else console.log('Rebuild complete');
-                });
-            },
-        },
-    ],
 });
 
 await ctx.watch();
