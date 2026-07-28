@@ -54,7 +54,7 @@ export const API_ENDPOINTS = /** @type {const} */ ({
 
 /** Authentication-specific constants. */
 export const AUTH_CONSTANTS = /** @type {const} */ ({
-    DEMO_EMAIL: 'student@demo.com',
+    DEMO_EMAIL: 'alex@student.edu',
     DEMO_PASSWORD: 'demo123',
 
     /** 30-day token lifetime in milliseconds. */
