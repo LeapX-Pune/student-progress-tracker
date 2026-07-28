@@ -235,8 +235,8 @@ export class ApiService {
         if (requestKey) {
             this.pendingRequests.set(requestKey, requestPromise);
             // Ensure we clean up if race resolves before finally block
-            // eslint-disable-next-line promise/catch-or-return
-            requestPromise.finally(() => this.pendingRequests.delete(requestKey));
+
+            requestPromise.finally(() => this.pendingRequests.delete(requestKey)).catch(() => {}); // Prevent unhandled rejection on this detached branch
         }
 
         return requestPromise;
