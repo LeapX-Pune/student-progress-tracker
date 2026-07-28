@@ -20,9 +20,6 @@ function copyAsset(src, dest) {
 
 // Copy standalone source files referenced by index.html for dev server
 copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
-if (existsSync(resolve(srcDir, 'pages', 'script.js'))) {
-    copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(publicDir, 'script.js'));
-}
 
 // Start JSON Server mock API
 const mockApi = spawn(
@@ -44,7 +41,6 @@ if (!existsSync(publicDir)) mkdirSync(publicDir, { recursive: true });
 
 // Copy assets needed by index.html
 copyAsset(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
-copyAsset(resolve(srcDir, 'pages', 'script.js'), resolve(publicDir, 'script.js'));
 
 // Copy assets needed by standalone HTML pages
 copyAsset(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(publicDir, 'dashboard.css'));

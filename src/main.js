@@ -1,4 +1,5 @@
 import './styles/main.css';
+import './dashboard/dashboard.css';
 import { createIcons, icons } from 'lucide';
 import { createEmptyState } from './components/EmptyState.js';
 import { withErrorBoundary } from './components/ErrorBoundary.js';
