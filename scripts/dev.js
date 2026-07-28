@@ -1,5 +1,5 @@
 import { context } from 'esbuild';
-import { copyFileSync, existsSync, mkdirSync } from 'fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
@@ -8,6 +8,20 @@ const __dirname = dirname(__filename);
 const rootDir = resolve(__dirname, '..');
 const publicDir = resolve(rootDir, 'public');
 const srcDir = resolve(rootDir, 'src');
+
+function copyDir(src, dest) {
+    if (!existsSync(dest)) mkdirSync(dest, { recursive: true });
+    const entries = readdirSync(src);
+    for (const file of entries) {
+        const srcFile = resolve(src, file);
+        const destFile = resolve(dest, file);
+        if (statSync(srcFile).isDirectory()) {
+            copyDir(srcFile, destFile);
+        } else {
+            copyFileSync(srcFile, destFile);
+        }
+    }
+}
 
 function copyAsset(src, dest) {
     if (existsSync(src)) {
@@ -45,6 +59,11 @@ copyAsset(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'
 // Copy assets needed by standalone HTML pages
 copyAsset(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(publicDir, 'dashboard.css'));
 copyAsset(resolve(srcDir, 'dashboard', 'dashboard.js'), resolve(publicDir, 'dashboard.js'));
+
+// Copy auth assets (SVG, images) from src/assets to public/assets for dev server
+if (existsSync(resolve(srcDir, 'assets'))) {
+    copyDir(resolve(srcDir, 'assets'), resolve(publicDir, 'assets'));
+}
 
 // esbuild watch mode
 const ctx = await context({
