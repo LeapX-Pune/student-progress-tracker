@@ -187,6 +187,41 @@ export class ApiService {
                         `[API Response] ${method} ${url} (${response.status}) took ${Date.now() - requestStartTime}ms`
                     );
                 }
+
+                if (options.onDownloadProgress && response.body) {
+                    const contentLength = response.headers.get('content-length');
+                    const total = contentLength ? parseInt(contentLength, 10) : 0;
+                    let loaded = 0;
+
+                    const reader = response.body.getReader();
+                    const chunks = [];
+
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+
+                        if (value) {
+                            loaded += value.length;
+                            chunks.push(value);
+                        }
+
+                        if (total) {
+                            options.onDownloadProgress({ loaded, total, progress: loaded / total });
+                        } else {
+                            options.onDownloadProgress({ loaded, total: 0, progress: 0 }); // Indeterminate
+                        }
+                    }
+
+                    const blob = new window.Blob(chunks);
+                    const newResponse = new Response(blob, {
+                        status: response.status,
+                        statusText: response.statusText,
+                        headers: response.headers,
+                    });
+
+                    return await this._responseInterceptor(newResponse);
+                }
+
                 return await this._responseInterceptor(response);
             })
             .catch(error => {
