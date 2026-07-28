@@ -1,6 +1,9 @@
 /* global DOMParser */
 
 // Dashboard theme and live data synchronization
+let progressChartInstance = null;
+let weeklyProgressData = [];
+
 /**
  *
  */
@@ -9,6 +12,10 @@ function applyTheme() {
         document.body.classList.add('dark');
     } else {
         document.body.classList.remove('dark');
+    }
+    // Re-render chart if data exists to apply updated colors (grid, text)
+    if (weeklyProgressData && weeklyProgressData.length > 0) {
+        renderWeeklyProgressChart(weeklyProgressData);
     }
 }
 
@@ -95,6 +102,13 @@ const DEFAULT_MOCK_COURSES = [
         term: 'Fall 2023',
         lastAccessedAt: '2023-12-15T09:00:00Z',
     },
+];
+
+const DEFAULT_WEEKLY_PROGRESS = [
+    { week: 1, dateRange: 'Jan 8-14', cumulative: 15 },
+    { week: 2, dateRange: 'Jan 15-21', cumulative: 37 },
+    { week: 3, dateRange: 'Jan 22-28', cumulative: 67 },
+    { week: 4, dateRange: 'Jan 29-Feb 4', cumulative: 105 },
 ];
 
 /**
@@ -283,7 +297,7 @@ async function updateLiveAttendance() {
             // Update the UI
             const progressTextEl = document.querySelector('.progress-text');
             if (progressTextEl) {
-                progressTextEl.textContent = avgAttendance;
+                progressTextEl.innerHTML = `<span style="font-size: 0.6rem; font-weight: 600; display: block; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1;">Att.</span><span style="font-size: 0.85rem; font-weight: 800; display: block; margin-top: 0.1rem;">${avgAttendance}</span>`;
             }
 
             const progressValue = parseFloat(avgAttendance);
@@ -303,9 +317,95 @@ async function updateLiveAttendance() {
     }
 }
 
+/**
+ *
+ */
+async function loadWeeklyProgress() {
+    const apiBaseUrl = 'http://localhost:3001/api';
+    try {
+        const response = await fetch(`${apiBaseUrl}/weeklyProgress`);
+        if (response.ok) {
+            weeklyProgressData = await response.json();
+        }
+    } catch (e) {
+        console.error('Failed to fetch weekly progress:', e);
+    }
+
+    if (!weeklyProgressData || weeklyProgressData.length === 0) {
+        weeklyProgressData = DEFAULT_WEEKLY_PROGRESS;
+    }
+
+    renderWeeklyProgressChart(weeklyProgressData);
+}
+
+/**
+ *
+ */
+function renderWeeklyProgressChart(progressData) {
+    const ctx = document.getElementById('weeklyProgressChart');
+    if (!ctx) return;
+
+    if (progressChartInstance) {
+        progressChartInstance.destroy();
+    }
+
+    const isDark = document.body.classList.contains('dark');
+    const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(226, 232, 240, 0.8)';
+    const textColor = isDark ? '#94a3b8' : '#64748b';
+
+    const labels = progressData.map(d => `Week ${d.week}`);
+    const data = progressData.map(d => d.cumulative);
+
+    progressChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'Cumulative Progress',
+                    data,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#3b82f6',
+                    pointHoverRadius: 6,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: isDark ? '#1e293b' : '#121824',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    padding: 10,
+                    cornerRadius: 8,
+                },
+            },
+            scales: {
+                y: {
+                    grid: { color: gridColor },
+                    ticks: { color: textColor, font: { family: 'Inter' } },
+                    title: { display: true, text: 'Progress (cumulative)', color: textColor },
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: textColor, font: { family: 'Inter' } },
+                },
+            },
+        },
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Dashboard loaded');
     applyTheme();
     loadStudentData();
     updateLiveAttendance();
+    loadWeeklyProgress();
 });
