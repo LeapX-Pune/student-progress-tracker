@@ -1,6 +1,8 @@
+import { API_ENDPOINTS } from '../utils/constants.js';
 import { getConfig, isDevelopment } from '../utils/env.js';
 import { normalizeApiError } from '../utils/errors.js';
 import { getAuthToken } from './authStorage.js';
+import { setupMockServer } from './mock.js';
 
 let mockHandlers = null;
 
@@ -8,12 +10,16 @@ let mockHandlers = null;
  *
  */
 export async function initApi() {
+    console.log('[API] Initializing API...');
     try {
         const config = getConfig();
+        console.log('[API] Config:', config);
 
         if (config.apiMockEnabled) {
-            const { setupMockServer } = await import('./mock.js');
+            console.log('[API] Mock API is enabled, setting up server...');
             mockHandlers = setupMockServer();
+        } else {
+            console.log('[API] Mock API is disabled.');
         }
     } catch (err) {
         console.warn('[API] Failed to initialize mock server:', err);
@@ -312,9 +318,10 @@ export const api = new ApiService();
  */
 export async function getCourses(studentId) {
     try {
-        const { API_ENDPOINTS } = await import('../utils/constants.js');
-        return await api.get(API_ENDPOINTS.STUDENT_COURSES(studentId));
+        const result = await api.get(API_ENDPOINTS.STUDENT_COURSES(studentId));
+        return result;
     } catch (err) {
+        console.error('[API] getCourses error:', err);
         throw {
             code: err.code || 'UNKNOWN',
             message: err.message || 'Failed to fetch courses',
