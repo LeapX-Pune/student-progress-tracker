@@ -267,112 +267,120 @@
 
         if (routeKey === 'grades') {
             pageContent.innerHTML = `
-        <div class="grades-dashboard">
+        <div class="grades-dashboard" role="region" aria-label="Grades dashboard with performance charts">
             <header class="grades-header">
-                <h1>Grades</h1>
+                <h1 id="grades-heading">Grades</h1>
                 <p>Track your academic performance across quizzes, assignments, weekly progress, and attendance.</p>
             </header>
 
-            <div class="charts-grid">
+            <div class="charts-grid" role="list" aria-labelledby="grades-heading">
 
-                <article class="chart-card">
-                    <h3 class="chart-title">Quiz Scores</h3>
-                    <p class="chart-subtitle">Your scores across all quizzes taken.</p>
-                    <div class="chart-container">
-                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
-                        <div class="loading-state">
-                            <div class="skeleton skeleton-title"></div>
-                            <div class="skeleton skeleton-subtitle"></div>
-                            <div class="skeleton skeleton-chart"></div>
-                            <div class="skeleton skeleton-legend"></div>
+                <article class="chart-card" role="listitem" id="chart-quiz" tabindex="0" aria-labelledby="quiz-title" aria-describedby="quiz-desc">
+                    <h3 class="chart-title" id="quiz-title">Quiz Scores</h3>
+                    <p class="chart-subtitle" id="quiz-desc">Your scores across all quizzes taken.</p>
+                    <div class="chart-container" role="img" aria-label="Bar chart showing quiz scores: Quiz 1 85%, Quiz 2 92%, Quiz 3 76%, Quiz 4 98%, Quiz 5 88%">
+                        <div class="chart-placeholder-text" aria-hidden="true">Chart.js charts displayed here</div>
+                        <div class="loading-state" role="status" aria-live="polite">
+                            <span class="sr-only">Loading quiz scores chart</span>
+                            <div class="skeleton skeleton-title" aria-hidden="true"></div>
+                            <div class="skeleton skeleton-subtitle" aria-hidden="true"></div>
+                            <div class="skeleton skeleton-chart" aria-hidden="true"></div>
+                            <div class="skeleton skeleton-legend" aria-hidden="true"></div>
                         </div>
-                        <div class="error-state">
-                            <span class="state-icon">&#9888;&#65039;</span>
+                        <div class="error-state" role="alert" aria-live="assertive">
+                            <span class="state-icon" aria-hidden="true">&#9888;&#65039;</span>
                             <h4>Failed to Load Chart</h4>
                             <p>Something went wrong while fetching quiz scores.</p>
-                            <button class="retry-btn">Retry</button>
+                            <button class="retry-btn" aria-label="Retry loading quiz scores chart">Retry</button>
                         </div>
-                        <div class="empty-state">
-                            <span class="state-icon">&#128202;</span>
+                        <div class="empty-state" role="status">
+                            <span class="state-icon" aria-hidden="true">&#128202;</span>
                             <h4>No Quiz Data</h4>
                             <p>You haven't taken any quizzes yet.</p>
                         </div>
                     </div>
+                    <p class="sr-only" aria-live="polite" data-chart-status="quiz"></p>
                 </article>
 
-                <article class="chart-card">
-                    <h3 class="chart-title">Assignment Performance</h3>
-                    <p class="chart-subtitle">Grades earned on submitted assignments.</p>
-                    <div class="chart-container">
-                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
-                        <div class="loading-state">
-                            <div class="skeleton skeleton-title"></div>
-                            <div class="skeleton skeleton-subtitle"></div>
-                            <div class="skeleton skeleton-chart"></div>
-                            <div class="skeleton skeleton-legend"></div>
+                <article class="chart-card" role="listitem" id="chart-assignment" tabindex="0" aria-labelledby="assignment-title" aria-describedby="assignment-desc">
+                    <h3 class="chart-title" id="assignment-title">Assignment Performance</h3>
+                    <p class="chart-subtitle" id="assignment-desc">Grades earned on submitted assignments.</p>
+                    <div class="chart-container" role="img" aria-label="Doughnut chart showing assignment grades: Grade A 40%, Grade B 30%, Grade C 15%, Grade D 10%, Grade F 5%">
+                        <div class="chart-placeholder-text" aria-hidden="true">Chart.js charts displayed here</div>
+                        <div class="loading-state" role="status" aria-live="polite">
+                            <span class="sr-only">Loading assignment performance chart</span>
+                            <div class="skeleton skeleton-title" aria-hidden="true"></div>
+                            <div class="skeleton skeleton-subtitle" aria-hidden="true"></div>
+                            <div class="skeleton skeleton-chart" aria-hidden="true"></div>
+                            <div class="skeleton skeleton-legend" aria-hidden="true"></div>
                         </div>
-                        <div class="error-state">
-                            <span class="state-icon">&#9888;&#65039;</span>
+                        <div class="error-state" role="alert" aria-live="assertive">
+                            <span class="state-icon" aria-hidden="true">&#9888;&#65039;</span>
                             <h4>Failed to Load Chart</h4>
                             <p>Something went wrong while fetching assignment data.</p>
-                            <button class="retry-btn">Retry</button>
+                            <button class="retry-btn" aria-label="Retry loading assignment performance chart">Retry</button>
                         </div>
-                        <div class="empty-state">
-                            <span class="state-icon">&#128202;</span>
+                        <div class="empty-state" role="status">
+                            <span class="state-icon" aria-hidden="true">&#128202;</span>
                             <h4>No Assignments</h4>
                             <p>No assignment submissions found yet.</p>
                         </div>
                     </div>
+                    <p class="sr-only" aria-live="polite" data-chart-status="assignment"></p>
                 </article>
 
-                <article class="chart-card">
-                    <h3 class="chart-title">Weekly Progress</h3>
-                    <p class="chart-subtitle">Your learning progress tracked week by week.</p>
-                    <div class="chart-container">
-                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
-                        <div class="loading-state">
-                            <div class="skeleton skeleton-title"></div>
-                            <div class="skeleton skeleton-subtitle"></div>
-                            <div class="skeleton skeleton-chart"></div>
-                            <div class="skeleton skeleton-legend"></div>
+                <article class="chart-card" role="listitem" id="chart-weekly" tabindex="0" aria-labelledby="weekly-title" aria-describedby="weekly-desc">
+                    <h3 class="chart-title" id="weekly-title">Weekly Progress</h3>
+                    <p class="chart-subtitle" id="weekly-desc">Your learning progress tracked week by week.</p>
+                    <div class="chart-container" role="img" aria-label="Line chart showing weekly progress: Assignments Completed from 60% to 96%, Attendance from 90% to 98% over 6 weeks">
+                        <div class="chart-placeholder-text" aria-hidden="true">Chart.js charts displayed here</div>
+                        <div class="loading-state" role="status" aria-live="polite">
+                            <span class="sr-only">Loading weekly progress chart</span>
+                            <div class="skeleton skeleton-title" aria-hidden="true"></div>
+                            <div class="skeleton skeleton-subtitle" aria-hidden="true"></div>
+                            <div class="skeleton skeleton-chart" aria-hidden="true"></div>
+                            <div class="skeleton skeleton-legend" aria-hidden="true"></div>
                         </div>
-                        <div class="error-state">
-                            <span class="state-icon">&#9888;&#65039;</span>
+                        <div class="error-state" role="alert" aria-live="assertive">
+                            <span class="state-icon" aria-hidden="true">&#9888;&#65039;</span>
                             <h4>Failed to Load Chart</h4>
                             <p>Something went wrong while fetching weekly progress.</p>
-                            <button class="retry-btn">Retry</button>
+                            <button class="retry-btn" aria-label="Retry loading weekly progress chart">Retry</button>
                         </div>
-                        <div class="empty-state">
-                            <span class="state-icon">&#128202;</span>
+                        <div class="empty-state" role="status">
+                            <span class="state-icon" aria-hidden="true">&#128202;</span>
                             <h4>No Progress Data</h4>
                             <p>Weekly progress will appear here once you start.</p>
                         </div>
                     </div>
+                    <p class="sr-only" aria-live="polite" data-chart-status="weekly"></p>
                 </article>
 
-                <article class="chart-card chart-card--full">
-                    <h3 class="chart-title">Attendance Percentage</h3>
-                    <p class="chart-subtitle">Your attendance rate across all sessions.</p>
-                    <div class="chart-container">
-                        <div class="chart-placeholder-text">Chart.js charts displayed here</div>
-                        <div class="loading-state">
-                            <div class="skeleton skeleton-title"></div>
-                            <div class="skeleton skeleton-subtitle"></div>
-                            <div class="skeleton skeleton-chart"></div>
-                            <div class="skeleton skeleton-legend"></div>
+                <article class="chart-card chart-card--full" role="listitem" id="chart-attendance" tabindex="0" aria-labelledby="attendance-title" aria-describedby="attendance-desc">
+                    <h3 class="chart-title" id="attendance-title">Attendance Percentage</h3>
+                    <p class="chart-subtitle" id="attendance-desc">Your attendance rate across all sessions.</p>
+                    <div class="chart-container" role="img" aria-label="Bar chart showing attendance percentage: Week 1 90%, Week 2 92%, Week 3 88%, Week 4 94%, Week 5 96%, Week 6 98%">
+                        <div class="chart-placeholder-text" aria-hidden="true">Chart.js charts displayed here</div>
+                        <div class="loading-state" role="status" aria-live="polite">
+                            <span class="sr-only">Loading attendance chart</span>
+                            <div class="skeleton skeleton-title" aria-hidden="true"></div>
+                            <div class="skeleton skeleton-subtitle" aria-hidden="true"></div>
+                            <div class="skeleton skeleton-chart" aria-hidden="true"></div>
+                            <div class="skeleton skeleton-legend" aria-hidden="true"></div>
                         </div>
-                        <div class="error-state">
-                            <span class="state-icon">&#9888;&#65039;</span>
+                        <div class="error-state" role="alert" aria-live="assertive">
+                            <span class="state-icon" aria-hidden="true">&#9888;&#65039;</span>
                             <h4>Failed to Load Chart</h4>
                             <p>Something went wrong while fetching attendance data.</p>
-                            <button class="retry-btn">Retry</button>
+                            <button class="retry-btn" aria-label="Retry loading attendance chart">Retry</button>
                         </div>
-                        <div class="empty-state">
-                            <span class="state-icon">&#128202;</span>
+                        <div class="empty-state" role="status">
+                            <span class="state-icon" aria-hidden="true">&#128202;</span>
                             <h4>No Attendance Data</h4>
                             <p>Attendance records will show up here.</p>
                         </div>
                     </div>
+                    <p class="sr-only" aria-live="polite" data-chart-status="attendance"></p>
                 </article>
 
             </div>
@@ -673,7 +681,7 @@
         if (ls) ls.style.display = 'none';
         if (es) es.style.display = 'none';
         if (ems) ems.style.display = 'none';
-        if (ph) ph.style.display = 'none';
+        if (ph) ph.style.display = 'flex';
     }
 
     /**
@@ -683,7 +691,27 @@
         const containers = document.querySelectorAll('.chart-container');
         if (!containers.length) return;
 
-        // Chart definitions keyed by card title
+        const sharedTooltip = {
+            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+            titleColor: '#f1f5f9',
+            bodyColor: '#e2e8f0',
+            borderColor: 'rgba(99, 102, 241, 0.3)',
+            borderWidth: 1,
+            cornerRadius: 10,
+            padding: { top: 10, bottom: 10, left: 14, right: 14 },
+            titleFont: { size: 13, weight: '600' },
+            bodyFont: { size: 12 },
+            bodySpacing: 6,
+            boxPadding: 4,
+            usePointStyle: true,
+            caretSize: 6,
+            caretPadding: 8,
+            shadowBlur: 12,
+            shadowOffsetX: 0,
+            shadowOffsetY: 4,
+            shadowColor: 'rgba(0, 0, 0, 0.25)',
+        };
+
         const chartDefs = [
             {
                 title: 'Quiz Scores',
@@ -696,6 +724,13 @@
                             label: 'Score (%)',
                             data: [85, 92, 76, 98, 88],
                             backgroundColor: [
+                                'rgba(79, 70, 229, 0.85)',
+                                'rgba(59, 130, 246, 0.85)',
+                                'rgba(16, 185, 129, 0.85)',
+                                'rgba(245, 158, 11, 0.85)',
+                                'rgba(239, 68, 68, 0.85)',
+                            ],
+                            hoverBackgroundColor: [
                                 '#4F46E5',
                                 '#3B82F6',
                                 '#10B981',
@@ -710,15 +745,15 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: { duration: 800, easing: 'easeOutQuart' },
                     plugins: {
                         legend: { display: false },
                         title: { display: false },
                         tooltip: {
+                            ...sharedTooltip,
                             callbacks: {
-                                /**
-                                 *
-                                 */
-                                label: ctx => `Score: ${ctx.raw}%`,
+                                title: items => items[0]?.label || '',
+                                label: ctx => ' Score: ' + ctx.raw + '%',
                             },
                         },
                     },
@@ -726,19 +761,19 @@
                         y: {
                             beginAtZero: true,
                             max: 100,
+                            grid: { color: 'rgba(148, 163, 184, 0.08)' },
                             ticks: {
-                                font: { size: 11 } /**
-                                 *
-                                 */,
-                                /**
-                                 *
-                                 */
-                                callback: v => v + '%',
+                                font: { size: 11 },
+                                callback: function (v) {
+                                    return v + '%';
+                                },
+                                color: '#94a3b8',
                             },
                             title: { display: false },
                         },
                         x: {
-                            ticks: { font: { size: 11 }, maxRotation: 0 },
+                            grid: { display: false },
+                            ticks: { font: { size: 11 }, maxRotation: 0, color: '#94a3b8' },
                             title: { display: false },
                         },
                     },
@@ -754,15 +789,22 @@
                         {
                             data: [40, 30, 15, 10, 5],
                             backgroundColor: [
+                                'rgba(34, 197, 94, 0.85)',
+                                'rgba(59, 130, 246, 0.85)',
+                                'rgba(250, 204, 21, 0.85)',
+                                'rgba(249, 115, 22, 0.85)',
+                                'rgba(239, 68, 68, 0.85)',
+                            ],
+                            hoverBackgroundColor: [
                                 '#22C55E',
                                 '#3B82F6',
                                 '#FACC15',
                                 '#F97316',
                                 '#EF4444',
                             ],
-                            borderColor: '#1e293b',
-                            borderWidth: 3,
-                            hoverOffset: 15,
+                            borderColor: 'rgba(15, 23, 42, 0.6)',
+                            borderWidth: 2,
+                            hoverOffset: 12,
                         },
                     ],
                 },
@@ -771,6 +813,7 @@
                     maintainAspectRatio: false,
                     cutout: '65%',
                     layout: { padding: 10 },
+                    animation: { animateRotate: true, duration: 1000, easing: 'easeOutQuart' },
                     plugins: {
                         title: { display: false },
                         legend: {
@@ -779,20 +822,28 @@
                             labels: {
                                 usePointStyle: true,
                                 pointStyle: 'circle',
-                                boxWidth: 12,
-                                padding: 16,
+                                boxWidth: 10,
+                                padding: 14,
                                 font: { size: 12 },
                                 color: '#94a3b8',
                             },
                         },
                         tooltip: {
+                            ...sharedTooltip,
                             callbacks: {
-                                /**
-                                 *
-                                 */
-                                label(ctx) {
-                                    const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                                    return `${ctx.label}: ${ctx.raw} (${((ctx.raw / total) * 100).toFixed(1)}%)`;
+                                label: function (ctx) {
+                                    var total = ctx.dataset.data.reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+                                    return (
+                                        ' ' +
+                                        ctx.label +
+                                        ': ' +
+                                        ctx.raw +
+                                        ' (' +
+                                        ((ctx.raw / total) * 100).toFixed(1) +
+                                        '%)'
+                                    );
                                 },
                             },
                         },
@@ -810,11 +861,14 @@
                             label: 'Assignments Completed',
                             data: [60, 68, 75, 82, 90, 96],
                             borderColor: '#4F46E5',
-                            backgroundColor: 'rgba(79,70,229,0.15)',
+                            backgroundColor: 'rgba(79, 70, 229, 0.1)',
                             borderWidth: 3,
-                            pointRadius: 5,
+                            pointRadius: 4,
                             pointHoverRadius: 7,
                             pointBackgroundColor: '#4F46E5',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointHoverBorderWidth: 3,
                             tension: 0.4,
                             fill: true,
                         },
@@ -822,34 +876,45 @@
                             label: 'Attendance',
                             data: [90, 92, 88, 94, 96, 98],
                             borderColor: '#10B981',
-                            backgroundColor: 'rgba(16,185,129,0.15)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.05)',
                             borderWidth: 3,
-                            pointRadius: 5,
+                            pointRadius: 4,
                             pointHoverRadius: 7,
                             pointBackgroundColor: '#10B981',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointHoverBorderWidth: 3,
                             tension: 0.4,
-                            fill: false,
+                            fill: true,
                         },
                     ],
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: { duration: 900, easing: 'easeOutQuart' },
+                    interaction: { intersect: false, mode: 'index' },
                     plugins: {
                         legend: {
                             position: 'top',
-                            labels: { color: '#94a3b8', font: { size: 13, weight: 'bold' } },
+                            labels: {
+                                color: '#94a3b8',
+                                font: { size: 12, weight: '600' },
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                boxWidth: 8,
+                                padding: 16,
+                            },
                         },
                         tooltip: {
-                            backgroundColor: '#111827',
-                            titleColor: '#ffffff',
-                            bodyColor: '#ffffff',
-                            padding: 12,
+                            ...sharedTooltip,
                             callbacks: {
-                                /**
-                                 *
-                                 */
-                                label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}%`,
+                                title: function (items) {
+                                    return items[0]?.label || '';
+                                },
+                                label: function (ctx) {
+                                    return ' ' + ctx.dataset.label + ': ' + ctx.parsed.y + '%';
+                                },
                             },
                         },
                     },
@@ -857,15 +922,31 @@
                         y: {
                             beginAtZero: true,
                             max: 100,
+                            grid: { color: 'rgba(148, 163, 184, 0.08)' },
                             ticks: {
-                                /**
-                                 *
-                                 */
-                                callback: v => v + '%',
+                                callback: function (v) {
+                                    return v + '%';
+                                },
+                                color: '#94a3b8',
+                                font: { size: 11 },
                             },
-                            title: { display: true, text: 'Progress (%)' },
+                            title: {
+                                display: true,
+                                text: 'Progress (%)',
+                                color: '#64748b',
+                                font: { size: 12 },
+                            },
                         },
-                        x: { title: { display: true, text: 'Weeks' } },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8', font: { size: 11 } },
+                            title: {
+                                display: true,
+                                text: 'Weeks',
+                                color: '#64748b',
+                                font: { size: 12 },
+                            },
+                        },
                     },
                 },
             },
@@ -879,25 +960,30 @@
                         {
                             label: 'Attendance (%)',
                             data: [90, 92, 88, 94, 96, 98],
-                            backgroundColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                            hoverBackgroundColor: '#10B981',
                             borderRadius: 6,
                             borderSkipped: false,
-                            barPercentage: 0.4,
-                            categoryPercentage: 0.6,
+                            barPercentage: 0.5,
+                            categoryPercentage: 0.7,
                         },
                     ],
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: { duration: 800, easing: 'easeOutQuart' },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
+                            ...sharedTooltip,
                             callbacks: {
-                                /**
-                                 *
-                                 */
-                                label: ctx => `Attendance: ${ctx.raw}%`,
+                                title: function (items) {
+                                    return items[0]?.label || '';
+                                },
+                                label: function (ctx) {
+                                    return ' Attendance: ' + ctx.raw + '%';
+                                },
                             },
                         },
                     },
@@ -905,62 +991,91 @@
                         y: {
                             beginAtZero: true,
                             max: 100,
+                            grid: { color: 'rgba(148, 163, 184, 0.08)' },
                             ticks: {
-                                /**
-                                 *
-                                 */
-                                callback: v => v + '%',
+                                callback: function (v) {
+                                    return v + '%';
+                                },
+                                color: '#94a3b8',
+                                font: { size: 11 },
                             },
-                            title: { display: true, text: 'Attendance (%)' },
+                            title: {
+                                display: true,
+                                text: 'Attendance (%)',
+                                color: '#64748b',
+                                font: { size: 12 },
+                            },
                         },
-                        x: { title: { display: true, text: 'Weeks' } },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8', font: { size: 11 } },
+                            title: {
+                                display: true,
+                                text: 'Weeks',
+                                color: '#64748b',
+                                font: { size: 12 },
+                            },
+                        },
                     },
                 },
             },
         ];
 
-        containers.forEach(container => {
+        function announceToScreenReader(container, message) {
+            var card = container.closest('.chart-card');
+            if (!card) return;
+            var liveRegion = card.querySelector('[data-chart-status]');
+            if (liveRegion) liveRegion.textContent = message;
+        }
+
+        containers.forEach(function (container) {
             showLoading(container);
-            setTimeout(() => {
+            announceToScreenReader(container, 'Loading chart data');
+
+            setTimeout(function () {
                 showChart(container);
 
-                // Find matching chart def by card title
-                const cardTitle = container
+                var cardTitle = container
                     .closest('.chart-card')
                     ?.querySelector('.chart-title')
                     ?.textContent?.trim();
-                const def = chartDefs.find(d => d.title === cardTitle);
+                var def = chartDefs.find(function (d) {
+                    return d.title === cardTitle;
+                });
                 if (!def || typeof Chart === 'undefined') return;
 
-                // Destroy existing instance if any
-                const existing = Chart.getChart(def.id);
-                if (existing) existing.destroy();
-
-                // Inject canvas if not already present
-                let canvas = container.querySelector(`#${def.id}`);
+                var canvas = container.querySelector('canvas');
                 if (!canvas) {
                     canvas = document.createElement('canvas');
                     canvas.id = def.id;
                     canvas.style.width = '100%';
                     canvas.style.height = '100%';
+                    canvas.setAttribute('role', 'img');
+                    canvas.setAttribute(
+                        'aria-label',
+                        container.getAttribute('aria-label') || cardTitle + ' chart'
+                    );
                     container.appendChild(canvas);
                 }
 
+                var existing = Chart.getChart(canvas);
+                if (existing) existing.destroy();
+
                 new Chart(canvas, { type: def.type, data: def.data, options: def.options });
+                announceToScreenReader(container, cardTitle + ' chart loaded successfully');
             }, 2500);
         });
 
-        document.querySelectorAll('.retry-btn').forEach(btn => {
-            /**
-             *
-             */
-            btn.onclick = function () {
-                const c = this.closest('.chart-container');
+        document.querySelectorAll('.retry-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var c = this.closest('.chart-container');
                 showLoading(c);
-                setTimeout(() => {
+                announceToScreenReader(c, 'Retrying chart load');
+                setTimeout(function () {
                     showChart(c);
+                    announceToScreenReader(c, 'Chart loaded successfully');
                 }, 2000);
-            };
+            });
         });
     }
 
