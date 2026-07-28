@@ -51,6 +51,7 @@ export class ApiService {
             '/api';
 
         this.pendingRequests = new Map();
+        this.responseCache = new Map();
         this.timeoutMs = 10000;
         this.maxRetries = 3;
     }
@@ -138,13 +139,24 @@ export class ApiService {
             body,
             retryCount = 0,
             skipDedup = false,
+            cacheTTL = 0, // Time-to-live in seconds
             ...otherOptions
         } = options;
 
         const url = `${this.baseUrl}${endpoint}`;
 
-        // Check deduplication
+        // Check deduplication (and cache key)
         const requestKey = !skipDedup && this._getRequestKey(method, url, body);
+
+        // Check Cache
+        if (method === 'GET' && cacheTTL > 0 && requestKey) {
+            const cached = this.responseCache.get(requestKey);
+            if (cached && Date.now() < cached.expiry) {
+                if (isDevelopment())
+                    console.log(`[API Cache] Returning cached response for ${url}`);
+                return Promise.resolve(cached.data);
+            }
+        }
         if (requestKey && this.pendingRequests.has(requestKey)) {
             if (isDevelopment())
                 console.log(`[API Dedup] Returning existing request for ${method} ${url}`);
@@ -219,10 +231,24 @@ export class ApiService {
                         headers: response.headers,
                     });
 
-                    return await this._responseInterceptor(newResponse);
+                    const finalData = await this._responseInterceptor(newResponse);
+                    if (method === 'GET' && cacheTTL > 0 && requestKey) {
+                        this.responseCache.set(requestKey, {
+                            data: finalData,
+                            expiry: Date.now() + cacheTTL * 1000,
+                        });
+                    }
+                    return finalData;
                 }
 
-                return await this._responseInterceptor(response);
+                const finalData = await this._responseInterceptor(response);
+                if (method === 'GET' && cacheTTL > 0 && requestKey) {
+                    this.responseCache.set(requestKey, {
+                        data: finalData,
+                        expiry: Date.now() + cacheTTL * 1000,
+                    });
+                }
+                return finalData;
             })
             .catch(error => {
                 if (requestKey) this.pendingRequests.delete(requestKey);
