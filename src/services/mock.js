@@ -4,7 +4,7 @@ const mockStudent = {
     email: 'student@demo.com',
     avatarUrl: 'https://i.pravatar.cc/150?u=stu_001',
     studentId: 'STU-2024-001',
-    enrolledAt: '2024-01-15T00:00:00.000Z',
+    enrolledAt: '2024-03-20T10:30:00.000Z',
     currentStreak: 5,
     lastActiveAt: '2024-03-20T10:30:00.000Z',
 };
@@ -92,9 +92,9 @@ function delay(ms) {
 /**
  *
  */
-async function handleLogin(url, options) {
+async function handleLogin(request) {
     await delay(300);
-    const body = JSON.parse(options.body || '{}');
+    const body = await request.json().catch(() => ({}));
 
     if (body.email === 'student@demo.com' && body.password === 'demo123') {
         return new Response(
@@ -126,7 +126,7 @@ async function handleGetStudent(request) {
     const url = new URL(request.url);
     const id = url.pathname.split('/').pop();
 
-    if (id === 'stu_001') {
+    if (id === mockStudent.id) {
         return new Response(JSON.stringify(mockStudent), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
@@ -147,8 +147,10 @@ async function handleGetCourses(request) {
     const url = new URL(request.url);
     const id = url.pathname.split('/')[3];
 
-    if (id === 'stu_001') {
-        return new Response(JSON.stringify(mockCourses), {
+    const courses = mockCourses.filter(c => c.studentId === id);
+
+    if (courses.length > 0) {
+        return new Response(JSON.stringify(courses), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
@@ -163,26 +165,23 @@ async function handleGetCourses(request) {
 /**
  *
  */
-async function handleGetGrades(request) {
+async function handleGetGrades() {
     await delay(200);
-    const url = new URL(request.url);
-    const id = url.pathname.split('/')[3];
 
-    if (id === 'stu_001') {
-        return new Response(JSON.stringify(mockGrades), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-        });
-    }
+    const gradesData = {
+        quizScores: mockGrades.quizScores,
+        gradeDistribution: mockGrades.gradeDistribution,
+        weeklyProgress: mockGrades.weeklyProgress,
+    };
 
-    return new Response(JSON.stringify({ message: 'Grades not found' }), {
-        status: 404,
+    return new Response(JSON.stringify(gradesData), {
+        status: 200,
         headers: { 'Content-Type': 'application/json' },
     });
 }
 
 /**
- * Handle individual course fetch
+ *
  */
 async function handleGetCourse(request) {
     await delay(200);
@@ -204,7 +203,7 @@ async function handleGetCourse(request) {
 }
 
 /**
- * Handle course progress fetch
+ *
  */
 async function handleGetCourseProgress(request) {
     await delay(200);
@@ -260,7 +259,10 @@ export function setupMockServer() {
         if (!matchedRoute) {
             const pathname = new URL(url, window.location.origin).pathname;
             for (const [routeKey, handler] of Object.entries(routes)) {
-                const [routeMethod, routePattern] = routeKey.split(':');
+                const colonIndex = routeKey.indexOf(':');
+                const routeMethod = routeKey.slice(0, colonIndex);
+                const routePattern = routeKey.slice(colonIndex + 1);
+
                 if (routeMethod !== method) continue;
 
                 const routeParts = routePattern.split('/');
