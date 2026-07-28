@@ -3,7 +3,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig(({ mode }) => ({
     root: '.',
-    base: '/',
+    base: process.env.VITE_BASE_URL || '/',
     build: {
         outDir: 'dist',
         sourcemap: true,
