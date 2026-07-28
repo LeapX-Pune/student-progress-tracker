@@ -50,11 +50,7 @@ export function createRoleSelector({ initialRole = 'student', onChange } = {}) {
     container.appendChild(teacherBtn);
 
     /**
-<<<<<<< Updated upstream
-     * Updates internal state and UI tab styles
-=======
-     *
->>>>>>> Stashed changes
+     * @param {string} role
      */
     function setRole(role) {
         if (role !== 'student' && role !== 'teacher') return;
@@ -72,11 +68,7 @@ export function createRoleSelector({ initialRole = 'student', onChange } = {}) {
     }
 
     /**
-<<<<<<< Updated upstream
      * Click handler for tabs
-=======
-     *
->>>>>>> Stashed changes
      */
     function handleClick(e) {
         const btn = e.target.closest('button[data-role]');
@@ -90,26 +82,18 @@ export function createRoleSelector({ initialRole = 'student', onChange } = {}) {
     return {
         element: container,
         /**
-<<<<<<< Updated upstream
          * Returns the currently selected role string ('student' | 'teacher').
          *
          * @returns {string}
-=======
-         *
->>>>>>> Stashed changes
          */
         getSelectedRole() {
             return currentRole;
         },
         setRole,
         /**
-<<<<<<< Updated upstream
          * Cleans up event listeners and removes container element.
          *
          * @returns {void}
-=======
-         *
->>>>>>> Stashed changes
          */
         destroy() {
             container.removeEventListener('click', handleClick);

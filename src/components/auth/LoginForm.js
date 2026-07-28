@@ -27,18 +27,20 @@ import { createRoleSelector } from './RoleSelector.js';
 export function createLoginForm(container, { onSuccess } = {}) {
     let isLoginMode = true;
 
-    // ── Outer Card Wrapper ──────────────────────────────────────────────────
+    // ── Outer Card Wrapper (Double-Bezel Architecture) ─────────────────────
+    const shellEl = document.createElement('div');
+    shellEl.className = 'login-form-shell';
     const cardEl = document.createElement('div');
     cardEl.className = 'login-form-card slide-in-right delay-200';
 
     cardEl.innerHTML = `
         <!-- Brand Header (Logo Icon, Title & Subtitle toggled via JS) -->
         <div class="text-center mb-3 lg:mb-4 flex flex-col items-center pt-1">
-          <div class="inline-flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 bg-primary rounded-xl mb-2 sm:mb-3 shadow-sm shrink-0">
+          <div class="inline-flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 bg-primary rounded-xl mb-2 sm:mb-3 shrink-0 brand-icon-box">
             <span class="material-symbols-outlined text-on-primary text-[22px] sm:text-[26px]">school</span>
           </div>
-          <h2 class="font-headline-md text-lg sm:text-[20px] font-bold text-primary mb-1" id="auth-title">Welcome back</h2>
-          <p class="font-body-md text-xs sm:text-sm text-on-surface-variant" id="auth-subtitle">Log in to your The Reality account.</p>
+          <h2 class="font-headline-md text-lg sm:text-[20px] font-bold mb-1 auth-heading" id="auth-title">Welcome back</h2>
+          <p class="font-body-md text-xs sm:text-sm auth-subheading" id="auth-subtitle">Log in to your The Reality account.</p>
         </div>
 
         <div id="role-selector-mount" class="mb-2 sm:mb-3"></div>
@@ -54,7 +56,7 @@ export function createLoginForm(container, { onSuccess } = {}) {
             <label class="block text-sm font-bold text-[#1E293B] mb-1.5" for="name">Full Name</label>
             <div class="relative flex items-center">
               <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">person</span>
-              <input class="w-full h-10 sm:h-11 pl-10 pr-4 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="name" placeholder="Your Name" type="text"/>
+              <input class="w-full h-10 sm:h-11 pl-10 pr-4 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors " id="name" placeholder="Your Name" type="text"/>
             </div>
           </div>
 
@@ -63,7 +65,7 @@ export function createLoginForm(container, { onSuccess } = {}) {
             <label class="block text-sm font-bold text-[#1E293B] mb-1.5" for="email">Email Address</label>
             <div class="relative flex items-center">
               <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">mail</span>
-              <input class="w-full h-10 sm:h-11 pl-10 pr-4 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="email" placeholder="student@school.edu" required="" type="email" autocomplete="email"/>
+              <input class="w-full h-10 sm:h-11 pl-10 pr-4 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="email" placeholder="student@school.edu" required="" type="email" autocomplete="email"/>
             </div>
             <span id="email-error" style="color: var(--error); font-size: 0.75rem; margin-top: 0.25rem; display: block;"></span>
           </div>
@@ -76,7 +78,7 @@ export function createLoginForm(container, { onSuccess } = {}) {
             </div>
             <div class="relative flex items-center">
               <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">lock</span>
-              <input class="w-full h-10 sm:h-11 pl-10 pr-12 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="password" placeholder="••••••••" required="" type="password" autocomplete="current-password"/>
+              <input class="w-full h-10 sm:h-11 pl-10 pr-12 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="password" placeholder="••••••••" required="" type="password" autocomplete="current-password"/>
               <button class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center text-[#64748B] hover:text-[#0F172A] transition-colors focus:outline-none" id="toggle-password-btn" type="button" aria-label="Toggle password visibility">
                 <span class="material-symbols-outlined text-[20px]">visibility_off</span>
               </button>
@@ -89,7 +91,7 @@ export function createLoginForm(container, { onSuccess } = {}) {
             <label class="block text-sm font-bold text-[#1E293B] mb-1.5" for="confirm-password">Confirm Password</label>
             <div class="relative flex items-center">
               <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">lock_reset</span>
-              <input class="w-full h-10 sm:h-11 pl-10 pr-12 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="confirm-password" placeholder="••••••••" type="password"/>
+              <input class="w-full h-10 sm:h-11 pl-10 pr-12 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="confirm-password" placeholder="••••••••" type="password"/>
             </div>
             <span id="confirm-password-error" style="color: var(--error); font-size: 0.75rem; margin-top: 0.25rem; display: block;"></span>
           </div>
@@ -97,18 +99,11 @@ export function createLoginForm(container, { onSuccess } = {}) {
           <div id="remember-me-mount" class="mb-2"></div>
 
           <!-- Dynamic Form Action Submit Button -->
-          <button class="w-full h-10 sm:h-11 px-6 bg-primary text-on-primary font-semibold text-sm rounded-xl hover:bg-primary/90 transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-md flex items-center justify-center gap-2" id="submit-btn" type="submit">
+          <button class="w-full h-11 px-6 bg-primary text-on-primary font-semibold text-sm flex items-center justify-center gap-2" id="submit-btn" type="submit">
             Sign In
-            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            <span class="material-symbols-outlined">arrow_forward</span>
           </button>
         </form>
-
-        <!-- Divider Line -->
-        <div class="flex items-center my-2 sm:my-3">
-          <div class="flex-1 border-t border-outline-variant"></div>
-          <span class="px-3 font-label-xs text-[10px] font-medium tracking-wider text-outline bg-surface-container-lowest">OR CONTINUE WITH</span>
-          <div class="flex-1 border-t border-outline-variant"></div>
-        </div>
 
         <!-- Auth Mode Toggle Switcher (Switch between Login and Sign Up) -->
         <div class="text-center font-body-md text-xs text-on-surface-variant mt-1 sm:mt-0" id="mode-switcher">
@@ -211,7 +206,8 @@ export function createLoginForm(container, { onSuccess } = {}) {
     cardEl.querySelector('#remember-me-mount').appendChild(rememberMe.wrapper);
 
     // ── Mount into container ────────────────────────────────────────────────
-    container.appendChild(cardEl);
+    shellEl.appendChild(cardEl);
+    container.appendChild(shellEl);
 
     // ── Helpers ─────────────────────────────────────────────────────────────
     /**
