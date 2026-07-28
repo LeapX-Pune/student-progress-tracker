@@ -3,6 +3,7 @@ import { getConfig, isDevelopment } from '../utils/env.js';
 import { normalizeApiError } from '../utils/errors.js';
 import { getAuthToken } from './authStorage.js';
 import { setupMockServer } from './mock.js';
+import { enqueueRequest, initOfflineSync } from './offlineSync.js';
 
 let mockHandlers = null;
 
@@ -54,6 +55,9 @@ export class ApiService {
         this.responseCache = new Map();
         this.timeoutMs = 10000;
         this.maxRetries = 3;
+
+        // Initialize offline sync to replay queued requests when online
+        initOfflineSync(this);
     }
 
     /**
@@ -283,6 +287,17 @@ export class ApiService {
                             delay
                         )
                     );
+                }
+
+                // If it's a network error and we're out of retries, OR we're offline
+                if (this._isNetworkError(error) || !window.navigator.onLine) {
+                    if (method !== 'GET') {
+                        enqueueRequest({ endpoint, method, options: { body, ...otherOptions } });
+                        // Throw a specific offline error so components know it was queued
+                        const offlineErr = new Error('Network offline, request queued for sync');
+                        offlineErr.code = 'OFFLINE_QUEUED';
+                        throw offlineErr;
+                    }
                 }
 
                 console.error(`API Error on ${endpoint}:`, error);
