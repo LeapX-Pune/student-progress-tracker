@@ -84,7 +84,9 @@ if (existsSync(resolve(publicDir, 'assets'))) {
 // Copy standalone source files referenced by index.html
 const srcDir = resolve(rootDir, 'src');
 copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(distDir, 'style.css'));
-copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(distDir, 'script.js'));
+if (existsSync(resolve(srcDir, 'pages', 'script.js'))) {
+    copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(distDir, 'script.js'));
+}
 
 // Copy standalone JS files from public root
 if (existsSync(resolve(publicDir, 'attendance.js'))) {
