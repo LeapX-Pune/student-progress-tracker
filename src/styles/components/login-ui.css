@@ -237,7 +237,7 @@
         0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
-#auth-root #submit-btn {
+#login-page #submit-btn {
     background: #000;
     color: #fff;
     border-radius: 9999px;
@@ -257,21 +257,21 @@
     min-height: 2.75rem;
 }
 
-#auth-root #submit-btn:hover {
+#login-page #submit-btn:hover {
     background: rgba(0, 0, 0, 0.85);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-#auth-root #submit-btn:active {
+#login-page #submit-btn:active {
     transform: scale(0.97);
 }
 
-#auth-root #submit-btn .material-symbols-outlined {
+#login-page #submit-btn .material-symbols-outlined {
     font-size: 16px;
     transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-#auth-root #submit-btn:hover .material-symbols-outlined {
+#login-page #submit-btn:hover .material-symbols-outlined {
     transform: translateX(2px);
 }
 
@@ -395,460 +395,460 @@
     animation-delay: 200ms;
 }
 
-/* ── Utility classes (scoped under #auth-root) ── */
+/* ── Utility classes (scoped under #login-page) ── */
 
-#auth-root .flex {
+#login-page .flex {
     display: flex;
 }
-#auth-root .inline-flex {
+#login-page .inline-flex {
     display: inline-flex;
 }
-#auth-root .flex-1 {
+#login-page .flex-1 {
     flex: 1 1 0%;
 }
-#auth-root .flex-col {
+#login-page .flex-col {
     flex-direction: column;
 }
-#auth-root .items-center {
+#login-page .items-center {
     align-items: center;
 }
-#auth-root .items-start {
+#login-page .items-start {
     align-items: flex-start;
 }
-#auth-root .justify-center {
+#login-page .justify-center {
     justify-content: center;
 }
-#auth-root .justify-between {
+#login-page .justify-between {
     justify-content: space-between;
 }
-#auth-root .shrink-0 {
+#login-page .shrink-0 {
     flex-shrink: 0;
 }
-#auth-root .flex-grow {
+#login-page .flex-grow {
     flex-grow: 1;
 }
 
-#auth-root .w-full {
+#login-page .w-full {
     width: 100%;
 }
-#auth-root .w-10 {
+#login-page .w-10 {
     width: 2.5rem;
 }
-#auth-root .w-11 {
+#login-page .w-11 {
     width: 2.75rem;
 }
-#auth-root .w-20 {
+#login-page .w-20 {
     width: 5rem;
 }
-#auth-root .w-\[55\%\] {
+#login-page .w-\[55\%\] {
     width: 55%;
 }
-#auth-root .h-10 {
+#login-page .h-10 {
     height: 2.5rem;
 }
-#auth-root .h-11 {
+#login-page .h-11 {
     height: 2.75rem;
 }
-#auth-root .h-screen {
+#login-page .h-screen {
     height: 100vh;
 }
-#auth-root .h-\[18px\] {
+#login-page .h-\[18px\] {
     height: 18px;
 }
-#auth-root .max-w-\[400px\] {
+#login-page .max-w-\[400px\] {
     max-width: 400px;
 }
-#auth-root .max-w-\[80\%\] {
+#login-page .max-w-\[80\%\] {
     max-width: 80%;
 }
-#auth-root .max-w-2xl {
+#login-page .max-w-2xl {
     max-width: 42rem;
 }
 
-#auth-root .relative {
+#login-page .relative {
     position: relative;
 }
-#auth-root .absolute {
+#login-page .absolute {
     position: absolute;
 }
-#auth-root .inset-0 {
+#login-page .inset-0 {
     inset: 0;
 }
-#auth-root .top-1\/2 {
+#login-page .top-1\/2 {
     top: 50%;
 }
-#auth-root .left-3 {
+#login-page .left-3 {
     left: 0.75rem;
 }
-#auth-root .right-3 {
+#login-page .right-3 {
     right: 0.75rem;
 }
-#auth-root .-translate-y-1\/2 {
+#login-page .-translate-y-1\/2 {
     transform: translateY(-50%);
 }
 
-#auth-root .text-center {
+#login-page .text-center {
     text-align: center;
 }
-#auth-root .text-sm {
+#login-page .text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
 }
-#auth-root .text-xs {
+#login-page .text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
 }
-#auth-root .text-lg {
+#login-page .text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
 }
-#auth-root .text-\[10px\] {
+#login-page .text-\[10px\] {
     font-size: 10px;
 }
-#auth-root .text-\[12px\] {
+#login-page .text-\[12px\] {
     font-size: 12px;
 }
-#auth-root .text-\[18px\] {
+#login-page .text-\[18px\] {
     font-size: 18px;
 }
-#auth-root .text-\[20px\] {
+#login-page .text-\[20px\] {
     font-size: 20px;
 }
-#auth-root .text-\[22px\] {
+#login-page .text-\[22px\] {
     font-size: 22px;
 }
-#auth-root .text-\[16px\] {
+#login-page .text-\[16px\] {
     font-size: 16px;
 }
-#auth-root .text-\[14px\] {
+#login-page .text-\[14px\] {
     font-size: 14px;
 }
-#auth-root .font-bold {
+#login-page .font-bold {
     font-weight: 700;
 }
-#auth-root .font-semibold {
+#login-page .font-semibold {
     font-weight: 600;
 }
-#auth-root .font-medium {
+#login-page .font-medium {
     font-weight: 500;
 }
-#auth-root .font-normal {
+#login-page .font-normal {
     font-weight: 400;
 }
-#auth-root .font-mono {
+#login-page .font-mono {
     font-family: 'Fira Code', 'Cascadia Code', monospace;
 }
-#auth-root .font-body-md {
+#login-page .font-body-md {
     font-family: Inter, sans-serif;
 }
-#auth-root .font-headline-md {
+#login-page .font-headline-md {
     font-family: Geist, sans-serif;
 }
-#auth-root .font-label-xs {
+#login-page .font-label-xs {
     font-family: Geist, sans-serif;
 }
-#auth-root .font-display-lg {
+#login-page .font-display-lg {
     font-family: Geist, sans-serif;
 }
-#auth-root .font-label-sm {
+#login-page .font-label-sm {
     font-family: Geist, sans-serif;
 }
-#auth-root .underline-offset-2 {
+#login-page .underline-offset-2 {
     text-underline-offset: 2px;
 }
-#auth-root .underline-offset-4 {
+#login-page .underline-offset-4 {
     text-underline-offset: 4px;
 }
-#auth-root .leading-tight {
+#login-page .leading-tight {
     line-height: 1.25;
 }
-#auth-root .leading-normal {
+#login-page .leading-normal {
     line-height: 1.5;
 }
-#auth-root .antialiased {
+#login-page .antialiased {
     -webkit-font-smoothing: antialiased;
 }
-#auth-root .tracking-wider {
+#login-page .tracking-wider {
     letter-spacing: 0.05em;
 }
-#auth-root .uppercase {
+#login-page .uppercase {
     text-transform: uppercase;
 }
 
-#auth-root .rounded-xl {
+#login-page .rounded-xl {
     border-radius: 0.75rem;
 }
-#auth-root .rounded-lg {
+#login-page .rounded-lg {
     border-radius: 0.5rem;
 }
-#auth-root .rounded {
+#login-page .rounded {
     border-radius: 0.25rem;
 }
-#auth-root .rounded-2xl {
+#login-page .rounded-2xl {
     border-radius: 1rem;
 }
-#auth-root .rounded-full {
+#login-page .rounded-full {
     border-radius: 9999px;
 }
-#auth-root .border-r {
+#login-page .border-r {
     border-right-width: 1px;
 }
-#auth-root .border-outline-variant {
+#login-page .border-outline-variant {
     border-color: #c6c6cd;
 }
-#auth-root .border-outline-variant\/60 {
+#login-page .border-outline-variant\/60 {
     border-color: rgba(198, 198, 205, 0.6);
 }
-#auth-root .border {
+#login-page .border {
     border-width: 1px;
 }
-#auth-root .border-t {
+#login-page .border-t {
     border-top-width: 1px;
 }
-#auth-root .border-\[\#CBD5E1\] {
+#login-page .border-\[\#CBD5E1\] {
     border-color: #d1d1d1;
 }
 
-#auth-root .bg-white {
+#login-page .bg-white {
     background-color: #fff;
 }
-#auth-root .bg-\[\#F1F5F9\] {
+#login-page .bg-\[\#F1F5F9\] {
     background-color: #f5f5f5;
 }
-#auth-root .bg-\[\#E2E8F0\] {
+#login-page .bg-\[\#E2E8F0\] {
     background-color: #e5e5e5;
 }
-#auth-root .bg-primary {
+#login-page .bg-primary {
     background-color: #000;
 }
-#auth-root .bg-surface-container-lowest {
+#login-page .bg-surface-container-lowest {
     background-color: #fff;
 }
-#auth-root .bg-\[\#F8FAFC\] {
+#login-page .bg-\[\#F8FAFC\] {
     background-color: #f8f8f8;
 }
-#auth-root .bg-error-container\/30 {
+#login-page .bg-error-container\/30 {
     background-color: rgba(204, 0, 0, 0.08);
 }
-#auth-root .bg-primary-fixed\/20 {
+#login-page .bg-primary-fixed\/20 {
     background-color: rgba(0, 0, 0, 0.04);
 }
-#auth-root .bg-primary-fixed\/30 {
+#login-page .bg-primary-fixed\/30 {
     background-color: rgba(0, 0, 0, 0.06);
 }
 
-#auth-root .text-primary {
+#login-page .text-primary {
     color: #000;
 }
-#auth-root .text-on-primary {
+#login-page .text-on-primary {
     color: #fff;
 }
-#auth-root .text-\[\#0F172A\] {
+#login-page .text-\[\#0F172A\] {
     color: #111;
 }
-#auth-root .text-\[\#1E293B\] {
+#login-page .text-\[\#1E293B\] {
     color: #1a1a1a;
 }
-#auth-root .text-\[\#334155\] {
+#login-page .text-\[\#334155\] {
     color: #333;
 }
-#auth-root .text-\[\#475569\] {
+#login-page .text-\[\#475569\] {
     color: #444;
 }
-#auth-root .text-\[\#64748B\] {
+#login-page .text-\[\#64748B\] {
     color: #666;
 }
-#auth-root .text-on-surface-variant {
+#login-page .text-on-surface-variant {
     color: #4a4a4a;
 }
-#auth-root .text-outline {
+#login-page .text-outline {
     color: #666;
 }
-#auth-root .text-on-error-container {
+#login-page .text-on-error-container {
     color: #c00;
 }
 
-#auth-root .shadow-sm {
+#login-page .shadow-sm {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
-#auth-root .shadow-md {
+#login-page .shadow-md {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
-#auth-root .shadow-xs {
+#login-page .shadow-xs {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
 }
-#auth-root .shadow-inner {
+#login-page .shadow-inner {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
 }
-#auth-root .shadow-lg {
+#login-page .shadow-lg {
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
-#auth-root .transition-all {
+#login-page .transition-all {
     transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
-#auth-root .transition-colors {
+#login-page .transition-colors {
     transition:
         color 0.3s cubic-bezier(0.32, 0.72, 0, 1),
         background-color 0.3s cubic-bezier(0.32, 0.72, 0, 1),
         border-color 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
-#auth-root .transition-transform {
+#login-page .transition-transform {
     transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
-#auth-root .duration-200 {
+#login-page .duration-200 {
     transition-duration: 0.2s;
 }
-#auth-root .duration-300 {
+#login-page .duration-300 {
     transition-duration: 0.3s;
 }
-#auth-root .ease-out {
+#login-page .ease-out {
     transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
-#auth-root .overflow-hidden {
+#login-page .overflow-hidden {
     overflow: hidden;
 }
-#auth-root .overflow-y-auto {
+#login-page .overflow-y-auto {
     overflow-y: auto;
 }
-#auth-root .object-contain {
+#login-page .object-contain {
     object-fit: contain;
 }
-#auth-root .block {
+#login-page .block {
     display: block;
 }
-#auth-root .inline {
+#login-page .inline {
     display: inline;
 }
-#auth-root .hidden {
+#login-page .hidden {
     display: none;
 }
-#auth-root .grid {
+#login-page .grid {
     display: grid;
 }
-#auth-root .grid-cols-2 {
+#login-page .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-#auth-root .cursor-pointer {
+#login-page .cursor-pointer {
     cursor: pointer;
 }
-#auth-root .pointer-events-none {
+#login-page .pointer-events-none {
     pointer-events: none;
 }
-#auth-root .select-none {
+#login-page .select-none {
     user-select: none;
 }
-#auth-root .whitespace-nowrap {
+#login-page .whitespace-nowrap {
     white-space: nowrap;
 }
 
-#auth-root .gap-1 {
+#login-page .gap-1 {
     gap: 0.25rem;
 }
-#auth-root .gap-1\.5 {
+#login-page .gap-1\.5 {
     gap: 0.375rem;
 }
-#auth-root .gap-2 {
+#login-page .gap-2 {
     gap: 0.5rem;
 }
-#auth-root .gap-4 {
+#login-page .gap-4 {
     gap: 1rem;
 }
-#auth-root .gap-6 {
+#login-page .gap-6 {
     gap: 1.5rem;
 }
-#auth-root .mb-1 {
+#login-page .mb-1 {
     margin-bottom: 0.25rem;
 }
-#auth-root .mb-1\.5 {
+#login-page .mb-1\.5 {
     margin-bottom: 0.375rem;
 }
-#auth-root .mb-2 {
+#login-page .mb-2 {
     margin-bottom: 0.5rem;
 }
-#auth-root .mb-3 {
+#login-page .mb-3 {
     margin-bottom: 0.75rem;
 }
-#auth-root .mb-4 {
+#login-page .mb-4 {
     margin-bottom: 1rem;
 }
-#auth-root .mb-5 {
+#login-page .mb-5 {
     margin-bottom: 1.25rem;
 }
-#auth-root .ml-1 {
+#login-page .ml-1 {
     margin-left: 0.25rem;
 }
-#auth-root .ml-auto {
+#login-page .ml-auto {
     margin-left: auto;
 }
-#auth-root .mt-1 {
+#login-page .mt-1 {
     margin-top: 0.25rem;
 }
-#auth-root .mt-2 {
+#login-page .mt-2 {
     margin-top: 0.5rem;
 }
-#auth-root .mt-3 {
+#login-page .mt-3 {
     margin-top: 0.75rem;
 }
-#auth-root .my-2 {
+#login-page .my-2 {
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
 }
-#auth-root .mx-auto {
+#login-page .mx-auto {
     margin-left: auto;
     margin-right: auto;
 }
-#auth-root .px-2 {
+#login-page .px-2 {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
 }
-#auth-root .px-3 {
+#login-page .px-3 {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
 }
-#auth-root .px-4 {
+#login-page .px-4 {
     padding-left: 1rem;
     padding-right: 1rem;
 }
-#auth-root .px-6 {
+#login-page .px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
 }
-#auth-root .py-0\.5 {
+#login-page .py-0\.5 {
     padding-top: 0.125rem;
     padding-bottom: 0.125rem;
 }
-#auth-root .py-2 {
+#login-page .py-2 {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
 }
-#auth-root .pl-10 {
+#login-page .pl-10 {
     padding-left: 2.5rem;
 }
-#auth-root .pr-12 {
+#login-page .pr-12 {
     padding-right: 3rem;
 }
-#auth-root .pr-4 {
+#login-page .pr-4 {
     padding-right: 1rem;
 }
-#auth-root .pt-1 {
+#login-page .pt-1 {
     padding-top: 0.25rem;
 }
-#auth-root .p-1 {
+#login-page .p-1 {
     padding: 0.25rem;
 }
-#auth-root .p-4 {
+#login-page .p-4 {
     padding: 1rem;
 }
-#auth-root .p-8 {
+#login-page .p-8 {
     padding: 2rem;
 }
-#auth-root .p-6 {
+#login-page .p-6 {
     padding: 1.5rem;
 }
 
-#auth-root .animate-spin {
+#login-page .animate-spin {
     animation: spin 1s linear infinite;
 }
 @keyframes spin {
@@ -857,30 +857,30 @@
     }
 }
 
-#auth-root .hover\:bg-primary\/90:hover {
+#login-page .hover\:bg-primary\/90:hover {
     background-color: rgba(0, 0, 0, 0.9);
 }
-#auth-root .hover\:text-\[\#0F172A\]:hover {
+#login-page .hover\:text-\[\#0F172A\]:hover {
     color: #0f172a;
 }
-#auth-root .hover\:text-primary:hover {
+#login-page .hover\:text-primary:hover {
     color: #000;
 }
-#auth-root .hover\:underline:hover {
+#login-page .hover\:underline:hover {
     text-decoration: underline;
 }
-#auth-root .hover\:opacity-100:hover {
+#login-page .hover\:opacity-100:hover {
     opacity: 1;
 }
 
-#auth-root .checkbox {
+#login-page .checkbox {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
 }
 
-#auth-root .checkbox__input {
+#login-page .checkbox__input {
     width: 16px;
     height: 16px;
     accent-color: #000;
@@ -889,7 +889,7 @@
     margin: 0;
 }
 
-#auth-root .checkbox__label {
+#login-page .checkbox__label {
     font-size: 0.8125rem;
     color: #333;
     cursor: pointer;
@@ -897,9 +897,9 @@
     line-height: 1.3;
 }
 
-#auth-root input[type='email'],
-#auth-root input[type='password'],
-#auth-root input[type='text'] {
+#login-page input[type='email'],
+#login-page input[type='password'],
+#login-page input[type='text'] {
     font-family:
         Inter,
         system-ui,
@@ -913,19 +913,19 @@
         box-shadow 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-#auth-root input[type='email']:focus,
-#auth-root input[type='password']:focus,
-#auth-root input[type='text']:focus {
+#login-page input[type='email']:focus,
+#login-page input[type='password']:focus,
+#login-page input[type='text']:focus {
     border-color: #000;
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
     outline: none;
 }
 
-#auth-root input:focus {
+#login-page input:focus {
     outline: none;
 }
 
-#auth-root .auth-heading {
+#login-page .auth-heading {
     font-size: 1.375rem;
     font-weight: 700;
     line-height: 1.2;
@@ -934,95 +934,95 @@
     margin: 0 0 0.25rem;
 }
 
-#auth-root .auth-subheading {
+#login-page .auth-subheading {
     font-size: 0.8125rem;
     color: #4a4a4a;
     margin: 0;
     line-height: 1.4;
 }
 
-#auth-root .btn--primary {
+#login-page .btn--primary {
     background: #000;
     color: #fff;
 }
-#auth-root .hover\:shadow:hover {
+#login-page .hover\:shadow:hover {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-#auth-root .hover\:shadow-md:hover {
+#login-page .hover\:shadow-md:hover {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
-#auth-root .hover\:scale-\[1\.02\]:hover {
+#login-page .hover\:scale-\[1\.02\]:hover {
     transform: scale(1.02);
 }
-#auth-root .hover\:-translate-y-0\.5:hover {
+#login-page .hover\:-translate-y-0\.5:hover {
     transform: translateY(-0.125rem);
 }
-#auth-root .hover\:bg-surface-container-low:hover {
+#login-page .hover\:bg-surface-container-low:hover {
     background-color: #f2f4f6;
 }
-#auth-root .hover\:border-primary\/20:hover {
+#login-page .hover\:border-primary\/20:hover {
     border-color: rgba(0, 0, 0, 0.2);
 }
 
-#auth-root .brand-icon-box {
+#login-page .brand-icon-box {
     border-radius: 12px;
     box-shadow: none;
 }
 
-#auth-root .focus\:outline-none:focus {
+#login-page .focus\:outline-none:focus {
     outline: 2px solid transparent;
     outline-offset: 2px;
 }
-#auth-root .focus\:ring-1:focus {
+#login-page .focus\:ring-1:focus {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
 }
-#auth-root .focus\:ring-2:focus {
+#login-page .focus\:ring-2:focus {
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5);
 }
-#auth-root .focus\:ring-primary:focus {
+#login-page .focus\:ring-primary:focus {
     --tw-ring-color: #000;
 }
-#auth-root .focus\:ring-offset-2:focus {
+#login-page .focus\:ring-offset-2:focus {
     --tw-ring-offset-width: 2px;
 }
-#auth-root .focus\:border-primary:focus {
+#login-page .focus\:border-primary:focus {
     border-color: #000;
 }
 
-#auth-root .placeholder\:text-\[\#94A3B8\]::placeholder {
+#login-page .placeholder\:text-\[\#94A3B8\]::placeholder {
     color: #767676;
 }
-#auth-root .placeholder\:text-\[\#94A3B8\]::-webkit-input-placeholder {
+#login-page .placeholder\:text-\[\#94A3B8\]::-webkit-input-placeholder {
     color: #767676;
 }
-#auth-root .placeholder\:text-\[\#94A3B8\]::-moz-placeholder {
+#login-page .placeholder\:text-\[\#94A3B8\]::-moz-placeholder {
     color: #767676;
 }
 
-#auth-root .selection\:bg-primary-fixed::selection {
+#login-page .selection\:bg-primary-fixed::selection {
     background-color: #dae2fd;
 }
-#auth-root .selection\:text-on-primary-fixed::selection {
+#login-page .selection\:text-on-primary-fixed::selection {
     color: #131b2e;
 }
 
-#auth-root .opacity-80 {
+#login-page .opacity-80 {
     opacity: 0.8;
 }
 
-#auth-root .space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
+#login-page .space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-y-reverse: 0;
     margin-top: calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));
     margin-bottom: calc(0.625rem * var(--tw-space-y-reverse));
 }
 
-#auth-root .space-y-3 > :not([hidden]) ~ :not([hidden]) {
+#login-page .space-y-3 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-y-reverse: 0;
     margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
     margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
 }
 
-#auth-root .material-symbols-outlined {
+#login-page .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';
     font-weight: normal;
     font-style: normal;
@@ -1043,45 +1043,45 @@
 }
 
 @media (min-width: 640px) {
-    #auth-root .sm\:h-11 {
+    #login-page .sm\:h-11 {
         height: 2.75rem;
     }
-    #auth-root .sm\:w-11 {
+    #login-page .sm\:w-11 {
         width: 2.75rem;
     }
-    #auth-root .sm\:text-\[20px\] {
+    #login-page .sm\:text-\[20px\] {
         font-size: 20px;
     }
-    #auth-root .sm\:text-\[26px\] {
+    #login-page .sm\:text-\[26px\] {
         font-size: 26px;
     }
-    #auth-root .sm\:text-sm {
+    #login-page .sm\:text-sm {
         font-size: 0.875rem;
         line-height: 1.25rem;
     }
-    #auth-root .sm\:p-5 {
+    #login-page .sm\:p-5 {
         padding: 1.25rem;
     }
-    #auth-root .sm\:p-7 {
+    #login-page .sm\:p-7 {
         padding: 1.75rem;
     }
-    #auth-root .sm\:gap-5 {
+    #login-page .sm\:gap-5 {
         gap: 1.25rem;
     }
-    #auth-root .sm\:mb-3 {
+    #login-page .sm\:mb-3 {
         margin-bottom: 0.75rem;
     }
-    #auth-root .sm\:mt-0 {
+    #login-page .sm\:mt-0 {
         margin-top: 0;
     }
-    #auth-root .sm\:mt-3 {
+    #login-page .sm\:mt-3 {
         margin-top: 0.75rem;
     }
-    #auth-root .sm\:my-3 {
+    #login-page .sm\:my-3 {
         margin-top: 0.75rem;
         margin-bottom: 0.75rem;
     }
-    #auth-root .sm\:space-y-3 > :not([hidden]) ~ :not([hidden]) {
+    #login-page .sm\:space-y-3 > :not([hidden]) ~ :not([hidden]) {
         --tw-space-y-reverse: 0;
         margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
         margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
@@ -1089,43 +1089,43 @@
 }
 
 @media (min-width: 768px) {
-    #auth-root .md\:flex-row {
+    #login-page .md\:flex-row {
         flex-direction: row;
     }
-    #auth-root .md\:mb-0 {
+    #login-page .md\:mb-0 {
         margin-bottom: 0;
     }
 }
 
 @media (min-width: 1024px) {
-    #auth-root .lg\:text-\[15px\] {
+    #login-page .lg\:text-\[15px\] {
         font-size: 15px;
     }
-    #auth-root .lg\:text-\[13px\] {
+    #login-page .lg\:text-\[13px\] {
         font-size: 13px;
     }
-    #auth-root .lg\:text-\[34px\] {
+    #login-page .lg\:text-\[34px\] {
         font-size: 34px;
     }
-    #auth-root .lg\:mb-4 {
+    #login-page .lg\:mb-4 {
         margin-bottom: 1rem;
     }
-    #auth-root .lg\:mb-8 {
+    #login-page .lg\:mb-8 {
         margin-bottom: 2rem;
     }
-    #auth-root .lg\:flex {
+    #login-page .lg\:flex {
         display: flex;
     }
-    #auth-root .lg\:hidden {
+    #login-page .lg\:hidden {
         display: none;
     }
-    #auth-root .lg\:w-\[45\%\] {
+    #login-page .lg\:w-\[45\%\] {
         width: 45%;
     }
-    #auth-root .lg\:p-12 {
+    #login-page .lg\:p-12 {
         padding: 3rem;
     }
-    #auth-root .lg\:p-8 {
+    #login-page .lg\:p-8 {
         padding: 2rem;
     }
 }
