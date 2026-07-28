@@ -673,7 +673,7 @@
         if (ls) ls.style.display = 'none';
         if (es) es.style.display = 'none';
         if (ems) ems.style.display = 'none';
-        if (ph) ph.style.display = 'flex';
+        if (ph) ph.style.display = 'none';
     }
 
     /**
@@ -683,7 +683,7 @@
         const containers = document.querySelectorAll('.chart-container');
         if (!containers.length) return;
 
-        // Chart configs keyed by card title
+        // Chart definitions keyed by card title
         const chartDefs = [
             {
                 title: 'Quiz Scores',
@@ -713,13 +713,28 @@
                     plugins: {
                         legend: { display: false },
                         title: { display: false },
-                        tooltip: { callbacks: { label: ctx => `Score: ${ctx.raw}%` } },
+                        tooltip: {
+                            callbacks: {
+                                /**
+                                 *
+                                 */
+                                label: ctx => `Score: ${ctx.raw}%`,
+                            },
+                        },
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             max: 100,
-                            ticks: { font: { size: 11 }, callback: v => v + '%' },
+                            ticks: {
+                                font: { size: 11 } /**
+                                 *
+                                 */,
+                                /**
+                                 *
+                                 */
+                                callback: v => v + '%',
+                            },
                             title: { display: false },
                         },
                         x: {
@@ -772,6 +787,9 @@
                         },
                         tooltip: {
                             callbacks: {
+                                /**
+                                 *
+                                 */
                                 label(ctx) {
                                     const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
                                     return `${ctx.label}: ${ctx.raw} (${((ctx.raw / total) * 100).toFixed(1)}%)`;
@@ -820,29 +838,34 @@
                     plugins: {
                         legend: {
                             position: 'top',
-                            labels: { color: '#94a3b8', font: { size: 12, weight: 'bold' } },
+                            labels: { color: '#94a3b8', font: { size: 13, weight: 'bold' } },
                         },
                         tooltip: {
-                            backgroundColor: '#0f172a',
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
+                            backgroundColor: '#111827',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
                             padding: 12,
-                            callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}%` },
+                            callbacks: {
+                                /**
+                                 *
+                                 */
+                                label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}%`,
+                            },
                         },
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             max: 100,
-                            ticks: { color: '#94a3b8', callback: v => v + '%' },
-                            title: { display: true, text: 'Progress (%)', color: '#64748b' },
-                            grid: { color: 'rgba(148,163,184,0.1)' },
+                            ticks: {
+                                /**
+                                 *
+                                 */
+                                callback: v => v + '%',
+                            },
+                            title: { display: true, text: 'Progress (%)' },
                         },
-                        x: {
-                            ticks: { color: '#94a3b8' },
-                            title: { display: true, text: 'Weeks', color: '#64748b' },
-                            grid: { color: 'rgba(148,163,184,0.1)' },
-                        },
+                        x: { title: { display: true, text: 'Weeks' } },
                     },
                 },
             },
@@ -856,11 +879,11 @@
                         {
                             label: 'Attendance (%)',
                             data: [90, 92, 88, 94, 96, 98],
-                            backgroundColor: 'rgba(16,185,129,0.8)',
+                            backgroundColor: '#10B981',
                             borderRadius: 6,
                             borderSkipped: false,
                             barPercentage: 0.4,
-                            categoryPercentage: 0.5,
+                            categoryPercentage: 0.6,
                         },
                     ],
                 },
@@ -869,44 +892,52 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
-                        title: { display: false },
-                        tooltip: { callbacks: { label: ctx => `Attendance: ${ctx.raw}%` } },
+                        tooltip: {
+                            callbacks: {
+                                /**
+                                 *
+                                 */
+                                label: ctx => `Attendance: ${ctx.raw}%`,
+                            },
+                        },
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             max: 100,
-                            ticks: { color: '#94a3b8', callback: v => v + '%' },
-                            grid: { color: 'rgba(148,163,184,0.1)' },
+                            ticks: {
+                                /**
+                                 *
+                                 */
+                                callback: v => v + '%',
+                            },
+                            title: { display: true, text: 'Attendance (%)' },
                         },
-                        x: {
-                            ticks: { color: '#94a3b8', font: { size: 11 }, maxRotation: 0 },
-                            grid: { color: 'rgba(148,163,184,0.1)' },
-                        },
+                        x: { title: { display: true, text: 'Weeks' } },
                     },
                 },
             },
         ];
 
-        containers.forEach((container, i) => {
-            const def = chartDefs[i];
-            if (!def || typeof Chart === 'undefined') return;
-
+        containers.forEach(container => {
             showLoading(container);
-
             setTimeout(() => {
-                // Hide all states
-                const ls = container.querySelector('.loading-state');
-                const es = container.querySelector('.error-state');
-                const ems = container.querySelector('.empty-state');
-                const ph = container.querySelector('.chart-placeholder-text');
-                if (ls) ls.style.display = 'none';
-                if (es) es.style.display = 'none';
-                if (ems) ems.style.display = 'none';
-                if (ph) ph.style.display = 'none';
+                showChart(container);
 
-                // Create canvas if not already present
-                let canvas = container.querySelector('canvas');
+                // Find matching chart def by card title
+                const cardTitle = container
+                    .closest('.chart-card')
+                    ?.querySelector('.chart-title')
+                    ?.textContent?.trim();
+                const def = chartDefs.find(d => d.title === cardTitle);
+                if (!def || typeof Chart === 'undefined') return;
+
+                // Destroy existing instance if any
+                const existing = Chart.getChart(def.id);
+                if (existing) existing.destroy();
+
+                // Inject canvas if not already present
+                let canvas = container.querySelector(`#${def.id}`);
                 if (!canvas) {
                     canvas = document.createElement('canvas');
                     canvas.id = def.id;
@@ -915,12 +946,8 @@
                     container.appendChild(canvas);
                 }
 
-                // Destroy existing instance if any
-                const existing = Chart.getChart(canvas);
-                if (existing) existing.destroy();
-
                 new Chart(canvas, { type: def.type, data: def.data, options: def.options });
-            }, 1500);
+            }, 2500);
         });
 
         document.querySelectorAll('.retry-btn').forEach(btn => {
