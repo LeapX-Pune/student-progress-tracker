@@ -186,11 +186,7 @@ function renderCourses(courses) {
     if (!listContainer) return;
 
     if (courses.length === 0) {
-        listContainer.innerHTML = `
-            <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">
-                No courses found.
-            </div>
-        `;
+        listContainer.innerHTML = '<div class="no-courses-message">No courses found.</div>';
         return;
     }
 
@@ -199,51 +195,50 @@ function renderCourses(courses) {
         .map((course, index) => {
             const colorClass = colors[index % colors.length];
 
-            // Calculate progress percentage
             const progressPercent =
                 course.totalModules > 0
                     ? Math.round((course.completedModules / course.totalModules) * 100)
                     : 0;
 
+            const nextModuleHtml = course.nextModule
+                ? `<div class="course-next-module">
+                    <span class="next-label">Next:</span>
+                    <span class="next-value">${course.nextModule}</span>
+                </div>`
+                : '';
+
             return `
             <div class="course-item-box ${colorClass}" style="margin-bottom: 1.25rem;">
-                <div class="course-header-row" style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
-                    <div style="flex: 1; padding-right: 0.5rem;">
-                        <h3 class="course-title-sub" style="margin-bottom: 0.15rem; font-size: 1.1rem; line-height: 1.3;">${course.title}</h3>
-                        <p class="course-instructor" style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">${course.instructor}</p>
+                <div class="course-card-header">
+                    <div class="course-card-header-text">
+                        <h3 class="course-title-sub">${course.title}</h3>
+                        <p class="course-instructor">${course.instructor}</p>
                     </div>
-                    <span class="status-badge-new ${course.status}" style="font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;">
+                    <span class="status-badge-new ${course.status}">
                         ${course.status === 'completed' ? 'Completed' : 'In Progress'}
                     </span>
                 </div>
-                
-                <div class="course-details-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.8rem; background: rgba(255,255,255,0.4); padding: 0.5rem; border-radius: 8px; transition: background 0.3s ease;">
+
+                <div class="course-details-grid">
                     <div>
-                        <span style="color: var(--text-secondary); font-weight: 500;">Modules:</span>
-                        <span style="font-weight: 600; color: var(--text-primary); margin-left: 0.25rem;">${course.completedModules} / ${course.totalModules}</span>
+                        <span class="label">Modules:</span>
+                        <span class="value">${course.completedModules} / ${course.totalModules}</span>
                     </div>
                     <div>
-                        <span style="color: var(--text-secondary); font-weight: 500;">Grade:</span>
-                        <span style="font-weight: 600; color: var(--text-primary); margin-left: 0.25rem;">${course.currentGrade ? `${getGradeLetter(course.currentGrade)} (${course.currentGrade}%)` : 'N/A'}</span>
+                        <span class="label">Grade:</span>
+                        <span class="value">${course.currentGrade ? `${getGradeLetter(course.currentGrade)} (${course.currentGrade}%)` : 'N/A'}</span>
                     </div>
                 </div>
 
-                ${
-                    course.nextModule
-                        ? `<div class="course-next-module" style="font-size: 0.8rem; margin-bottom: 0.75rem; padding: 0.4rem 0.5rem; background: rgba(255,255,255,0.6); border-radius: 6px; border-left: 3px solid #3b82f6; transition: background 0.3s ease;">
-    <span style="color: var(--text-secondary); font-weight: 500;">Next:</span>
-    <span style="font-weight: 600; color: var(--text-primary); margin-left: 0.25rem;">${course.nextModule}</span>
-</div>`
-                        : ''
-                }
+                ${nextModuleHtml}
 
-                <div class="course-progress-section" style="margin-top: 0.5rem;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.25rem;">
+                <div class="course-progress-section">
+                    <div class="course-progress-header">
                         <span>Progress</span>
                         <span>${progressPercent}%</span>
                     </div>
-                    <div class="progress-bar-bg" style="width: 100%; height: 6px; background: rgba(0,0,0,0.06); border-radius: 3px; overflow: hidden;">
-                        <div class="progress-bar-fill" style="width: ${progressPercent}%; height: 100%; background: #3b82f6; border-radius: 3px;"></div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: ${progressPercent}%;"></div>
                     </div>
                 </div>
             </div>
