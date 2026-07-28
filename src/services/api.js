@@ -1,6 +1,8 @@
+import { API_ENDPOINTS } from '../utils/constants.js';
 import { getConfig, isDevelopment } from '../utils/env.js';
 import { normalizeApiError } from '../utils/errors.js';
 import { getAuthToken } from './authStorage.js';
+import { setupMockServer } from './mock.js';
 
 let mockHandlers = null;
 
@@ -8,12 +10,16 @@ let mockHandlers = null;
  *
  */
 export async function initApi() {
+    console.log('[API] Initializing API...');
     try {
         const config = getConfig();
+        console.log('[API] Config:', config);
 
         if (config.apiMockEnabled) {
-            const { setupMockServer } = await import('./mock.js');
+            console.log('[API] Mock API is enabled, setting up server...');
             mockHandlers = setupMockServer();
+        } else {
+            console.log('[API] Mock API is disabled.');
         }
     } catch (err) {
         console.warn('[API] Failed to initialize mock server:', err);
@@ -165,9 +171,8 @@ export class ApiService {
         }
         fetchOptions.signal = controller.signal;
 
-        let timeoutId;
         const timeoutPromise = new Promise((_resolve, reject) => {
-            timeoutId = setTimeout(() => {
+            setTimeout(() => {
                 controller.abort();
                 reject(new Error('Request timeout'));
             }, this.timeoutMs);
@@ -177,14 +182,21 @@ export class ApiService {
         const fetchPromise = fetch(url, fetchOptions)
             .then(async response => {
                 if (requestKey) this.pendingRequests.delete(requestKey);
+                if (isDevelopment()) {
+                    console.log(
+                        `[API Response] ${method} ${url} (${response.status}) took ${Date.now() - requestStartTime}ms`
+                    );
+                }
                 return await this._responseInterceptor(response);
             })
             .catch(error => {
                 if (requestKey) this.pendingRequests.delete(requestKey);
-                console.error(
-                    `[API Error] ${method} ${url} failed after ${Date.now() - requestStartTime}ms`,
-                    error
-                );
+                if (isDevelopment()) {
+                    console.error(
+                        `[API Error] ${method} ${url} failed after ${Date.now() - requestStartTime}ms`,
+                        error
+                    );
+                }
 
                 // Handle abort specifically
                 if (error.name === 'AbortError') {
@@ -212,17 +224,8 @@ export class ApiService {
                     );
                 }
 
-                if (
-                    typeof process !== 'undefined' &&
-                    process.env &&
-                    process.env.NODE_ENV !== 'test'
-                ) {
-                    console.error(`API Error on ${endpoint}:`, error);
-                }
+                console.error(`API Error on ${endpoint}:`, error);
                 throw error;
-            })
-            .finally(() => {
-                clearTimeout(timeoutId);
             });
 
         // Race fetch against timeout
@@ -231,7 +234,9 @@ export class ApiService {
         // Store for deduplication
         if (requestKey) {
             this.pendingRequests.set(requestKey, requestPromise);
-            requestPromise.finally(() => this.pendingRequests.delete(requestKey)).catch(() => {});
+            // Ensure we clean up if race resolves before finally block
+            // eslint-disable-next-line promise/catch-or-return
+            requestPromise.finally(() => this.pendingRequests.delete(requestKey));
         }
 
         return requestPromise;
@@ -313,9 +318,10 @@ export const api = new ApiService();
  */
 export async function getCourses(studentId) {
     try {
-        const { API_ENDPOINTS } = await import('../utils/constants.js');
-        return await api.get(API_ENDPOINTS.STUDENT_COURSES(studentId));
+        const result = await api.get(API_ENDPOINTS.STUDENT_COURSES(studentId));
+        return result;
     } catch (err) {
+        console.error('[API] getCourses error:', err);
         throw {
             code: err.code || 'UNKNOWN',
             message: err.message || 'Failed to fetch courses',

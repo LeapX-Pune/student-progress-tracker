@@ -9,23 +9,22 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Instrument+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="main.css" />
 </head>
 <body class="dark">
 
-  <!-- 
-    Skip link for keyboard navigation
-  -->
+  <!-- SKIP TO MAIN CONTENT (first tabbable element) -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- Drawer overlay (Mobile only) -->
+  <!-- MOBILE OVERLAY -->
   <div class="drawer-overlay" data-drawer-overlay></div>
 
-  <!-- Main Application Shell -->
+  <!-- AUTH ROOT (login page renders here when not authenticated) -->
+  <div id="auth-root"></div>
+
   <div class="app-shell">
 
     <!-- SIDEBAR NAVIGATION -->
@@ -252,9 +251,10 @@
 
   </div>
 
-  <script defer src="script.js"></script>
-  <script defer src="attendance.js"></script>
-  <script type="module" src="main.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <script defer src="script.js"></script>
+   <script defer src="attendance.js"></script>
+   <script type="module" src="main.js"></script>
 
 </body>
 </html>

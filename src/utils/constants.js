@@ -128,3 +128,48 @@ export const ERROR_CODES = /** @type {const} */ ({
     VALIDATION_ERROR: 'VALIDATION_ERROR',
     UNKNOWN: 'UNKNOWN',
 });
+
+// ---------------------------------------------------------------------------
+// Chart.js defaults
+// ---------------------------------------------------------------------------
+
+/** Shared color palettes for Chart.js charts. */
+export const CHART_COLORS = {
+    primary: '#4F46E5',
+    blue: '#3B82F6',
+    green: '#10B981',
+    yellow: '#F59E0B',
+    red: '#EF4444',
+    orange: '#F97316',
+};
+
+/** 5-color palette used by bar charts. */
+export const PALETTE_5 = [
+    CHART_COLORS.primary,
+    CHART_COLORS.blue,
+    CHART_COLORS.green,
+    CHART_COLORS.yellow,
+    CHART_COLORS.red,
+];
+
+/** 3-color palette for donut/doughnut charts. */
+export const PALETTE_3 = [CHART_COLORS.green, CHART_COLORS.blue, CHART_COLORS.yellow];
+
+/** Default animation config shared across all chart types. */
+export const CHART_ANIMATION = {
+    duration: 600,
+    easing: 'easeOutQuart',
+};
+
+/** Default tooltip styling. */
+export const CHART_TOOLTIP_DEFAULTS = {
+    backgroundColor: '#1e293b',
+    titleFont: { family: 'Inter, system-ui, sans-serif', size: 12 },
+    bodyFont: { family: 'Inter, system-ui, sans-serif', size: 13, weight: '600' },
+    padding: { x: 12, y: 8 },
+    cornerRadius: 8,
+    displayColors: true,
+};
+
+/** Chart.js CDN URL (used by dynamic loader). */
+export const CHARTJS_CDN_URL = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';
