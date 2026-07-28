@@ -10,14 +10,27 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
-        if (localStorage.getItem('theme') === 'dark') {
+        function getThemePreference() {
+            var saved = localStorage.getItem('theme');
+            if (saved === 'dark' || saved === 'light') return saved;
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+            return 'light';
+        }
+        
+        var theme = getThemePreference();
+        if (theme === 'dark') {
             document.documentElement.classList.add('dark');
         }
+
         function applyTheme() {
-            var isDark = localStorage.getItem('theme') === 'dark' || document.documentElement.classList.contains('dark');
-            if (isDark) document.body.classList.add('dark');
-            else document.body.classList.remove('dark');
+            var currentTheme = getThemePreference();
+            if (currentTheme === 'dark') {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
         }
+
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', applyTheme);
         } else {
