@@ -18,5 +18,6 @@
   },
   "javascript.updateImportsOnFileMove.enabled": "always",
   "css.lint.unknownAtRules": "ignore",
-  "scss.lint.unknownAtRules": "ignore"
+  "scss.lint.unknownAtRules": "ignore",
+  "liveServer.settings.port": 5508
 }

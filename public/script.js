@@ -273,6 +273,13 @@
                 <p>Track your academic performance across quizzes, assignments, weekly progress, and attendance.</p>
             </header>
 
+            <nav class="grades-skip-nav" aria-label="Chart quick navigation">
+                <a href="#chart-quiz" class="sr-only sr-only-focusable">Skip to Quiz Scores chart</a>
+                <a href="#chart-assignment" class="sr-only sr-only-focusable">Skip to Assignment Performance chart</a>
+                <a href="#chart-weekly" class="sr-only sr-only-focusable">Skip to Weekly Progress chart</a>
+                <a href="#chart-attendance" class="sr-only sr-only-focusable">Skip to Attendance chart</a>
+            </nav>
+
             <div class="charts-grid" role="list" aria-labelledby="grades-heading">
 
                 <article class="chart-card" role="listitem" id="chart-quiz" tabindex="0" aria-labelledby="quiz-title" aria-describedby="quiz-desc">
@@ -681,7 +688,7 @@
         if (ls) ls.style.display = 'none';
         if (es) es.style.display = 'none';
         if (ems) ems.style.display = 'none';
-        if (ph) ph.style.display = 'flex';
+        if (ph) ph.style.display = 'none';
     }
 
     /**
@@ -752,8 +759,14 @@
                         tooltip: {
                             ...sharedTooltip,
                             callbacks: {
+                                /**
+                                 *
+                                 */
                                 title: items => items[0]?.label || '',
-                                label: ctx => ' Score: ' + ctx.raw + '%',
+                                /**
+                                 *
+                                 */
+                                label: ctx => ` Score: ${ctx.raw}%`,
                             },
                         },
                     },
@@ -764,9 +777,10 @@
                             grid: { color: 'rgba(148, 163, 184, 0.08)' },
                             ticks: {
                                 font: { size: 11 },
-                                callback: function (v) {
-                                    return v + '%';
-                                },
+                                /**
+                                 *
+                                 */
+                                callback: v => v + '%',
                                 color: '#94a3b8',
                             },
                             title: { display: false },
@@ -831,19 +845,12 @@
                         tooltip: {
                             ...sharedTooltip,
                             callbacks: {
-                                label: function (ctx) {
-                                    var total = ctx.dataset.data.reduce(function (a, b) {
-                                        return a + b;
-                                    }, 0);
-                                    return (
-                                        ' ' +
-                                        ctx.label +
-                                        ': ' +
-                                        ctx.raw +
-                                        ' (' +
-                                        ((ctx.raw / total) * 100).toFixed(1) +
-                                        '%)'
-                                    );
+                                /**
+                                 *
+                                 */
+                                label(ctx) {
+                                    const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                    return ` ${ctx.label}: ${ctx.raw} (${((ctx.raw / total) * 100).toFixed(1)}%)`;
                                 },
                             },
                         },
@@ -909,12 +916,14 @@
                         tooltip: {
                             ...sharedTooltip,
                             callbacks: {
-                                title: function (items) {
-                                    return items[0]?.label || '';
-                                },
-                                label: function (ctx) {
-                                    return ' ' + ctx.dataset.label + ': ' + ctx.parsed.y + '%';
-                                },
+                                /**
+                                 *
+                                 */
+                                title: items => items[0]?.label || '',
+                                /**
+                                 *
+                                 */
+                                label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y}%`,
                             },
                         },
                     },
@@ -924,9 +933,10 @@
                             max: 100,
                             grid: { color: 'rgba(148, 163, 184, 0.08)' },
                             ticks: {
-                                callback: function (v) {
-                                    return v + '%';
-                                },
+                                /**
+                                 *
+                                 */
+                                callback: v => v + '%',
                                 color: '#94a3b8',
                                 font: { size: 11 },
                             },
@@ -978,12 +988,14 @@
                         tooltip: {
                             ...sharedTooltip,
                             callbacks: {
-                                title: function (items) {
-                                    return items[0]?.label || '';
-                                },
-                                label: function (ctx) {
-                                    return ' Attendance: ' + ctx.raw + '%';
-                                },
+                                /**
+                                 *
+                                 */
+                                title: items => items[0]?.label || '',
+                                /**
+                                 *
+                                 */
+                                label: ctx => ` Attendance: ${ctx.raw}%`,
                             },
                         },
                     },
@@ -993,9 +1005,10 @@
                             max: 100,
                             grid: { color: 'rgba(148, 163, 184, 0.08)' },
                             ticks: {
-                                callback: function (v) {
-                                    return v + '%';
-                                },
+                                /**
+                                 *
+                                 */
+                                callback: v => v + '%',
                                 color: '#94a3b8',
                                 font: { size: 11 },
                             },
@@ -1021,30 +1034,33 @@
             },
         ];
 
+        /**
+         *
+         */
         function announceToScreenReader(container, message) {
-            var card = container.closest('.chart-card');
+            const card = container.closest('.chart-card');
             if (!card) return;
-            var liveRegion = card.querySelector('[data-chart-status]');
+            const liveRegion = card.querySelector('[data-chart-status]');
             if (liveRegion) liveRegion.textContent = message;
         }
 
-        containers.forEach(function (container) {
+        containers.forEach(container => {
             showLoading(container);
             announceToScreenReader(container, 'Loading chart data');
-
-            setTimeout(function () {
+            setTimeout(() => {
                 showChart(container);
 
-                var cardTitle = container
+                const cardTitle = container
                     .closest('.chart-card')
                     ?.querySelector('.chart-title')
                     ?.textContent?.trim();
-                var def = chartDefs.find(function (d) {
-                    return d.title === cardTitle;
-                });
+                const def = chartDefs.find(d => d.title === cardTitle);
                 if (!def || typeof Chart === 'undefined') return;
 
-                var canvas = container.querySelector('canvas');
+                const existing = Chart.getChart(def.id);
+                if (existing) existing.destroy();
+
+                let canvas = container.querySelector(`#${def.id}`);
                 if (!canvas) {
                     canvas = document.createElement('canvas');
                     canvas.id = def.id;
@@ -1053,25 +1069,22 @@
                     canvas.setAttribute('role', 'img');
                     canvas.setAttribute(
                         'aria-label',
-                        container.getAttribute('aria-label') || cardTitle + ' chart'
+                        container.getAttribute('aria-label') || `${cardTitle} chart`
                     );
                     container.appendChild(canvas);
                 }
 
-                var existing = Chart.getChart(canvas);
-                if (existing) existing.destroy();
-
                 new Chart(canvas, { type: def.type, data: def.data, options: def.options });
-                announceToScreenReader(container, cardTitle + ' chart loaded successfully');
+                announceToScreenReader(container, `${cardTitle} chart loaded successfully`);
             }, 2500);
         });
 
-        document.querySelectorAll('.retry-btn').forEach(function (btn) {
+        document.querySelectorAll('.retry-btn').forEach(btn => {
             btn.addEventListener('click', function () {
-                var c = this.closest('.chart-container');
+                const c = this.closest('.chart-container');
                 showLoading(c);
                 announceToScreenReader(c, 'Retrying chart load');
-                setTimeout(function () {
+                setTimeout(() => {
                     showChart(c);
                     announceToScreenReader(c, 'Chart loaded successfully');
                 }, 2000);
