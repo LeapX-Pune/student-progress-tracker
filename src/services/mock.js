@@ -276,7 +276,9 @@ export function setupMockServer() {
         if (!matchedRoute) {
             const pathname = parsedUrl.pathname;
             for (const [routeKey, handler] of Object.entries(routes)) {
-                const [routeMethod, routePattern] = routeKey.split(':');
+                const colonIndex = routeKey.indexOf(':');
+                const routeMethod = routeKey.substring(0, colonIndex);
+                const routePattern = routeKey.substring(colonIndex + 1);
                 if (routeMethod !== method) continue;
 
                 const routeParts = routePattern.split('/');
