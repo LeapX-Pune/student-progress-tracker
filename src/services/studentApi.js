@@ -147,3 +147,35 @@ export async function updateStudentActivity(activityId, data) {
         };
     }
 }
+
+/**
+ * Fetches the attendance for a specific student.
+ */
+export async function getStudentAttendance(studentId) {
+    try {
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.get(API_ENDPOINTS.STUDENT_ATTENDANCE(targetId));
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to fetch student attendance',
+        };
+    }
+}
+
+/**
+ * Fetches the academic performance analytics for a specific student.
+ */
+export async function getAcademicPerformance(studentId) {
+    try {
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.get(API_ENDPOINTS.STUDENT_ACADEMIC_PERFORMANCE(targetId));
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to fetch academic performance',
+        };
+    }
+}

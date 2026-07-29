@@ -203,6 +203,50 @@ const MOCK_COURSE_METRICS = [
         assignmentCompletionRate: 90,
     },
 ];
+
+const MOCK_GRADES_ANALYTICS = [
+    {
+        studentId: 'stu_001',
+        semesterGpa: 3.8,
+        overallGpa: 3.75,
+        creditsCompleted: 45,
+        subjectsPassed: 15,
+        subjectsRemaining: 25,
+        overallStanding: 'Excellent',
+        highestScoringSubject: 'Advanced Mathematics',
+        lowestScoringSubject: 'Computer Science Fundamentals',
+    },
+];
+
+const MOCK_ATTENDANCE_RECORDS = [
+    {
+        studentId: 'stu_001',
+        overallPercentage: 92,
+        trend: [90, 92, 88, 94, 96, 98],
+        courses: [
+            {
+                courseId: 'crs_001',
+                courseName: 'Advanced Mathematics',
+                percentage: 95,
+                conducted: 20,
+                attended: 19,
+                missed: 1,
+                required: 75,
+                status: 'Excellent',
+            },
+            {
+                courseId: 'crs_002',
+                courseName: 'Computer Science Fundamentals',
+                percentage: 85,
+                conducted: 20,
+                attended: 17,
+                missed: 3,
+                required: 75,
+                status: 'Good',
+            },
+        ],
+    },
+];
 // ============================================================================
 // TRANSFORMATION LAYER (HELPERS)
 // ============================================================================
@@ -669,6 +713,36 @@ async function handleGetCourseMetrics(request) {
     });
 }
 
+/**
+ * Handle GET academic performance
+ */
+async function handleGetAcademicPerformance(request) {
+    await delay(200);
+    const url = new URL(request.url);
+    const studentId = url.pathname.split('/')[3];
+    const data = MOCK_GRADES_ANALYTICS.find(m => m.studentId === studentId);
+
+    return new Response(JSON.stringify(data || {}), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
+ * Handle GET attendance
+ */
+async function handleGetAttendance(request) {
+    await delay(200);
+    const url = new URL(request.url);
+    const studentId = url.pathname.split('/')[3];
+    const data = MOCK_ATTENDANCE_RECORDS.find(m => m.studentId === studentId);
+
+    return new Response(JSON.stringify(data || {}), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
 const routes = {
     'POST:/api/auth/login': handleLogin,
     'GET:/api/students/:id': handleGetStudent,
@@ -677,6 +751,8 @@ const routes = {
     'GET:/api/students/:id/metrics': handleGetMetrics,
     'GET:/api/students/:id/notifications': handleGetNotifications,
     'GET:/api/students/:id/upcoming': handleGetUpcoming,
+    'GET:/api/students/:id/performance': handleGetAcademicPerformance,
+    'GET:/api/students/:id/attendance': handleGetAttendance,
     'PATCH:/api/notifications/:id': handlePatchNotification,
     'PATCH:/api/upcoming/:id': handlePatchActivity,
     'GET:/api/courses/:id': handleGetCourse,

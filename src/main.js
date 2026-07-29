@@ -10,7 +10,9 @@ import { showError, showInfo } from './components/Toast.js';
 import { createTooltip } from './components/Tooltip.js';
 import AuthContext from './context/AuthContext.js';
 import { useDashboard } from './hooks/useDashboard.js';
+import { initAttendancePage } from './pages/AttendancePage.js';
 import { initCoursesPage } from './pages/CoursesPage.js';
+import { initGradesPage } from './pages/GradesPage.js';
 import { createLoginPage } from './pages/LoginPage.js';
 import { initApi } from './services/api.js';
 
@@ -217,6 +219,8 @@ async function init() {
     await AuthContext.restoreSession();
 
     initCoursesPage();
+    initGradesPage();
+    initAttendancePage();
 
     if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
 
