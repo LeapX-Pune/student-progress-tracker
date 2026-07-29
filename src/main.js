@@ -23,7 +23,7 @@ import { initApi } from './services/api.js';
 window.useDashboard = useDashboard;
 import { initMotionPreferences } from './utils/animations.js';
 import { handleGlobalErrors } from './utils/errors.js';
-import { initScrollRestoration } from './utils/router.js';
+import { initScrollRestoration, initRouter } from './utils/router.js';
 import { initTheme } from './utils/theme.js';
 
 /**
@@ -197,6 +197,125 @@ function wireAppInteractions() {
 }
 
 /**
+ *
+ */
+function wireDOMInteractions() {
+    const profileToggleBtn = document.querySelector('[data-profile-toggle]');
+    const profileDropdown = document.querySelector('[data-profile-dropdown]');
+    const notificationToggleBtn = document.querySelector('[data-notification-toggle]');
+    const notificationPanel = document.querySelector('[data-notification-panel]');
+
+    const appShell = document.querySelector('.app-shell');
+    const drawerOpenBtn = document.querySelector('[data-drawer-open]');
+    const drawerOverlay = document.querySelector('[data-drawer-overlay]');
+    const collapseToggleBtn = document.querySelector('[data-collapse-toggle]');
+
+    /**
+     *
+     */
+    function closeProfileDropdown() {
+        if (!profileDropdown || profileDropdown.hidden) return;
+        profileDropdown.hidden = true;
+        profileToggleBtn?.setAttribute('aria-expanded', 'false');
+    }
+
+    /**
+     *
+     */
+    function closeNotifications() {
+        if (!notificationPanel || notificationPanel.hidden) return;
+        notificationPanel.hidden = true;
+        notificationToggleBtn?.setAttribute('aria-expanded', 'false');
+    }
+
+    /**
+     *
+     */
+    function closeDrawer() {
+        if (appShell) appShell.classList.remove('is-drawer-open');
+        if (drawerOverlay) drawerOverlay.classList.remove('is-visible');
+        if (drawerOpenBtn) drawerOpenBtn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+
+    if (profileToggleBtn) {
+        profileToggleBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            const willOpen = profileDropdown.hidden;
+            closeNotifications();
+            profileDropdown.hidden = !willOpen;
+            profileToggleBtn.setAttribute('aria-expanded', String(willOpen));
+        });
+    }
+
+    if (notificationToggleBtn) {
+        notificationToggleBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            const willOpen = notificationPanel.hidden;
+            closeProfileDropdown();
+            notificationPanel.hidden = !willOpen;
+            notificationToggleBtn.setAttribute('aria-expanded', String(willOpen));
+        });
+    }
+
+    if (drawerOpenBtn) {
+        drawerOpenBtn.addEventListener('click', () => {
+            if (appShell.classList.contains('is-drawer-open')) {
+                closeDrawer();
+            } else {
+                appShell.classList.add('is-drawer-open');
+                if (drawerOverlay) drawerOverlay.classList.add('is-visible');
+                drawerOpenBtn.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    }
+
+    if (drawerOverlay) {
+        drawerOverlay.addEventListener('click', closeDrawer);
+    }
+
+    if (collapseToggleBtn) {
+        collapseToggleBtn.addEventListener('click', () => {
+            if (window.innerWidth <= 768) return;
+            appShell.classList.toggle('is-collapsed');
+            const collapsed = appShell.classList.contains('is-collapsed');
+            collapseToggleBtn.setAttribute(
+                'aria-label',
+                collapsed ? 'Expand sidebar' : 'Collapse sidebar'
+            );
+        });
+    }
+
+    document.addEventListener('click', e => {
+        if (
+            notificationPanel &&
+            !notificationPanel.hidden &&
+            !notificationPanel.contains(e.target) &&
+            e.target !== notificationToggleBtn
+        ) {
+            closeNotifications();
+        }
+        if (
+            profileDropdown &&
+            !profileDropdown.hidden &&
+            !profileDropdown.contains(e.target) &&
+            !e.target.closest('[data-profile-toggle]')
+        ) {
+            closeProfileDropdown();
+        }
+    });
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            closeProfileDropdown();
+            closeNotifications();
+            closeDrawer();
+        }
+    });
+}
+
+/**
  * Initialize notifications panel
  */
 function initNotifications() {
@@ -322,6 +441,110 @@ function initNotifications() {
 }
 
 /**
+ * Initialize the Overview (dashboard) page.
+ */
+function initOverviewPage() {
+    const pageContent = document.querySelector('[data-page-content]');
+    if (!pageContent) return;
+
+    /**
+     *
+     */
+    function renderOverview(data) {
+        const { profile = {}, courses = [], metrics = {} } = data;
+        const activeCourses = courses.filter(c => c.status !== 'completed').length;
+        const completedCourses = courses.filter(c => c.status === 'completed').length;
+        const gradesSummary = metrics.grades?.academicSummary || {};
+
+        pageContent.innerHTML = `
+            <div class="overview-page" role="region" aria-label="Dashboard Overview" style="padding-bottom: 2rem;">
+                <header style="margin-bottom: 2rem;">
+                    <h1 class="dashboard-title" style="font-size: 2.25rem; font-weight: 700; margin-bottom: 0.5rem;">
+                        Welcome back, ${profile.name || 'Student'} 👋
+                    </h1>
+                    <p style="color: var(--text-secondary);">${gradesSummary.currentSemester || 'Spring 2025'} &bull; ${profile.program || profile.department || 'Student'}</p>
+                </header>
+
+                <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div class="metric-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem;">
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Overall GPA</p>
+                        <p style="margin: 0.5rem 0 0; font-size: 2rem; font-weight: 700; color: var(--text-primary);">${gradesSummary.overallGpa || metrics.grades?.overallGpa || 'N/A'}</p>
+                    </div>
+                    <div class="metric-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem;">
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Active Courses</p>
+                        <p style="margin: 0.5rem 0 0; font-size: 2rem; font-weight: 700; color: var(--text-primary);">${activeCourses}</p>
+                    </div>
+                    <div class="metric-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem;">
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Completed</p>
+                        <p style="margin: 0.5rem 0 0; font-size: 2rem; font-weight: 700; color: var(--color-success);">${completedCourses}</p>
+                    </div>
+                    <div class="metric-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem;">
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Attendance</p>
+                        <p style="margin: 0.5rem 0 0; font-size: 2rem; font-weight: 700; color: var(--text-primary);">${metrics.grades?.overallAttendance ?? 'N/A'}%</p>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem;">
+                    <h2 style="font-size: 1.125rem; font-weight: 600; margin: 0 0 1rem 0;">Enrolled Courses</h2>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        ${courses
+                            .map(
+                                c => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-page, var(--bg-surface)); border: 1px solid var(--border-color); border-radius: 12px;">
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">${c.title}</div>
+                                    <div style="font-size: 0.875rem; color: var(--text-secondary);">${c.instructor} &bull; ${c.completedModules || 0}/${c.totalModules || 0} modules</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 700; color: var(--text-primary);">${c.currentGrade ?? 'N/A'}%</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary); text-transform: capitalize;">${c.status || 'in-progress'}</div>
+                                </div>
+                            </div>
+                        `
+                            )
+                            .join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     *
+     */
+    function handleRoute(e) {
+        const route = e.detail.route;
+        if (route !== 'overview' && route !== 'students') return;
+        pageContent.innerHTML =
+            '<div style="padding:2rem;text-align:center;color:var(--text-secondary);">Loading…</div>';
+        const dashboard = useDashboard({
+            /**
+             *
+             */
+            onLoading: () => {},
+            /**
+             *
+             */
+            onSuccess: data => renderOverview(data),
+            /**
+             *
+             */
+            onError: err => {
+                pageContent.innerHTML = `<div style="padding:2rem;text-align:center;color:var(--color-danger);">${err.message || 'Failed to load overview'}</div>`;
+            },
+        });
+        dashboard.fetch();
+    }
+
+    document.addEventListener('pathway:route', handleRoute);
+
+    const currentHash = window.location.hash.replace(/^#\/?/, '').split('?')[0].trim();
+    if (currentHash === 'overview' || currentHash === '' || currentHash === 'students') {
+        handleRoute({ detail: { route: currentHash || 'overview' } });
+    }
+}
+
+/**
  *
  */
 async function init() {
@@ -335,6 +558,7 @@ async function init() {
     wireLoadingStates();
     wireTooltips();
     wireAppInteractions();
+    wireDOMInteractions();
 
     createIcons({ icons });
 
@@ -346,11 +570,14 @@ async function init() {
     await initApi();
     await AuthContext.restoreSession();
 
+    initRouter();
+
     initCoursesPage();
     initGradesPage();
     initAttendancePage();
     initSettingsPage();
     initProfilePage();
+    initOverviewPage();
     initNotifications();
 
     if (spinner.parentNode) spinner.parentNode.removeChild(spinner);

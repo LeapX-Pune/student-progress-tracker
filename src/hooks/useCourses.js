@@ -47,32 +47,46 @@ export function useCourses() {
 
         let result = [...state.data];
 
-        // 1. Search
+        // 1. Search — mock uses title/id, not name/code
         if (state.searchQuery) {
             const query = state.searchQuery.toLowerCase();
             result = result.filter(
-                c => c.name.toLowerCase().includes(query) || c.code.toLowerCase().includes(query)
+                c =>
+                    (c.title || c.name || '').toLowerCase().includes(query) ||
+                    (c.courseCode || c.code || c.id || '').toLowerCase().includes(query) ||
+                    (c.instructor || '').toLowerCase().includes(query)
             );
         }
 
-        // 2. Filter
+        // 2. Filter — mock statuses: 'in-progress', 'completed', 'not-started', 'almost-complete'
         if (state.filterBy !== 'all') {
             result = result.filter(c => {
                 if (state.filterBy === 'current')
-                    return c.status === 'in_progress' || c.status === 'active';
+                    return (
+                        c.status === 'in-progress' ||
+                        c.status === 'in_progress' ||
+                        c.status === 'almost-complete'
+                    );
                 if (state.filterBy === 'completed') return c.status === 'completed';
-                if (state.filterBy === 'in_progress') return c.status === 'in_progress';
+                if (state.filterBy === 'in_progress')
+                    return c.status === 'in-progress' || c.status === 'almost-complete';
                 return true;
             });
         }
 
-        // 3. Sort
+        // 3. Sort — use title/completedModules/lastAccessedAt
         result.sort((a, b) => {
             if (state.sortBy === 'alphabetical') {
-                return a.name.localeCompare(b.name);
+                return (a.title || a.name || '').localeCompare(b.title || b.name || '');
             }
             if (state.sortBy === 'progress') {
-                return (b.progress || 0) - (a.progress || 0);
+                const pA = a.totalModules
+                    ? (a.completedModules || 0) / a.totalModules
+                    : a.progress || 0;
+                const pB = b.totalModules
+                    ? (b.completedModules || 0) / b.totalModules
+                    : b.progress || 0;
+                return pB - pA;
             }
             if (state.sortBy === 'recent') {
                 // Assuming lastAccessed exists or fallback to alphabetical

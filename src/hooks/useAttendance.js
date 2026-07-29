@@ -90,7 +90,9 @@ export function useAttendance() {
         try {
             const attendance = await getStudentAttendance();
             const isAtRisk = attendance.overallPercentage < 75;
-            state.data = { ...attendance, isAtRisk };
+            // Normalize: mock returns array as `courses`, hook reads `records`
+            const records = attendance.records || attendance.courses || [];
+            state.data = { ...attendance, records, isAtRisk };
             applyFiltersAndSort();
         } catch (err) {
             state.error = err.message || 'Failed to load attendance';

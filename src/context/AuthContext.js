@@ -28,7 +28,7 @@ import * as authApi from '../services/authApi.js';
 import { saveAuthToken, getAuthToken, clearAuthToken } from '../services/authStorage.js';
 import { isTokenExpired } from '../utils/authHelpers.js';
 import * as authz from '../utils/authorization.js';
-import { ERROR_CODES, ROUTES } from '../utils/constants.js';
+import { ERROR_CODES, ROUTES, AUTH_CONSTANTS } from '../utils/constants.js';
 
 // ─── Private helper functions ─────────────────────────────────────────────────
 
@@ -213,11 +213,7 @@ const AuthContext = (() => {
 
             if (!stored) {
                 if (ENV.ENABLE_MOCK_API) {
-                    const mockUser = {
-                        id: 'mock-001',
-                        name: 'Sai Shendge',
-                        email: 'sai@example.com',
-                    };
+                    const mockUser = { ...AUTH_CONSTANTS.DEMO_STUDENT };
                     const mockToken = 'mock-jwt-token-dev';
                     saveAuthToken({
                         token: mockToken,

@@ -88,10 +88,28 @@ export function useGrades() {
         notify();
 
         try {
-            const [grades, performance] = await Promise.all([
+            const [gradesPayload, performance] = await Promise.all([
                 getStudentGrades(), // Updated API to use current user
                 getAcademicPerformance(),
             ]);
+
+            // Normalize: mock returns grades as {quizScores, gradeDistribution, weeklyProgress}
+            // The UI expects a flat array of grade items with .score/.title/.courseName
+            let grades;
+            if (Array.isArray(gradesPayload)) {
+                grades = gradesPayload;
+            } else if (gradesPayload && Array.isArray(gradesPayload.quizScores)) {
+                grades = gradesPayload.quizScores.map((q, i) => ({
+                    title: q.label || `Quiz ${i + 1}`,
+                    courseName: 'General Assessment',
+                    courseCode: '',
+                    type: 'Quiz',
+                    score: q.maxScore ? Math.round((q.score / q.maxScore) * 100) : q.score,
+                    date: null,
+                }));
+            } else {
+                grades = [];
+            }
 
             state.data = { grades, performance };
             applyFiltersAndSort();
