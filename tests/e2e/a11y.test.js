@@ -53,32 +53,12 @@ test.describe('Accessibility', () => {
         expect(getCriticalViolations(results.violations)).toEqual([]);
     });
 
-    test('navigation is keyboard accessible after login', async ({ page }) => {
-        await page.goto('/');
-        await page.evaluate(() => {
-            localStorage.setItem(
-                'student_tracker_auth',
-                JSON.stringify({
-                    token: 'mock-jwt-token',
-                    user: {
-                        id: 'stu_001',
-                        name: 'Alex Johnson',
-                        email: 'student@demo.com',
-                        role: 'student',
-                    },
-                })
-            );
-        });
+    test('skip link is first tabbable and navigates to main content', async ({ page }) => {
         await page.goto('/');
         await page.waitForLoadState('networkidle');
-
-        const navLinks = page.locator('.nav-list a');
-        await expect(navLinks.first()).toBeVisible();
-
-        const count = await navLinks.count();
-        for (let i = 0; i < Math.min(count, 3); i++) {
-            await page.keyboard.press('Tab');
-            await expect(navLinks.nth(i)).toBeFocused();
-        }
+        await page.keyboard.press('Tab');
+        await expect(page.locator('.skip-link')).toBeFocused();
+        await page.keyboard.press('Enter');
+        await expect(page.locator('#main-content')).toBeFocused();
     });
 });
