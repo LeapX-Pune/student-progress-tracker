@@ -35,7 +35,7 @@ await build({
     define: {
         'import.meta.env.DEV': 'false',
         'import.meta.env.PROD': 'true',
-        'import.meta.env.VITE_API_URL': '"https://api.example.com/api"',
+        'import.meta.env.VITE_API_BASE_URL': '"/api"',
         'import.meta.env.VITE_ENABLE_MOCK_API': '"true"',
         'import.meta.env.VITE_API_MOCK_ENABLED': '"true"',
     },
@@ -88,7 +88,23 @@ if (existsSync(resolve(publicDir, '_redirects'))) {
     copyFileSync(resolve(publicDir, '_redirects'), resolve(distDir, '_redirects'));
 }
 
-// Copy assets for standalone HTML pages
+// Copy standalone HTML pages
 copyFileSync(resolve(publicDir, 'dashboard.html'), resolve(distDir, 'dashboard.html'));
+if (existsSync(resolve(publicDir, 'course-progress.html'))) {
+    copyFileSync(
+        resolve(publicDir, 'course-progress.html'),
+        resolve(distDir, 'course-progress.html')
+    );
+}
+if (existsSync(resolve(publicDir, 'grades.html'))) {
+    copyFileSync(resolve(publicDir, 'grades.html'), resolve(distDir, 'grades.html'));
+}
+
+// Copy dashboard assets (CSS, JS) — not bundled through esbuild
 copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(distDir, 'dashboard.css'));
 copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.js'), resolve(distDir, 'dashboard.js'));
+
+// GitHub Pages SPA fallback: serve index.html for 404s
+if (existsSync(resolve(publicDir, '404.html'))) {
+    copyFileSync(resolve(publicDir, '404.html'), resolve(distDir, '404.html'));
+}

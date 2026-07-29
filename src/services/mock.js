@@ -243,6 +243,17 @@ async function handleGetCourseProgress(request) {
     });
 }
 
+/**
+ *
+ */
+async function handleGetWeeklyProgress(_request) {
+    await delay(150);
+    return new Response(JSON.stringify(db.weeklyProgress), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
 const routes = {
     'POST:/api/auth/login': handleLogin,
     'GET:/api/students/:id': handleGetStudent,
@@ -250,6 +261,7 @@ const routes = {
     'GET:/api/students/:id/grades': handleGetGrades,
     'GET:/api/courses/:id': handleGetCourse,
     'GET:/api/courses/:id/progress': handleGetCourseProgress,
+    'GET:/api/weeklyProgress': handleGetWeeklyProgress,
 };
 
 /**
