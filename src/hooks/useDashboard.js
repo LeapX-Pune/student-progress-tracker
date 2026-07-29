@@ -23,7 +23,28 @@ export function useDashboard({ onLoading, onSuccess, onError }) {
 
         try {
             const data = await getDashboardMetrics();
-            if (onSuccess) onSuccess(data);
+
+            // Generate Academic Insights
+            const insights = {
+                bestSubject: 'N/A',
+                needsImprovement: 'N/A',
+            };
+
+            if (data.courses && data.courses.length > 0) {
+                const validCourses = data.courses.filter(c => typeof c.currentGrade === 'number');
+                if (validCourses.length > 0) {
+                    const sorted = [...validCourses].sort(
+                        (a, b) => b.currentGrade - a.currentGrade
+                    );
+                    insights.bestSubject = sorted[0].title;
+                    insights.needsImprovement = sorted[sorted.length - 1].title;
+                }
+            }
+
+            // Append insights to data payload
+            const enrichedData = { ...data, insights };
+
+            if (onSuccess) onSuccess(enrichedData);
         } catch (error) {
             if (onError) onError(error);
         }

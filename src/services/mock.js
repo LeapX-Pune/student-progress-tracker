@@ -104,7 +104,67 @@ const MOCK_STUDENT_METRICS = [
                 { week: 'Week 6', completed: 2, total: 3 },
             ],
             overallAttendance: 96.2,
+            academicSummary: {
+                currentSemester: 'Spring 2025',
+                academicYear: '2024-2025',
+                overallGpa: 3.8,
+                creditsEarned: 84,
+                creditsRemaining: 36,
+                totalRegisteredCredits: 120,
+            },
+            attendanceOverview: {
+                overallAttendance: 96.2,
+                classesAttended: 120,
+                classesMissed: 5,
+                trend: 'stable',
+            },
+            weeklyActivity: {
+                hoursStudied: 14.5,
+                modulesCompleted: 3,
+                assignmentsSubmitted: 2,
+                quizAttempts: 1,
+            },
         },
+    },
+];
+
+const MOCK_NOTIFICATIONS = [
+    {
+        id: 'notif_1',
+        studentId: 'stu_001',
+        title: 'Assignment Reminder',
+        message: 'Your Physics assignment is due tomorrow.',
+        type: 'warning',
+        isRead: false,
+        timestamp: '2025-05-14T09:00:00Z',
+    },
+    {
+        id: 'notif_2',
+        studentId: 'stu_001',
+        title: 'Grade Published',
+        message: 'Your Math Midterm grade has been published.',
+        type: 'success',
+        isRead: true,
+        timestamp: '2025-05-12T14:30:00Z',
+    },
+];
+
+const MOCK_UPCOMING_ACTIVITIES = [
+    {
+        id: 'act_1',
+        studentId: 'stu_001',
+        title: 'Physics Lab Report',
+        type: 'Assignment',
+        dueDate: '2025-05-16T23:59:00Z',
+        course: 'Physics 101',
+    },
+    {
+        id: 'act_2',
+        studentId: 'stu_001',
+        title: 'Math Quiz 3',
+        type: 'Quiz',
+        dueDate: '2025-05-18T10:00:00Z',
+        course: 'Calculus II',
     },
 ];
 
@@ -130,6 +190,27 @@ function getCoursesForStudent(studentId) {
 function getGradesForStudent(studentId) {
     const metrics = MOCK_STUDENT_METRICS.find(m => m.studentId === studentId);
     return metrics ? metrics.grades : null;
+}
+
+/**
+ *
+ */
+function getMetricsForStudent(studentId) {
+    return MOCK_STUDENT_METRICS.find(m => m.studentId === studentId) || null;
+}
+
+/**
+ *
+ */
+function getNotificationsForStudent(studentId) {
+    return MOCK_NOTIFICATIONS.filter(n => n.studentId === studentId);
+}
+
+/**
+ *
+ */
+function getUpcomingActivitiesForStudent(studentId) {
+    return MOCK_UPCOMING_ACTIVITIES.filter(a => a.studentId === studentId);
 }
 
 /**
@@ -334,6 +415,54 @@ async function handleGetGrades(request) {
 }
 
 /**
+ *
+ */
+async function handleGetMetrics(request) {
+    await delay(100);
+    const url = new URL(request.url);
+    const studentId = url.pathname.split('/')[3];
+    const metrics = getMetricsForStudent(studentId);
+    if (metrics) {
+        return new Response(JSON.stringify(metrics), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+    return new Response(JSON.stringify({ message: 'Metrics not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
+ *
+ */
+async function handleGetNotifications(request) {
+    await delay(100);
+    const url = new URL(request.url);
+    const studentId = url.pathname.split('/')[3];
+    const notifications = getNotificationsForStudent(studentId);
+    return new Response(JSON.stringify(notifications), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
+ *
+ */
+async function handleGetUpcoming(request) {
+    await delay(100);
+    const url = new URL(request.url);
+    const studentId = url.pathname.split('/')[3];
+    const upcoming = getUpcomingActivitiesForStudent(studentId);
+    return new Response(JSON.stringify(upcoming), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
  * Handle individual course fetch
  */
 async function handleGetCourse(request) {
@@ -384,6 +513,9 @@ const routes = {
     'GET:/api/students/:id': handleGetStudent,
     'GET:/api/students/:id/courses': handleGetCourses,
     'GET:/api/students/:id/grades': handleGetGrades,
+    'GET:/api/students/:id/metrics': handleGetMetrics,
+    'GET:/api/students/:id/notifications': handleGetNotifications,
+    'GET:/api/students/:id/upcoming': handleGetUpcoming,
     'GET:/api/courses/:id': handleGetCourse,
     'GET:/api/courses/:id/progress': handleGetCourseProgress,
 };

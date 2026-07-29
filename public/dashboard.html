@@ -361,8 +361,8 @@
                                 <section class="premium-card">
                                     <div class="card-header">
                                         <div>
-                                            <h2 class="card-title">Homework</h2>
-                                            <p class="card-subtitle">Check and complete tasks</p>
+                                            <h2 class="card-title">Quiz Performance</h2>
+                                            <p class="card-subtitle">Recent quiz scores</p>
                                         </div>
                                     </div>
                                     <div class="chart-container-bar">
@@ -373,14 +373,70 @@
                                 <section class="premium-card">
                                     <div class="card-header">
                                         <div>
-                                            <h2 class="card-title">Friends Score</h2>
+                                            <h2 class="card-title">Grade Distribution</h2>
                                             <p class="card-subtitle">
-                                                See how you rank among friends
+                                                Overall performance spread
                                             </p>
                                         </div>
                                     </div>
                                     <div class="chart-container-doughnut">
                                         <canvas id="gradeChart"></canvas>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <!-- New Academic Row -->
+                            <div class="stats-row" style="margin-top: 1.5rem;">
+                                <!-- Academic Summary -->
+                                <section class="premium-card" style="flex: 1;">
+                                    <div class="card-header">
+                                        <div>
+                                            <h2 class="card-title">Academic Summary</h2>
+                                            <p class="card-subtitle">Credits and GPA</p>
+                                        </div>
+                                    </div>
+                                    <div class="course-details-grid" id="academicSummaryContainer" style="padding-top: 1rem;">
+                                        <!-- Bound dynamically -->
+                                    </div>
+                                </section>
+
+                                <!-- Insights -->
+                                <section class="premium-card" style="flex: 1;">
+                                    <div class="card-header">
+                                        <div>
+                                            <h2 class="card-title">Insights</h2>
+                                            <p class="card-subtitle">AI-driven analysis</p>
+                                        </div>
+                                    </div>
+                                    <div id="insightsContainer" style="padding-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.875rem;">
+                                        <!-- Bound dynamically -->
+                                    </div>
+                                </section>
+                            </div>
+
+                            <!-- Notifications & Upcoming -->
+                            <div class="stats-row" style="margin-top: 1.5rem;">
+                                <section class="premium-card" style="flex: 1;">
+                                    <div class="card-header">
+                                        <div>
+                                            <h2 class="card-title">Upcoming Activities</h2>
+                                            <p class="card-subtitle">Deadlines and exams</p>
+                                        </div>
+                                    </div>
+                                    <div id="upcomingContainer" style="padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                                        <!-- Bound dynamically -->
+                                    </div>
+                                </section>
+
+                                <section class="premium-card" style="flex: 1;">
+                                    <div class="card-header">
+                                        <div>
+                                            <h2 class="card-title">Notifications</h2>
+                                            <p class="card-subtitle">Recent alerts</p>
+                                        </div>
+                                    </div>
+                                    <div id="notificationsContainer" style="padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                                        <!-- Bound dynamically -->
                                     </div>
                                 </section>
                             </div>

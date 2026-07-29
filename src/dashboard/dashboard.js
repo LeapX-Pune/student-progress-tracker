@@ -138,6 +138,11 @@ function renderGradeChart(distribution) {
         gradeChartInstance.destroy();
     }
 
+    if (distribution.length === 0) {
+        // Clear canvas context if empty state is desired
+        return;
+    }
+
     const labels = distribution.map(d => `Grade ${d.label}`);
     const data = distribution.map(d => d.percentage);
 
@@ -174,6 +179,137 @@ function renderGradeChart(distribution) {
 }
 
 /**
+ *
+ */
+function renderAcademicSummary(summary) {
+    const container = document.getElementById('academicSummaryContainer');
+    if (!container) return;
+
+    if (!summary) {
+        container.innerHTML =
+            '<div style="color: var(--text-secondary);">No academic data available.</div>';
+        return;
+    }
+
+    container.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.875rem;">
+            <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Overall GPA</span>
+                <span style="font-weight: 600;">${summary.overallGpa || 'N/A'}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Credits Earned</span>
+                <span style="font-weight: 600;">${summary.creditsEarned || 0} / ${summary.totalRegisteredCredits || 0}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Credits Remaining</span>
+                <span style="font-weight: 600;">${summary.creditsRemaining || 0}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Semester</span>
+                <span style="font-weight: 600;">${summary.currentSemester || 'N/A'}</span>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ *
+ */
+function renderInsights(insights, attendance) {
+    const container = document.getElementById('insightsContainer');
+    if (!container) return;
+
+    if (!insights && !attendance) {
+        container.innerHTML =
+            '<div style="color: var(--text-secondary);">No insights available.</div>';
+        return;
+    }
+
+    container.innerHTML = `
+        <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--text-secondary);">Best Subject</span>
+            <span style="font-weight: 600;">${insights?.bestSubject || 'N/A'}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--text-secondary);">Needs Improvement</span>
+            <span style="font-weight: 600;">${insights?.needsImprovement || 'N/A'}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--text-secondary);">Attendance Trend</span>
+            <span style="font-weight: 600;">${attendance?.trend ? attendance.trend.charAt(0).toUpperCase() + attendance.trend.slice(1) : 'N/A'}</span>
+        </div>
+    `;
+}
+
+/**
+ *
+ */
+function renderUpcomingActivities(activities) {
+    const container = document.getElementById('upcomingContainer');
+    if (!container) return;
+
+    if (!activities || activities.length === 0) {
+        container.innerHTML =
+            '<div style="color: var(--text-secondary); font-size: 0.875rem;">No upcoming activities.</div>';
+        return;
+    }
+
+    container.innerHTML = activities
+        .map(
+            act => `
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem;">
+            <div style="display: flex; flex-direction: column;">
+                <span style="font-weight: 600;">${act.title}</span>
+                <span style="color: var(--text-secondary); font-size: 0.75rem;">${act.course} • ${act.type}</span>
+            </div>
+            <span style="font-weight: 500; font-size: 0.75rem; color: #f59e0b;">${formatDate(act.dueDate)}</span>
+        </div>
+    `
+        )
+        .join(
+            '<hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.25rem 0;" />'
+        );
+}
+
+/**
+ *
+ */
+function renderNotifications(notifications) {
+    const container = document.getElementById('notificationsContainer');
+    if (!container) return;
+
+    if (!notifications || notifications.length === 0) {
+        container.innerHTML =
+            '<div style="color: var(--text-secondary); font-size: 0.875rem;">No new notifications.</div>';
+        return;
+    }
+
+    container.innerHTML = notifications
+        .map(notif => {
+            const color =
+                notif.type === 'success'
+                    ? '#10b981'
+                    : notif.type === 'warning'
+                      ? '#f59e0b'
+                      : '#3b82f6';
+            return `
+        <div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.875rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 600; color: ${color};">${notif.title}</span>
+                ${!notif.isRead ? '<span style="width: 6px; height: 6px; border-radius: 50%; background-color: #ef4444;"></span>' : ''}
+            </div>
+            <span style="color: var(--text-secondary); line-height: 1.4;">${notif.message}</span>
+            <span style="color: var(--text-secondary); font-size: 0.7rem;">${formatDate(notif.timestamp)}</span>
+        </div>
+    `;
+        })
+        .join(
+            '<hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.25rem 0;" />'
+        );
+}
+
+/**
  * Initialize dashboard data via window.parent.useDashboard hook
  */
 function initDashboardData() {
@@ -198,7 +334,7 @@ function initDashboardData() {
          *
          */
         onSuccess: data => {
-            const { profile, courses, grades } = data;
+            const { profile, courses, grades, metrics, notifications, upcoming, insights } = data;
 
             // 1. Profile bindings
             const nameEl = document.getElementById('studentName');
@@ -251,9 +387,16 @@ function initDashboardData() {
                 renderGradeChart([]);
             }
 
-            // 4. Attendance ring and GPA (derived from grades if available)
-            const attendance = grades?.overallAttendance ?? 0;
+            // 4. Attendance ring and GPA (derived from metrics or grades)
+            const attendance =
+                metrics?.attendanceOverview?.overallAttendance ?? grades?.overallAttendance ?? 0;
             updateAttendanceRing(attendance);
+
+            // 5. New widgets
+            renderAcademicSummary(metrics?.academicSummary);
+            renderInsights(insights, metrics?.attendanceOverview);
+            renderUpcomingActivities(upcoming);
+            renderNotifications(notifications);
         },
         /**
          *
@@ -266,6 +409,10 @@ function initDashboardData() {
             renderWeeklyProgressChart([]);
             renderQuizChart([]);
             renderGradeChart([]);
+            renderAcademicSummary(null);
+            renderInsights(null, null);
+            renderUpcomingActivities([]);
+            renderNotifications([]);
         },
     });
 

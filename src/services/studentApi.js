@@ -69,3 +69,51 @@ export async function getStudentGrades(studentId) {
         };
     }
 }
+
+/**
+ * Fetches the metrics for a specific student.
+ */
+export async function getStudentMetrics(studentId) {
+    try {
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.get(API_ENDPOINTS.STUDENT_METRICS(targetId));
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to fetch student metrics',
+        };
+    }
+}
+
+/**
+ * Fetches the notifications for a specific student.
+ */
+export async function getStudentNotifications(studentId) {
+    try {
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.get(API_ENDPOINTS.STUDENT_NOTIFICATIONS(targetId));
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to fetch student notifications',
+        };
+    }
+}
+
+/**
+ * Fetches the upcoming activities for a specific student.
+ */
+export async function getStudentUpcomingActivities(studentId) {
+    try {
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.get(API_ENDPOINTS.STUDENT_UPCOMING(targetId));
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to fetch student upcoming activities',
+        };
+    }
+}

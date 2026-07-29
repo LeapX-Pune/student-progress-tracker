@@ -9,7 +9,14 @@
 
 import AuthContext from '../context/AuthContext.js';
 import { ERROR_CODES } from '../utils/constants.js';
-import { getStudentProfile, getStudentCourses, getStudentGrades } from './studentApi.js';
+import {
+    getStudentProfile,
+    getStudentCourses,
+    getStudentGrades,
+    getStudentMetrics,
+    getStudentNotifications,
+    getStudentUpcomingActivities,
+} from './studentApi.js';
 
 /**
  * Fetches the aggregated dashboard metrics for the student.
@@ -23,16 +30,22 @@ export async function getDashboardMetrics(studentId) {
         if (!targetId) throw new Error('No user authenticated');
 
         // Fetch data in parallel to optimize load times
-        const [profile, courses, grades] = await Promise.all([
+        const [profile, courses, grades, metrics, notifications, upcoming] = await Promise.all([
             getStudentProfile(targetId),
             getStudentCourses(targetId),
             getStudentGrades(targetId),
+            getStudentMetrics(targetId),
+            getStudentNotifications(targetId),
+            getStudentUpcomingActivities(targetId),
         ]);
 
         return {
             profile,
             courses,
             grades,
+            metrics,
+            notifications,
+            upcoming,
         };
     } catch (err) {
         throw {
