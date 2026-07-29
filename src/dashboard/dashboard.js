@@ -228,9 +228,7 @@ function renderCourses(courses) {
                         <h3 class="course-title-sub">${course.title}</h3>
                         <p class="course-instructor">${course.instructor}</p>
                     </div>
-                    <span class="status-badge-new ${course.status}">
-                        ${course.status === 'completed' ? 'Completed' : 'In Progress'}
-                    </span>
+                    <span class="status-badge-new ${course.status}">${course.status === 'completed' ? 'Completed' : 'In Progress'}</span>
                 </div>
 
                 <div class="course-details-grid">
@@ -340,6 +338,8 @@ function renderWeeklyProgressChart(progressData) {
     const ctx = document.getElementById('weeklyProgressChart');
     if (!ctx) return;
 
+    const existing = Chart.getChart(ctx);
+    if (existing) existing.destroy();
     if (progressChartInstance) {
         progressChartInstance.destroy();
     }
