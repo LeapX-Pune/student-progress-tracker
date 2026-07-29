@@ -1,158 +1,189 @@
-import AuthContext from '../context/AuthContext.js';
+import { createEmptyState, EMPTY_ILLUSTRATIONS } from '../components/EmptyState.js';
+import { createToolbar } from '../components/Toolbar.js';
+import { createErrorState } from '../components/courses/ErrorState.js';
 import { useGrades } from '../hooks/useGrades.js';
 
 /**
- *
+ * Initializes the Grades page.
  */
 export function initGradesPage() {
     const pageContent = document.querySelector('[data-page-content]');
     if (!pageContent) return;
 
-    let isFetching = false;
-
-    const gradesHook = useGrades({
-        /**
-         *
-         */
-        onLoading: () => {
-            const placeholder = pageContent.querySelector('.route-placeholder');
-            if (placeholder) {
-                placeholder.remove();
-            } else {
-                pageContent.innerHTML = '';
-            }
-
-            pageContent.innerHTML = `
-        <div class="grades-dashboard" role="region" aria-label="Grades dashboard with performance charts">
-            <header class="grades-header">
-                <h1 id="grades-heading">Grades & Analytics</h1>
-                <p>Track your academic performance across quizzes, assignments, and weekly progress.</p>
-                <div id="gpa-summary" class="metrics-grid" style="margin-top:1.5rem; display:flex; gap:1rem;">
-                    <!-- dynamic gpa -->
-                </div>
-            </header>
-
-            <div class="charts-grid" role="list" aria-labelledby="grades-heading">
-
-                <article class="chart-card" role="listitem" id="chart-quiz" tabindex="0" aria-labelledby="quiz-title" aria-describedby="quiz-desc">
-                    <h3 class="chart-title" id="quiz-title">Quiz Scores</h3>
-                    <p class="chart-subtitle" id="quiz-desc">Your scores across all quizzes taken.</p>
-                    <div class="chart-container" role="img" aria-label="Bar chart showing quiz scores">
-                        <div class="loading-state" role="status" aria-live="polite">
-                            <span class="sr-only">Loading quiz scores chart</span>
-                            <div class="skeleton skeleton-title" aria-hidden="true"></div>
-                            <div class="skeleton skeleton-subtitle" aria-hidden="true"></div>
-                            <div class="skeleton skeleton-chart" aria-hidden="true"></div>
-                            <div class="skeleton skeleton-legend" aria-hidden="true"></div>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="chart-card" role="listitem" id="chart-assignment" tabindex="0" aria-labelledby="assignment-title" aria-describedby="assignment-desc">
-                    <h3 class="chart-title" id="assignment-title">Assignment Performance</h3>
-                    <p class="chart-subtitle" id="assignment-desc">Grades earned on submitted assignments.</p>
-                    <div class="chart-container" role="img" aria-label="Doughnut chart showing assignment grades">
-                        <div class="loading-state" role="status" aria-live="polite">
-                            <span class="sr-only">Loading assignment performance chart</span>
-                            <div class="skeleton skeleton-title" aria-hidden="true"></div>
-                            <div class="skeleton skeleton-subtitle" aria-hidden="true"></div>
-                            <div class="skeleton skeleton-chart" aria-hidden="true"></div>
-                            <div class="skeleton skeleton-legend" aria-hidden="true"></div>
-                        </div>
-                    </div>
-                </article>
-
-            </div>
-        </div>
-        `;
-        },
-        /**
-         *
-         */
-        onSuccess: ({ grades, performance }) => {
-            const summary = document.getElementById('gpa-summary');
-            if (summary) {
-                summary.innerHTML = `
-                    <div class="metric-card" style="background:#f8fafc; padding:1rem; border-radius:8px; flex:1;">
-                        <h4 style="margin:0; font-size:0.875rem; color:#64748b;">Semester GPA</h4>
-                        <p style="margin:0.25rem 0 0; font-size:1.5rem; font-weight:bold;">${performance.semesterGpa || 'N/A'}</p>
-                    </div>
-                    <div class="metric-card" style="background:#f8fafc; padding:1rem; border-radius:8px; flex:1;">
-                        <h4 style="margin:0; font-size:0.875rem; color:#64748b;">Overall GPA</h4>
-                        <p style="margin:0.25rem 0 0; font-size:1.5rem; font-weight:bold;">${performance.overallGpa || 'N/A'}</p>
-                    </div>
-                    <div class="metric-card" style="background:#f8fafc; padding:1rem; border-radius:8px; flex:1;">
-                        <h4 style="margin:0; font-size:0.875rem; color:#64748b;">Credits</h4>
-                        <p style="margin:0.25rem 0 0; font-size:1.5rem; font-weight:bold;">${performance.creditsCompleted || 0}</p>
-                    </div>
-                    <div class="metric-card" style="background:#f8fafc; padding:1rem; border-radius:8px; flex:1;">
-                        <h4 style="margin:0; font-size:0.875rem; color:#64748b;">Standing</h4>
-                        <p style="margin:0.25rem 0 0; font-size:1.125rem; font-weight:bold; color:#10b981;">${performance.overallStanding || 'N/A'}</p>
-                    </div>
-                `;
-            }
-
-            // Remove loading states from charts
-            document
-                .querySelectorAll('#chart-quiz .loading-state, #chart-assignment .loading-state')
-                .forEach(el => el.remove());
-
-            const quizContainer = document.querySelector('#chart-quiz .chart-container');
-            if (quizContainer) {
-                quizContainer.innerHTML += `
-                    <div style="display:flex; flex-direction:column; gap:0.5rem; padding-top:1rem;">
-                        ${
-                            grades
-                                ?.map(
-                                    g => `
-                            <div style="display:flex; justify-content:space-between; padding:0.5rem; background:#f1f5f9; border-radius:4px;">
-                                <span>${g.course} - ${g.type}</span>
-                                <strong>${g.score}%</strong>
-                            </div>
-                        `
-                                )
-                                .join('') || 'No grades available.'
-                        }
-                    </div>
-                `;
-            }
-        },
-        /**
-         *
-         */
-        onError: _err => {
-            // Handle error state
-            const header = document.querySelector('.grades-header');
-            if (header) {
-                header.insertAdjacentHTML(
-                    'afterend',
-                    '<div class="error-state" style="padding:2rem; text-align:center; color:#ef4444;">Failed to load grades data.</div>'
-                );
-            }
-        },
-    });
+    let cleanup = null;
+    const { subscribe, fetchGrades, retry, setSearch, setFilter, setSort } = useGrades();
 
     /**
      *
      */
-    const fetchGrades = async () => {
-        if (isFetching) return;
-        isFetching = true;
-        try {
-            await gradesHook.fetch(AuthContext.getCurrentUserId());
-        } finally {
-            isFetching = false;
-        }
-    };
+    function render(state) {
+        if (!pageContent.querySelector('.grades-page')) {
+            pageContent.innerHTML = '';
+            const container = document.createElement('div');
+            container.className = 'grades-page';
+            container.setAttribute('role', 'region');
+            container.setAttribute('aria-label', 'Grades dashboard');
 
-    document.addEventListener('pathway:route', event => {
-        if (event.detail.route === 'grades') {
+            const header = document.createElement('header');
+            header.className = 'grades-header';
+            header.innerHTML = `
+                <h1 id="grades-heading" class="dashboard-title" style="margin-bottom: 0.5rem; font-size: 2.25rem; font-weight: 700;">Grades & Analytics</h1>
+                <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">Track your academic performance across quizzes, assignments, and weekly progress.</p>
+                <div id="gpa-summary" class="metrics-grid" style="margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <!-- dynamic gpa -->
+                </div>
+            `;
+
+            const toolbar = createToolbar({
+                searchPlaceholder: 'Search by course or assignment...',
+                filterOptions: [
+                    { value: 'all', label: 'All Semesters' },
+                    { value: 'current_semester', label: 'Current Semester' },
+                ],
+                sortOptions: [
+                    { value: 'highest', label: 'Highest Grade' },
+                    { value: 'lowest', label: 'Lowest Grade' },
+                    { value: 'date', label: 'Recent' },
+                ],
+                onSearch: setSearch,
+                onFilter: setFilter,
+                onSort: setSort,
+            });
+
+            const contentContainer = document.createElement('div');
+            contentContainer.className = 'grades-content-container';
+
+            container.appendChild(header);
+            container.appendChild(toolbar);
+            container.appendChild(contentContainer);
+            pageContent.appendChild(container);
+        }
+
+        const container = pageContent.querySelector('.grades-content-container');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        if (state.loading) {
+            container.innerHTML = `
+                <div class="loading-state" role="status" aria-live="polite">
+                    <span class="sr-only">Loading grades data</span>
+                    <div class="skeleton skeleton-chart" aria-hidden="true" style="height: 300px; border-radius: 12px; margin-bottom: 1rem;"></div>
+                    <div class="skeleton skeleton-chart" aria-hidden="true" style="height: 300px; border-radius: 12px;"></div>
+                </div>
+            `;
+            return;
+        }
+
+        if (state.error) {
+            container.appendChild(
+                createErrorState({
+                    title: 'Failed to load grades',
+                    message: state.error || 'There was a problem fetching your grades.',
+                    onRetry: retry,
+                })
+            );
+            return;
+        }
+
+        const { performance } = state.data || {};
+        const grades = state.filteredGrades;
+
+        const summary = document.getElementById('gpa-summary');
+        if (summary && performance) {
+            summary.innerHTML = `
+                <div class="metric-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px; flex: 1; min-width: 150px;">
+                    <h4 style="margin: 0; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Semester GPA</h4>
+                    <p style="margin: 0.5rem 0 0; font-size: 1.75rem; font-weight: 700; color: var(--text-primary);">${performance.semesterGpa || 'N/A'}</p>
+                </div>
+                <div class="metric-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px; flex: 1; min-width: 150px;">
+                    <h4 style="margin: 0; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Overall GPA</h4>
+                    <p style="margin: 0.5rem 0 0; font-size: 1.75rem; font-weight: 700; color: var(--text-primary);">${performance.overallGpa || 'N/A'}</p>
+                </div>
+                <div class="metric-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px; flex: 1; min-width: 150px;">
+                    <h4 style="margin: 0; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Credits</h4>
+                    <p style="margin: 0.5rem 0 0; font-size: 1.75rem; font-weight: 700; color: var(--text-primary);">${performance.creditsCompleted || 0}</p>
+                </div>
+                <div class="metric-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px; flex: 1; min-width: 150px;">
+                    <h4 style="margin: 0; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Standing</h4>
+                    <p style="margin: 0.5rem 0 0; font-size: 1.25rem; font-weight: 700; color: var(--color-success);">${performance.overallStanding || 'N/A'}</p>
+                </div>
+            `;
+        }
+
+        if (!grades || grades.length === 0) {
+            container.appendChild(
+                createEmptyState({
+                    title:
+                        state.searchQuery || state.filterBy !== 'all'
+                            ? 'No Matches Found'
+                            : 'Grades Not Published',
+                    description:
+                        state.searchQuery || state.filterBy !== 'all'
+                            ? 'Try adjusting your search or filter.'
+                            : 'Your grades for this semester have not been published yet.',
+                    illustration: EMPTY_ILLUSTRATIONS.grades,
+                })
+            );
+            return;
+        }
+
+        const listContainer = document.createElement('div');
+        listContainer.style.display = 'flex';
+        listContainer.style.flexDirection = 'column';
+        listContainer.style.gap = '0.75rem';
+
+        grades.forEach(g => {
+            const item = document.createElement('div');
+            item.style.display = 'flex';
+            item.style.justifyContent = 'space-between';
+            item.style.alignItems = 'center';
+            item.style.padding = '1.25rem';
+            item.style.background = 'var(--bg-surface)';
+            item.style.border = '1px solid var(--border-color)';
+            item.style.borderRadius = '12px';
+
+            const left = document.createElement('div');
+            left.innerHTML = `
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">${g.title || g.courseName || 'Assignment'}</div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">${g.courseCode || ''} &bull; ${g.type || 'Assessment'}</div>
+            `;
+
+            const right = document.createElement('div');
+            right.style.fontWeight = '700';
+            right.style.fontSize = '1.125rem';
+            right.style.color = 'var(--text-primary)';
+            right.textContent = g.score !== undefined ? g.score + '%' : 'N/A';
+
+            item.appendChild(left);
+            item.appendChild(right);
+            listContainer.appendChild(item);
+        });
+
+        container.appendChild(listContainer);
+    }
+
+    /**
+     *
+     */
+    function handleRoute(e) {
+        if (e.detail.route === 'grades') {
+            cleanup = subscribe(render);
             fetchGrades();
+        } else {
+            if (cleanup) {
+                cleanup();
+                cleanup = null;
+            }
         }
-    });
+    }
 
+    document.addEventListener('pathway:route', handleRoute);
+
+    // Initial check
     const currentHash = window.location.hash.replace(/^#\/?/, '').split('?')[0].trim();
     if (currentHash === 'grades') {
+        cleanup = subscribe(render);
         fetchGrades();
     }
 }

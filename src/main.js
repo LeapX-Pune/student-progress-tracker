@@ -204,10 +204,67 @@ function initNotifications() {
     if (!panel) return;
 
     const dot = document.querySelector('[data-notification-dot]');
-    const { subscribe, fetchNotifications, markAsRead, markAllRead } = useNotifications();
+    const {
+        subscribe,
+        fetchNotifications,
+        markAsRead,
+        markAllRead,
+        setSearch,
+        setFilter,
+        setSort,
+    } = useNotifications();
+
+    // Setup Toolbar inside notification panel
+    import('./components/Toolbar.js')
+        .then(({ createToolbar }) => {
+            const toolbar = createToolbar({
+                searchPlaceholder: 'Search notifications...',
+                filterOptions: [
+                    { value: 'all', label: 'All' },
+                    { value: 'read', label: 'Read' },
+                    { value: 'unread', label: 'Unread' },
+                    { value: 'system', label: 'System' },
+                    { value: 'course', label: 'Course' },
+                ],
+                sortOptions: [
+                    { value: 'newest', label: 'Newest' },
+                    { value: 'oldest', label: 'Oldest' },
+                    { value: 'priority', label: 'Priority' },
+                ],
+                onSearch: setSearch,
+                onFilter: setFilter,
+                onSort: setSort,
+            });
+
+            // Insert toolbar at the top of the panel, right after the header if it exists
+            const header = panel.querySelector('.notification-header') || panel.firstElementChild;
+            if (header) {
+                header.insertAdjacentElement('afterend', toolbar);
+            } else {
+                panel.insertBefore(toolbar, panel.firstChild);
+            }
+            return true;
+        })
+        .catch(console.error);
+
+    const listContainer = document.createElement('div');
+    listContainer.className = 'notification-list';
+    panel.appendChild(listContainer);
 
     subscribe(state => {
-        if (state.loading || state.error || !state.data) return;
+        if (state.loading) {
+            listContainer.innerHTML =
+                '<div style="padding: 1rem; text-align: center; color: var(--text-secondary);">Loading notifications...</div>';
+            return;
+        }
+
+        if (state.error) {
+            listContainer.innerHTML =
+                '<div style="padding: 1rem; text-align: center; color: var(--color-danger);">Failed to load notifications.</div>';
+            return;
+        }
+
+        if (!state.data) return;
 
         const unreadCount = state.data.filter(n => !n.isRead).length;
         if (dot) {
@@ -215,43 +272,41 @@ function initNotifications() {
         }
 
         const emptyMsg = panel.querySelector('.notification-empty');
-        if (state.data.length === 0) {
-            if (emptyMsg) {
-                emptyMsg.style.display = 'block';
-                emptyMsg.textContent = 'No notifications yet.';
-            }
-        } else {
-            if (emptyMsg) emptyMsg.style.display = 'none';
+        if (emptyMsg) emptyMsg.style.display = 'none';
 
-            // Remove existing items
-            panel.querySelectorAll('.notification-item').forEach(el => el.remove());
+        const notifications = state.filteredData || [];
 
-            // Add new items
-            state.data.forEach(n => {
-                const item = document.createElement('div');
-                item.className = 'notification-item' + (n.isRead ? '' : ' unread');
-                item.style.padding = '1rem';
-                item.style.borderBottom = '1px solid var(--border-color)';
-                if (!n.isRead) item.style.backgroundColor = 'var(--bg-surface-hover)';
-
-                item.innerHTML = `
-                    <div style="font-weight: 500; font-size: 0.875rem; color: var(--text-primary); margin-bottom: 0.25rem;">${n.title}</div>
-                    <div style="font-size: 0.8125rem; color: var(--text-secondary); margin-bottom: 0.5rem;">${n.message}</div>
-                    <div style="font-size: 0.75rem; color: var(--text-tertiary);">${new Date(n.timestamp).toLocaleString()}</div>
-                    ${!n.isRead ? '<button class="mark-read-btn" style="background:none; border:none; color:var(--primary-color); cursor:pointer; font-size:0.75rem; padding:0; margin-top:0.5rem;">Mark as read</button>' : ''}
-                `;
-
-                const btn = item.querySelector('.mark-read-btn');
-                if (btn) {
-                    btn.addEventListener('click', async e => {
-                        e.stopPropagation();
-                        await markAsRead(n.id);
-                    });
-                }
-
-                panel.appendChild(item);
-            });
+        if (notifications.length === 0) {
+            listContainer.innerHTML =
+                '<div style="padding: 2rem 1rem; text-align: center; color: var(--text-secondary);">No notifications found.</div>';
+            return;
         }
+
+        listContainer.innerHTML = '';
+        notifications.forEach(n => {
+            const item = document.createElement('div');
+            item.className = 'notification-item' + (n.isRead ? '' : ' unread');
+            item.style.padding = '1rem';
+            item.style.borderBottom = '1px solid var(--border-color)';
+            if (!n.isRead) item.style.backgroundColor = 'var(--bg-surface-hover)';
+
+            item.innerHTML = `
+                <div style="font-weight: 500; font-size: 0.875rem; color: var(--text-primary); margin-bottom: 0.25rem;">${n.title}</div>
+                <div style="font-size: 0.8125rem; color: var(--text-secondary); margin-bottom: 0.5rem;">${n.message}</div>
+                <div style="font-size: 0.75rem; color: var(--text-tertiary);">${new Date(n.timestamp).toLocaleString()}</div>
+                ${!n.isRead ? '<button class="mark-read-btn" style="background:none; border:none; color:var(--primary-color); cursor:pointer; font-size:0.75rem; padding:0; margin-top:0.5rem;">Mark as read</button>' : ''}
+            `;
+
+            const btn = item.querySelector('.mark-read-btn');
+            if (btn) {
+                btn.addEventListener('click', async e => {
+                    e.stopPropagation();
+                    await markAsRead(n.id);
+                });
+            }
+
+            listContainer.appendChild(item);
+        });
     });
 
     // Handle "Clear All" confirm
