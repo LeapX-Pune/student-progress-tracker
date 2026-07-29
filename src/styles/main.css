@@ -1,5 +1,3 @@
-@import './components/auth.css';
-@import './components/login-ui.css';
 @import './components/toast.css';
 @import './components/skeleton.css';
 @import './components/empty-state.css';
@@ -46,9 +44,18 @@
     --color-gray-800: #1f2937;
     --color-gray-900: #111827;
 
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
     --font-mono: 'Fira Code', 'Cascadia Code', monospace;
 
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
 
     --transition-fast: 150ms ease;
     --transition-base: 200ms ease;
@@ -110,5 +117,8 @@ body.dark {
     --color-error-light: #7f1d1d;
     --color-info-light: #0c4a6e;
 
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
 }

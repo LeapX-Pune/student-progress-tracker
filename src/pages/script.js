@@ -350,7 +350,7 @@
                     </div>
                 </article>
 
-                <article class="chart-card chart-card--full">
+                <article class="chart-card">
                     <h3 class="chart-title">Attendance Percentage</h3>
                     <p class="chart-subtitle">Your attendance rate across all sessions.</p>
                     <div class="chart-container">
@@ -473,6 +473,9 @@
                 window._showErrorBoundary({
                     title: 'Page Render Error',
                     message: err.message || 'Failed to render this page.',
+                    /**
+                     *
+                     */
                     onRetry: () => handleRouteChange(pushState),
                 });
             }
@@ -680,244 +683,11 @@
         const containers = document.querySelectorAll('.chart-container');
         if (!containers.length) return;
 
-        // Chart configs keyed by card title
-        const chartDefs = [
-            {
-                title: 'Quiz Scores',
-                id: 'gradesQuizChart',
-                type: 'bar',
-                data: {
-                    labels: ['Quiz 1', 'Quiz 2', 'Quiz 3', 'Quiz 4', 'Quiz 5'],
-                    datasets: [
-                        {
-                            label: 'Score (%)',
-                            data: [85, 92, 76, 98, 88],
-                            backgroundColor: [
-                                '#4F46E5',
-                                '#3B82F6',
-                                '#10B981',
-                                '#F59E0B',
-                                '#EF4444',
-                            ],
-                            borderRadius: 8,
-                            borderSkipped: false,
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        title: { display: false },
-                        tooltip: { callbacks: { label: ctx => `Score: ${ctx.raw}%` } },
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: { font: { size: 11 }, callback: v => v + '%' },
-                            title: { display: false },
-                        },
-                        x: {
-                            ticks: { font: { size: 11 }, maxRotation: 0 },
-                            title: { display: false },
-                        },
-                    },
-                },
-            },
-            {
-                title: 'Assignment Performance',
-                id: 'gradesAssignmentChart',
-                type: 'doughnut',
-                data: {
-                    labels: ['Grade A', 'Grade B', 'Grade C', 'Grade D', 'Grade F'],
-                    datasets: [
-                        {
-                            data: [40, 30, 15, 10, 5],
-                            backgroundColor: [
-                                '#22C55E',
-                                '#3B82F6',
-                                '#FACC15',
-                                '#F97316',
-                                '#EF4444',
-                            ],
-                            borderColor: '#1e293b',
-                            borderWidth: 3,
-                            hoverOffset: 15,
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '65%',
-                    layout: { padding: 10 },
-                    plugins: {
-                        title: { display: false },
-                        legend: {
-                            position: 'right',
-                            align: 'center',
-                            labels: {
-                                usePointStyle: true,
-                                pointStyle: 'circle',
-                                boxWidth: 12,
-                                padding: 16,
-                                font: { size: 12 },
-                                color: '#94a3b8',
-                            },
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label(ctx) {
-                                    const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                                    return `${ctx.label}: ${ctx.raw} (${((ctx.raw / total) * 100).toFixed(1)}%)`;
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-            {
-                title: 'Weekly Progress',
-                id: 'gradesWeeklyChart',
-                type: 'line',
-                data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
-                    datasets: [
-                        {
-                            label: 'Assignments Completed',
-                            data: [60, 68, 75, 82, 90, 96],
-                            borderColor: '#4F46E5',
-                            backgroundColor: 'rgba(79,70,229,0.15)',
-                            borderWidth: 3,
-                            pointRadius: 5,
-                            pointHoverRadius: 7,
-                            pointBackgroundColor: '#4F46E5',
-                            tension: 0.4,
-                            fill: true,
-                        },
-                        {
-                            label: 'Attendance',
-                            data: [90, 92, 88, 94, 96, 98],
-                            borderColor: '#10B981',
-                            backgroundColor: 'rgba(16,185,129,0.15)',
-                            borderWidth: 3,
-                            pointRadius: 5,
-                            pointHoverRadius: 7,
-                            pointBackgroundColor: '#10B981',
-                            tension: 0.4,
-                            fill: false,
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: { color: '#94a3b8', font: { size: 12, weight: 'bold' } },
-                        },
-                        tooltip: {
-                            backgroundColor: '#0f172a',
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
-                            padding: 12,
-                            callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}%` },
-                        },
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: { color: '#94a3b8', callback: v => v + '%' },
-                            title: { display: true, text: 'Progress (%)', color: '#64748b' },
-                            grid: { color: 'rgba(148,163,184,0.1)' },
-                        },
-                        x: {
-                            ticks: { color: '#94a3b8' },
-                            title: { display: true, text: 'Weeks', color: '#64748b' },
-                            grid: { color: 'rgba(148,163,184,0.1)' },
-                        },
-                    },
-                },
-            },
-            {
-                title: 'Attendance Percentage',
-                id: 'gradesAttendanceChart',
-                type: 'bar',
-                data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
-                    datasets: [
-                        {
-                            label: 'Attendance (%)',
-                            data: [90, 92, 88, 94, 96, 98],
-                            backgroundColor: 'rgba(16,185,129,0.8)',
-                            borderRadius: 6,
-                            borderSkipped: false,
-                            barPercentage: 0.4,
-                            categoryPercentage: 0.5,
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        title: { display: false },
-                        tooltip: { callbacks: { label: ctx => `Attendance: ${ctx.raw}%` } },
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: { color: '#94a3b8', callback: v => v + '%' },
-                            grid: { color: 'rgba(148,163,184,0.1)' },
-                        },
-                        x: {
-                            ticks: { color: '#94a3b8', font: { size: 11 }, maxRotation: 0 },
-                            grid: { color: 'rgba(148,163,184,0.1)' },
-                        },
-                    },
-                },
-            },
-        ];
-
-        containers.forEach((container, i) => {
-            const def = chartDefs[i];
-            if (!def || typeof Chart === 'undefined') return;
-
+        containers.forEach(container => {
             showLoading(container);
-
             setTimeout(() => {
-                // Hide all states
-                const ls = container.querySelector('.loading-state');
-                const es = container.querySelector('.error-state');
-                const ems = container.querySelector('.empty-state');
-                const ph = container.querySelector('.chart-placeholder-text');
-                if (ls) ls.style.display = 'none';
-                if (es) es.style.display = 'none';
-                if (ems) ems.style.display = 'none';
-                if (ph) ph.style.display = 'none';
-
-                // Create canvas if not already present
-                let canvas = container.querySelector('canvas');
-                if (!canvas) {
-                    canvas = document.createElement('canvas');
-                    canvas.id = def.id;
-                    canvas.style.width = '100%';
-                    canvas.style.height = '100%';
-                    container.appendChild(canvas);
-                }
-
-                // Destroy existing instance if any
-                const existing = Chart.getChart(canvas);
-                if (existing) existing.destroy();
-
-                new Chart(canvas, { type: def.type, data: def.data, options: def.options });
-            }, 1500);
+                showChart(container);
+            }, 2500);
         });
 
         document.querySelectorAll('.retry-btn').forEach(btn => {

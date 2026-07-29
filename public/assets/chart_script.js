@@ -158,4 +158,136 @@ if (gradeCtx) {
     new Chart(gradeCtx, gradeConfig);
 }
 
-// weeklyProgressChart is handled by dashboard.js with live data
+// =========================
+// Day 4 - Weekly Progress Line Chart
+// =========================
+
+const weeklyProgress = {
+    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+
+    datasets: [
+        {
+            label: 'Assignments Completed',
+
+            data: [60, 68, 75, 82, 90, 96],
+
+            borderColor: '#4F46E5',
+
+            backgroundColor: 'rgba(79,70,229,0.15)',
+
+            borderWidth: 3,
+
+            pointRadius: 5,
+
+            pointHoverRadius: 7,
+
+            pointBackgroundColor: '#4F46E5',
+
+            tension: 0.4,
+
+            fill: true,
+        },
+
+        {
+            label: 'Attendance',
+
+            data: [90, 92, 88, 94, 96, 98],
+
+            borderColor: '#10B981',
+
+            backgroundColor: 'rgba(16,185,129,0.15)',
+
+            borderWidth: 3,
+
+            pointRadius: 5,
+
+            pointHoverRadius: 7,
+
+            pointBackgroundColor: '#10B981',
+
+            tension: 0.4,
+
+            fill: false,
+        },
+    ],
+};
+
+const weeklyProgressConfig = {
+    type: 'line',
+
+    data: weeklyProgress,
+
+    options: {
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+            legend: {
+                position: 'top',
+
+                labels: {
+                    color: '#374151',
+
+                    font: {
+                        size: 13,
+
+                        weight: 'bold',
+                    },
+                },
+            },
+
+            tooltip: {
+                backgroundColor: '#111827',
+
+                titleColor: '#ffffff',
+
+                bodyColor: '#ffffff',
+
+                padding: 12,
+
+                callbacks: {
+                    label(context) {
+                        return `${context.dataset.label}: ${context.parsed.y}%`;
+                    },
+                },
+            },
+        },
+
+        scales: {
+            y: {
+                beginAtZero: true,
+
+                max: 100,
+
+                ticks: {
+                    /**
+                     *
+                     */
+                    callback(value) {
+                        return value + '%';
+                    },
+                },
+
+                title: {
+                    display: true,
+
+                    text: 'Progress (%)',
+                },
+            },
+
+            x: {
+                title: {
+                    display: true,
+
+                    text: 'Weeks',
+                },
+            },
+        },
+    },
+};
+
+const weeklyProgressCtx = document.getElementById('weeklyProgressChart');
+if (weeklyProgressCtx) {
+    new Chart(weeklyProgressCtx, weeklyProgressConfig);
+}

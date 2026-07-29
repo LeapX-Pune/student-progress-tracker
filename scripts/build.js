@@ -84,7 +84,6 @@ await build({
         '.woff2': 'file',
     },
     define: {
- feature/ci_deploy_workflow
         ...defines,
         'import.meta.env.VITE_APP_NAME': '"Student Progress Tracker"',
         'import.meta.env.VITE_APP_VERSION': '"0.1.0"',
@@ -98,13 +97,6 @@ await build({
         'import.meta.env.VITE_CACHE_TTL_SECONDS': '300',
         'import.meta.env.VITE_CHART_ANIMATION_DURATION': '750',
         'import.meta.env.VITE_CHART_RESPONSIVE': 'true',
-
-        'import.meta.env.DEV': 'false',
-        'import.meta.env.PROD': 'true',
-        'import.meta.env.VITE_API_BASE_URL': '"/api"',
-        'import.meta.env.VITE_ENABLE_MOCK_API': '"true"',
-        'import.meta.env.VITE_API_MOCK_ENABLED': '"true"',
- develop
     },
     treeShaking: true,
     legalComments: 'none',
@@ -133,17 +125,10 @@ if (existsSync(resolve(publicDir, 'assets'))) {
     copyDir(resolve(publicDir, 'assets'), resolve(distDir, 'assets'));
 }
 
-// Copy auth assets (SVG, images) from src/assets to dist/assets
-const srcDir = resolve(rootDir, 'src');
-if (existsSync(resolve(srcDir, 'assets'))) {
-    copyDir(resolve(srcDir, 'assets'), resolve(distDir, 'assets'));
-}
-
 // Copy standalone source files referenced by index.html
+const srcDir = resolve(rootDir, 'src');
 copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(distDir, 'style.css'));
-if (existsSync(resolve(publicDir, 'script.js'))) {
-    copyFileSync(resolve(publicDir, 'script.js'), resolve(distDir, 'script.js'));
-}
+copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(distDir, 'script.js'));
 
 // Copy standalone JS files from public root
 if (existsSync(resolve(publicDir, 'attendance.js'))) {
@@ -155,23 +140,11 @@ if (existsSync(resolve(publicDir, '_redirects'))) {
     copyFileSync(resolve(publicDir, '_redirects'), resolve(distDir, '_redirects'));
 }
 
-// Copy standalone HTML pages
+// Copy assets for standalone HTML pages
 copyFileSync(resolve(publicDir, 'dashboard.html'), resolve(distDir, 'dashboard.html'));
-if (existsSync(resolve(publicDir, 'course-progress.html'))) {
-    copyFileSync(
-        resolve(publicDir, 'course-progress.html'),
-        resolve(distDir, 'course-progress.html')
-    );
-}
-if (existsSync(resolve(publicDir, 'grades.html'))) {
-    copyFileSync(resolve(publicDir, 'grades.html'), resolve(distDir, 'grades.html'));
-}
-
-// Copy dashboard assets (CSS, JS) — not bundled through esbuild
 copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(distDir, 'dashboard.css'));
 copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.js'), resolve(distDir, 'dashboard.js'));
 
- feature/ci_deploy_workflow
 // Copy index.html as 404.html for SPA fallback on static hosts (GitHub Pages, etc.)
 const indexHtml = resolve(distDir, 'index.html');
 if (existsSync(indexHtml)) {
@@ -182,9 +155,3 @@ if (existsSync(indexHtml)) {
 // Write .nojekyll for GitHub Pages (disables Jekyll processing)
 writeFileSync(resolve(distDir, '.nojekyll'), '');
 console.log('Created .nojekyll');
-
-// GitHub Pages SPA fallback: serve index.html for 404s
-if (existsSync(resolve(publicDir, '404.html'))) {
-    copyFileSync(resolve(publicDir, '404.html'), resolve(distDir, '404.html'));
-}
- develop
