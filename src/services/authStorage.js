@@ -209,12 +209,12 @@ export function clearAuthToken() {
  * After a successful login, `getRedirectPath()` retrieves and removes this
  * value so the router can navigate to the intended destination.
  *
- * @param {string} path - A relative URL path, e.g. '/dashboard'
+ * @param {string} path - A relative URL path, e.g. '/overview'
  * @returns {void}
  *
  * @example
  * // Called by AuthGuard when redirecting an unauthenticated user:
- * saveRedirectPath('/dashboard');
+ * saveRedirectPath('/overview');
  * router.navigate(ROUTES.LOGIN);
  */
 export function saveRedirectPath(path) {
@@ -235,11 +235,11 @@ export function saveRedirectPath(path) {
  *
  * Returns the default dashboard path when no redirect path was saved.
  *
- * @returns {string} The saved path, or `'/dashboard'` when none exists
+ * @returns {string} The saved path, or `'/overview'` when none exists
  *
  * @example
  * // Called by LoginForm after a successful login:
- * const destination = getRedirectPath();  // e.g. '/dashboard'
+ * const destination = getRedirectPath();  // e.g. '/overview'
  * router.navigate(destination);
  */
 export function getRedirectPath() {
@@ -258,5 +258,5 @@ export function getRedirectPath() {
         _memoryStore.delete(REDIRECT_KEY);
     }
 
-    return path ?? '/dashboard';
+    return path ?? '/overview';
 }

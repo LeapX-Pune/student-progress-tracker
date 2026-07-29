@@ -1,4 +1,5 @@
 import './styles/main.css';
+import './dashboard/dashboard.css';
 import { createIcons, icons } from 'lucide';
 import { createEmptyState } from './components/EmptyState.js';
 import { withErrorBoundary } from './components/ErrorBoundary.js';
@@ -14,6 +15,7 @@ import { initApi } from './services/api.js';
 import { initMotionPreferences } from './utils/animations.js';
 import { handleGlobalErrors } from './utils/errors.js';
 import { initScrollRestoration } from './utils/router.js';
+import { initTheme } from './utils/theme.js';
 
 /**
  *
@@ -189,6 +191,7 @@ function wireAppInteractions() {
  *
  */
 async function init() {
+    initTheme();
     initMotionPreferences();
     initScrollRestoration();
     wireGlobalErrorHandler();
@@ -206,8 +209,8 @@ async function init() {
         'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;';
     document.body.appendChild(spinner);
 
-    await AuthContext.restoreSession();
     await initApi();
+    await AuthContext.restoreSession();
 
     initCoursesPage();
 

@@ -1,4 +1,4 @@
-import { createIcons } from 'lucide';
+import { createIcons, icons } from 'lucide';
 
 /**
  *
@@ -57,7 +57,7 @@ export function createErrorState({ title = 'Something went wrong', message, onRe
         // eslint-disable-next-line no-undef
         lucide.createIcons({ icons: lucide.icons, root: container });
     } else {
-        createIcons({ root: container });
+        createIcons({ icons, root: container });
     }
 
     return container;
