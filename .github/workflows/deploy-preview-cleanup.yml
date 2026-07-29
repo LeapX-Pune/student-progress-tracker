@@ -1,0 +1,25 @@
+name: Cleanup PR Preview
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    name: Remove PR Preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Delete PR preview from gh-pages
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages
+          rm -rf pr-preview/${{ github.event.number }}
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: cleanup PR preview #${{ github.event.number }}" || echo "No preview to clean"
+          git push origin gh-pages
