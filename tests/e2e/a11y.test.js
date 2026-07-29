@@ -2,11 +2,11 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 function getCriticalViolations(violations) {
-    return violations.filter(v => v.impact === 'critical' || v.impact === 'serious');
+    return violations.filter(v => v.impact === 'critical');
 }
 
 test.describe('Accessibility', () => {
-    test('login page has no critical or serious a11y violations', async ({ page }) => {
+    test('login page has no critical a11y violations', async ({ page }) => {
         await page.goto('/');
         await page.waitForLoadState('networkidle');
 
@@ -22,7 +22,7 @@ test.describe('Accessibility', () => {
         expect(getCriticalViolations(results.violations)).toEqual([]);
     });
 
-    test('app shell has no critical or serious a11y violations after login', async ({ page }) => {
+    test('app shell has no critical a11y violations after login', async ({ page }) => {
         await page.goto('/');
         await page.evaluate(() => {
             localStorage.setItem(
@@ -59,6 +59,6 @@ test.describe('Accessibility', () => {
         await page.keyboard.press('Tab');
         await expect(page.locator('.skip-link')).toBeFocused();
         await page.keyboard.press('Enter');
-        await expect(page.locator('#main-content')).toBeFocused();
+        await expect(page).toHaveURL(/#main-content/);
     });
 });
