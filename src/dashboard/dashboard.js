@@ -4,6 +4,103 @@
 let progressChartInstance = null;
 let weeklyProgressData = [];
 
+const MOCK_STUDENT = {
+    id: 'stu_001',
+    studentId: 'STU-2024-001',
+    name: 'Alex Johnson',
+    email: 'student@demo.com',
+    avatarUrl: 'https://i.pravatar.cc/150?u=stu_001',
+    enrolledAt: '2024-01-15T00:00:00.000Z',
+};
+
+(function () {
+    const originalFetch = window.fetch;
+    const mockData = {
+        'GET:/api/students/stu_001': MOCK_STUDENT,
+        'GET:/api/students/stu_001/courses': (function () {
+            const c = [
+                {
+                    id: 'course_001',
+                    studentId: 'stu_001',
+                    title: 'Full Stack Web Development',
+                    instructor: 'Dr. Ankit Verma',
+                    thumbnailUrl:
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMiw4eziKnZ6okVY_lRgegT53w_bfaxA5sUs0Ng0QbCs4QwyszbRkV2Eq-&s=10',
+                    description:
+                        'Complete web development bootcamp covering HTML, CSS, JavaScript, React, Node.js',
+                    totalModules: 20,
+                    completedModules: 13,
+                    status: 'in-progress',
+                    currentGrade: 87.5,
+                    term: 'Spring 2024',
+                    lastAccessedAt: '2024-01-19T10:00:00Z',
+                    nextModule: 'React Hooks Deep Dive',
+                },
+                {
+                    id: 'course_002',
+                    studentId: 'stu_001',
+                    title: 'Data Structures & Algorithms',
+                    instructor: 'Prof. Priya Sharma',
+                    thumbnailUrl:
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU3_ZKJtTtwNplnn5J4iYmalV0v4rGBSDaWKPolk8j-WnHkPnlzumMXzc&s=10',
+                    description:
+                        'Fundamental algorithms and data structures for technical interviews',
+                    totalModules: 15,
+                    completedModules: 8,
+                    status: 'in-progress',
+                    currentGrade: 78.2,
+                    term: 'Spring 2024',
+                    lastAccessedAt: '2024-01-18T14:30:00Z',
+                    nextModule: 'Graph Traversal Algorithms',
+                },
+                {
+                    id: 'course_003',
+                    studentId: 'stu_001',
+                    title: 'UX Design Fundamentals',
+                    instructor: 'Prof. Sneha Iyer',
+                    thumbnailUrl:
+                        'https://spot-digital.com.tw/wp-content/uploads/2025/06/UIUX-1024x683.webp',
+                    description: 'User experience design principles, research, and prototyping',
+                    totalModules: 12,
+                    completedModules: 12,
+                    status: 'completed',
+                    currentGrade: 94.0,
+                    term: 'Fall 2023',
+                    lastAccessedAt: '2023-12-15T09:00:00Z',
+                },
+            ];
+            return c;
+        })(),
+        'GET:/api/weeklyProgress': [
+            { week: 1, dateRange: 'Jan 8-14', cumulative: 15 },
+            { week: 2, dateRange: 'Jan 15-21', cumulative: 37 },
+            { week: 3, dateRange: 'Jan 22-28', cumulative: 67 },
+            { week: 4, dateRange: 'Jan 29-Feb 4', cumulative: 105 },
+        ],
+    };
+
+    /**
+     *
+     */
+    window.fetch = function (input, options) {
+        const urlStr = typeof input === 'string' ? input : input.url;
+        const method = (options && options.method) || 'GET';
+        const url = new URL(urlStr, window.location.href);
+        const key = method.toUpperCase() + ':' + url.pathname;
+
+        if (mockData[key] !== undefined) {
+            return Promise.resolve(
+                new Response(JSON.stringify(mockData[key]), {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json' },
+                })
+            );
+        }
+
+        return originalFetch.call(window, input, options);
+    };
+})();
+
 /**
  *
  */
