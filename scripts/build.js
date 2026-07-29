@@ -74,21 +74,7 @@ if (existsSync(resolve(srcDir, 'assets'))) {
 
 // Copy standalone source files referenced by index.html
 copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(distDir, 'style.css'));
-if (existsSync(resolve(publicDir, 'script.js'))) {
-    copyFileSync(resolve(publicDir, 'script.js'), resolve(distDir, 'script.js'));
-}
-
-// Copy standalone JS files from public root
-if (existsSync(resolve(publicDir, 'attendance.js'))) {
-    copyFileSync(resolve(publicDir, 'attendance.js'), resolve(distDir, 'attendance.js'));
-}
-
 // Copy deployment config (SPA fallback, redirects)
 if (existsSync(resolve(publicDir, '_redirects'))) {
     copyFileSync(resolve(publicDir, '_redirects'), resolve(distDir, '_redirects'));
 }
-
-// Copy assets for standalone HTML pages
-copyFileSync(resolve(publicDir, 'dashboard.html'), resolve(distDir, 'dashboard.html'));
-copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(distDir, 'dashboard.css'));
-copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.js'), resolve(distDir, 'dashboard.js'));
