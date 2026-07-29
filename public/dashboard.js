@@ -53,6 +53,22 @@ function getGradeLetter(grade) {
 }
 
 let allCoursesData = [];
+let dashboardActions = null;
+
+window.markNotificationRead = id => {
+    if (dashboardActions && dashboardActions.markNotificationRead) {
+        dashboardActions.markNotificationRead(id);
+    }
+};
+
+window.markActivityComplete = id => {
+    if (dashboardActions && dashboardActions.markActivityComplete) {
+        dashboardActions.markActivityComplete(id);
+    }
+};
+
+let quizChartInstance = null;
+let gradeChartInstance = null;
 
 /**
  * Update the circular attendance ring
@@ -75,9 +91,6 @@ function updateAttendanceRing(avgAttendance) {
         }
     }
 }
-
-let quizChartInstance = null;
-let gradeChartInstance = null;
 
 /**
  * Render the Quiz Scores Bar Chart
@@ -178,6 +191,9 @@ function renderGradeChart(distribution) {
     });
 }
 
+/**
+ *
+ */
 function renderAcademicSummary(summary) {
     const container = document.getElementById('academicSummaryContainer');
     if (!container) return;
@@ -210,6 +226,9 @@ function renderAcademicSummary(summary) {
     `;
 }
 
+/**
+ *
+ */
 function renderInsights(insights, attendance) {
     const container = document.getElementById('insightsContainer');
     if (!container) return;
@@ -236,6 +255,9 @@ function renderInsights(insights, attendance) {
     `;
 }
 
+/**
+ *
+ */
 function renderUpcomingActivities(activities) {
     const container = document.getElementById('upcomingContainer');
     if (!container) return;
@@ -246,15 +268,20 @@ function renderUpcomingActivities(activities) {
         return;
     }
 
+    container.innerHTML = activities;
     container.innerHTML = activities
         .map(
             act => `
         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem;">
             <div style="display: flex; flex-direction: column;">
-                <span style="font-weight: 600;">${act.title}</span>
+                <span style="font-weight: 600; text-decoration: ${act.status === 'completed' ? 'line-through' : 'none'}; color: ${act.status === 'completed' ? 'var(--text-secondary)' : 'inherit'};">${act.title}</span>
                 <span style="color: var(--text-secondary); font-size: 0.75rem;">${act.course} • ${act.type}</span>
             </div>
-            <span style="font-weight: 500; font-size: 0.75rem; color: #f59e0b;">${formatDate(act.dueDate)}</span>
+            ${
+                act.status === 'completed'
+                    ? `<span style="font-weight: 600; font-size: 0.75rem; color: #10b981;">Completed</span>`
+                    : `<button onclick="window.markActivityComplete('${act.id}')" style="background: none; border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px; padding: 0.25rem 0.5rem; font-size: 0.75rem; cursor: pointer;">Mark Done</button>`
+            }
         </div>
     `
         )
@@ -263,6 +290,9 @@ function renderUpcomingActivities(activities) {
         );
 }
 
+/**
+ *
+ */
 function renderNotifications(notifications) {
     const container = document.getElementById('notificationsContainer');
     if (!container) return;
@@ -282,10 +312,10 @@ function renderNotifications(notifications) {
                       ? '#f59e0b'
                       : '#3b82f6';
             return `
-        <div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.875rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.875rem; opacity: ${notif.isRead ? 0.6 : 1}; transition: opacity 0.2s;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 600; color: ${color};">${notif.title}</span>
-                ${!notif.isRead ? '<span style="width: 6px; height: 6px; border-radius: 50%; background-color: #ef4444;"></span>' : ''}
+                <span style="font-weight: 600; color: ${color}; cursor: pointer;" ${!notif.isRead ? `onclick="window.markNotificationRead('${notif.id}')"` : ''}>${notif.title}</span>
+                ${!notif.isRead ? `<span onclick="window.markNotificationRead('${notif.id}')" style="width: 8px; height: 8px; border-radius: 50%; background-color: #ef4444; cursor: pointer; box-shadow: 0 0 4px #ef4444;"></span>` : ''}
             </div>
             <span style="color: var(--text-secondary); line-height: 1.4;">${notif.message}</span>
             <span style="color: var(--text-secondary); font-size: 0.7rem;">${formatDate(notif.timestamp)}</span>
@@ -311,7 +341,7 @@ function initDashboardData() {
         return;
     }
 
-    const { fetch } = useDashboard({
+    dashboardActions = useDashboard({
         /**
          *
          */
@@ -404,7 +434,7 @@ function initDashboardData() {
         },
     });
 
-    fetch();
+    dashboardActions.fetch();
 
     // Bind search functionality
     const searchInput = document.querySelector('.search-input');

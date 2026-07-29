@@ -463,6 +463,72 @@ async function handleGetUpcoming(request) {
 }
 
 /**
+ * Handle PATCH for a specific notification
+ */
+async function handlePatchNotification(request) {
+    await delay(100);
+    const url = new URL(request.url);
+    const id = url.pathname.split('/').pop();
+    const bodyText = await request.text();
+
+    let updates = {};
+    try {
+        if (bodyText) updates = JSON.parse(bodyText);
+    } catch (_e) {
+        // ignore
+    }
+
+    const notification = MOCK_NOTIFICATIONS.find(n => n.id === id);
+    if (notification) {
+        if (typeof updates.isRead === 'boolean') {
+            notification.isRead = updates.isRead;
+        }
+        return new Response(JSON.stringify(notification), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+
+    return new Response(JSON.stringify({ message: 'Notification not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
+ * Handle PATCH for a specific upcoming activity
+ */
+async function handlePatchActivity(request) {
+    await delay(100);
+    const url = new URL(request.url);
+    const id = url.pathname.split('/').pop();
+    const bodyText = await request.text();
+
+    let updates = {};
+    try {
+        if (bodyText) updates = JSON.parse(bodyText);
+    } catch (_e) {
+        // ignore
+    }
+
+    const activity = MOCK_UPCOMING_ACTIVITIES.find(a => a.id === id);
+    if (activity) {
+        if (updates.status === 'completed') {
+            activity.status = 'completed';
+        }
+        return new Response(JSON.stringify(activity), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+
+    return new Response(JSON.stringify({ message: 'Activity not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
  * Handle individual course fetch
  */
 async function handleGetCourse(request) {
@@ -516,6 +582,8 @@ const routes = {
     'GET:/api/students/:id/metrics': handleGetMetrics,
     'GET:/api/students/:id/notifications': handleGetNotifications,
     'GET:/api/students/:id/upcoming': handleGetUpcoming,
+    'PATCH:/api/notifications/:id': handlePatchNotification,
+    'PATCH:/api/upcoming/:id': handlePatchActivity,
     'GET:/api/courses/:id': handleGetCourse,
     'GET:/api/courses/:id/progress': handleGetCourseProgress,
 };

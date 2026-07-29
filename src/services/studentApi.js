@@ -117,3 +117,33 @@ export async function getStudentUpcomingActivities(studentId) {
         };
     }
 }
+
+/**
+ * Updates the status of a specific notification.
+ */
+export async function updateStudentNotification(notificationId, data) {
+    try {
+        if (!AuthContext.getCurrentUserId()) throw new Error('No user authenticated');
+        return await api.patch(API_ENDPOINTS.NOTIFICATION(notificationId), data);
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to update notification',
+        };
+    }
+}
+
+/**
+ * Updates the status of a specific upcoming activity.
+ */
+export async function updateStudentActivity(activityId, data) {
+    try {
+        if (!AuthContext.getCurrentUserId()) throw new Error('No user authenticated');
+        return await api.patch(API_ENDPOINTS.UPCOMING_ACTIVITY(activityId), data);
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to update activity',
+        };
+    }
+}

@@ -16,6 +16,8 @@ import {
     getStudentMetrics,
     getStudentNotifications,
     getStudentUpcomingActivities,
+    updateStudentNotification,
+    updateStudentActivity,
 } from './studentApi.js';
 
 /**
@@ -53,4 +55,20 @@ export async function getDashboardMetrics(studentId) {
             message: err.message || 'Failed to fetch dashboard metrics',
         };
     }
+}
+
+/**
+ * Marks a notification as read or unread.
+ */
+export async function updateNotificationStatus(notificationId, isRead) {
+    return updateStudentNotification(notificationId, { isRead });
+}
+
+/**
+ * Marks an upcoming activity as completed or pending.
+ */
+export async function updateActivityStatus(activityId, isCompleted) {
+    return updateStudentActivity(activityId, {
+        status: isCompleted ? 'completed' : 'pending',
+    });
 }
