@@ -84,7 +84,6 @@ await build({
         '.woff2': 'file',
     },
     define: {
- feature/ci_deploy_workflow
         ...defines,
         'import.meta.env.VITE_APP_NAME': '"Student Progress Tracker"',
         'import.meta.env.VITE_APP_VERSION': '"0.1.0"',
@@ -104,7 +103,6 @@ await build({
         'import.meta.env.VITE_API_BASE_URL': '"/api"',
         'import.meta.env.VITE_ENABLE_MOCK_API': '"true"',
         'import.meta.env.VITE_API_MOCK_ENABLED': '"true"',
- develop
     },
     treeShaking: true,
     legalComments: 'none',
@@ -171,7 +169,6 @@ if (existsSync(resolve(publicDir, 'grades.html'))) {
 copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(distDir, 'dashboard.css'));
 copyFileSync(resolve(srcDir, 'dashboard', 'dashboard.js'), resolve(distDir, 'dashboard.js'));
 
- feature/ci_deploy_workflow
 // Copy index.html as 404.html for SPA fallback on static hosts (GitHub Pages, etc.)
 const indexHtml = resolve(distDir, 'index.html');
 if (existsSync(indexHtml)) {
@@ -187,4 +184,3 @@ console.log('Created .nojekyll');
 if (existsSync(resolve(publicDir, '404.html'))) {
     copyFileSync(resolve(publicDir, '404.html'), resolve(distDir, '404.html'));
 }
- develop
