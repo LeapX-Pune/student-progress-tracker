@@ -31,8 +31,6 @@ import { AUTH_CONSTANTS } from '../../utils/constants.js';
  * loginFormEl.append(hint);
  */
 export function createDemoCredentials({ initialRole = 'student', onFill } = {}) {
-    let currentRole = initialRole;
-
     const block = document.createElement('div');
     block.className =
         'p-4.5 sm:p-5 bg-[#F1F5F9] border border-[#CBD5E1] rounded-xl text-left shadow-xs';
@@ -61,10 +59,7 @@ export function createDemoCredentials({ initialRole = 'student', onFill } = {}) 
     /**
      *
      */
-    function getCredentialsForRole(role) {
-        if (role === ROLES.TEACHER && AUTH_CONSTANTS.DEMO_TEACHER) {
-            return AUTH_CONSTANTS.DEMO_TEACHER;
-        }
+    function getCredentialsForRole() {
         return (
             AUTH_CONSTANTS.DEMO_STUDENT || {
                 email: AUTH_CONSTANTS.DEMO_EMAIL,
@@ -76,12 +71,10 @@ export function createDemoCredentials({ initialRole = 'student', onFill } = {}) 
     /**
      *
      */
-    function renderRole(role) {
-        currentRole = role;
-        const creds = getCredentialsForRole(role);
-        const roleName = role.charAt(0).toUpperCase() + role.slice(1);
+    function renderRole() {
+        const creds = getCredentialsForRole();
         const titleSpan = toggleBtn.querySelector('#demo-title');
-        if (titleSpan) titleSpan.textContent = `Demo ${roleName} credentials`;
+        if (titleSpan) titleSpan.textContent = 'Demo Student credentials';
 
         emailRow.innerHTML = `<span class="w-20 font-medium">Email:</span>
       <code class="font-mono text-[#0F172A] bg-white border border-[#CBD5E1] px-2 py-0.5 rounded text-[12px] shadow-xs">${creds.email}</code>`;
@@ -103,8 +96,8 @@ export function createDemoCredentials({ initialRole = 'student', onFill } = {}) 
         fillBtn.innerHTML =
             '<span>Use demo credentials</span> <span class="material-symbols-outlined text-[14px]">arrow_forward</span>';
         fillBtn.addEventListener('click', () => {
-            const creds = getCredentialsForRole(currentRole);
-            onFill({ email: creds.email, password: creds.password, role: currentRole });
+            const creds = getCredentialsForRole();
+            onFill({ email: creds.email, password: creds.password, role: ROLES.STUDENT });
         });
         contentWrapper.appendChild(fillBtn);
     }

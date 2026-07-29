@@ -7,7 +7,7 @@
  * @module utils/authorization
  */
 
-import { ROLES, PERMISSIONS, ROLE_PERMISSIONS, MODULE_PERMISSIONS } from '../config/rbac.js';
+import { ROLES, ROLE_PERMISSIONS, MODULE_PERMISSIONS } from '../config/rbac.js';
 
 /**
  * Checks if a given role exactly matches the target role.
@@ -23,7 +23,6 @@ export function checkHasRole(currentRole, targetRole) {
 
 /**
  * Checks if a given role is granted a specific permission.
- * Admins automatically have all permissions.
  *
  * @param {string} currentRole - The user's active role
  * @param {string} requiredPermission - The permission to check
@@ -33,11 +32,6 @@ export function checkHasPermission(currentRole, requiredPermission) {
     if (!currentRole) return false;
 
     const permissions = ROLE_PERMISSIONS[currentRole] || [];
-
-    // Admin override
-    if (permissions.includes(PERMISSIONS.ADMIN_ALL)) {
-        return true;
-    }
 
     return permissions.includes(requiredPermission);
 }
@@ -67,18 +61,4 @@ export function checkCanAccessRoute(currentRole, routeKey) {
  */
 export function checkIsStudent(currentRole) {
     return checkHasRole(currentRole, ROLES.STUDENT);
-}
-
-/**
- *
- */
-export function checkIsTeacher(currentRole) {
-    return checkHasRole(currentRole, ROLES.TEACHER);
-}
-
-/**
- *
- */
-export function checkIsAdmin(currentRole) {
-    return checkHasRole(currentRole, ROLES.ADMIN);
 }

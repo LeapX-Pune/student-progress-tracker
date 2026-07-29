@@ -353,6 +353,13 @@ const AuthContext = (() => {
     }
 
     /**
+     * Alias for getCurrentUser in a student-only platform.
+     */
+    function getCurrentStudent() {
+        return _state.user;
+    }
+
+    /**
      * Returns the currently authenticated user's ID, or null.
      */
     function getCurrentUserId() {
@@ -360,10 +367,10 @@ const AuthContext = (() => {
     }
 
     /**
-     * Returns the currently authenticated user's role, or null.
+     * Returns the currently authenticated student's unique studentId, or null.
      */
-    function getCurrentRole() {
-        return _state.user ? _state.user.role : null;
+    function getCurrentStudentId() {
+        return _state.user ? _state.user.studentId : null;
     }
 
     /**
@@ -385,43 +392,17 @@ const AuthContext = (() => {
     /**
      *
      */
-    function hasRole(targetRole) {
-        return authz.checkHasRole(getCurrentRole(), targetRole);
-    }
-
-    /**
-     *
-     */
     function hasPermission(permission) {
-        return authz.checkHasPermission(getCurrentRole(), permission);
+        // Since there is only one role, we default to the student role for permission checks.
+        return authz.checkHasPermission('student', permission);
     }
 
     /**
      *
      */
     function canAccessRoute(routeKey) {
-        return authz.checkCanAccessRoute(getCurrentRole(), routeKey);
-    }
-
-    /**
-     *
-     */
-    function isStudent() {
-        return authz.checkIsStudent(getCurrentRole());
-    }
-
-    /**
-     *
-     */
-    function isTeacher() {
-        return authz.checkIsTeacher(getCurrentRole());
-    }
-
-    /**
-     *
-     */
-    function isAdmin() {
-        return authz.checkIsAdmin(getCurrentRole());
+        // Since there is only one role, we default to the student role for route checks.
+        return authz.checkCanAccessRoute('student', routeKey);
     }
 
     return {
@@ -435,16 +416,13 @@ const AuthContext = (() => {
         logout,
         clearStorage: clearAuthToken,
         getCurrentUser,
+        getCurrentStudent,
         getCurrentUserId,
-        getCurrentRole,
+        getCurrentStudentId,
         getToken,
         isAuthenticated,
-        hasRole,
         hasPermission,
         canAccessRoute,
-        isStudent,
-        isTeacher,
-        isAdmin,
     };
 })();
 

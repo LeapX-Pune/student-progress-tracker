@@ -12,9 +12,6 @@ const MOCK_USERS = [
         currentStreak: 5,
         lastActiveAt: '2024-03-20T10:30:00.000Z',
     },
-    {
-        ...AUTH_CONSTANTS.DEMO_TEACHER,
-    },
 ];
 
 const MOCK_COURSES = [
@@ -208,38 +205,6 @@ async function handleLogin(request) {
         );
     }
 
-    if (
-        body.email === AUTH_CONSTANTS.DEMO_TEACHER.email &&
-        body.password === AUTH_CONSTANTS.DEMO_TEACHER.password
-    ) {
-        if (body.role && body.role !== 'teacher') {
-            return new Response(
-                JSON.stringify({ message: 'Invalid email or password for selected role' }),
-                { status: 401, headers: { 'Content-Type': 'application/json' } }
-            );
-        }
-        const teacher = MOCK_USERS.find(u => u.role === ROLES.TEACHER);
-        return new Response(
-            JSON.stringify({
-                token: 'mock-jwt-token-' + Date.now(),
-                expiresAt: new Date(Date.now() + 3600000).toISOString(),
-                user: {
-                    id: teacher.id,
-                    teacherId: teacher.teacherId,
-                    name: teacher.name,
-                    email: teacher.email,
-                    role: teacher.role,
-                    avatar: teacher.avatar,
-                    avatarUrl: teacher.avatarUrl,
-                    department: teacher.department,
-                    designation: teacher.designation,
-                    status: teacher.status,
-                },
-            }),
-            { status: 200, headers: { 'Content-Type': 'application/json' } }
-        );
-    }
-
     return new Response(JSON.stringify({ message: 'Invalid credentials' }), {
         status: 401,
         headers: { 'Content-Type': 'application/json' },
@@ -303,9 +268,9 @@ async function handleGetCourses(request) {
 
     let courses;
 
-    if (window.AuthContext && window.AuthContext.isStudent()) {
-        const user = window.AuthContext.getCurrentUser();
-        if (user && user.studentId !== studentId) {
+    if (window.AuthContext && window.AuthContext.isAuthenticated()) {
+        const user = window.AuthContext.getCurrentStudent();
+        if (user && user.id !== studentId) {
             return new Response(JSON.stringify({ message: 'Forbidden' }), {
                 status: 403,
                 headers: { 'Content-Type': 'application/json' },
@@ -313,8 +278,7 @@ async function handleGetCourses(request) {
         }
         courses = getCoursesForStudent(studentId);
     } else {
-        // Teacher or Admin sees all courses for now
-        courses = MOCK_COURSES;
+        courses = [];
     }
 
     if (courses.length > 0) {
@@ -342,9 +306,9 @@ async function handleGetGrades(request) {
     const studentId = url.pathname.split('/')[3];
 
     let grades;
-    if (window.AuthContext && window.AuthContext.isStudent()) {
-        const user = window.AuthContext.getCurrentUser();
-        if (user && user.studentId !== studentId) {
+    if (window.AuthContext && window.AuthContext.isAuthenticated()) {
+        const user = window.AuthContext.getCurrentStudent();
+        if (user && user.id !== studentId) {
             return new Response(JSON.stringify({ message: 'Forbidden' }), {
                 status: 403,
                 headers: { 'Content-Type': 'application/json' },
@@ -352,8 +316,7 @@ async function handleGetGrades(request) {
         }
         grades = getGradesForStudent(studentId);
     } else {
-        // Teachers/Admins see all requested grades
-        grades = getGradesForStudent(studentId);
+        grades = null;
     }
 
     if (grades) {
@@ -448,7 +411,9 @@ export function setupMockServer() {
         if (!matchedRoute) {
             const pathname = parsedUrl.pathname;
             for (const [routeKey, handler] of Object.entries(routes)) {
-                const [routeMethod, routePattern] = routeKey.split(':');
+                const colonIndex = routeKey.indexOf(':');
+                const routeMethod = routeKey.slice(0, colonIndex);
+                const routePattern = routeKey.slice(colonIndex + 1);
                 if (routeMethod !== method) continue;
 
                 const routeParts = routePattern.split('/');

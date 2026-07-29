@@ -20,16 +20,10 @@ describe('Role-Based Authentication Integration (Phase 1.5 Validation)', () => {
         AuthContext.logout();
     });
 
-    it('defines role-aware demo user constants for Student and Teacher', () => {
+    it('defines role-aware demo user constant for Student', () => {
         expect(AUTH_CONSTANTS.DEMO_STUDENT).toBeDefined();
         expect(AUTH_CONSTANTS.DEMO_STUDENT.email).toBe('student@demo.com');
         expect(AUTH_CONSTANTS.DEMO_STUDENT.role).toBe('student');
-        expect(AUTH_CONSTANTS.DEMO_STUDENT.studentId).toBe('STU-2024-001');
-
-        expect(AUTH_CONSTANTS.DEMO_TEACHER).toBeDefined();
-        expect(AUTH_CONSTANTS.DEMO_TEACHER.email).toBe('teacher@demo.com');
-        expect(AUTH_CONSTANTS.DEMO_TEACHER.role).toBe('teacher');
-        expect(AUTH_CONSTANTS.DEMO_TEACHER.teacherId).toBe('TCH-2024-001');
     });
 
     // Scenario 1: Student selected + Student credentials
@@ -60,58 +54,6 @@ describe('Role-Based Authentication Integration (Phase 1.5 Validation)', () => {
         expect(stored.user.studentId).toBe('STU-2024-001');
     });
 
-    // Scenario 2: Teacher selected + Teacher credentials
-    it('Scenario 2: authenticates Teacher demo user and extends session user object', async () => {
-        const result = await AuthContext.login({
-            email: AUTH_CONSTANTS.DEMO_TEACHER.email,
-            password: AUTH_CONSTANTS.DEMO_TEACHER.password,
-            role: 'teacher',
-            rememberMe: false,
-        });
-
-        expect(result.success).toBe(true);
-        expect(result.user).toBeDefined();
-        expect(result.user.role).toBe('teacher');
-        expect(result.user.teacherId).toBe('TCH-2024-001');
-        expect(result.user.department).toBe('Mathematics & Computer Science');
-        expect(result.user.designation).toBe('Senior Educator');
-
-        const state = AuthContext.getState();
-        expect(state.isAuthenticated).toBe(true);
-        expect(state.user.role).toBe('teacher');
-
-        const stored = getAuthToken();
-        expect(stored).not.toBeNull();
-        expect(stored.user.role).toBe('teacher');
-        expect(stored.user.department).toBe('Mathematics & Computer Science');
-    });
-
-    // Scenario 3: Student selected + Teacher credentials
-    it('Scenario 3: rejects Teacher credentials when Student role is selected', async () => {
-        const result = await AuthContext.login({
-            email: AUTH_CONSTANTS.DEMO_TEACHER.email,
-            password: AUTH_CONSTANTS.DEMO_TEACHER.password,
-            role: 'student',
-        });
-
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Invalid email or password for selected role');
-        expect(AuthContext.getState().isAuthenticated).toBe(false);
-    });
-
-    // Scenario 4: Teacher selected + Student credentials
-    it('Scenario 4: rejects Student credentials when Teacher role is selected', async () => {
-        const result = await AuthContext.login({
-            email: AUTH_CONSTANTS.DEMO_STUDENT.email,
-            password: AUTH_CONSTANTS.DEMO_STUDENT.password,
-            role: 'teacher',
-        });
-
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Invalid email or password for selected role');
-        expect(AuthContext.getState().isAuthenticated).toBe(false);
-    });
-
     // Scenario 5: Incorrect Password
     it('Scenario 5: rejects login attempt with incorrect password', async () => {
         const result = await AuthContext.login({
@@ -139,7 +81,7 @@ describe('Role-Based Authentication Integration (Phase 1.5 Validation)', () => {
 
     // Scenario 7: Refresh Browser / Session Restoration
     it('Scenario 7: restores authenticated session upon browser reload', async () => {
-        const mockUser = { ...AUTH_CONSTANTS.DEMO_TEACHER };
+        const mockUser = { ...AUTH_CONSTANTS.DEMO_STUDENT };
         saveAuthToken({
             token: 'mock-jwt-token-restore-123',
             expiresAt: Date.now() + 3600000,
@@ -163,8 +105,8 @@ describe('Role-Based Authentication Integration (Phase 1.5 Validation)', () => {
 
         const restoredState = AuthContext.getState();
         expect(restoredState.isAuthenticated).toBe(true);
-        expect(restoredState.user.role).toBe('teacher');
-        expect(restoredState.user.teacherId).toBe('TCH-2024-001');
+        expect(restoredState.user.role).toBe('student');
+        expect(restoredState.user.studentId).toBe('STU-2024-001');
     });
 
     // Scenario 8: Logout Session Teardown

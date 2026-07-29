@@ -8,21 +8,16 @@
  * @module components/auth/UserProfileHeader
  */
 
-import { ROLES } from '../../config/rbac.js';
 import AuthContext from '../../context/AuthContext.js';
 import { createUserAvatar } from './UserAvatar.js';
 
 /**
  * Renders role-aware visual badge HTML for a given user role.
  *
- * @param {string} role - User role ('student' | 'teacher')
  * @returns {string} Badge HTML string
  */
-export function getRoleBadgeHtml(role) {
-    const isTeacher = role === ROLES.TEACHER;
-    const roleLabel = isTeacher ? 'Teacher' : 'Student';
-    const badgeClass = isTeacher ? 'role-badge--teacher' : 'role-badge--student';
-    return `<span class="role-badge ${badgeClass}">${roleLabel}</span>`;
+export function getRoleBadgeHtml() {
+    return '<span class="role-badge role-badge--student">Student</span>';
 }
 
 /**
@@ -38,8 +33,7 @@ export function updateUserProfileHeader(user) {
     if (profileTrigger) {
         // Update or replace avatar wrapper
         const oldAvatar = profileTrigger.querySelector('.avatar, .user-avatar');
-        const roleRing =
-            user.role === ROLES.TEACHER ? 'avatar-ring--teacher' : 'avatar-ring--student';
+        const roleRing = 'avatar-ring--student';
         const newAvatar = createUserAvatar(user, 'sm', roleRing);
 
         if (oldAvatar) {
@@ -57,7 +51,7 @@ export function updateUserProfileHeader(user) {
         // Update role indicator badge
         const roleEl = profileTrigger.querySelector('.profile-role');
         if (roleEl) {
-            roleEl.innerHTML = getRoleBadgeHtml(user.role ?? 'student');
+            roleEl.innerHTML = getRoleBadgeHtml();
         }
     }
 
@@ -71,18 +65,13 @@ export function updateUserProfileHeader(user) {
             profileDropdown.prepend(summaryHeader);
         }
 
-        const isTeacher = user.role === ROLES.TEACHER;
-        const detailsLine = isTeacher
-            ? `${user.department ?? 'Faculty'} • ${user.designation ?? 'Teacher'}`
-            : `${user.class ?? 'Student'} • Roll No: ${user.rollNumber ?? 'N/A'}`;
-        const idLine = isTeacher
-            ? `ID: ${user.teacherId ?? user.id}`
-            : `ID: ${user.studentId ?? user.id}`;
+        const detailsLine = `${user.class ?? 'Student'} • Roll No: ${user.rollNumber ?? 'N/A'}`;
+        const idLine = `ID: ${user.studentId ?? user.id}`;
 
         summaryHeader.innerHTML = `
             <div class="flex items-center justify-between gap-2 mb-1">
               <span class="profile-summary-name truncate">${user.name}</span>
-              ${getRoleBadgeHtml(user.role ?? 'student')}
+              ${getRoleBadgeHtml()}
             </div>
             <div class="profile-summary-email truncate">${user.email}</div>
             <div class="flex items-center justify-between text-xs pt-1 border-t border-[var(--border-subtle)]">
@@ -123,10 +112,7 @@ export function updateWelcomeHeader(user, container = document) {
         '[data-welcome-subtitle], #welcome-subtitle, .welcome-subtitle'
     );
     if (subtitleEl) {
-        const isTeacher = user.role === ROLES.TEACHER;
-        subtitleEl.textContent = isTeacher
-            ? `${user.department ?? 'Faculty'} • ${user.designation ?? 'Senior Educator'}`
-            : `${user.class ?? 'Class 10-A'} • Roll No: ${user.rollNumber ?? '24'}`;
+        subtitleEl.textContent = `${user.class ?? 'Class 10-A'} • Roll No: ${user.rollNumber ?? '24'}`;
     }
 }
 

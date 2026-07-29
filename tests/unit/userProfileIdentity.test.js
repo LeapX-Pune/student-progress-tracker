@@ -40,10 +40,6 @@ describe('Role-Based User Identity & Personalization (Phase 2)', () => {
         const studentBadge = getRoleBadgeHtml('student');
         expect(studentBadge).toContain('role-badge--student');
         expect(studentBadge).toContain('Student');
-
-        const teacherBadge = getRoleBadgeHtml('teacher');
-        expect(teacherBadge).toContain('role-badge--teacher');
-        expect(teacherBadge).toContain('Teacher');
     });
 
     it('creates user avatar with initials fallback when image URL fails or is missing', () => {
@@ -54,12 +50,6 @@ describe('Role-Based User Identity & Personalization (Phase 2)', () => {
 
         expect(avatarEl.querySelector('.user-avatar__initials')).not.toBeNull();
         expect(avatarEl.querySelector('.user-avatar__initials').textContent).toBe('AJ');
-
-        const teacherAvatarEl = createUserAvatar({
-            name: AUTH_CONSTANTS.DEMO_TEACHER.name,
-            id: AUTH_CONSTANTS.DEMO_TEACHER.id,
-        });
-        expect(teacherAvatarEl.querySelector('.user-avatar__initials').textContent).toBe('DJ');
     });
 
     it('updates header profile trigger and dropdown for authenticated Student user', () => {
@@ -78,51 +68,27 @@ describe('Role-Based User Identity & Personalization (Phase 2)', () => {
         expect(summaryHeader.innerHTML).toContain('STU-2024-001');
     });
 
-    it('updates header profile trigger and dropdown for authenticated Teacher user', () => {
-        const user = { ...AUTH_CONSTANTS.DEMO_TEACHER };
-        updateUserProfileHeader(user);
-
-        const nameEl = document.querySelector('.profile-name');
-        const roleEl = document.querySelector('.profile-role');
-        const summaryHeader = document.querySelector('.profile-summary-header');
-
-        expect(nameEl.textContent).toBe('Dr. Sarah Jenkins');
-        expect(roleEl.innerHTML).toContain('role-badge--teacher');
-        expect(summaryHeader).not.toBeNull();
-        expect(summaryHeader.innerHTML).toContain('teacher@demo.com');
-        expect(summaryHeader.innerHTML).toContain('Mathematics &amp; Computer Science');
-        expect(summaryHeader.innerHTML).toContain('TCH-2024-001');
-    });
-
     it('updates welcome header title and subtitle dynamically based on user role', () => {
         updateWelcomeHeader(AUTH_CONSTANTS.DEMO_STUDENT);
         expect(document.querySelector('#welcome-title').textContent).toBe(
             'Welcome back, Alex Johnson'
         );
         expect(document.querySelector('#welcome-subtitle').textContent).toContain('Class 10-A');
-
-        updateWelcomeHeader(AUTH_CONSTANTS.DEMO_TEACHER);
-        expect(document.querySelector('#welcome-title').textContent).toBe(
-            'Welcome back, Dr. Sarah Jenkins'
-        );
-        expect(document.querySelector('#welcome-subtitle').textContent).toContain(
-            'Mathematics & Computer Science'
-        );
     });
 
     it('reactively synchronizes UI when AuthContext state changes via initUserProfileHeader', () => {
         const unsubscribe = initUserProfileHeader();
 
         AuthContext.setState({
-            user: AUTH_CONSTANTS.DEMO_TEACHER,
+            user: AUTH_CONSTANTS.DEMO_STUDENT,
             token: 'mock-token',
             isAuthenticated: true,
             isLoading: false,
             error: null,
         });
 
-        expect(document.querySelector('.profile-name').textContent).toBe('Dr. Sarah Jenkins');
-        expect(document.querySelector('.profile-role').innerHTML).toContain('role-badge--teacher');
+        expect(document.querySelector('.profile-name').textContent).toBe('Alex Johnson');
+        expect(document.querySelector('.profile-role').innerHTML).toContain('role-badge--student');
 
         unsubscribe();
     });

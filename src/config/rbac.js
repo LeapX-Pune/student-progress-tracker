@@ -11,9 +11,7 @@
  * System Roles
  */
 export const ROLES = {
-    STUDENT: 'student',
-    TEACHER: 'teacher', // Instructor
-    ADMIN: 'admin',
+    STUDENT: 'student', // Learner
 };
 
 /**
@@ -25,29 +23,18 @@ export const PERMISSIONS = {
 
     // Courses
     READ_COURSES: 'read:courses',
-    MANAGE_COURSES: 'manage:courses',
-
-    // Attendance
-    READ_ATTENDANCE: 'read:attendance',
-    MANAGE_ATTENDANCE: 'manage:attendance',
 
     // Grades
     READ_GRADES: 'read:grades',
-    MANAGE_GRADES: 'manage:grades',
+
+    // Attendance
+    READ_ATTENDANCE: 'read:attendance',
 
     // Students
     READ_STUDENTS: 'read:students',
-    MANAGE_STUDENTS: 'manage:students',
 
-    // Analytics
-    READ_ANALYTICS: 'read:analytics',
-
-    // Settings
+    // Profile & Settings
     READ_SETTINGS: 'read:settings',
-    WRITE_SETTINGS: 'write:settings',
-
-    // Admin overrides
-    ADMIN_ALL: 'admin:all',
 };
 
 /**
@@ -59,7 +46,6 @@ export const MODULES = {
     STUDENTS: 'students',
     COURSES: 'courses',
     GRADES: 'grades',
-    ANALYTICS: 'analytics',
     ATTENDANCE: 'attendance',
     SETTINGS: 'settings',
 };
@@ -74,22 +60,26 @@ export const ROLE_PERMISSIONS = {
         PERMISSIONS.READ_COURSES,
         PERMISSIONS.READ_GRADES,
         PERMISSIONS.READ_ATTENDANCE,
-        PERMISSIONS.READ_SETTINGS,
-    ],
-    [ROLES.TEACHER]: [
-        PERMISSIONS.READ_DASHBOARD,
-        PERMISSIONS.READ_COURSES,
-        PERMISSIONS.MANAGE_COURSES,
-        PERMISSIONS.READ_GRADES,
-        PERMISSIONS.MANAGE_GRADES,
-        PERMISSIONS.READ_ATTENDANCE,
-        PERMISSIONS.MANAGE_ATTENDANCE,
         PERMISSIONS.READ_STUDENTS,
-        PERMISSIONS.READ_ANALYTICS,
         PERMISSIONS.READ_SETTINGS,
-        PERMISSIONS.WRITE_SETTINGS,
     ],
-    [ROLES.ADMIN]: [PERMISSIONS.ADMIN_ALL],
+};
+
+/**
+ * Route / Module Access Configuration
+ */
+export const ROUTE_PERMISSIONS = {
+    // Public / Fallback
+    login: { requiresAuth: false },
+    overview: { requiresAuth: false },
+
+    // Student Routes
+    dashboard: { requiresAuth: true, permission: PERMISSIONS.READ_DASHBOARD },
+    students: { requiresAuth: true, permission: PERMISSIONS.READ_STUDENTS },
+    courses: { requiresAuth: true, permission: PERMISSIONS.READ_COURSES },
+    grades: { requiresAuth: true, permission: PERMISSIONS.READ_GRADES },
+    attendance: { requiresAuth: true, permission: PERMISSIONS.READ_ATTENDANCE },
+    settings: { requiresAuth: true, permission: PERMISSIONS.READ_SETTINGS },
 };
 
 /**
@@ -101,7 +91,6 @@ export const MODULE_PERMISSIONS = {
     [MODULES.STUDENTS]: PERMISSIONS.READ_STUDENTS,
     [MODULES.COURSES]: PERMISSIONS.READ_COURSES,
     [MODULES.GRADES]: PERMISSIONS.READ_GRADES,
-    [MODULES.ANALYTICS]: PERMISSIONS.READ_ANALYTICS,
     [MODULES.ATTENDANCE]: PERMISSIONS.READ_ATTENDANCE,
     [MODULES.SETTINGS]: PERMISSIONS.READ_SETTINGS,
 };

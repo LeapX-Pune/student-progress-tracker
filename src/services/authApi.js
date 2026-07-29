@@ -51,7 +51,7 @@ import { api } from './api.js';
  * @param {Object}  credentials            - Login form data
  * @param {string}  credentials.email      - User's email address
  * @param {string}  credentials.password   - User's password
- * @param {string}  [credentials.role]     - Selected user role ('student' | 'teacher')
+ * @param {string}  [credentials.role]     - Selected user role (deprecated, defaults to student)
  * @returns {Promise<{ token: string, expiresAt: string|number, user: Object }>}
  *   The raw auth response body
  * @throws {{ code: string, message: string }} Normalised error on failure
