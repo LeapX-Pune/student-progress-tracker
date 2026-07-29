@@ -1,5 +1,5 @@
 import { context } from 'esbuild';
-import { copyFileSync, existsSync, mkdirSync } from 'fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
@@ -8,6 +8,20 @@ const __dirname = dirname(__filename);
 const rootDir = resolve(__dirname, '..');
 const publicDir = resolve(rootDir, 'public');
 const srcDir = resolve(rootDir, 'src');
+
+function copyDir(src, dest) {
+    if (!existsSync(dest)) mkdirSync(dest, { recursive: true });
+    const entries = readdirSync(src);
+    for (const file of entries) {
+        const srcFile = resolve(src, file);
+        const destFile = resolve(dest, file);
+        if (statSync(srcFile).isDirectory()) {
+            copyDir(srcFile, destFile);
+        } else {
+            copyFileSync(srcFile, destFile);
+        }
+    }
+}
 
 function copyAsset(src, dest) {
     if (existsSync(src)) {
@@ -20,7 +34,6 @@ function copyAsset(src, dest) {
 
 // Copy standalone source files referenced by index.html for dev server
 copyFileSync(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
-copyFileSync(resolve(srcDir, 'pages', 'script.js'), resolve(publicDir, 'script.js'));
 
 // Start JSON Server mock API
 const mockApi = spawn(
@@ -42,11 +55,15 @@ if (!existsSync(publicDir)) mkdirSync(publicDir, { recursive: true });
 
 // Copy assets needed by index.html
 copyAsset(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
-copyAsset(resolve(srcDir, 'pages', 'script.js'), resolve(publicDir, 'script.js'));
 
 // Copy assets needed by standalone HTML pages
 copyAsset(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(publicDir, 'dashboard.css'));
 copyAsset(resolve(srcDir, 'dashboard', 'dashboard.js'), resolve(publicDir, 'dashboard.js'));
+
+// Copy auth assets (SVG, images) from src/assets to public/assets for dev server
+if (existsSync(resolve(srcDir, 'assets'))) {
+    copyDir(resolve(srcDir, 'assets'), resolve(publicDir, 'assets'));
+}
 
 // esbuild watch mode
 const ctx = await context({
