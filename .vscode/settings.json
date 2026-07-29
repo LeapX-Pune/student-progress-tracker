@@ -1,10 +1,12 @@
 {
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
   "eslint.validate": ["javascript", "html"],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "files.exclude": {
     "**/dist": true,
     "**/node_modules": true,
@@ -14,5 +16,8 @@
     "**/dist": true,
     "**/node_modules": true
   },
-  "javascript.updateImportsOnFileMove.enabled": "always"
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "liveServer.settings.port": 5508
 }
