@@ -1,29 +1,29 @@
 /**
- * @fileoverview LoginPage — Top-Level Login Page — Part 3.
+ * @fileoverview LoginPage — Integrated Top-Level Authentication Page.
  *
- * Assembles the complete login view:
- *   • App logo + tagline (left / top panel)
- *   • LoginForm (right / bottom panel)
+ * Assembles the complete split-screen authentication view:
+ *   • Left Panel (55% desktop width): Visual hero branding illustration,
+ *     title, subtitle, 4 feature cards, and atmospheric glow accents.
+ *   • Right Panel (45% desktop width): LoginForm card (Role selector, Sign In /
+ *     Sign Up mode toggle, password mask toggle, Google OAuth button, and inputs).
+ *   • Footer: Branding and legal/help links.
  *
  * Responsibilities:
- *   - Set `document.title` on mount (FR-UX-029)
- *   - Redirect to /dashboard if the user is already authenticated
+ *   - Set `document.title` on mount
+ *   - Redirect to /overview if the user is already authenticated
  *   - Compose LoginForm with a navigation callback
  *   - Clean up subscriptions and child components on destroy
- *
- * ─── Navigation ──────────────────────────────────────────────────────────────
- *   TODO (Part 4 — Routing):
- *     Replace the `window.location.hash = …` calls with `router.navigate()`.
  *
  * @module pages/LoginPage
  */
 
+import heroIllustrationUrl from '../assets/auth/hero-illustration.jpg';
 import { createLoginForm } from '../components/auth/LoginForm.js';
 import AuthContext from '../context/AuthContext.js';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const PAGE_TITLE = 'Sign In | Student Progress Tracker';
+const PAGE_TITLE = 'The Reality - Student Progress Tracker Authentication';
 
 // ─── Factory ──────────────────────────────────────────────────────────────────
 
@@ -43,12 +43,12 @@ export function createLoginPage(container) {
     const { isAuthenticated, isLoading } = AuthContext.getState();
 
     if (!isLoading && isAuthenticated) {
-        // TODO (Part 4 — Routing): router.navigate(ROUTES.DASHBOARD);
-        window.location.hash = '/dashboard';
-        // Return a no-op destroy handle — page won't be rendered.
+        window.location.hash = '/overview';
         return {
             /**
+             * No-op destroy handle when user is already authenticated.
              *
+             * @returns {void}
              */
             destroy: () => {},
         };
@@ -57,95 +57,121 @@ export function createLoginPage(container) {
     // ── Set document title ────────────────────────────────────────────────────
     document.title = PAGE_TITLE;
 
-    // ── Build page shell ──────────────────────────────────────────────────────
-    const pageEl = document.createElement('div');
-    pageEl.className = 'login-page';
-    pageEl.id = 'login-page';
+    // ── Build page wrapper shell ──────────────────────────────────────────────
+    const pageWrapper = document.createElement('div');
+    pageWrapper.id = 'login-page';
 
-    // ── Left / hero panel ─────────────────────────────────────────────────────
-    const heroPanel = document.createElement('div');
-    heroPanel.className = 'login-page__hero';
-    heroPanel.setAttribute('aria-hidden', 'true'); // decorative panel
+    pageWrapper.innerHTML = `
+  <main class="login-main">
+    <!-- LEFT BRANDING PANEL -->
+    <section class="login-left-panel">
+      <div class="login-left-inner fade-in-up">
+        
+        <!-- Hero Branding Illustration -->
+        <div class="login-hero-img-wrap">
+          <img 
+            alt="The Reality Student Progress Illustration" 
+            class="login-hero-img"
+            src="${heroIllustrationUrl}"
+          />
+        </div>
 
-    const logoArea = document.createElement('div');
-    logoArea.className = 'login-page__logo-area';
+        <!-- Hero Title & Subtitle -->
+        <div class="login-hero-text fade-in-up delay-100">
+          <h1 class="login-hero-title">Student Progress Tracker</h1>
+          <p class="login-hero-subtitle">Track Learning. Measure Growth. Empower Education.</p>
+        </div>
 
-    // Inline SVG logo — uses the asset at src/assets/auth/logo.svg.
-    // Loaded as an <img> with a meaningful alt so it degrades gracefully.
-    const logoImg = document.createElement('img');
-    logoImg.src = '/src/assets/auth/logo.svg';
-    logoImg.alt = 'Student Progress Tracker logo';
-    logoImg.className = 'login-page__logo';
-    logoImg.width = 48;
-    logoImg.height = 48;
-    /**
-     *
-     */
-    logoImg.onerror = () => {
-        // If the SVG asset is missing, fall back to a text logo.
-        logoImg.style.display = 'none';
-    };
+        <!-- Key Feature Highlights Grid (2 Columns) -->
+        <div class="login-features-grid fade-in-up delay-200">
+          
+          <div class="login-feature-card">
+            <div class="login-feature-icon login-feature-icon--blue">
+              <span class="material-symbols-outlined">monitoring</span>
+            </div>
+            <div>
+              <h3 class="login-feature-title">Performance Analytics</h3>
+              <p class="login-feature-desc">Deep insights into student grades and trends.</p>
+            </div>
+          </div>
 
-    const appName = document.createElement('span');
-    appName.className = 'login-page__app-name';
-    appName.textContent = 'Student Progress Tracker';
+          <div class="login-feature-card">
+            <div class="login-feature-icon login-feature-icon--green">
+              <span class="material-symbols-outlined">psychology</span>
+            </div>
+            <div>
+              <h3 class="login-feature-title">Student Tracking</h3>
+              <p class="login-feature-desc">Monitor individual progress across all subjects.</p>
+            </div>
+          </div>
 
-    logoArea.appendChild(logoImg);
-    logoArea.appendChild(appName);
+          <div class="login-feature-card">
+            <div class="login-feature-icon login-feature-icon--purple">
+              <span class="material-symbols-outlined">assignment</span>
+            </div>
+            <div>
+              <h3 class="login-feature-title">Assignment Management</h3>
+              <p class="login-feature-desc">Streamlined submission and grading workflow.</p>
+            </div>
+          </div>
 
-    const heroTagline = document.createElement('p');
-    heroTagline.className = 'login-page__tagline';
-    heroTagline.textContent = 'Track your learning journey, one course at a time.';
+          <div class="login-feature-card">
+            <div class="login-feature-icon login-feature-icon--red">
+              <span class="material-symbols-outlined">notifications_active</span>
+            </div>
+            <div>
+              <h3 class="login-feature-title">Real-time Alerts</h3>
+              <p class="login-feature-desc">Instant notifications for deadlines and updates.</p>
+            </div>
+          </div>
 
-    // Login illustration
-    const illustration = document.createElement('img');
-    illustration.src = '/src/assets/auth/login.svg';
-    illustration.alt = ''; // decorative — hidden from screen readers
-    illustration.setAttribute('aria-hidden', 'true');
-    illustration.className = 'login-page__illustration';
-    /**
-     *
-     */
-    illustration.onerror = () => {
-        illustration.style.display = 'none';
-    };
+        </div>
+      </div>
 
-    heroPanel.appendChild(logoArea);
-    heroPanel.appendChild(heroTagline);
-    heroPanel.appendChild(illustration);
+      <div class="login-glow login-glow--top"></div>
+      <div class="login-glow login-glow--bottom"></div>
+    </section>
 
-    // ── Right / form panel ────────────────────────────────────────────────────
-    const formPanel = document.createElement('div');
-    formPanel.className = 'login-page__form-panel';
+    <!-- RIGHT AUTHENTICATION PANEL -->
+    <section id="form-mount-container" class="login-right-panel">
+      <div class="login-right-bg-gradient"></div>
+    </section>
+  </main>
 
-    const formCard = document.createElement('div');
-    formCard.className = 'login-page__form-card';
+  <footer class="login-footer">
+    <div class="login-footer-brand">
+      <span class="login-footer-logo">The Reality</span>
+      <span class="login-footer-copy">© 2024 The Reality Academy. All rights reserved.</span>
+    </div>
+    <nav class="login-footer-links" aria-label="Footer links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Help Center</a>
+      <a href="#">Contact</a>
+    </nav>
+  </footer>
+    `;
 
-    formPanel.appendChild(formCard);
+    container.appendChild(pageWrapper);
+    const formMountContainer = pageWrapper.querySelector('#form-mount-container');
 
-    pageEl.appendChild(heroPanel);
-    pageEl.appendChild(formPanel);
-    container.appendChild(pageEl);
-
-    // ── Mount LoginForm into the card ─────────────────────────────────────────
-    const loginFormHandle = createLoginForm(formCard, {
+    // ── Mount LoginForm into form panel ──────────────────────────────────────
+    const loginFormHandle = createLoginForm(formMountContainer, {
         /**
+         * Navigation callback on successful login.
          *
+         * @param {Object} _user
+         * @param {string} destination
          */
         onSuccess: (_user, destination) => {
-            // TODO (Part 4 — Routing): router.navigate(destination);
             window.location.hash = destination;
         },
     });
 
     // ── Subscribe to AuthContext to handle mid-session auth changes ───────────
-    //
-    // If the user somehow becomes authenticated while on the login page
-    // (e.g. via another tab), redirect them away.
     const unsubscribe = AuthContext.subscribe(({ isAuthenticated: authed }) => {
         if (authed) {
-            // TODO (Part 4 — Routing): router.navigate(ROUTES.DASHBOARD);
-            window.location.hash = '/dashboard';
+            window.location.hash = '/overview';
         }
     });
 
@@ -154,17 +180,15 @@ export function createLoginPage(container) {
     return {
         /**
          * Tears down the login page, removing DOM elements and subscriptions.
-         * Call this when the router navigates away from the login route.
          *
          * @returns {void}
          */
         destroy() {
             unsubscribe();
             loginFormHandle.destroy();
-            if (container.contains(pageEl)) {
-                container.removeChild(pageEl);
+            if (container.contains(pageWrapper)) {
+                container.removeChild(pageWrapper);
             }
-            // Reset title to the app default.
             document.title = 'Student Progress Tracker';
         },
     };
