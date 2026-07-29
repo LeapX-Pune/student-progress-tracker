@@ -19,6 +19,7 @@
         grades: 'Grades',
         attendance: 'Attendance',
         settings: 'Settings',
+        profile: 'Profile',
     };
 
     const DEFAULT_ROUTE = 'overview';
@@ -268,26 +269,6 @@
     function renderPlaceholder(routeKey) {
         if (!pageContent) return;
         if (routeKey === 'settings') {
-            pageContent.innerHTML = `
-        <div class="settings-page">
-            <h1>Settings</h1>
-            <div class="settings-card">
-                <div class="setting-row">
-                    <div>
-                        <h3>Dark Mode</h3>
-                        <p>Switch between light and dark appearance.</p>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="themeToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        `;
-
-            initThemeToggle();
-
             return;
         }
 
@@ -346,29 +327,6 @@
     /**
      *
      */
-    function initThemeToggle() {
-        const toggle = document.getElementById('themeToggle');
-
-        if (!toggle) return;
-
-        if (localStorage.getItem('theme') === 'dark' || !localStorage.getItem('theme')) {
-            document.body.classList.add('dark');
-        }
-
-        toggle.checked = document.body.classList.contains('dark');
-
-        toggle.addEventListener('change', () => {
-            if (toggle.checked) {
-                document.body.classList.add('dark');
-
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark');
-
-                localStorage.setItem('theme', 'light');
-            }
-        });
-    }
 
     /**
      *

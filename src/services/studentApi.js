@@ -179,3 +179,83 @@ export async function getAcademicPerformance(studentId) {
         };
     }
 }
+
+/**
+ * Updates the profile details for a specific student.
+ */
+export async function updateStudentProfile(data, studentId) {
+    try {
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.put(API_ENDPOINTS.STUDENT(targetId), data);
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to update student profile',
+        };
+    }
+}
+
+/**
+ * Fetches the settings for a specific student.
+ */
+export async function getStudentSettings(studentId) {
+    try {
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.get(API_ENDPOINTS.STUDENT_SETTINGS(targetId));
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to fetch student settings',
+        };
+    }
+}
+
+/**
+ * Updates the settings for a specific student.
+ */
+export async function updateStudentSettings(data, studentId) {
+    try {
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.put(API_ENDPOINTS.STUDENT_SETTINGS(targetId), data);
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to update student settings',
+        };
+    }
+}
+
+/**
+ * Updates the preferences for a specific student.
+ */
+export async function updateStudentPreferences(data, studentId) {
+    try {
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.put(API_ENDPOINTS.STUDENT_PREFERENCES(targetId), data);
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to update student preferences',
+        };
+    }
+}
+
+/**
+ * Marks all notifications as read for a specific student.
+ */
+export async function markAllNotificationsRead(studentId) {
+    try {
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.put(API_ENDPOINTS.STUDENT_MARK_ALL_NOTIFICATIONS(targetId), {});
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to mark all notifications read',
+        };
+    }
+}

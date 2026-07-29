@@ -56,6 +56,15 @@ export const API_ENDPOINTS = /** @type {const} */ ({
     /** @param {string} id - Student ID */
     STUDENT_ACADEMIC_PERFORMANCE: id => `/students/${id}/performance`,
 
+    /** @param {string} id - Student ID */
+    STUDENT_SETTINGS: id => `/students/${id}/settings`,
+
+    /** @param {string} id - Student ID */
+    STUDENT_PREFERENCES: id => `/students/${id}/preferences`,
+
+    /** @param {string} id - Student ID */
+    STUDENT_MARK_ALL_NOTIFICATIONS: id => `/students/${id}/notifications/mark-all-read`,
+
     /** @param {string} id - Notification ID */
     NOTIFICATION: id => `/notifications/${id}`,
 

@@ -8,9 +8,32 @@ import { AUTH_CONSTANTS } from '../utils/constants.js';
 const MOCK_USERS = [
     {
         ...AUTH_CONSTANTS.DEMO_STUDENT,
+        phone: '+1 (555) 123-4567',
+        emergencyContact: 'Jane Doe (+1 555-987-6543)',
+        address: '123 University Ave, Apt 4B',
+        bio: 'Passionate about computer science and mathematics.',
+        department: 'Computer Science',
+        program: 'B.Sc. Computer Science',
+        semester: 6,
+        batch: 'Class of 2025',
+        academicAdvisor: 'Dr. Alan Turing',
         enrolledAt: '2024-01-15T00:00:00.000Z',
         currentStreak: 5,
         lastActiveAt: '2024-03-20T10:30:00.000Z',
+    },
+];
+
+const MOCK_STUDENT_SETTINGS = [
+    {
+        studentId: 'stu_001',
+        theme: 'system',
+        language: 'en-US',
+        timeZone: 'America/New_York',
+        emailNotifications: true,
+        notificationSound: true,
+        compactView: false,
+        dashboardWidgets: ['courses', 'grades', 'attendance', 'upcoming'],
+        defaultLandingPage: 'dashboard',
     },
 ];
 
@@ -431,6 +454,103 @@ async function handleGetStudent(request) {
 /**
  *
  */
+async function handlePutStudent(request) {
+    const denied = checkMockPermission(PERMISSIONS.READ_STUDENTS); // or UPDATE_STUDENTS
+    if (denied) return denied;
+    await delay(200);
+    const url = new URL(request.url);
+    const id = url.pathname.split('/').pop();
+    const bodyText = await request.text();
+
+    let updates = {};
+    try {
+        if (bodyText) updates = JSON.parse(bodyText);
+    } catch (_e) {
+        // ignore JSON parse errors
+    }
+
+    const student = MOCK_USERS.find(u => u.id === id);
+    if (student) {
+        if (updates.phone !== undefined) student.phone = updates.phone;
+        if (updates.emergencyContact !== undefined)
+            student.emergencyContact = updates.emergencyContact;
+        if (updates.address !== undefined) student.address = updates.address;
+        if (updates.bio !== undefined) student.bio = updates.bio;
+        if (updates.avatarUrl !== undefined) student.avatarUrl = updates.avatarUrl;
+
+        return new Response(JSON.stringify(student), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+
+    return new Response(JSON.stringify({ message: 'Student not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
+ *
+ */
+async function handleGetSettings(request) {
+    await delay(100);
+    const url = new URL(request.url);
+    const studentId = url.pathname.split('/')[3];
+
+    let settings = MOCK_STUDENT_SETTINGS.find(s => s.studentId === studentId);
+    if (!settings) {
+        settings = {
+            studentId,
+            theme: 'system',
+            language: 'en-US',
+            timeZone: 'UTC',
+            emailNotifications: true,
+            notificationSound: true,
+            compactView: false,
+            dashboardWidgets: ['courses', 'grades', 'attendance'],
+            defaultLandingPage: 'dashboard',
+        };
+    }
+    return new Response(JSON.stringify(settings), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
+ *
+ */
+async function handlePutSettings(request) {
+    await delay(100);
+    const url = new URL(request.url);
+    const studentId = url.pathname.split('/')[3];
+    const bodyText = await request.text();
+
+    let updates = {};
+    try {
+        if (bodyText) updates = JSON.parse(bodyText);
+    } catch (_e) {
+        // ignore JSON parse errors
+    }
+
+    let settings = MOCK_STUDENT_SETTINGS.find(s => s.studentId === studentId);
+    if (!settings) {
+        settings = { studentId, ...updates };
+        MOCK_STUDENT_SETTINGS.push(settings);
+    } else {
+        Object.assign(settings, updates);
+    }
+
+    return new Response(JSON.stringify(settings), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
+ *
+ */
 async function handleGetCourses(request) {
     const denied = checkMockPermission(PERMISSIONS.READ_COURSES);
     if (denied) return denied;
@@ -548,6 +668,26 @@ async function handleGetUpcoming(request) {
     const studentId = url.pathname.split('/')[3];
     const upcoming = getUpcomingActivitiesForStudent(studentId);
     return new Response(JSON.stringify(upcoming), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
+ *
+ */
+async function handleMarkAllNotificationsRead(request) {
+    await delay(100);
+    const url = new URL(request.url);
+    const studentId = url.pathname.split('/')[3];
+
+    MOCK_NOTIFICATIONS.forEach(n => {
+        if (n.studentId === studentId) {
+            n.isRead = true;
+        }
+    });
+
+    return new Response(JSON.stringify({ success: true }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
     });
@@ -746,6 +886,11 @@ async function handleGetAttendance(request) {
 const routes = {
     'POST:/api/auth/login': handleLogin,
     'GET:/api/students/:id': handleGetStudent,
+    'PUT:/api/students/:id': handlePutStudent,
+    'GET:/api/students/:id/settings': handleGetSettings,
+    'PUT:/api/students/:id/settings': handlePutSettings,
+    'PUT:/api/students/:id/preferences': handlePutSettings,
+    'PUT:/api/students/:id/notifications/mark-all-read': handleMarkAllNotificationsRead,
     'GET:/api/students/:id/courses': handleGetCourses,
     'GET:/api/students/:id/grades': handleGetGrades,
     'GET:/api/students/:id/metrics': handleGetMetrics,

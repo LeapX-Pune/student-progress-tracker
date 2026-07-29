@@ -10,10 +10,13 @@ import { showError, showInfo } from './components/Toast.js';
 import { createTooltip } from './components/Tooltip.js';
 import AuthContext from './context/AuthContext.js';
 import { useDashboard } from './hooks/useDashboard.js';
+import { useNotifications } from './hooks/useNotifications.js';
 import { initAttendancePage } from './pages/AttendancePage.js';
 import { initCoursesPage } from './pages/CoursesPage.js';
 import { initGradesPage } from './pages/GradesPage.js';
 import { createLoginPage } from './pages/LoginPage.js';
+import { initProfilePage } from './pages/ProfilePage.js';
+import { initSettingsPage } from './pages/SettingsPage.js';
 import { initApi } from './services/api.js';
 
 // Export to window for iframe access
@@ -194,6 +197,76 @@ function wireAppInteractions() {
 }
 
 /**
+ * Initialize notifications panel
+ */
+function initNotifications() {
+    const panel = document.querySelector('[data-notification-panel]');
+    if (!panel) return;
+
+    const dot = document.querySelector('[data-notification-dot]');
+    const { subscribe, fetchNotifications, markAsRead, markAllRead } = useNotifications();
+
+    subscribe(state => {
+        if (state.loading || state.error || !state.data) return;
+
+        const unreadCount = state.data.filter(n => !n.isRead).length;
+        if (dot) {
+            dot.style.display = unreadCount > 0 ? 'block' : 'none';
+        }
+
+        const emptyMsg = panel.querySelector('.notification-empty');
+        if (state.data.length === 0) {
+            if (emptyMsg) {
+                emptyMsg.style.display = 'block';
+                emptyMsg.textContent = 'No notifications yet.';
+            }
+        } else {
+            if (emptyMsg) emptyMsg.style.display = 'none';
+
+            // Remove existing items
+            panel.querySelectorAll('.notification-item').forEach(el => el.remove());
+
+            // Add new items
+            state.data.forEach(n => {
+                const item = document.createElement('div');
+                item.className = 'notification-item' + (n.isRead ? '' : ' unread');
+                item.style.padding = '1rem';
+                item.style.borderBottom = '1px solid var(--border-color)';
+                if (!n.isRead) item.style.backgroundColor = 'var(--bg-surface-hover)';
+
+                item.innerHTML = `
+                    <div style="font-weight: 500; font-size: 0.875rem; color: var(--text-primary); margin-bottom: 0.25rem;">${n.title}</div>
+                    <div style="font-size: 0.8125rem; color: var(--text-secondary); margin-bottom: 0.5rem;">${n.message}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-tertiary);">${new Date(n.timestamp).toLocaleString()}</div>
+                    ${!n.isRead ? '<button class="mark-read-btn" style="background:none; border:none; color:var(--primary-color); cursor:pointer; font-size:0.75rem; padding:0; margin-top:0.5rem;">Mark as read</button>' : ''}
+                `;
+
+                const btn = item.querySelector('.mark-read-btn');
+                if (btn) {
+                    btn.addEventListener('click', async e => {
+                        e.stopPropagation();
+                        await markAsRead(n.id);
+                    });
+                }
+
+                panel.appendChild(item);
+            });
+        }
+    });
+
+    // Handle "Clear All" confirm
+    document.body.addEventListener('click', async e => {
+        if (e.target.hasAttribute('data-confirm-clear')) {
+            await markAllRead();
+            const modal = e.target.closest('.modal-overlay');
+            if (modal) modal.querySelector('[data-modal-close]')?.click();
+        }
+    });
+
+    fetchNotifications();
+}
+
+/**
  *
  */
 async function init() {
@@ -221,6 +294,9 @@ async function init() {
     initCoursesPage();
     initGradesPage();
     initAttendancePage();
+    initSettingsPage();
+    initProfilePage();
+    initNotifications();
 
     if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
 
