@@ -17,7 +17,6 @@
         students: 'Students',
         courses: 'Courses',
         grades: 'Grades',
-        analytics: 'Analytics',
         attendance: 'Attendance',
         settings: 'Settings',
     };
