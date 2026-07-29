@@ -23,7 +23,8 @@ import {
     createProfileCardSkeleton,
     createProfileCardError,
 } from '../components/dashboard/StudentProfileCard.js';
-import { getStudentProfile, getStudentCourses } from '../services/studentApi.js';
+import AuthContext from '../context/AuthContext.js';
+import { getStudentCourses } from '../services/studentApi.js';
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
@@ -92,14 +93,14 @@ async function _fetchDashboardData() {
 
     _abortController = new AbortController();
 
-    const studentId = _getStudentId();
+    // Get user data from AuthContext (matches logged-in user)
+    const authState = AuthContext.getState();
+    const profile = authState.user;
+    const studentId = profile?.id || _getStudentId();
 
     try {
-        // Fetch student profile and courses in parallel
-        const [profile, courses] = await Promise.all([
-            getStudentProfile(studentId),
-            getStudentCourses(studentId),
-        ]);
+        // Fetch courses only (profile comes from AuthContext)
+        const courses = await getStudentCourses(studentId);
 
         if (_abortController.signal.aborted) return;
 
