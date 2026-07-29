@@ -103,6 +103,7 @@ const MOCK_STUDENT_METRICS = [
                 { week: 'Week 5', completed: 3, total: 3 },
                 { week: 'Week 6', completed: 2, total: 3 },
             ],
+            overallAttendance: 96.2,
         },
     },
 ];

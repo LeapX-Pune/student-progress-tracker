@@ -1,8 +1,6 @@
-/* global DOMParser */
-
 // Dashboard theme and live data synchronization
 let progressChartInstance = null;
-let weeklyProgressData = [];
+const weeklyProgressData = [];
 
 /**
  *
@@ -54,139 +52,231 @@ function getGradeLetter(grade) {
     return 'F';
 }
 
-const DEFAULT_MOCK_COURSES = [
-    {
-        id: 'course_001',
-        studentId: 'stu_001',
-        title: 'Full Stack Web Development',
-        instructor: 'Dr. Ankit Verma',
-        thumbnailUrl:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMiw4eziKnZ6okVY_lRgegT53w_bfaxA5sUs0Ng0QbCs4QwyszbRkV2Eq-&s=10',
-        description:
-            'Complete web development bootcamp covering HTML, CSS, JavaScript, React, Node.js',
-        totalModules: 20,
-        completedModules: 13,
-        status: 'in-progress',
-        currentGrade: 87.5,
-        term: 'Spring 2024',
-        lastAccessedAt: '2024-01-19T10:00:00Z',
-        nextModule: 'React Hooks Deep Dive',
-    },
-    {
-        id: 'course_002',
-        studentId: 'stu_001',
-        title: 'Data Structures & Algorithms',
-        instructor: 'Prof. Priya Sharma',
-        thumbnailUrl:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU3_ZKJtTtwNplnn5J4iYmalV0v4rGBSDaWKPolk8j-WnHkPnlzumMXzc&s=10',
-        description: 'Fundamental algorithms and data structures for technical interviews',
-        totalModules: 15,
-        completedModules: 8,
-        status: 'in-progress',
-        currentGrade: 78.2,
-        term: 'Spring 2024',
-        lastAccessedAt: '2024-01-18T14:30:00Z',
-        nextModule: 'Graph Traversal Algorithms',
-    },
-    {
-        id: 'course_003',
-        studentId: 'stu_001',
-        title: 'UX Design Fundamentals',
-        instructor: 'Prof. Sneha Iyer',
-        thumbnailUrl: 'https://spot-digital.com.tw/wp-content/uploads/2025/06/UIUX-1024x683.webp',
-        description: 'User experience design principles, research, and prototyping',
-        totalModules: 12,
-        completedModules: 12,
-        status: 'completed',
-        currentGrade: 94.0,
-        term: 'Fall 2023',
-        lastAccessedAt: '2023-12-15T09:00:00Z',
-    },
-];
-
-const DEFAULT_WEEKLY_PROGRESS = [
-    { week: 1, dateRange: 'Jan 8-14', cumulative: 15 },
-    { week: 2, dateRange: 'Jan 15-21', cumulative: 37 },
-    { week: 3, dateRange: 'Jan 22-28', cumulative: 67 },
-    { week: 4, dateRange: 'Jan 29-Feb 4', cumulative: 105 },
-];
+let allCoursesData = [];
 
 /**
- *
+ * Update the circular attendance ring
  */
-async function loadStudentData() {
-    // Determine active student
-    let studentId = 'stu_001'; // Default fallback
-    try {
-        if (window.AuthContext) {
-            const currentId = window.AuthContext.getCurrentUserId();
-            if (currentId) studentId = currentId;
-        } else {
-            const authDataRaw = localStorage.getItem('student_tracker_auth');
-            if (authDataRaw) {
-                const authData = JSON.parse(authDataRaw);
-                if (authData && authData.user && authData.user.id) {
-                    studentId = authData.user.id;
-                }
-            }
-        }
-    } catch (e) {
-        console.warn('Failed to parse auth token:', e);
+function updateAttendanceRing(avgAttendance) {
+    const progressTextEl = document.querySelector('.progress-text');
+    if (progressTextEl) {
+        progressTextEl.innerHTML = `<span style="font-size: 0.6rem; font-weight: 600; display: block; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1;">Att.</span><span style="font-size: 0.85rem; font-weight: 800; display: block; margin-top: 0.1rem;">${avgAttendance}%</span>`;
     }
 
-    const apiBaseUrl = 'http://localhost:3001/api';
+    const progressValue = parseFloat(avgAttendance);
+    if (!isNaN(progressValue)) {
+        const r = 26;
+        const circumference = 2 * Math.PI * r;
+        const offset = circumference - (progressValue / 100) * circumference;
+        const circleBar = document.querySelector('.progress-ring-circle-bar');
+        if (circleBar) {
+            circleBar.style.strokeDasharray = `${circumference}`;
+            circleBar.style.strokeDashoffset = `${offset}`;
+        }
+    }
+}
 
-    // 1. Fetch Student Profile
-    try {
-        const studentResponse = await fetch(`${apiBaseUrl}/students/${studentId}`);
-        if (studentResponse.ok) {
-            const student = await studentResponse.json();
+let quizChartInstance = null;
+let gradeChartInstance = null;
 
+/**
+ * Render the Quiz Scores Bar Chart
+ */
+function renderQuizChart(quizScores) {
+    const ctx = document.getElementById('quizChart');
+    if (!ctx) return;
+
+    if (quizChartInstance) {
+        quizChartInstance.destroy();
+    }
+
+    const labels = quizScores.map(q => q.label);
+    const data = quizScores.map(q => q.score);
+
+    quizChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'Score (%)',
+                    data,
+                    backgroundColor: ['#4F46E5', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'],
+                    borderRadius: 8,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        /**
+                         *
+                         */
+                        label: c => `Score: ${c.raw}%`,
+                    },
+                },
+            },
+            scales: {
+                y: { beginAtZero: true, max: 100 },
+            },
+        },
+    });
+}
+
+/**
+ * Render the Grade Distribution Doughnut Chart
+ */
+function renderGradeChart(distribution) {
+    const ctx = document.getElementById('gradeChart');
+    if (!ctx) return;
+
+    if (gradeChartInstance) {
+        gradeChartInstance.destroy();
+    }
+
+    const labels = distribution.map(d => `Grade ${d.label}`);
+    const data = distribution.map(d => d.percentage);
+
+    gradeChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels,
+            datasets: [
+                {
+                    data,
+                    backgroundColor: ['#22C55E', '#3B82F6', '#FACC15', '#F97316', '#EF4444'],
+                    borderWidth: 3,
+                    hoverOffset: 4,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } },
+                tooltip: {
+                    callbacks: {
+                        /**
+                         *
+                         */
+                        label: c => ` ${c.label}: ${c.raw}%`,
+                    },
+                },
+            },
+        },
+    });
+}
+
+/**
+ * Initialize dashboard data via window.parent.useDashboard hook
+ */
+function initDashboardData() {
+    const useDashboard = window.parent?.useDashboard || window.useDashboard;
+    if (!useDashboard) {
+        console.warn(
+            'Dashboard dependencies not found on window object. Ensure main app has exported them.'
+        );
+        renderCourses([]);
+        renderWeeklyProgressChart([]);
+        return;
+    }
+
+    const { fetch } = useDashboard({
+        /**
+         *
+         */
+        onLoading: () => {
+            // Optional: Show loading indicators if implemented
+        },
+        /**
+         *
+         */
+        onSuccess: data => {
+            const { profile, courses, grades } = data;
+
+            // 1. Profile bindings
             const nameEl = document.getElementById('studentName');
             const emailEl = document.getElementById('studentEmail');
             const idEl = document.getElementById('studentId');
             const avatarEl = document.getElementById('studentAvatar');
             const sinceEl = document.getElementById('studentSince');
 
-            if (nameEl) nameEl.textContent = student.name;
-            if (emailEl) emailEl.textContent = student.email;
-            if (idEl) idEl.textContent = student.studentId || student.id;
-            if (avatarEl && student.avatarUrl) {
-                avatarEl.src = student.avatarUrl;
-                avatarEl.alt = student.name;
+            if (nameEl && profile.name) nameEl.textContent = profile.name;
+            if (emailEl && profile.email) emailEl.textContent = profile.email;
+            if (idEl) idEl.textContent = profile.studentId || profile.id;
+            if (avatarEl && profile.avatarUrl) {
+                avatarEl.src = profile.avatarUrl;
+                avatarEl.alt = profile.name;
             }
-            if (sinceEl && student.enrolledAt) {
-                sinceEl.textContent = `Student since ${formatDate(student.enrolledAt)}`;
+            if (sinceEl && profile.enrolledAt) {
+                sinceEl.textContent = `Student since ${formatDate(profile.enrolledAt)}`;
             }
-        }
-    } catch (e) {
-        console.error('Failed to load student profile:', e);
-    }
 
-    // 2. Fetch and render Courses
-    let allCourses = [];
-    try {
-        const coursesResponse = await fetch(`${apiBaseUrl}/students/${studentId}/courses`);
-        if (coursesResponse.ok) {
-            allCourses = await coursesResponse.json();
-        }
-    } catch (e) {
-        console.error('Failed to load student courses:', e);
-    }
+            // 2. Courses bindings
+            allCoursesData = courses && courses.length > 0 ? courses : [];
+            renderCourses(allCoursesData);
 
-    // If courses couldn't be loaded or list is empty, fallback to DEFAULT_MOCK_COURSES
-    if (!allCourses || allCourses.length === 0) {
-        allCourses = DEFAULT_MOCK_COURSES;
-    }
+            // 3. Charts bindings
+            if (grades) {
+                if (grades.weeklyProgress) {
+                    const mappedProgress = grades.weeklyProgress.map((w, index) => ({
+                        week: index + 1,
+                        cumulative: w.completed * 10,
+                    }));
+                    renderWeeklyProgressChart(mappedProgress);
+                } else {
+                    renderWeeklyProgressChart([]);
+                }
 
-    renderCourses(allCourses);
+                if (grades.quizScores) {
+                    renderQuizChart(grades.quizScores);
+                } else {
+                    renderQuizChart([]);
+                }
+
+                if (grades.gradeDistribution) {
+                    renderGradeChart(grades.gradeDistribution);
+                } else {
+                    renderGradeChart([]);
+                }
+            } else {
+                renderWeeklyProgressChart([]);
+                renderQuizChart([]);
+                renderGradeChart([]);
+            }
+
+            // 4. Attendance ring and GPA (derived from grades if available)
+            const attendance = grades?.overallAttendance ?? 0;
+            updateAttendanceRing(attendance);
+        },
+        /**
+         *
+         */
+        onError: err => {
+            console.error('Failed to load dashboard data:', err);
+            // Fallback to static UI if API fails
+            allCoursesData = [];
+            renderCourses(allCoursesData);
+            renderWeeklyProgressChart([]);
+            renderQuizChart([]);
+            renderGradeChart([]);
+        },
+    });
+
+    fetch();
 
     // Bind search functionality
     const searchInput = document.querySelector('.search-input');
     if (searchInput) {
         searchInput.addEventListener('input', e => {
             const query = e.target.value.toLowerCase().trim();
-            const filtered = allCourses.filter(
+            const filtered = allCoursesData.filter(
                 course =>
                     course.title.toLowerCase().includes(query) ||
                     (course.description && course.description.toLowerCase().includes(query)) ||
@@ -267,79 +357,7 @@ function renderCourses(courses) {
 }
 
 /**
- *
- */
-async function updateLiveAttendance() {
-    try {
-        const response = await fetch('index.html');
-        if (!response.ok) return;
-        const htmlText = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText, 'text/html');
-        const template = doc.getElementById('attendance-template');
-        if (template) {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = template.innerHTML;
-
-            // Find Avg Attendance value
-            const cards = tempDiv.querySelectorAll('.stat-card');
-            let avgAttendance = '96.2%'; // Fallback
-            cards.forEach(card => {
-                const label = card.querySelector('.stat-card-label');
-                if (label && label.textContent.trim().toLowerCase().includes('avg attendance')) {
-                    const valueEl = card.querySelector('.stat-card-value');
-                    if (valueEl) {
-                        avgAttendance = valueEl.textContent.trim();
-                    }
-                }
-            });
-
-            // Update the UI
-            const progressTextEl = document.querySelector('.progress-text');
-            if (progressTextEl) {
-                progressTextEl.innerHTML = `<span style="font-size: 0.6rem; font-weight: 600; display: block; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1;">Att.</span><span style="font-size: 0.85rem; font-weight: 800; display: block; margin-top: 0.1rem;">${avgAttendance}</span>`;
-            }
-
-            const progressValue = parseFloat(avgAttendance);
-            if (!isNaN(progressValue)) {
-                const r = 26;
-                const circumference = 2 * Math.PI * r;
-                const offset = circumference - (progressValue / 100) * circumference;
-                const circleBar = document.querySelector('.progress-ring-circle-bar');
-                if (circleBar) {
-                    circleBar.style.strokeDasharray = `${circumference}`;
-                    circleBar.style.strokeDashoffset = `${offset}`;
-                }
-            }
-        }
-    } catch (e) {
-        console.error('Failed to fetch live attendance:', e);
-    }
-}
-
-/**
- *
- */
-async function loadWeeklyProgress() {
-    const apiBaseUrl = 'http://localhost:3001/api';
-    try {
-        const response = await fetch(`${apiBaseUrl}/weeklyProgress`);
-        if (response.ok) {
-            weeklyProgressData = await response.json();
-        }
-    } catch (e) {
-        console.error('Failed to fetch weekly progress:', e);
-    }
-
-    if (!weeklyProgressData || weeklyProgressData.length === 0) {
-        weeklyProgressData = DEFAULT_WEEKLY_PROGRESS;
-    }
-
-    renderWeeklyProgressChart(weeklyProgressData);
-}
-
-/**
- *
+ * Render the Weekly Progress Chart using Chart.js
  */
 function renderWeeklyProgressChart(progressData) {
     const ctx = document.getElementById('weeklyProgressChart');
@@ -405,7 +423,5 @@ function renderWeeklyProgressChart(progressData) {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Dashboard loaded');
     applyTheme();
-    loadStudentData();
-    updateLiveAttendance();
-    loadWeeklyProgress();
+    initDashboardData();
 });
