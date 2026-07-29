@@ -442,6 +442,34 @@
 
     `;
     }
+
+    /**
+     * Renders a 403 Access Denied block directly in the shell.
+     */
+    function render403() {
+        if (!pageContent) return;
+        pageContent.innerHTML = `
+            <div class="empty-state flex flex-col items-center justify-center p-12 text-center bg-white rounded-2xl shadow-sm border border-[#E2E8F0] min-h-[400px] w-full" style="margin-top:2rem;">
+                <div class="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-6 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                        <path d="M12 8v4"/>
+                        <path d="M12 16h.01"/>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-[#0F172A] mb-2 tracking-tight">Access Denied</h2>
+                <p class="text-[#64748B] text-base mb-8 max-w-md mx-auto leading-relaxed">
+                    You do not have permission to view this module.
+                </p>
+                <a href="#/overview" class="inline-flex items-center gap-2 px-6 py-3 bg-[#F8FAFC] hover:bg-[#E2E8F0] text-[#0F172A] text-sm font-semibold rounded-lg transition-colors border border-[#CBD5E1] shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                    Return to Dashboard
+                </a>
+            </div>
+        `;
+    }
     /**
      *
      */
@@ -490,7 +518,14 @@
         if (window.AuthContext) {
             if (!window.AuthContext.canAccessRoute(routeKey)) {
                 console.warn(`[Router] Access denied to route: ${routeKey}`);
-                routeKey = 'overview'; // Fallback route
+
+                // If it's the initial load or they navigated here, render 403
+                setActiveNav('');
+                render403();
+
+                // Also optionally fix the URL to avoid them staying on a blocked hash,
+                // but we might want them to see the 403 on that URL. We'll leave the URL as-is.
+                return; // Stop routing!
             }
         }
 
@@ -503,6 +538,7 @@
         }
 
         setActiveNav(routeKey);
+        renderPlaceholder(routeKey);
         if (breadcrumbLabel) breadcrumbLabel.textContent = ROUTES[routeKey];
         document.title = ROUTES[routeKey] + ' \u2014 The Reality';
 

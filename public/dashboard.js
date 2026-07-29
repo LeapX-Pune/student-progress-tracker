@@ -4,6 +4,9 @@
 let progressChartInstance = null;
 let weeklyProgressData = [];
 
+/**
+ *
+ */
 function applyTheme() {
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark');
@@ -20,6 +23,9 @@ function applyTheme() {
 applyTheme();
 
 // Helper to format date
+/**
+ *
+ */
 function formatDate(dateString) {
     if (!dateString) return 'N/A';
     try {
@@ -35,6 +41,9 @@ function formatDate(dateString) {
 }
 
 // Helper to get grade letters
+/**
+ *
+ */
 function getGradeLetter(grade) {
     if (grade >= 90) return 'A';
     if (grade >= 85) return 'B+';
@@ -102,6 +111,9 @@ const DEFAULT_WEEKLY_PROGRESS = [
     { week: 4, dateRange: 'Jan 29-Feb 4', cumulative: 105 },
 ];
 
+/**
+ *
+ */
 async function loadStudentData() {
     // Determine active student
     let studentId = 'stu_001'; // Default fallback
@@ -185,6 +197,9 @@ async function loadStudentData() {
     }
 }
 
+/**
+ *
+ */
 function renderCourses(courses) {
     const listContainer = document.querySelector('.course-list-container');
     if (!listContainer) return;
@@ -251,6 +266,9 @@ function renderCourses(courses) {
         .join('');
 }
 
+/**
+ *
+ */
 async function updateLiveAttendance() {
     try {
         const response = await fetch('index.html');
@@ -299,6 +317,9 @@ async function updateLiveAttendance() {
     }
 }
 
+/**
+ *
+ */
 async function loadWeeklyProgress() {
     const apiBaseUrl = 'http://localhost:3001/api';
     try {
@@ -317,6 +338,9 @@ async function loadWeeklyProgress() {
     renderWeeklyProgressChart(weeklyProgressData);
 }
 
+/**
+ *
+ */
 function renderWeeklyProgressChart(progressData) {
     const ctx = document.getElementById('weeklyProgressChart');
     if (!ctx) return;
@@ -335,11 +359,11 @@ function renderWeeklyProgressChart(progressData) {
     progressChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: labels,
+            labels,
             datasets: [
                 {
                     label: 'Cumulative Progress',
-                    data: data,
+                    data,
                     borderColor: '#3b82f6',
                     backgroundColor: 'rgba(59, 130, 246, 0.08)',
                     borderWidth: 3,

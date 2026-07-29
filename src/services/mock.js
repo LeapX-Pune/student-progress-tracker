@@ -1,4 +1,4 @@
-import { ROLES } from '../config/rbac.js';
+import { ROLES, PERMISSIONS } from '../config/rbac.js';
 import { AUTH_CONSTANTS } from '../utils/constants.js';
 
 // ============================================================================
@@ -247,9 +247,31 @@ async function handleLogin(request) {
 }
 
 /**
+ * Helper to enforce permissions at the mock API layer
+ */
+function checkMockPermission(permission) {
+    if (
+        window.AuthContext &&
+        window.AuthContext.isAuthenticated() &&
+        !window.AuthContext.hasPermission(permission)
+    ) {
+        return new Response(
+            JSON.stringify({ message: 'Access Denied: Missing permission ' + permission }),
+            {
+                status: 403,
+                headers: { 'Content-Type': 'application/json' },
+            }
+        );
+    }
+    return null;
+}
+
+/**
  *
  */
 async function handleGetStudent(request) {
+    const denied = checkMockPermission(PERMISSIONS.READ_STUDENTS);
+    if (denied) return denied;
     await delay(200);
     const url = new URL(request.url);
     const id = url.pathname.split('/').pop();
@@ -272,11 +294,29 @@ async function handleGetStudent(request) {
  *
  */
 async function handleGetCourses(request) {
+    const denied = checkMockPermission(PERMISSIONS.READ_COURSES);
+    if (denied) return denied;
+
     await delay(250);
     const url = new URL(request.url);
     const studentId = url.pathname.split('/')[3];
 
-    const courses = getCoursesForStudent(studentId);
+    let courses;
+
+    if (window.AuthContext && window.AuthContext.isStudent()) {
+        const user = window.AuthContext.getCurrentUser();
+        if (user && user.studentId !== studentId) {
+            return new Response(JSON.stringify({ message: 'Forbidden' }), {
+                status: 403,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+        courses = getCoursesForStudent(studentId);
+    } else {
+        // Teacher or Admin sees all courses for now
+        courses = MOCK_COURSES;
+    }
+
     if (courses.length > 0) {
         return new Response(JSON.stringify(courses), {
             status: 200,
@@ -294,11 +334,28 @@ async function handleGetCourses(request) {
  *
  */
 async function handleGetGrades(request) {
+    const denied = checkMockPermission(PERMISSIONS.READ_GRADES);
+    if (denied) return denied;
+
     await delay(200);
     const url = new URL(request.url);
     const studentId = url.pathname.split('/')[3];
 
-    const grades = getGradesForStudent(studentId);
+    let grades;
+    if (window.AuthContext && window.AuthContext.isStudent()) {
+        const user = window.AuthContext.getCurrentUser();
+        if (user && user.studentId !== studentId) {
+            return new Response(JSON.stringify({ message: 'Forbidden' }), {
+                status: 403,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+        grades = getGradesForStudent(studentId);
+    } else {
+        // Teachers/Admins see all requested grades
+        grades = getGradesForStudent(studentId);
+    }
+
     if (grades) {
         return new Response(JSON.stringify(grades), {
             status: 200,
