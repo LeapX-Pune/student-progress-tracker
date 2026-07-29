@@ -1042,29 +1042,34 @@
         function renderCharts(courseId) {
             const chartDefs = buildChartDefs(courseId);
 
-            containers.forEach(container => {
-                const existingCanvas = container.querySelector('canvas');
-                if (existingCanvas) {
-                    const existingChart = Chart.getChart(existingCanvas);
-                    if (existingChart) existingChart.destroy();
-                    existingCanvas.remove();
+            ['gradesQuizChart', 'gradesAssignmentChart', 'gradesWeeklyChart'].forEach(
+                function (id) {
+                    var existing = Chart.getChart(id);
+                    if (existing) existing.destroy();
                 }
+            );
+
+            containers.forEach(function (container) {
+                var canvas = container.querySelector('canvas');
+                if (canvas) canvas.remove();
             });
 
-            containers.forEach(container => {
+            containers.forEach(function (container) {
                 showLoading(container);
                 announceToScreenReader(container, 'Loading chart data');
-                setTimeout(() => {
+                setTimeout(function () {
                     showChart(container);
 
-                    const cardTitle = container
+                    var cardTitle = container
                         .closest('.chart-card')
                         ?.querySelector('.chart-title')
                         ?.textContent?.trim();
-                    const def = chartDefs.find(d => d.title === cardTitle);
+                    var def = chartDefs.find(function (d) {
+                        return d.title === cardTitle;
+                    });
                     if (!def || typeof Chart === 'undefined') return;
 
-                    let canvas = container.querySelector(`#${def.id}`);
+                    var canvas = container.querySelector('#' + def.id);
                     if (!canvas) {
                         canvas = document.createElement('canvas');
                         canvas.id = def.id;
@@ -1073,13 +1078,13 @@
                         canvas.setAttribute('role', 'img');
                         canvas.setAttribute(
                             'aria-label',
-                            container.getAttribute('aria-label') || `${cardTitle} chart`
+                            container.getAttribute('aria-label') || cardTitle + ' chart'
                         );
                         container.appendChild(canvas);
                     }
 
                     new Chart(canvas, { type: def.type, data: def.data, options: def.options });
-                    announceToScreenReader(container, `${cardTitle} chart loaded successfully`);
+                    announceToScreenReader(container, cardTitle + ' chart loaded successfully');
                 }, 1200);
             });
         }
