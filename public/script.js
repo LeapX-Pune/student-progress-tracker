@@ -1145,6 +1145,6 @@
     }
 
     window.addEventListener('app:shell-visible', () => {
-        window.requestAnimationFrame(positionHighlight);
+        window.requestAnimationFrame(() => positionHighlight());
     });
 })();

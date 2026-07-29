@@ -226,6 +226,13 @@ const AuthContext = (() => {
                 return;
             }
 
+            if (token === 'mock-jwt-token-dev') {
+                console.warn('[AuthContext] Stale mock auto-login token found — clearing.');
+                clearAuthToken();
+                setState({ isLoading: false });
+                return;
+            }
+
             if (isTokenExpired(expiresAt)) {
                 console.warn('[AuthContext] Stored token has expired — clearing session.');
                 clearAuthToken();
