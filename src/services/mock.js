@@ -168,6 +168,41 @@ const MOCK_UPCOMING_ACTIVITIES = [
     },
 ];
 
+const MOCK_COURSE_MODULES = [
+    {
+        courseId: 'crs_001',
+        modules: [
+            { id: 'm1', title: 'Introduction to Calculus', isCompleted: true, isLocked: false },
+            { id: 'm2', title: 'Limits and Continuity', isCompleted: true, isLocked: false },
+            { id: 'm3', title: 'Derivatives', isCompleted: false, isLocked: false },
+            { id: 'm4', title: 'Integrals', isCompleted: false, isLocked: true },
+            { id: 'm5', title: 'Applications of Integration', isCompleted: false, isLocked: true },
+        ],
+    },
+];
+
+const MOCK_COURSE_TIMELINES = [
+    {
+        courseId: 'crs_001',
+        studentId: 'stu_001',
+        enrolledAt: '2024-01-15T08:00:00Z',
+        lastAccessedAt: '2024-03-19T14:30:00Z',
+        lastQuizAttemptAt: '2024-03-15T10:00:00Z',
+        recentActivity: 'Completed Module 2 Quiz',
+    },
+];
+
+const MOCK_COURSE_METRICS = [
+    {
+        courseId: 'crs_001',
+        studentId: 'stu_001',
+        completionPercentage: 75,
+        averageQuizScore: 88,
+        timeSpentHours: 45.5,
+        estimatedRemainingHours: 12.5,
+        assignmentCompletionRate: 90,
+    },
+];
 // ============================================================================
 // TRANSFORMATION LAYER (HELPERS)
 // ============================================================================
@@ -179,8 +214,20 @@ function getCoursesForStudent(studentId) {
     const enrollments = MOCK_ENROLLMENTS.filter(e => e.studentId === studentId);
     return enrollments.map(enr => {
         const course = MOCK_COURSES.find(c => c.id === enr.courseId);
+
+        let calculatedStatus;
+        if (enr.completedModules === 0) {
+            calculatedStatus = 'not-started';
+        } else if (enr.completedModules === course.totalModules) {
+            calculatedStatus = 'completed';
+        } else if (enr.completedModules / course.totalModules >= 0.8) {
+            calculatedStatus = 'almost-complete';
+        } else {
+            calculatedStatus = 'in-progress';
+        }
+
         // Merge course metadata with student-specific enrollment data
-        return { ...course, ...enr, id: course.id };
+        return { ...course, ...enr, id: course.id, status: calculatedStatus };
     });
 }
 
@@ -574,6 +621,54 @@ async function handleGetCourseProgress(request) {
     });
 }
 
+/**
+ * Handle GET course modules
+ */
+async function handleGetCourseModules(request) {
+    await delay(100);
+    const url = new URL(request.url);
+    const courseId = url.pathname.split('/')[3];
+    const data = MOCK_COURSE_MODULES.find(m => m.courseId === courseId);
+    return new Response(JSON.stringify(data ? data.modules : []), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
+ * Handle GET course timeline
+ */
+async function handleGetCourseTimeline(request) {
+    await delay(100);
+    const url = new URL(request.url);
+    const courseId = url.pathname.split('/')[3];
+    const studentId = url.searchParams.get('studentId') || 'stu_001';
+    const data = MOCK_COURSE_TIMELINES.find(
+        m => m.courseId === courseId && m.studentId === studentId
+    );
+    return new Response(JSON.stringify(data || {}), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
+ * Handle GET course metrics
+ */
+async function handleGetCourseMetrics(request) {
+    await delay(100);
+    const url = new URL(request.url);
+    const courseId = url.pathname.split('/')[3];
+    const studentId = url.searchParams.get('studentId') || 'stu_001';
+    const data = MOCK_COURSE_METRICS.find(
+        m => m.courseId === courseId && m.studentId === studentId
+    );
+    return new Response(JSON.stringify(data || {}), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
 const routes = {
     'POST:/api/auth/login': handleLogin,
     'GET:/api/students/:id': handleGetStudent,
@@ -586,6 +681,9 @@ const routes = {
     'PATCH:/api/upcoming/:id': handlePatchActivity,
     'GET:/api/courses/:id': handleGetCourse,
     'GET:/api/courses/:id/progress': handleGetCourseProgress,
+    'GET:/api/courses/:id/modules': handleGetCourseModules,
+    'GET:/api/courses/:id/timeline': handleGetCourseTimeline,
+    'GET:/api/courses/:id/metrics': handleGetCourseMetrics,
 };
 
 /**

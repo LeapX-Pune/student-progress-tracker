@@ -11,6 +11,21 @@ export function createCourseCard(course) {
     card.className = 'course-card';
     card.setAttribute('tabindex', '0');
 
+    /**
+     *
+     */
+    const navigateToCourse = () => {
+        window.location.hash = `/courses/${course.id}`;
+    };
+
+    card.addEventListener('click', navigateToCourse);
+    card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            navigateToCourse();
+        }
+    });
+
     card.appendChild(createCourseThumbnail(course.thumbnailUrl, course.title));
 
     const content = document.createElement('div');

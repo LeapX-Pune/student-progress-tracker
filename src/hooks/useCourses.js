@@ -1,4 +1,10 @@
 import { getCourses } from '../services/api.js';
+import {
+    getCourseDetails,
+    getCourseModules,
+    getCourseTimeline,
+    getCourseMetrics,
+} from '../services/courseApi.js';
 
 /**
  * ----------------------------------------------------
@@ -36,5 +42,31 @@ export function useCourses({ onLoading, onSuccess, onError }) {
         fetchCourses();
     };
 
-    return { fetch: fetchCourses, retry };
+    /**
+     * Fetches complete details for a specific course.
+     */
+    const fetchCourseDetails = async courseId => {
+        if (onLoading) onLoading();
+        try {
+            const [details, modules, timeline, metrics] = await Promise.all([
+                getCourseDetails(courseId),
+                getCourseModules(courseId),
+                getCourseTimeline(courseId),
+                getCourseMetrics(courseId),
+            ]);
+
+            const fullCourseData = {
+                ...details,
+                modules,
+                timeline,
+                metrics,
+            };
+
+            if (onSuccess) onSuccess(fullCourseData);
+        } catch (error) {
+            if (onError) onError(error);
+        }
+    };
+
+    return { fetch: fetchCourses, retry, fetchCourseDetails };
 }

@@ -61,6 +61,15 @@ export const API_ENDPOINTS = /** @type {const} */ ({
 
     /** @param {string} id - Course ID */
     COURSE_PROGRESS: id => `/courses/${id}/progress`,
+
+    /** @param {string} id - Course ID */
+    COURSE_MODULES: id => `/courses/${id}/modules`,
+
+    /** @param {string} id - Course ID */
+    COURSE_TIMELINE: id => `/courses/${id}/timeline`,
+
+    /** @param {string} id - Course ID */
+    COURSE_METRICS: id => `/courses/${id}/metrics`,
 });
 
 // ---------------------------------------------------------------------------

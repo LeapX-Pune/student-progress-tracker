@@ -50,3 +50,53 @@ export async function getCourseProgress(courseId, studentId) {
         };
     }
 }
+
+/**
+ * Fetches the modules for a specific course.
+ */
+export async function getCourseModules(courseId) {
+    try {
+        return await api.get(API_ENDPOINTS.COURSE_MODULES(courseId));
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to fetch course modules',
+        };
+    }
+}
+
+/**
+ * Fetches the timeline for a specific course.
+ */
+export async function getCourseTimeline(courseId, studentId) {
+    try {
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        const url = targetId
+            ? `${API_ENDPOINTS.COURSE_TIMELINE(courseId)}?studentId=${targetId}`
+            : API_ENDPOINTS.COURSE_TIMELINE(courseId);
+        return await api.get(url);
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to fetch course timeline',
+        };
+    }
+}
+
+/**
+ * Fetches the metrics for a specific course.
+ */
+export async function getCourseMetrics(courseId, studentId) {
+    try {
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        const url = targetId
+            ? `${API_ENDPOINTS.COURSE_METRICS(courseId)}?studentId=${targetId}`
+            : API_ENDPOINTS.COURSE_METRICS(courseId);
+        return await api.get(url);
+    } catch (err) {
+        throw {
+            code: err.code || ERROR_CODES.UNKNOWN,
+            message: err.message || 'Failed to fetch course metrics',
+        };
+    }
+}
