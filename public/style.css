@@ -171,6 +171,46 @@ body.dark {
     --border-strong: var(--gray-300);
     --border-focus: var(--accent-500);
 }
+
+/* Dark mode — enhanced glows for grade cards */
+body.dark .chart-card--purple::after {
+    box-shadow:
+        0 8px 40px rgba(99, 102, 241, 0.25),
+        0 0 0 1px rgba(99, 102, 241, 0.15);
+}
+
+body.dark .chart-card--green::after {
+    box-shadow:
+        0 8px 40px rgba(16, 185, 129, 0.25),
+        0 0 0 1px rgba(16, 185, 129, 0.15);
+}
+
+body.dark .chart-card--blue::after {
+    box-shadow:
+        0 8px 40px rgba(59, 130, 246, 0.25),
+        0 0 0 1px rgba(59, 130, 246, 0.15);
+}
+
+body.dark .chart-card:hover {
+    transform: translateY(-6px) scale(1.01);
+}
+
+body.dark .chart-card:hover .chart-container {
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .grades-chip.active {
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5);
+}
+
+body.dark .grades-chip.active:hover {
+    box-shadow: 0 6px 28px rgba(99, 102, 241, 0.6);
+}
+
+body.dark .grades-chip:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
 /* --------------------------------------------------------------------------
    2. RESET & BASE
    -------------------------------------------------------------------------- */
@@ -1433,11 +1473,11 @@ svg.lucide {
    ========================================================================== */
 
 .grades-header {
-    margin-bottom: 35px;
+    margin-bottom: 30px;
 }
 
 .grades-header h1 {
-    margin: 0 0 10px 0;
+    margin: 0 0 8px 0;
     font-family: var(--font-display);
     font-size: var(--text-2xl);
     font-weight: 700;
@@ -1450,52 +1490,296 @@ svg.lucide {
     color: var(--text-secondary);
 }
 
+/* Grades Filter Section */
+.grades-filter-section {
+    margin-bottom: 30px;
+}
+
+/* Filter Chip Buttons */
+.grades-filter-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.grades-chip {
+    padding: 10px 22px;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--text-secondary);
+    background: var(--surface-card);
+    border: 1.5px solid var(--border-default);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.3s ease,
+        transform 0.2s var(--ease-out);
+    white-space: nowrap;
+}
+
+.grades-chip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(139, 92, 246, 0.06));
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    border-radius: inherit;
+}
+
+.grades-chip:hover {
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.grades-chip:hover::before {
+    opacity: 1;
+}
+
+.grades-chip:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.grades-chip.active {
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+}
+
+.grades-chip.active::before {
+    opacity: 0;
+}
+
+.grades-chip.active:hover {
+    background: linear-gradient(135deg, #4f46e5, #6d28d9);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(99, 102, 241, 0.5);
+}
+
+.grades-chip.active:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+/* Charts Grid */
 .charts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    align-items: start;
 }
 
-/* Full-width card spanning all columns */
-.chart-card--full {
-    grid-column: 1 / -1;
+/* Card entrance animation */
+@keyframes cardSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
+/* Chart Card */
 .chart-card {
     background: var(--surface-card);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xl);
-    padding: var(--space-6);
+    padding: 0;
     box-shadow: var(--shadow-sm);
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.25s ease,
-        border-color 0.25s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    animation: cardSlideUp 0.6s var(--ease-out) both;
+}
+
+.charts-grid .chart-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+.charts-grid .chart-card:nth-child(2) {
+    animation-delay: 0.15s;
+}
+.charts-grid .chart-card:nth-child(3) {
+    animation-delay: 0.25s;
+}
+
+.chart-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-xl);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.chart-card--purple::after {
+    box-shadow:
+        0 8px 32px rgba(99, 102, 241, 0.18),
+        0 0 0 1px rgba(99, 102, 241, 0.12);
+}
+
+.chart-card--green::after {
+    box-shadow:
+        0 8px 32px rgba(16, 185, 129, 0.18),
+        0 0 0 1px rgba(16, 185, 129, 0.12);
+}
+
+.chart-card--blue::after {
+    box-shadow:
+        0 8px 32px rgba(59, 130, 246, 0.18),
+        0 0 0 1px rgba(59, 130, 246, 0.12);
 }
 
 .chart-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    border-color: var(--border-strong, rgba(99, 102, 241, 0.2));
+    transform: translateY(-6px) scale(1.008);
+    border-color: transparent;
+}
+
+.chart-card--purple:hover::after {
+    opacity: 1;
+}
+
+.chart-card--green:hover::after {
+    opacity: 1;
+}
+
+.chart-card--blue:hover::after {
+    opacity: 1;
+}
+
+/* Colored top accent bar */
+.chart-card::before {
+    content: '';
+    display: block;
+    height: 4px;
+    flex-shrink: 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    transition: height 0.3s var(--ease-out);
+}
+
+.chart-card:hover::before {
+    height: 5px;
+}
+
+.chart-card--purple::before {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #a78bfa);
+}
+
+.chart-card--green::before {
+    background: linear-gradient(135deg, #10b981, #34d399, #6ee7b7);
+}
+
+.chart-card--blue::before {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa, #93c5fd);
+}
+
+/* Wide card — spans both columns */
+.chart-card--wide {
+    grid-column: 1 / -1;
+}
+
+.chart-card--wide .chart-container {
+    min-height: 380px;
+}
+
+/* Card Header with Icon */
+.chart-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 24px 24px 0 24px;
+    position: relative;
+    z-index: 2;
+}
+
+.chart-card-icon {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    transition:
+        transform 0.35s var(--ease-out),
+        box-shadow 0.35s var(--ease-out);
+}
+
+.chart-card:hover .chart-card-icon {
+    transform: scale(1.1) rotate(-3deg);
+}
+
+.chart-card--purple .chart-card-icon {
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+}
+
+.chart-card--purple:hover .chart-card-icon {
+    background: rgba(99, 102, 241, 0.18);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+}
+
+.chart-card--green .chart-card-icon {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+.chart-card--green:hover .chart-card-icon {
+    background: rgba(16, 185, 129, 0.18);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+}
+
+.chart-card--blue .chart-card-icon {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.chart-card--blue:hover .chart-card-icon {
+    background: rgba(59, 130, 246, 0.18);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
 }
 
 .chart-title {
-    margin: 0 0 8px 0;
+    margin: 0 0 4px 0;
     font-size: var(--text-lg);
     font-weight: 600;
+    color: var(--text-primary);
+    line-height: var(--leading-tight);
+    transition: color 0.2s ease;
+}
+
+.chart-card:hover .chart-title {
     color: var(--text-primary);
 }
 
 .chart-subtitle {
-    margin: 0 0 18px 0;
+    margin: 0;
     color: var(--text-secondary);
     font-size: var(--text-sm);
+    line-height: var(--leading-normal);
 }
 
 .chart-container {
     position: relative;
-    height: 300px;
-    border: 2px dashed var(--border-default);
+    flex: 1;
+    min-height: 280px;
+    margin: 20px 24px 28px 24px;
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
     background: var(--surface-sunken);
     display: block;
@@ -1655,11 +1939,29 @@ svg.lucide {
 
 /* Chart container transitions */
 .chart-container {
-    transition: border-color 0.2s ease;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.3s var(--ease-out);
+    position: relative;
+    z-index: 2;
 }
 
 .chart-card:hover .chart-container {
     border-color: var(--border-strong, rgba(99, 102, 241, 0.15));
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.chart-card--purple:hover .chart-container {
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.chart-card--green:hover .chart-container {
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.chart-card--blue:hover .chart-container {
+    border-color: rgba(59, 130, 246, 0.2);
 }
 
 /* Fade-in animation for states */
@@ -1681,16 +1983,16 @@ svg.lucide {
 /* Desktop (1025px and above) */
 @media (min-width: 1025px) {
     .charts-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 25px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 36px;
     }
 
-    .chart-card {
-        padding: var(--space-6);
+    .chart-card--wide .chart-container {
+        min-height: 420px;
     }
 
     .chart-container {
-        height: 300px;
+        min-height: 300px;
     }
 
     .skeleton-chart-area {
@@ -1723,15 +2025,15 @@ svg.lucide {
 
     .charts-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        gap: 24px;
     }
 
-    .chart-card {
-        padding: 20px;
+    .chart-card--wide .chart-container {
+        min-height: 340px;
     }
 
     .chart-container {
-        height: 260px;
+        min-height: 260px;
     }
 
     .skeleton-chart-area {
@@ -1768,28 +2070,51 @@ svg.lucide {
         font-size: var(--text-xs);
     }
 
+    .grades-filter-buttons {
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .grades-chip {
+        padding: 8px 16px;
+        font-size: var(--text-xs);
+    }
+
     .charts-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 20px;
+    }
+
+    .chart-card--wide .chart-container {
+        min-height: 280px;
+    }
+
+    .chart-card-header {
+        padding: 18px 18px 0 18px;
+        gap: 10px;
+    }
+
+    .chart-card-icon {
+        width: 36px;
+        height: 36px;
     }
 
     .chart-card {
-        padding: 16px;
-        border-radius: var(--radius-lg);
+        padding: 0;
     }
 
     .chart-title {
         font-size: var(--text-base);
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
     .chart-subtitle {
         font-size: var(--text-xs);
-        margin-bottom: 14px;
     }
 
     .chart-container {
-        height: 220px;
+        min-height: 220px;
+        margin: 14px 18px 22px 18px;
         border-radius: var(--radius-md);
     }
 
