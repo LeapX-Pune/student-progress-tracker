@@ -156,6 +156,7 @@ export function ensureChartJS() {
 
         const script = document.createElement('script');
         script.src = CHARTJS_CDN_URL;
+        script.crossOrigin = 'anonymous';
         script.dataset.chartjsLoader = 'true';
         /** @returns {void} */
         script.onload = () => resolve();
