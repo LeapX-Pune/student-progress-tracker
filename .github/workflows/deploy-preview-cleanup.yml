@@ -13,13 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Delete PR preview from gh-pages
+        with:
+          ref: gh-pages
+          fetch-depth: 1
+      - name: Delete PR preview
+        continue-on-error: true
         run: |
-          git fetch origin gh-pages
-          git checkout gh-pages
           rm -rf pr-preview/${{ github.event.number }}
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "chore: cleanup PR preview #${{ github.event.number }}" || echo "No preview to clean"
+          git diff --quiet && git diff --staged --quiet || git commit -m "chore: cleanup PR preview #${{ github.event.number }}"
           git push origin gh-pages
