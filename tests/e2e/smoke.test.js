@@ -44,7 +44,7 @@ test.describe('Application Shell', () => {
 
     test('profile section displays user name', async ({ page }) => {
         await page.goto('/');
-        await expect(page.locator('.profile-name')).toHaveText('Sai Shendge');
+        await expect(page.locator('.profile-name')).toHaveText('Alex Johnson');
         await expect(page.locator('.profile-role')).toHaveText('Administrator');
     });
 

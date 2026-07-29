@@ -96,6 +96,7 @@ function normaliseError(err, fallback) {
  * @property {string}  password
  * @property {string}  [role]
  * @property {boolean} [rememberMe]
+ * @property {string}  [name]
  */
 
 /**
@@ -212,9 +213,9 @@ const AuthContext = (() => {
             if (!stored) {
                 if (ENV.ENABLE_MOCK_API) {
                     const mockUser = {
-                        id: 'mock-001',
-                        name: 'Sai Shendge',
-                        email: 'sai@example.com',
+                        id: 'stu_001',
+                        name: 'Alex Johnson',
+                        email: 'student@demo.com',
                     };
                     const mockToken = 'mock-jwt-token-dev';
                     saveAuthToken({

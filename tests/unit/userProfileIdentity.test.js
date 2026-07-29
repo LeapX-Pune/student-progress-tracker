@@ -14,9 +14,9 @@ describe('Role-Based User Identity & Personalization (Phase 2)', () => {
         document.body.innerHTML = `
             <div class="profile-menu" data-profile-menu>
               <button class="profile-trigger" type="button" data-profile-toggle>
-                <span class="avatar">SS</span>
+                <span class="avatar">AJ</span>
                 <span class="profile-meta">
-                  <span class="profile-name">Sai Shendge</span>
+                  <span class="profile-name">Alex Johnson</span>
                   <span class="profile-role">Administrator</span>
                 </span>
               </button>
