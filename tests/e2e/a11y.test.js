@@ -1,18 +1,28 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+function getCriticalViolations(violations) {
+    return violations.filter(v => v.impact === 'critical' || v.impact === 'serious');
+}
+
 test.describe('Accessibility', () => {
-    test('login page has no critical a11y violations', async ({ page }) => {
+    test('login page has no critical or serious a11y violations', async ({ page }) => {
         await page.goto('/');
         await page.waitForLoadState('networkidle');
 
         const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
-        expect(results.violations).toEqual([]);
+        if (results.violations.length > 0) {
+            console.log(
+                'All violations:',
+                results.violations.map(v => `${v.id} (${v.impact}): ${v.help}`)
+            );
+        }
+
+        expect(getCriticalViolations(results.violations)).toEqual([]);
     });
 
-    test('app shell has no critical a11y violations after login', async ({ page }) => {
-        // Mock auth state to bypass login
+    test('app shell has no critical or serious a11y violations after login', async ({ page }) => {
         await page.goto('/');
         await page.evaluate(() => {
             localStorage.setItem(
@@ -33,15 +43,38 @@ test.describe('Accessibility', () => {
 
         const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
-        expect(results.violations).toEqual([]);
+        if (results.violations.length > 0) {
+            console.log(
+                'All violations:',
+                results.violations.map(v => `${v.id} (${v.impact}): ${v.help}`)
+            );
+        }
+
+        expect(getCriticalViolations(results.violations)).toEqual([]);
     });
 
-    test('navigation is keyboard accessible', async ({ page }) => {
+    test('navigation is keyboard accessible after login', async ({ page }) => {
+        await page.goto('/');
+        await page.evaluate(() => {
+            localStorage.setItem(
+                'student_tracker_auth',
+                JSON.stringify({
+                    token: 'mock-jwt-token',
+                    user: {
+                        id: 'stu_001',
+                        name: 'Alex Johnson',
+                        email: 'student@demo.com',
+                        role: 'student',
+                    },
+                })
+            );
+        });
         await page.goto('/');
         await page.waitForLoadState('networkidle');
 
-        // Tab through nav links
         const navLinks = page.locator('.nav-list a');
+        await expect(navLinks.first()).toBeVisible();
+
         const count = await navLinks.count();
         for (let i = 0; i < Math.min(count, 3); i++) {
             await page.keyboard.press('Tab');

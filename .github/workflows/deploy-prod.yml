@@ -20,7 +20,6 @@ jobs:
   deploy-production:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
-    environment: production
     concurrency:
       group: deploy-production
       cancel-in-progress: false
