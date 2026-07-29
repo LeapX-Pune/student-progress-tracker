@@ -88,6 +88,7 @@ function showAppView() {
     if (appShell) {
         appShell.style.display = '';
         createIcons({ icons });
+        requestAnimationFrame(() => window.dispatchEvent(new window.Event('app:shell-visible')));
     }
 }
 
