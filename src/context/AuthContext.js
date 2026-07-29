@@ -65,8 +65,16 @@ function normaliseError(err, fallback) {
  * @property {string}      id
  * @property {string}      name
  * @property {string}      email
+ * @property {string}      [role]
+ * @property {string|null} [avatar]
  * @property {string|null} [avatarUrl]
  * @property {string}      [studentId]
+ * @property {string}      [teacherId]
+ * @property {string}      [class]
+ * @property {string}      [rollNumber]
+ * @property {string}      [department]
+ * @property {string}      [designation]
+ * @property {string}      [status]
  */
 
 /**
@@ -86,6 +94,7 @@ function normaliseError(err, fallback) {
  * @typedef {Object} LoginCredentials
  * @property {string}  email
  * @property {string}  password
+ * @property {string}  [role]
  * @property {boolean} [rememberMe]
  */
 

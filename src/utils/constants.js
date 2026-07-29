@@ -17,7 +17,7 @@
 /** Hash-router path constants used across the application. */
 export const ROUTES = /** @type {const} */ ({
     LOGIN: '/login',
-    DASHBOARD: '/dashboard',
+    DASHBOARD: '/overview',
     NOT_FOUND: '/404',
 });
 
@@ -54,7 +54,33 @@ export const API_ENDPOINTS = /** @type {const} */ ({
 
 /** Authentication-specific constants. */
 export const AUTH_CONSTANTS = /** @type {const} */ ({
-    DEMO_EMAIL: 'alex@student.edu',
+    DEMO_STUDENT: {
+        id: 'stu_001',
+        studentId: 'STU-2024-001',
+        name: 'Alex Johnson',
+        email: 'student@demo.com',
+        password: 'demo123',
+        role: 'student',
+        avatar: 'https://i.pravatar.cc/150?u=stu_001',
+        avatarUrl: 'https://i.pravatar.cc/150?u=stu_001',
+        class: 'Class 10-A',
+        rollNumber: '24',
+        status: 'active',
+    },
+    DEMO_TEACHER: {
+        id: 'tch_001',
+        teacherId: 'TCH-2024-001',
+        name: 'Dr. Sarah Jenkins',
+        email: 'teacher@demo.com',
+        password: 'teacher123',
+        role: 'teacher',
+        avatar: 'https://i.pravatar.cc/150?u=tch_001',
+        avatarUrl: 'https://i.pravatar.cc/150?u=tch_001',
+        department: 'Mathematics & Computer Science',
+        designation: 'Senior Educator',
+        status: 'active',
+    },
+    DEMO_EMAIL: 'student@demo.com',
     DEMO_PASSWORD: 'demo123',
 
     /** 30-day token lifetime in milliseconds. */
@@ -102,3 +128,48 @@ export const ERROR_CODES = /** @type {const} */ ({
     VALIDATION_ERROR: 'VALIDATION_ERROR',
     UNKNOWN: 'UNKNOWN',
 });
+
+// ---------------------------------------------------------------------------
+// Chart.js defaults
+// ---------------------------------------------------------------------------
+
+/** Shared color palettes for Chart.js charts. */
+export const CHART_COLORS = {
+    primary: '#4F46E5',
+    blue: '#3B82F6',
+    green: '#10B981',
+    yellow: '#F59E0B',
+    red: '#EF4444',
+    orange: '#F97316',
+};
+
+/** 5-color palette used by bar charts. */
+export const PALETTE_5 = [
+    CHART_COLORS.primary,
+    CHART_COLORS.blue,
+    CHART_COLORS.green,
+    CHART_COLORS.yellow,
+    CHART_COLORS.red,
+];
+
+/** 3-color palette for donut/doughnut charts. */
+export const PALETTE_3 = [CHART_COLORS.green, CHART_COLORS.blue, CHART_COLORS.yellow];
+
+/** Default animation config shared across all chart types. */
+export const CHART_ANIMATION = {
+    duration: 600,
+    easing: 'easeOutQuart',
+};
+
+/** Default tooltip styling. */
+export const CHART_TOOLTIP_DEFAULTS = {
+    backgroundColor: '#1e293b',
+    titleFont: { family: 'Inter, system-ui, sans-serif', size: 12 },
+    bodyFont: { family: 'Inter, system-ui, sans-serif', size: 13, weight: '600' },
+    padding: { x: 12, y: 8 },
+    cornerRadius: 8,
+    displayColors: true,
+};
+
+/** Chart.js CDN URL (used by dynamic loader). */
+export const CHARTJS_CDN_URL = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';
