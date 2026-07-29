@@ -8,6 +8,7 @@
  * @module components/auth/UserProfileHeader
  */
 
+import { ROLES } from '../../config/rbac.js';
 import AuthContext from '../../context/AuthContext.js';
 import { createUserAvatar } from './UserAvatar.js';
 
@@ -18,7 +19,7 @@ import { createUserAvatar } from './UserAvatar.js';
  * @returns {string} Badge HTML string
  */
 export function getRoleBadgeHtml(role) {
-    const isTeacher = role === 'teacher';
+    const isTeacher = role === ROLES.TEACHER;
     const roleLabel = isTeacher ? 'Teacher' : 'Student';
     const badgeClass = isTeacher ? 'role-badge--teacher' : 'role-badge--student';
     return `<span class="role-badge ${badgeClass}">${roleLabel}</span>`;
@@ -37,7 +38,8 @@ export function updateUserProfileHeader(user) {
     if (profileTrigger) {
         // Update or replace avatar wrapper
         const oldAvatar = profileTrigger.querySelector('.avatar, .user-avatar');
-        const roleRing = user.role === 'teacher' ? 'avatar-ring--teacher' : 'avatar-ring--student';
+        const roleRing =
+            user.role === ROLES.TEACHER ? 'avatar-ring--teacher' : 'avatar-ring--student';
         const newAvatar = createUserAvatar(user, 'sm', roleRing);
 
         if (oldAvatar) {
@@ -69,7 +71,7 @@ export function updateUserProfileHeader(user) {
             profileDropdown.prepend(summaryHeader);
         }
 
-        const isTeacher = user.role === 'teacher';
+        const isTeacher = user.role === ROLES.TEACHER;
         const detailsLine = isTeacher
             ? `${user.department ?? 'Faculty'} • ${user.designation ?? 'Teacher'}`
             : `${user.class ?? 'Student'} • Roll No: ${user.rollNumber ?? 'N/A'}`;
@@ -121,7 +123,7 @@ export function updateWelcomeHeader(user, container = document) {
         '[data-welcome-subtitle], #welcome-subtitle, .welcome-subtitle'
     );
     if (subtitleEl) {
-        const isTeacher = user.role === 'teacher';
+        const isTeacher = user.role === ROLES.TEACHER;
         subtitleEl.textContent = isTeacher
             ? `${user.department ?? 'Faculty'} • ${user.designation ?? 'Senior Educator'}`
             : `${user.class ?? 'Class 10-A'} • Roll No: ${user.rollNumber ?? '24'}`;

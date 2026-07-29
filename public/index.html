@@ -1,249 +1,304 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Student Progress Tracker</title>
-  <meta name="description" content="Core application shell for the student progress tracking platform." />
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Student Progress Tracker</title>
+        <meta
+            name="description"
+            content="Core application shell for the student progress tracking platform."
+        />
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Instrument+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Instrument+Sans:wght@500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+            rel="stylesheet"
+        />
 
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="main.css" />
-</head>
-<body class="dark">
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="main.css" />
+    </head>
+    <body class="dark">
+        <!-- SKIP TO MAIN CONTENT (first tabbable element) -->
+        <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- SKIP TO MAIN CONTENT (first tabbable element) -->
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+        <!-- MOBILE OVERLAY -->
+        <div class="drawer-overlay" data-drawer-overlay></div>
 
-  <!-- MOBILE OVERLAY -->
-  <div class="drawer-overlay" data-drawer-overlay></div>
+        <!-- AUTH ROOT (login page renders here when not authenticated) -->
+        <div id="auth-root"></div>
 
-  <!-- AUTH ROOT (login page renders here when not authenticated) -->
-  <div id="auth-root"></div>
+        <div class="app-shell">
+            <!-- SIDEBAR NAVIGATION -->
+            <aside class="sidebar" data-sidebar>
+                <div class="sidebar-inner">
+                    <!-- Brand -->
+                    <div class="sidebar-brand">
+                        <a href="#/overview" class="brand-mark">
+                            <span class="brand-glyph" aria-hidden="true">
+                                <i data-lucide="layout-dashboard"></i>
+                            </span>
+                            <span class="brand-name">The Reality</span>
+                        </a>
 
-  <div class="app-shell">
+                        <button
+                            class="sidebar-close"
+                            type="button"
+                            data-drawer-close
+                            aria-label="Close navigation"
+                        >
+                            <i data-lucide="x" aria-hidden="true"></i>
+                        </button>
+                    </div>
 
-    <!-- SIDEBAR NAVIGATION -->
-    <aside class="sidebar" data-sidebar>
-      <div class="sidebar-inner">
+                    <!-- Primary navigation -->
+                    <nav class="sidebar-nav" aria-label="Primary">
+                        <section class="nav-group">
+                            <span class="nav-group-label">Workspace</span>
+                            <ul class="nav-list">
+                                <li class="nav-item">
+                                    <a href="#/overview" class="nav-link" data-route="overview">
+                                        <span class="nav-icon" aria-hidden="true">
+                                            <i data-lucide="grid"></i>
+                                        </span>
+                                        <span class="nav-label">Overview</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#/students" class="nav-link" data-route="students">
+                                        <span class="nav-icon" aria-hidden="true">
+                                            <i data-lucide="users"></i>
+                                        </span>
+                                        <span class="nav-label">Students</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#/courses" class="nav-link" data-route="courses">
+                                        <span class="nav-icon" aria-hidden="true">
+                                            <i data-lucide="book-open"></i>
+                                        </span>
+                                        <span class="nav-label">Courses</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#/grades" class="nav-link" data-route="grades">
+                                        <span class="nav-icon" aria-hidden="true">
+                                            <i data-lucide="bar-chart-3"></i>
+                                        </span>
+                                        <span class="nav-label">Grades</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </section>
 
-        <!-- Brand -->
-        <div class="sidebar-brand">
-          <a href="#/overview" class="brand-mark">
-            <span class="brand-glyph" aria-hidden="true">
-              <i data-lucide="layout-dashboard"></i>
-            </span>
-            <span class="brand-name">The Reality</span>
-          </a>
+                        <section class="nav-group">
+                            <span class="nav-group-label">Insights</span>
+                            <ul class="nav-list">
+                                <li class="nav-item">
+                                    <a href="#/analytics" class="nav-link" data-route="analytics">
+                                        <span class="nav-icon" aria-hidden="true">
+                                            <i data-lucide="trending-up"></i>
+                                        </span>
+                                        <span class="nav-label">Analytics</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#/attendance" class="nav-link" data-route="attendance">
+                                        <span class="nav-icon" aria-hidden="true">
+                                            <i data-lucide="calendar"></i>
+                                        </span>
+                                        <span class="nav-label">Attendance</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </section>
 
-          <button class="sidebar-close" type="button" data-drawer-close aria-label="Close navigation">
-            <i data-lucide="x" aria-hidden="true"></i>
-          </button>
+                        <section class="nav-group">
+                            <span class="nav-group-label">Account</span>
+                            <ul class="nav-list">
+                                <li class="nav-item">
+                                    <a href="#/settings" class="nav-link" data-route="settings">
+                                        <span class="nav-icon" aria-hidden="true">
+                                            <i data-lucide="settings"></i>
+                                        </span>
+                                        <span class="nav-label">Settings</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </section>
+                    </nav>
+
+                    <!-- Sidebar footer -->
+                    <div class="sidebar-footer">
+                        <button
+                            class="collapse-toggle"
+                            type="button"
+                            data-collapse-toggle
+                            aria-label="Collapse sidebar"
+                        >
+                            <i data-lucide="chevron-left" aria-hidden="true"></i>
+                            <span class="collapse-label">Collapse</span>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- MAIN CONTENT AREA -->
+            <div class="main-column">
+                <!-- HEADER -->
+                <header class="app-header">
+                    <div class="header-left">
+                        <button
+                            class="menu-toggle"
+                            type="button"
+                            data-drawer-open
+                            aria-label="Open navigation"
+                        >
+                            <i data-lucide="menu" aria-hidden="true"></i>
+                        </button>
+
+                        <div class="breadcrumb" data-breadcrumb aria-live="polite">
+                            <span class="breadcrumb-current" data-breadcrumb-label>Overview</span>
+                        </div>
+                    </div>
+
+                    <div class="header-search">
+                        <label class="search-field" for="global-search">
+                            <i class="search-icon" data-lucide="search" aria-hidden="true"></i>
+                            <input
+                                id="global-search"
+                                type="text"
+                                placeholder="Search students, courses, reports&hellip;"
+                                autocomplete="off"
+                            />
+                            <span class="search-kbd">⌘K</span>
+                        </label>
+                    </div>
+
+                    <div class="header-actions">
+                        <button
+                            class="icon-button"
+                            type="button"
+                            data-notification-toggle
+                            aria-label="Notifications"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                        >
+                            <i data-lucide="bell" aria-hidden="true"></i>
+                            <span class="notification-dot" data-notification-dot></span>
+                        </button>
+
+                        <div class="notification-panel" data-notification-panel hidden>
+                            <div class="notification-panel-header">
+                                <span>Notifications</span>
+                                <button class="text-link" type="button" data-notification-clear>
+                                    Mark all read
+                                </button>
+                            </div>
+                            <p class="notification-empty">
+                                This module is owned by another developer. Placeholder only.
+                            </p>
+                        </div>
+
+                        <div class="profile-menu" data-profile-menu>
+                            <button
+                                class="profile-trigger"
+                                type="button"
+                                data-profile-toggle
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                <span class="avatar" aria-hidden="true">SS</span>
+                                <span class="profile-meta">
+                                    <span class="profile-name">Sai Shendge</span>
+                                    <span class="profile-role">Administrator</span>
+                                </span>
+                                <i
+                                    class="profile-chevron"
+                                    data-lucide="chevron-down"
+                                    aria-hidden="true"
+                                ></i>
+                            </button>
+
+                            <div class="profile-dropdown" data-profile-dropdown hidden>
+                                <a href="#/settings" class="profile-dropdown-item"
+                                    >Account settings</a
+                                >
+                                <a href="#/settings" class="profile-dropdown-item">Preferences</a>
+                                <div class="profile-dropdown-divider"></div>
+                                <button
+                                    class="profile-dropdown-item profile-dropdown-item--danger"
+                                    type="button"
+                                >
+                                    Sign out
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- DYNAMIC PAGE CONTENT -->
+                <main class="page-content" data-page-content id="main-content"></main>
+
+                <!-- ATTENDANCE PAGE TEMPLATE -->
+                <template id="attendance-template">
+                    <div class="attendance-page">
+                        <div class="page-header">
+                            <h1>Attendance</h1>
+                            <p>Track student attendance and monitor trends.</p>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-card-header">
+                                    <span class="stat-card-label">Total Classes</span>
+                                    <span class="stat-card-icon"
+                                        ><i data-lucide="calendar" aria-hidden="true"></i
+                                    ></span>
+                                </div>
+                                <div class="stat-card-value" id="totalClasses">113</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-card-header">
+                                    <span class="stat-card-label">Attended</span>
+                                    <span class="stat-card-icon"
+                                        ><i data-lucide="user-check" aria-hidden="true"></i
+                                    ></span>
+                                </div>
+                                <div class="stat-card-value" id="totalAttended">105</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-card-header">
+                                    <span class="stat-card-label">Overall</span>
+                                    <span class="stat-card-icon"
+                                        ><i data-lucide="target" aria-hidden="true"></i
+                                    ></span>
+                                </div>
+                                <div class="stat-card-value" id="overallPercent">92.9%</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-card-header">
+                                    <span class="stat-card-label">Enrolled Courses</span>
+                                    <span class="stat-card-icon"
+                                        ><i data-lucide="book-open" aria-hidden="true"></i
+                                    ></span>
+                                </div>
+                                <div class="stat-card-value">3</div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
         </div>
 
-        <!-- Primary navigation -->
-        <nav class="sidebar-nav" aria-label="Primary">
-
-          <section class="nav-group">
-            <span class="nav-group-label">Workspace</span>
-            <ul class="nav-list">
-              <li class="nav-item">
-                <a href="#/overview" class="nav-link" data-route="overview">
-                  <span class="nav-icon" aria-hidden="true">
-                    <i data-lucide="grid"></i>
-                  </span>
-                  <span class="nav-label">Overview</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#/students" class="nav-link" data-route="students">
-                  <span class="nav-icon" aria-hidden="true">
-                    <i data-lucide="users"></i>
-                  </span>
-                  <span class="nav-label">Students</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#/courses" class="nav-link" data-route="courses">
-                  <span class="nav-icon" aria-hidden="true">
-                    <i data-lucide="book-open"></i>
-                  </span>
-                  <span class="nav-label">Courses</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#/grades" class="nav-link" data-route="grades">
-                  <span class="nav-icon" aria-hidden="true">
-                    <i data-lucide="bar-chart-3"></i>
-                  </span>
-                  <span class="nav-label">Grades</span>
-                </a>
-              </li>
-            </ul>
-          </section>
-
-          <section class="nav-group">
-            <span class="nav-group-label">Insights</span>
-            <ul class="nav-list">
-              <li class="nav-item">
-                <a href="#/analytics" class="nav-link" data-route="analytics">
-                  <span class="nav-icon" aria-hidden="true">
-                    <i data-lucide="trending-up"></i>
-                  </span>
-                  <span class="nav-label">Analytics</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#/attendance" class="nav-link" data-route="attendance">
-                  <span class="nav-icon" aria-hidden="true">
-                    <i data-lucide="calendar"></i>
-                  </span>
-                  <span class="nav-label">Attendance</span>
-                </a>
-              </li>
-            </ul>
-          </section>
-
-          <section class="nav-group">
-            <span class="nav-group-label">Account</span>
-            <ul class="nav-list">
-              <li class="nav-item">
-                <a href="#/settings" class="nav-link" data-route="settings">
-                  <span class="nav-icon" aria-hidden="true">
-                    <i data-lucide="settings"></i>
-                  </span>
-                  <span class="nav-label">Settings</span>
-                </a>
-              </li>
-            </ul>
-          </section>
-
-        </nav>
-
-        <!-- Sidebar footer -->
-        <div class="sidebar-footer">
-          <button class="collapse-toggle" type="button" data-collapse-toggle aria-label="Collapse sidebar">
-            <i data-lucide="chevron-left" aria-hidden="true"></i>
-            <span class="collapse-label">Collapse</span>
-          </button>
-        </div>
-
-      </div>
-    </aside>
-
-    <!-- MAIN CONTENT AREA -->
-    <div class="main-column">
-
-      <!-- HEADER -->
-      <header class="app-header">
-        <div class="header-left">
-          <button class="menu-toggle" type="button" data-drawer-open aria-label="Open navigation">
-            <i data-lucide="menu" aria-hidden="true"></i>
-          </button>
-
-          <div class="breadcrumb" data-breadcrumb aria-live="polite">
-            <span class="breadcrumb-current" data-breadcrumb-label>Overview</span>
-          </div>
-        </div>
-
-        <div class="header-search">
-          <label class="search-field" for="global-search">
-            <i class="search-icon" data-lucide="search" aria-hidden="true"></i>
-            <input id="global-search" type="text" placeholder="Search students, courses, reports&hellip;" autocomplete="off" />
-            <span class="search-kbd">⌘K</span>
-          </label>
-        </div>
-
-        <div class="header-actions">
-          <button class="icon-button" type="button" data-notification-toggle aria-label="Notifications" aria-haspopup="true" aria-expanded="false">
-            <i data-lucide="bell" aria-hidden="true"></i>
-            <span class="notification-dot" data-notification-dot></span>
-          </button>
-
-          <div class="notification-panel" data-notification-panel hidden>
-            <div class="notification-panel-header">
-              <span>Notifications</span>
-              <button class="text-link" type="button" data-notification-clear>Mark all read</button>
-            </div>
-            <p class="notification-empty">This module is owned by another developer. Placeholder only.</p>
-          </div>
-
-          <div class="profile-menu" data-profile-menu>
-            <button class="profile-trigger" type="button" data-profile-toggle aria-haspopup="true" aria-expanded="false">
-              <span class="avatar" aria-hidden="true">SS</span>
-              <span class="profile-meta">
-                <span class="profile-name">Sai Shendge</span>
-                <span class="profile-role">Administrator</span>
-              </span>
-              <i class="profile-chevron" data-lucide="chevron-down" aria-hidden="true"></i>
-            </button>
-
-            <div class="profile-dropdown" data-profile-dropdown hidden>
-              <a href="#/settings" class="profile-dropdown-item">Account settings</a>
-              <a href="#/settings" class="profile-dropdown-item">Preferences</a>
-              <div class="profile-dropdown-divider"></div>
-              <button class="profile-dropdown-item profile-dropdown-item--danger" type="button">Sign out</button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <!-- DYNAMIC PAGE CONTENT -->
-      <main class="page-content" data-page-content id="main-content"></main>
-
-      <!-- ATTENDANCE PAGE TEMPLATE -->
-      <template id="attendance-template">
-        <div class="attendance-page">
-          <div class="page-header">
-            <h1>Attendance</h1>
-            <p>Track student attendance and monitor trends.</p>
-          </div>
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-card-header">
-                <span class="stat-card-label">Total Classes</span>
-                <span class="stat-card-icon"><i data-lucide="calendar" aria-hidden="true"></i></span>
-              </div>
-              <div class="stat-card-value" id="totalClasses">113</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-header">
-                <span class="stat-card-label">Attended</span>
-                <span class="stat-card-icon"><i data-lucide="user-check" aria-hidden="true"></i></span>
-              </div>
-              <div class="stat-card-value" id="totalAttended">105</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-header">
-                <span class="stat-card-label">Overall</span>
-                <span class="stat-card-icon"><i data-lucide="target" aria-hidden="true"></i></span>
-              </div>
-              <div class="stat-card-value" id="overallPercent">92.9%</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-header">
-                <span class="stat-card-label">Enrolled Courses</span>
-                <span class="stat-card-icon"><i data-lucide="book-open" aria-hidden="true"></i></span>
-              </div>
-              <div class="stat-card-value">3</div>
-            </div>
-          </div>
-        </div>
-      </template>
-
-    </div>
-
-  </div>
-
-   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   <script defer src="script.js"></script>
-   <script defer src="attendance.js"></script>
-   <script type="module" src="main.js"></script>
-
-</body>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script defer src="script.js"></script>
+        <script defer src="attendance.js"></script>
+        <script type="module" src="main.js"></script>
+    </body>
 </html>

@@ -1,3 +1,5 @@
+// eslint-disable-next-line import-x/no-cycle
+import AuthContext from '../context/AuthContext.js';
 import { API_ENDPOINTS } from '../utils/constants.js';
 import { getConfig, isDevelopment } from '../utils/env.js';
 import { normalizeApiError } from '../utils/errors.js';
@@ -394,7 +396,9 @@ export const api = new ApiService();
  */
 export async function getCourses(studentId) {
     try {
-        const result = await api.get(API_ENDPOINTS.STUDENT_COURSES(studentId));
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        const result = await api.get(API_ENDPOINTS.STUDENT_COURSES(targetId));
         return result;
     } catch (err) {
         console.error('[API] getCourses error:', err);

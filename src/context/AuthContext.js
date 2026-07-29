@@ -23,9 +23,11 @@
  */
 
 import { ENV } from '../config/env.js';
+// eslint-disable-next-line import-x/no-cycle
 import * as authApi from '../services/authApi.js';
 import { saveAuthToken, getAuthToken, clearAuthToken } from '../services/authStorage.js';
 import { isTokenExpired } from '../utils/authHelpers.js';
+import * as authz from '../utils/authorization.js';
 import { ERROR_CODES, ROUTES } from '../utils/constants.js';
 
 // ─── Private helper functions ─────────────────────────────────────────────────
@@ -343,6 +345,85 @@ const AuthContext = (() => {
         }
     });
 
+    /**
+     * Returns the currently authenticated user object, or null.
+     */
+    function getCurrentUser() {
+        return _state.user;
+    }
+
+    /**
+     * Returns the currently authenticated user's ID, or null.
+     */
+    function getCurrentUserId() {
+        return _state.user ? _state.user.id : null;
+    }
+
+    /**
+     * Returns the currently authenticated user's role, or null.
+     */
+    function getCurrentRole() {
+        return _state.user ? _state.user.role : null;
+    }
+
+    /**
+     * Returns the current authentication token, or null.
+     */
+    function getToken() {
+        return _state.token;
+    }
+
+    /**
+     * Returns boolean indicating if a valid session is active.
+     */
+    function isAuthenticated() {
+        return _state.isAuthenticated;
+    }
+
+    // ─── Authorization Helpers ───────────────────────────────────────────────
+
+    /**
+     *
+     */
+    function hasRole(targetRole) {
+        return authz.checkHasRole(getCurrentRole(), targetRole);
+    }
+
+    /**
+     *
+     */
+    function hasPermission(permission) {
+        return authz.checkHasPermission(getCurrentRole(), permission);
+    }
+
+    /**
+     *
+     */
+    function canAccessRoute(routeKey) {
+        return authz.checkCanAccessRoute(getCurrentRole(), routeKey);
+    }
+
+    /**
+     *
+     */
+    function isStudent() {
+        return authz.checkIsStudent(getCurrentRole());
+    }
+
+    /**
+     *
+     */
+    function isTeacher() {
+        return authz.checkIsTeacher(getCurrentRole());
+    }
+
+    /**
+     *
+     */
+    function isAdmin() {
+        return authz.checkIsAdmin(getCurrentRole());
+    }
+
     return {
         subscribe,
         unsubscribe,
@@ -353,7 +434,19 @@ const AuthContext = (() => {
         login,
         logout,
         clearStorage: clearAuthToken,
+        getCurrentUser,
+        getCurrentUserId,
+        getCurrentRole,
+        getToken,
+        isAuthenticated,
+        hasRole,
+        hasPermission,
+        canAccessRoute,
+        isStudent,
+        isTeacher,
+        isAdmin,
     };
 })();
 
+window.AuthContext = AuthContext;
 export default AuthContext;

@@ -1,3 +1,5 @@
+import { ROLES } from '../../config/rbac.js';
+
 /**
  * @fileoverview RoleSelector — Tabbed role selector component (Student vs Teacher).
  *
@@ -33,34 +35,49 @@ export function createRoleSelector({ initialRole = 'student', onChange } = {}) {
     const studentBtn = document.createElement('button');
     studentBtn.type = 'button';
     studentBtn.setAttribute('role', 'tab');
-    studentBtn.setAttribute('data-role', 'student');
-    studentBtn.setAttribute('aria-selected', initialRole === 'student' ? 'true' : 'false');
-    studentBtn.className = `${baseTabClasses} ${initialRole === 'student' ? activeTabClasses : inactiveTabClasses}`;
-    studentBtn.textContent = 'Student';
+    studentBtn.setAttribute('data-role', ROLES.STUDENT);
+    studentBtn.setAttribute('aria-selected', initialRole === ROLES.STUDENT ? 'true' : 'false');
+    studentBtn.className = `${baseTabClasses} ${initialRole === ROLES.STUDENT ? activeTabClasses : inactiveTabClasses}`;
+    studentBtn.innerHTML = `
+        <i data-lucide="graduation-cap" class="role-icon" aria-hidden="true"></i>
+        <span>Student</span>
+    `;
 
     const teacherBtn = document.createElement('button');
     teacherBtn.type = 'button';
     teacherBtn.setAttribute('role', 'tab');
-    teacherBtn.setAttribute('data-role', 'teacher');
-    teacherBtn.setAttribute('aria-selected', initialRole === 'teacher' ? 'true' : 'false');
-    teacherBtn.className = `${baseTabClasses} ${initialRole === 'teacher' ? activeTabClasses : inactiveTabClasses}`;
+    teacherBtn.setAttribute('data-role', ROLES.TEACHER);
+    teacherBtn.setAttribute('aria-selected', initialRole === ROLES.TEACHER ? 'true' : 'false');
+    teacherBtn.className = `${baseTabClasses} ${initialRole === ROLES.TEACHER ? activeTabClasses : inactiveTabClasses}`;
     teacherBtn.textContent = 'Teacher';
 
     container.appendChild(studentBtn);
     container.appendChild(teacherBtn);
 
     /**
+     * @param {HTMLElement} container
      * @param {string} role
      */
+    function updateRoleSelectorVisuals(container, role) {
+        const studentBtn = container.querySelector('button:first-child');
+        const teacherBtn = container.querySelector('button:last-child');
+        if (!studentBtn || !teacherBtn) return;
+
+        studentBtn.setAttribute('aria-selected', role === ROLES.STUDENT ? 'true' : 'false');
+        studentBtn.className = `${baseTabClasses} ${role === ROLES.STUDENT ? activeTabClasses : inactiveTabClasses}`;
+
+        teacherBtn.setAttribute('aria-selected', role === ROLES.TEACHER ? 'true' : 'false');
+        teacherBtn.className = `${baseTabClasses} ${role === ROLES.TEACHER ? activeTabClasses : inactiveTabClasses}`;
+    }
+
+    /**
+     *
+     */
     function setRole(role) {
-        if (role !== 'student' && role !== 'teacher') return;
+        if (role !== ROLES.STUDENT && role !== ROLES.TEACHER) return;
         currentRole = role;
 
-        studentBtn.setAttribute('aria-selected', role === 'student' ? 'true' : 'false');
-        studentBtn.className = `${baseTabClasses} ${role === 'student' ? activeTabClasses : inactiveTabClasses}`;
-
-        teacherBtn.setAttribute('aria-selected', role === 'teacher' ? 'true' : 'false');
-        teacherBtn.className = `${baseTabClasses} ${role === 'teacher' ? activeTabClasses : inactiveTabClasses}`;
+        updateRoleSelectorVisuals(container, role);
 
         if (typeof onChange === 'function') {
             onChange(currentRole);

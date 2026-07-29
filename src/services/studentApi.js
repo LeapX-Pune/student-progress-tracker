@@ -6,6 +6,7 @@
  * @module services/studentApi
  */
 
+import AuthContext from '../context/AuthContext.js';
 import { API_ENDPOINTS, ERROR_CODES } from '../utils/constants.js';
 import { api } from './api.js';
 
@@ -18,7 +19,9 @@ import { api } from './api.js';
  */
 export async function getStudentProfile(studentId) {
     try {
-        return await api.get(API_ENDPOINTS.STUDENT(studentId));
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.get(API_ENDPOINTS.STUDENT(targetId));
     } catch (err) {
         throw {
             code: err.code || ERROR_CODES.UNKNOWN,
@@ -36,7 +39,9 @@ export async function getStudentProfile(studentId) {
  */
 export async function getStudentCourses(studentId) {
     try {
-        return await api.get(API_ENDPOINTS.STUDENT_COURSES(studentId));
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.get(API_ENDPOINTS.STUDENT_COURSES(targetId));
     } catch (err) {
         throw {
             code: err.code || ERROR_CODES.UNKNOWN,
@@ -54,7 +59,9 @@ export async function getStudentCourses(studentId) {
  */
 export async function getStudentGrades(studentId) {
     try {
-        return await api.get(API_ENDPOINTS.STUDENT_GRADES(studentId));
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        if (!targetId) throw new Error('No user authenticated');
+        return await api.get(API_ENDPOINTS.STUDENT_GRADES(targetId));
     } catch (err) {
         throw {
             code: err.code || ERROR_CODES.UNKNOWN,

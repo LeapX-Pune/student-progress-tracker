@@ -8,6 +8,7 @@
  * @module components/auth/DemoCredentials
  */
 
+import { ROLES } from '../../config/rbac.js';
 import { AUTH_CONSTANTS } from '../../utils/constants.js';
 
 /**
@@ -61,7 +62,7 @@ export function createDemoCredentials({ initialRole = 'student', onFill } = {}) 
      *
      */
     function getCredentialsForRole(role) {
-        if (role === 'teacher' && AUTH_CONSTANTS.DEMO_TEACHER) {
+        if (role === ROLES.TEACHER && AUTH_CONSTANTS.DEMO_TEACHER) {
             return AUTH_CONSTANTS.DEMO_TEACHER;
         }
         return (

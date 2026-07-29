@@ -23,6 +23,7 @@
 
 import { ENV } from '../config/env.js';
 import { API_ENDPOINTS, ERROR_CODES } from '../utils/constants.js';
+// eslint-disable-next-line import-x/no-cycle
 import { api } from './api.js';
 
 // ─── Exported API ─────────────────────────────────────────────────────────────

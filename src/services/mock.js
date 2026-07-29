@@ -1,3 +1,4 @@
+import { ROLES } from '../config/rbac.js';
 import { AUTH_CONSTANTS } from '../utils/constants.js';
 
 // ============================================================================
@@ -185,7 +186,7 @@ async function handleLogin(request) {
                 { status: 401, headers: { 'Content-Type': 'application/json' } }
             );
         }
-        const student = MOCK_USERS.find(u => u.role === 'student');
+        const student = MOCK_USERS.find(u => u.role === ROLES.STUDENT);
         return new Response(
             JSON.stringify({
                 token: 'mock-jwt-token-' + Date.now(),
@@ -217,7 +218,7 @@ async function handleLogin(request) {
                 { status: 401, headers: { 'Content-Type': 'application/json' } }
             );
         }
-        const teacher = MOCK_USERS.find(u => u.role === 'teacher');
+        const teacher = MOCK_USERS.find(u => u.role === ROLES.TEACHER);
         return new Response(
             JSON.stringify({
                 token: 'mock-jwt-token-' + Date.now(),
@@ -341,8 +342,9 @@ async function handleGetCourseProgress(request) {
     await delay(200);
     const url = new URL(request.url);
     const id = url.pathname.split('/')[3]; // /api/courses/:id/progress
+    const studentId = url.searchParams.get('studentId');
 
-    const progress = getCourseProgress(id);
+    const progress = getCourseProgress(id, studentId || 'stu_001');
     if (progress) {
         return new Response(JSON.stringify(progress), {
             status: 200,

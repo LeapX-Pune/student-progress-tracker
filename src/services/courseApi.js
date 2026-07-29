@@ -6,6 +6,7 @@
  * @module services/courseApi
  */
 
+import AuthContext from '../context/AuthContext.js';
 import { API_ENDPOINTS, ERROR_CODES } from '../utils/constants.js';
 import { api } from './api.js';
 
@@ -34,9 +35,14 @@ export async function getCourseDetails(courseId) {
  * @returns {Promise<Object>} Course progress data.
  * @throws {{ code: string, message: string }} Normalised error on failure.
  */
-export async function getCourseProgress(courseId) {
+export async function getCourseProgress(courseId, studentId) {
     try {
-        return await api.get(API_ENDPOINTS.COURSE_PROGRESS(courseId));
+        const targetId = studentId || AuthContext.getCurrentUserId();
+        // Pass studentId as query param so mock server can read it if needed
+        const url = targetId
+            ? `${API_ENDPOINTS.COURSE_PROGRESS(courseId)}?studentId=${targetId}`
+            : API_ENDPOINTS.COURSE_PROGRESS(courseId);
+        return await api.get(url);
     } catch (err) {
         throw {
             code: err.code || ERROR_CODES.UNKNOWN,

@@ -131,16 +131,16 @@ student-progress-tracker/
 Since this project uses no bundlers, compilation, or package managers:
 
 1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/LeapX-Pune/student-progress-tracker.git
-   cd student-progress-tracker
-   ```
+    ```bash
+    git clone https://github.com/LeapX-Pune/student-progress-tracker.git
+    cd student-progress-tracker
+    ```
 2. **Launch the application**:
-   - Open the
-     [index.html](file:///Users/devanshmittal/Documents/LeapX_Internship/student-progress-tracker/index.html)
-     file directly in any modern web browser.
-   - Alternatively, use a lightweight local server extension (e.g., _Live
-     Server_ in VS Code) to serve the directory.
+    - Open the
+      [index.html](file:///Users/devanshmittal/Documents/LeapX_Internship/student-progress-tracker/index.html)
+      file directly in any modern web browser.
+    - Alternatively, use a lightweight local server extension (e.g., _Live
+      Server_ in VS Code) to serve the directory.
 
 ---
 

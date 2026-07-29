@@ -118,15 +118,20 @@ async function loadStudentData() {
     // Determine active student
     let studentId = 'stu_001'; // Default fallback
     try {
-        const authDataRaw = localStorage.getItem('student_tracker_auth');
-        if (authDataRaw) {
-            const authData = JSON.parse(authDataRaw);
-            if (authData && authData.user && authData.user.id) {
-                studentId = authData.user.id;
+        if (window.AuthContext) {
+            const currentId = window.AuthContext.getCurrentUserId();
+            if (currentId) studentId = currentId;
+        } else {
+            const authDataRaw = localStorage.getItem('student_tracker_auth');
+            if (authDataRaw) {
+                const authData = JSON.parse(authDataRaw);
+                if (authData && authData.user && authData.user.id) {
+                    studentId = authData.user.id;
+                }
             }
         }
     } catch (e) {
-        console.warn('Failed to parse auth token from localStorage:', e);
+        console.warn('Failed to parse auth token:', e);
     }
 
     const apiBaseUrl = 'http://localhost:3001/api';

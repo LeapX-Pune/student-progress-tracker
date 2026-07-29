@@ -15,18 +15,14 @@ import { getCourses } from '../services/api.js';
  * @returns {Object} - Object containing fetch and retry methods
  */
 export function useCourses({ onLoading, onSuccess, onError }) {
-    let currentStudentId = null;
-
     /**
      *
      */
-    const fetchCourses = async studentId => {
-        currentStudentId = studentId;
-
+    const fetchCourses = async () => {
         if (onLoading) onLoading();
 
         try {
-            const data = await getCourses(studentId);
+            const data = await getCourses();
             if (onSuccess) onSuccess(data);
         } catch (error) {
             if (onError) onError(error);
@@ -37,9 +33,7 @@ export function useCourses({ onLoading, onSuccess, onError }) {
      *
      */
     const retry = () => {
-        if (currentStudentId) {
-            fetchCourses(currentStudentId);
-        }
+        fetchCourses();
     };
 
     return { fetch: fetchCourses, retry };

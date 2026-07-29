@@ -222,6 +222,33 @@
     }
 
     /* ------------------------------------------------------------------------
+     Navigation Access Filtering (Phase 3.4B)
+  ------------------------------------------------------------------------ */
+
+    /**
+     * Determines whether navigation items should be visible based on user permissions.
+     */
+    function updateNavigationVisibility() {
+        if (!window.AuthContext) return;
+
+        navLinks.forEach(link => {
+            const route = link.dataset.route;
+            const canAccess = window.AuthContext.canAccessRoute(route);
+
+            if (!canAccess) {
+                // For Phase 3.4B, we simply mark it. Later phases will hide it completely.
+                // link.style.display = 'none';
+                link.setAttribute('aria-disabled', 'true');
+                link.classList.add('is-unauthorized');
+            } else {
+                // link.style.display = '';
+                link.removeAttribute('aria-disabled');
+                link.classList.remove('is-unauthorized');
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------
      Hash routing
      Renders a lightweight placeholder only. Real page modules should listen
      for the "pathway:route" event and mount their own content into
@@ -457,7 +484,15 @@
      *
      */
     function handleRouteChange(pushState) {
-        const routeKey = parseRoute();
+        let routeKey = parseRoute();
+
+        // RBAC Check
+        if (window.AuthContext) {
+            if (!window.AuthContext.canAccessRoute(routeKey)) {
+                console.warn(`[Router] Access denied to route: ${routeKey}`);
+                routeKey = 'overview'; // Fallback route
+            }
+        }
 
         if (pushState !== false) {
             const target = '#/' + routeKey;
@@ -1090,9 +1125,19 @@
         attachNavHoverHighlight();
         attachRipple('.icon-button, .nav-link, .profile-trigger, .collapse-toggle');
         handleRouteChange(false);
+        updateNavigationVisibility();
 
         // Keep the highlight aligned through the sidebar's own entrance/collapse animation
         window.setTimeout(positionHighlight, 60);
+
+        // Listen to Auth state changes to refresh navigation if user roles change
+        if (window.AuthContext) {
+            window.AuthContext.subscribe(() => {
+                updateNavigationVisibility();
+                // We re-evaluate current route access
+                handleRouteChange(false);
+            });
+        }
     }
 
     if (document.readyState === 'loading') {

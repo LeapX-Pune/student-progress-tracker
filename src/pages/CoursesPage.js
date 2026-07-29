@@ -108,7 +108,7 @@ export function initCoursesPage() {
 
         // Fetch courses for 'stu_001' as per mock API setup
         try {
-            await courseHook.fetch('stu_001');
+            await courseHook.fetch();
         } finally {
             isFetching = false;
         }
