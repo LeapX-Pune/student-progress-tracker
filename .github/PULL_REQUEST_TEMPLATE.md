@@ -1,28 +1,16 @@
 ## Description
-
-<!-- Briefly describe the changes in this PR. -->
-
-Closes #<!-- issue number -->
+Provide a concise summary of the changes introduced by this pull request.
 
 ## Type of Change
-
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Refactor
+- [ ] Bug fix (non-breaking change fixing an issue)
+- [ ] New feature (non-breaking change adding functionality)
+- [ ] Refactoring / Code quality improvement
 - [ ] Documentation update
-- [ ] CI/CD or build
-- [ ] Other (please describe):
+
+## Related Issues
+Closes #
 
 ## Checklist
-
-- [ ] My code follows the project's code style (ESLint + Prettier)
-- [ ] I have added tests that prove my fix/feature works
-- [ ] All existing tests pass (`npm test`)
-- [ ] Linting passes (`npm run lint`)
-- [ ] Type checking passes (`npm run typecheck`)
-- [ ] Production build succeeds (`npm run build`)
-- [ ] I have updated documentation (if applicable)
-
-## Screenshots / Preview
-
-<!-- If applicable, add screenshots or a link to the PR preview. -->
+- [ ] Code follows project formatting guidelines.
+- [ ] Tested locally in browser without errors.
+- [ ] Updated documentation if necessary.
