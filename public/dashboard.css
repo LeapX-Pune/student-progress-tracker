@@ -31,7 +31,7 @@
     flex-direction: column;
     min-height: 100vh;
     padding: 1.5rem;
-    max-width: 1600px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -244,11 +244,9 @@
     border: 1px solid #dcfce7;
 }
 
-/* Dashboard Body (Sidebar + Content) */
+/* Dashboard Body */
 .dashboard-body {
-    display: flex;
-    gap: 2rem;
-    align-items: flex-start;
+    display: block;
 }
 
 /* Left Sidebar Menu */
@@ -525,8 +523,7 @@
     }
 
     .dashboard-body {
-        flex-direction: column;
-        gap: 1.5rem;
+        display: block;
     }
 
     .sidebar-menu {

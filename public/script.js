@@ -282,6 +282,11 @@
             return;
         }
 
+        if (routeKey === 'overview' || routeKey === 'courses') {
+            pageContent.innerHTML = '';
+            return;
+        }
+
         pageContent.innerHTML = `
 
         <div class="route-placeholder">
