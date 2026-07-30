@@ -63,10 +63,10 @@ test.describe('Application Shell', () => {
         await expect(page.locator('.profile-role')).toHaveText('Administrator');
     });
 
-    test('route placeholder renders for default route', async ({ page }) => {
+    test('overview dashboard renders stats row for default route', async ({ page }) => {
         await page.goto('/');
-        await expect(page.locator('.route-placeholder')).toBeVisible();
-        await expect(page.locator('.route-placeholder h2')).toHaveText('Overview');
+        await expect(page.locator('.overview-stats')).toBeVisible();
+        await expect(page.locator('.overview-stat-card__label').first()).toHaveText('Active Courses');
     });
 
     test('navigating to a different route updates breadcrumb and content', async ({ page }) => {

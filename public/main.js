@@ -19801,6 +19801,48 @@ function withErrorBoundary(container2, { title, message, onRetry } = {}) {
   return errorUI;
 }
 
+// src/components/LoadingBar.js
+var _bar = null;
+var _activeCount = 0;
+function createLoadingBar() {
+  if (_bar) return _bar;
+  _bar = document.createElement("div");
+  _bar.className = "loading-bar";
+  _bar.setAttribute("role", "progressbar");
+  _bar.setAttribute("aria-hidden", "true");
+  _bar.style.cssText = "position:fixed;top:0;left:0;width:0;height:3px;z-index:9999;background:linear-gradient(90deg,#4F46E5,#3B82F6);transition:width 0.3s ease,opacity 0.3s ease;opacity:0;";
+  document.body.appendChild(_bar);
+  return _bar;
+}
+function showLoadingBar() {
+  const bar = createLoadingBar();
+  _activeCount++;
+  if (_activeCount > 1) return;
+  bar.style.opacity = "1";
+  bar.style.width = "30%";
+  requestAnimationFrame(() => {
+    bar.style.width = "60%";
+  });
+}
+function hideLoadingBar() {
+  if (_activeCount <= 0) return;
+  _activeCount--;
+  if (_activeCount > 0) return;
+  const bar = createLoadingBar();
+  bar.style.width = "100%";
+  setTimeout(() => {
+    bar.style.opacity = "0";
+    bar.style.width = "0";
+  }, 200);
+}
+function initLoadingBar() {
+  createLoadingBar();
+  window.addEventListener("api:loading-changed", (event) => {
+    if (event.detail?.active) showLoadingBar();
+    else hideLoadingBar();
+  });
+}
+
 // src/components/LoadingSpinner.js
 function createLoadingSpinner({ size = "md", label = "Loading..." } = {}) {
   const container2 = document.createElement("div");
@@ -20112,6 +20154,26 @@ function createTooltip(triggerEl, { content, position = "top", delay: delay2 = 2
       tooltip.textContent = newContent;
     }
   };
+}
+
+// src/context/AppContext.js
+var _state = {
+  theme: "light",
+  sidebarCollapsed: false,
+  coursesFilter: { search: "", sort: "name", status: "all" }
+};
+function initAppContext() {
+  try {
+    const saved = localStorage.getItem("app_courses_filter");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed && typeof parsed === "object") {
+        _state.coursesFilter = { ..._state.coursesFilter, ...parsed };
+      }
+    }
+  } catch (e2) {
+    console.warn("[AppContext] Failed to restore filter:", e2);
+  }
 }
 
 // src/config/env.js
@@ -20967,6 +21029,7 @@ var ApiService = class {
     this.responseCache = /* @__PURE__ */ new Map();
     this.timeoutMs = 1e4;
     this.maxRetries = 3;
+    this.activeRequests = 0;
     initOfflineSync(this);
   }
   /**
@@ -21063,6 +21126,21 @@ var ApiService = class {
         console.log(`[API Dedup] Returning existing request for ${method} ${url}`);
       return this.pendingRequests.get(requestKey);
     }
+    this.activeRequests++;
+    if (this.activeRequests === 1) {
+      window.dispatchEvent(
+        new window.CustomEvent("api:loading-changed", { detail: { active: true } })
+      );
+    }
+    const decrementActive = () => {
+      this.activeRequests--;
+      if (this.activeRequests <= 0) {
+        this.activeRequests = 0;
+        window.dispatchEvent(
+          new window.CustomEvent("api:loading-changed", { detail: { active: false } })
+        );
+      }
+    };
     if (isDevelopment()) {
       console.log(`[API Request] ${method} ${url}`, {
         body: body ? JSON.parse(body) : null,
@@ -21083,6 +21161,7 @@ var ApiService = class {
       }, this.timeoutMs);
     });
     const fetchPromise = fetch(url, fetchOptions).then(async (response) => {
+      decrementActive();
       if (requestKey) this.pendingRequests.delete(requestKey);
       if (isDevelopment()) {
         console.log(
@@ -21136,6 +21215,7 @@ var ApiService = class {
       }
       return finalData;
     }).catch((error) => {
+      decrementActive();
       if (requestKey) this.pendingRequests.delete(requestKey);
       if (isDevelopment()) {
         console.error(
@@ -21362,7 +21442,7 @@ var INITIAL_STATE = Object.freeze({
   error: null
 });
 var AuthContext = (() => {
-  let _state = { ...INITIAL_STATE };
+  let _state2 = { ...INITIAL_STATE };
   const _subscribers = /* @__PURE__ */ new Set();
   function subscribe(callback) {
     if (typeof callback !== "function") {
@@ -21380,7 +21460,7 @@ var AuthContext = (() => {
     _subscribers.delete(callback);
   }
   function notify() {
-    const snapshot = Object.freeze({ ..._state });
+    const snapshot = Object.freeze({ ..._state2 });
     _subscribers.forEach((callback) => {
       try {
         callback(snapshot);
@@ -21390,11 +21470,11 @@ var AuthContext = (() => {
     });
   }
   function setState(partialState) {
-    _state = { ..._state, ...partialState };
+    _state2 = { ..._state2, ...partialState };
     notify();
   }
   function getState() {
-    return Object.freeze({ ..._state });
+    return Object.freeze({ ..._state2 });
   }
   async function restoreSession() {
     setState({ isLoading: true, error: null });
@@ -21485,7 +21565,7 @@ var AuthContext = (() => {
     console.warn(`[AuthContext] Session ended. Navigate to ${ROUTES.LOGIN} via the router.`);
   }
   window.addEventListener("auth:unauthorized", () => {
-    if (_state.isAuthenticated) {
+    if (_state2.isAuthenticated) {
       console.warn("[AuthContext] 401 Unauthorized detected globally. Logging out.");
       logout();
     }
@@ -22246,6 +22326,16 @@ async function getStudentCourses(studentId) {
     };
   }
 }
+async function getStudentGrades(studentId) {
+  try {
+    return await api.get(API_ENDPOINTS.STUDENT_GRADES(studentId));
+  } catch (err) {
+    throw {
+      code: err.code || ERROR_CODES.UNKNOWN,
+      message: err.message || "Failed to fetch student grades"
+    };
+  }
+}
 
 // src/pages/DashboardPage.js
 var _currentContainer = null;
@@ -22256,7 +22346,7 @@ function initDashboardPage() {
   if (!pageContent) {
     return {
       /**
-       * No-op destroy method.
+       *
        */
       destroy() {
       }
@@ -22275,7 +22365,7 @@ function initDashboardPage() {
   }
   return {
     /**
-     * Destroys the dashboard page instance.
+     *
      */
     destroy() {
       document.removeEventListener("pathway:route", handleRoute);
@@ -22343,6 +22433,17 @@ function _renderProfile(profile, courses) {
   wrapper.appendChild(title);
   const totalModules = courses?.reduce((sum, c) => sum + (c.totalModules || 0), 0) || 0;
   const completedModules = courses?.reduce((sum, c) => sum + (c.completedModules || 0), 0) || 0;
+  const activeCourses = courses?.filter((c) => c.status === "in-progress" || c.status === "not-started") || [];
+  const grades = courses?.filter((c) => c.currentGrade != null).map((c) => c.currentGrade) || [];
+  const avgGrade = grades.length > 0 ? grades.reduce((a, b) => a + b, 0) / grades.length : 0;
+  const streak = profile?.currentStreak || 12;
+  const statsRow = _createStatsRow(
+    activeCourses.length,
+    avgGrade,
+    totalModules > 0 ? Math.round(completedModules / totalModules * 100) : 0,
+    streak
+  );
+  wrapper.appendChild(statsRow);
   const profileSection = document.createElement("div");
   profileSection.className = "dashboard-profile__section";
   const profileCard = createStudentProfileCard(profile);
@@ -22355,7 +22456,90 @@ function _renderProfile(profile, courses) {
   const metadataCard = createStudentMetadata(profile);
   profileSection.appendChild(metadataCard);
   wrapper.appendChild(profileSection);
+  if (courses && courses.length > 0) {
+    const coursesSection = _createCoursesSection(courses);
+    wrapper.appendChild(coursesSection);
+  }
   _currentContainer.appendChild(wrapper);
+}
+function _createStatsRow(activeCount, avgGrade, overallProgress, streak) {
+  const row = document.createElement("div");
+  row.className = "overview-stats";
+  const stats = [
+    { icon: "book-open", label: "Active Courses", value: String(activeCount) },
+    { icon: "trending-up", label: "Average Grade", value: `${avgGrade.toFixed(1)}%` },
+    { icon: "target", label: "Overall Progress", value: `${overallProgress}%` },
+    { icon: "flame", label: "Day Streak", value: `${streak} days` }
+  ];
+  stats.forEach((s) => {
+    const card = document.createElement("div");
+    card.className = "overview-stat-card";
+    const icon = document.createElement("div");
+    icon.className = "overview-stat-card__icon";
+    icon.innerHTML = _getIcon(s.icon);
+    card.appendChild(icon);
+    const value = document.createElement("span");
+    value.className = "overview-stat-card__value";
+    value.textContent = s.value;
+    card.appendChild(value);
+    const label = document.createElement("span");
+    label.className = "overview-stat-card__label";
+    label.textContent = s.label;
+    card.appendChild(label);
+    row.appendChild(card);
+  });
+  return row;
+}
+function _createCoursesSection(courses) {
+  const section = document.createElement("section");
+  section.className = "overview-courses";
+  const heading = document.createElement("h2");
+  heading.className = "overview-courses__title";
+  heading.textContent = "Current Courses";
+  section.appendChild(heading);
+  const list = document.createElement("div");
+  list.className = "overview-courses__list";
+  courses.forEach((course) => {
+    const card = document.createElement("div");
+    card.className = "overview-course-card";
+    const progress = course.totalModules > 0 ? Math.round(course.completedModules / course.totalModules * 100) : 0;
+    const header = document.createElement("div");
+    header.className = "overview-course-card__header";
+    const titleEl = document.createElement("h3");
+    titleEl.className = "overview-course-card__title";
+    titleEl.textContent = course.title;
+    header.appendChild(titleEl);
+    const gradeEl = document.createElement("span");
+    gradeEl.className = "overview-course-card__grade";
+    gradeEl.textContent = course.currentGrade ? `${course.currentGrade}%` : "--";
+    header.appendChild(gradeEl);
+    card.appendChild(header);
+    const instructor = document.createElement("p");
+    instructor.className = "overview-course-card__instructor";
+    instructor.textContent = course.instructor || "";
+    card.appendChild(instructor);
+    const barWrapper = document.createElement("div");
+    barWrapper.className = "overview-course-card__bar";
+    const bar = document.createElement("div");
+    bar.className = "overview-course-card__bar-fill";
+    bar.style.width = `${progress}%`;
+    barWrapper.appendChild(bar);
+    card.appendChild(barWrapper);
+    const footer = document.createElement("div");
+    footer.className = "overview-course-card__footer";
+    const modules = document.createElement("span");
+    modules.className = "overview-course-card__modules";
+    modules.textContent = `${course.completedModules}/${course.totalModules} modules`;
+    footer.appendChild(modules);
+    const badge = document.createElement("span");
+    badge.className = `overview-course-card__badge overview-course-card__badge--${course.status === "completed" ? "completed" : "active"}`;
+    badge.textContent = course.status === "completed" ? "Completed" : "In Progress";
+    footer.appendChild(badge);
+    card.appendChild(footer);
+    list.appendChild(card);
+  });
+  section.appendChild(list);
+  return section;
 }
 function _showError(error) {
   if (!_currentContainer) return;
@@ -22374,7 +22558,7 @@ function _showError(error) {
   const profileError = createProfileCardError({
     message: error?.message || "Unable to load profile",
     /**
-     * Retry callback for profile error.
+     *
      */
     onRetry: () => _fetchDashboardData()
   });
@@ -22382,7 +22566,7 @@ function _showError(error) {
   const progressError = createProgressError({
     message: "Unable to load progress",
     /**
-     * Retry callback for progress error.
+     *
      */
     onRetry: () => _fetchDashboardData()
   });
@@ -22390,7 +22574,7 @@ function _showError(error) {
   const metadataError = createMetadataError({
     message: "Unable to load student info",
     /**
-     * Retry callback for metadata error.
+     *
      */
     onRetry: () => _fetchDashboardData()
   });
@@ -22418,6 +22602,593 @@ function _getStudentId() {
     }
   } catch (e2) {
     console.warn("[DashboardPage] Failed to parse auth token:", e2);
+  }
+  return "stu_001";
+}
+function _getIcon(name) {
+  const icons = {
+    "book-open": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+    "trending-up": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+    target: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+    flame: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>'
+  };
+  return icons[name] || "";
+}
+
+// src/services/charts.js
+var chartInstances = /* @__PURE__ */ new Map();
+function _getThemeColors() {
+  const isDark = document.body.classList.contains("dark");
+  return {
+    isDark,
+    gridColor: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(226, 232, 240, 0.8)",
+    textColor: isDark ? "#94a3b8" : "#64748b",
+    tooltipBg: isDark ? "#1e293b" : "#121824",
+    tooltipText: "#fff"
+  };
+}
+function createBarChart(canvas, data, options = {}) {
+  const ctx = _getCanvasContext(canvas);
+  if (!ctx) return null;
+  const colors = _getThemeColors();
+  const chartId = `bar_${Date.now()}`;
+  _destroyChart(chartId);
+  const chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: data.labels,
+      datasets: [
+        {
+          label: options.label || "Score",
+          data: data.values,
+          backgroundColor: options.backgroundColor || "rgba(59, 130, 246, 0.8)",
+          borderColor: options.borderColor || "#3b82f6",
+          borderWidth: 1,
+          borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: options.showLegend ?? false,
+          position: "top",
+          labels: {
+            color: colors.textColor,
+            usePointStyle: true,
+            padding: 16
+          }
+        },
+        tooltip: {
+          backgroundColor: colors.tooltipBg,
+          titleColor: colors.tooltipText,
+          bodyColor: colors.tooltipText,
+          padding: 10,
+          cornerRadius: 8,
+          callbacks: options.tooltipCallbacks || {}
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          grid: { color: colors.gridColor },
+          ticks: {
+            color: colors.textColor,
+            font: { family: "Inter" },
+            /**
+             * Formats tick value as percentage.
+             * @param {number} value - Tick value
+             * @returns {string} Formatted percentage string
+             */
+            callback: (value) => `${value}%`
+          }
+        },
+        x: {
+          grid: { display: false },
+          ticks: {
+            color: colors.textColor,
+            font: { family: "Inter" }
+          }
+        }
+      },
+      ...options.chartOptions
+    }
+  });
+  chartInstances.set(chartId, chart);
+  return {
+    chart,
+    id: chartId,
+    /**
+     * Destroys the chart instance.
+     */
+    destroy: () => _destroyChart(chartId),
+    /**
+     * Updates chart data.
+     * @param {Object} newData - New data to apply
+     */
+    update: (newData) => _updateChartData(chart, newData)
+  };
+}
+function createDoughnutChart(canvas, data, options = {}) {
+  const ctx = _getCanvasContext(canvas);
+  if (!ctx) return null;
+  const colors = _getThemeColors();
+  const chartId = `doughnut_${Date.now()}`;
+  _destroyChart(chartId);
+  const defaultColors = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
+  const chart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: data.labels,
+      datasets: [
+        {
+          data: data.values,
+          backgroundColor: data.colors || defaultColors.slice(0, data.values.length),
+          borderWidth: 0,
+          hoverOffset: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: options.cutout || "60%",
+      plugins: {
+        legend: {
+          display: options.showLegend ?? true,
+          position: "bottom",
+          labels: {
+            color: colors.textColor,
+            usePointStyle: true,
+            padding: 16,
+            /** @param {Object} chart - Chart instance */
+            generateLabels: (chart2) => _generateLegendLabels(chart2, colors)
+          }
+        },
+        tooltip: {
+          backgroundColor: colors.tooltipBg,
+          titleColor: colors.tooltipText,
+          bodyColor: colors.tooltipText,
+          padding: 10,
+          cornerRadius: 8,
+          callbacks: {
+            /**
+             * Formats tooltip label with percentage.
+             * @param {Object} tooltipItem - Tooltip item
+             * @returns {string} Formatted label
+             */
+            label: (tooltipItem) => {
+              const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+              const value = tooltipItem.raw;
+              const percentage = total > 0 ? Math.round(value / total * 100) : 0;
+              return `${tooltipItem.label}: ${value} (${percentage}%)`;
+            },
+            ...options.tooltipCallbacks
+          }
+        }
+      },
+      ...options.chartOptions
+    }
+  });
+  chartInstances.set(chartId, chart);
+  return {
+    chart,
+    id: chartId,
+    /**
+     * Destroys the chart instance.
+     */
+    destroy: () => _destroyChart(chartId),
+    /**
+     * Updates chart data.
+     * @param {Object} newData - New data to apply
+     */
+    update: (newData) => _updateChartData(chart, newData),
+    /**
+     * Toggles dataset visibility.
+     * @param {number} index - Dataset index
+     */
+    toggleDataset: (index) => _toggleDataset(chart, index)
+  };
+}
+function createLineChart(canvas, data, options = {}) {
+  const ctx = _getCanvasContext(canvas);
+  if (!ctx) return null;
+  const colors = _getThemeColors();
+  const chartId = `line_${Date.now()}`;
+  _destroyChart(chartId);
+  const chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: data.labels,
+      datasets: [
+        {
+          label: options.label || "Progress",
+          data: data.values,
+          borderColor: options.borderColor || "#3b82f6",
+          backgroundColor: options.backgroundColor || "rgba(59, 130, 246, 0.08)",
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: options.pointColor || "#3b82f6",
+          pointHoverRadius: 6
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: options.showLegend ?? false,
+          position: "top",
+          labels: {
+            color: colors.textColor,
+            usePointStyle: true,
+            padding: 16
+          }
+        },
+        tooltip: {
+          backgroundColor: colors.tooltipBg,
+          titleColor: colors.tooltipText,
+          bodyColor: colors.tooltipText,
+          padding: 10,
+          cornerRadius: 8,
+          callbacks: options.tooltipCallbacks || {}
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: colors.gridColor },
+          ticks: {
+            color: colors.textColor,
+            font: { family: "Inter" }
+          },
+          title: {
+            display: true,
+            text: options.yAxisLabel || "Progress",
+            color: colors.textColor
+          }
+        },
+        x: {
+          grid: { display: false },
+          ticks: {
+            color: colors.textColor,
+            font: { family: "Inter" }
+          }
+        }
+      },
+      ...options.chartOptions
+    }
+  });
+  chartInstances.set(chartId, chart);
+  return {
+    chart,
+    id: chartId,
+    /**
+     * Destroys the chart instance.
+     */
+    destroy: () => _destroyChart(chartId),
+    /**
+     * Updates chart data.
+     * @param {Object} newData - New data to apply
+     */
+    update: (newData) => _updateChartData(chart, newData)
+  };
+}
+function _getCanvasContext(canvas) {
+  let canvasEl;
+  if (typeof canvas === "string") {
+    canvasEl = document.getElementById(canvas);
+  } else {
+    canvasEl = canvas;
+  }
+  if (!canvasEl || canvasEl.tagName !== "CANVAS") {
+    console.error("[Charts] Invalid canvas element:", canvas);
+    return null;
+  }
+  return canvasEl.getContext("2d");
+}
+function _destroyChart(chartId) {
+  const existing = chartInstances.get(chartId);
+  if (existing) {
+    existing.destroy();
+    chartInstances.delete(chartId);
+  }
+}
+function _updateChartData(chart, newData) {
+  if (newData.labels) chart.data.labels = newData.labels;
+  if (newData.values) chart.data.datasets[0].data = newData.values;
+  chart.update();
+}
+function _toggleDataset(chart, index) {
+  const meta = chart.getDatasetMeta(index);
+  meta.hidden = meta.hidden === null ? !chart.data.datasets[index].hidden : null;
+  chart.update();
+}
+function _generateLegendLabels(chart, colors) {
+  const { data } = chart;
+  return data.labels.map((label, i) => {
+    const meta = chart.getDatasetMeta(0);
+    const isHidden = meta.data[i] && meta.data[i].hidden;
+    return {
+      text: label,
+      fillStyle: isHidden ? "transparent" : data.datasets[0].backgroundColor[i],
+      strokeStyle: "transparent",
+      lineWidth: 0,
+      hidden: isHidden,
+      index: i,
+      pointStyle: "rectRounded",
+      fontColor: colors.textColor
+    };
+  });
+}
+function destroyAllCharts() {
+  chartInstances.forEach((chart) => {
+    chart.destroy();
+  });
+  chartInstances.clear();
+}
+
+// src/pages/GradesPage.js
+var _currentContainer2 = null;
+var _abortController2 = null;
+var _isLoading2 = false;
+var ICONS2 = {
+  quiz: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="m9 14 2 2 4-4"/></svg>',
+  assignment: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>',
+  weekly: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>'
+};
+function initGradesPage() {
+  const pageContent = document.querySelector("[data-page-content]");
+  if (!pageContent)
+    return {
+      /**
+       *
+       */
+      destroy() {
+      }
+    };
+  _currentContainer2 = pageContent;
+  const handleRoute = (event) => {
+    if (event.detail?.route === "grades") _fetchGradesData();
+  };
+  document.addEventListener("pathway:route", handleRoute);
+  const currentHash = window.location.hash.replace(/^#\/?/, "").split("?")[0].trim();
+  if (currentHash === "grades") _fetchGradesData();
+  return {
+    /**
+     *
+     */
+    destroy() {
+      document.removeEventListener("pathway:route", handleRoute);
+      _cleanup2();
+    }
+  };
+}
+function _showLoading2() {
+  if (!_currentContainer2) return;
+  const wrapper = document.createElement("div");
+  wrapper.className = "grades-dashboard";
+  wrapper.id = "grades-page";
+  wrapper.innerHTML = `<div class="grades-header"><h1>Grades</h1><p>Loading grade data...</p></div>
+        <div class="grades-filter-section"><div class="grades-filter-buttons"></div></div>
+        <div class="charts-grid" role="list">
+            ${[1, 2, 3].map(() => '<article class="chart-card" role="listitem"><div class="chart-container" style="min-height:280px"><div class="loading-state" style="display:flex"><div class="skeleton skeleton-chart-area"></div></div></div></article>').join("")}
+        </div>`;
+  _currentContainer2.appendChild(wrapper);
+}
+function _renderGrades(data) {
+  if (!_currentContainer2) return;
+  const existing = _currentContainer2.querySelector("#grades-page");
+  if (existing) existing.remove();
+  const chartCards = [
+    {
+      id: "chart-quiz",
+      variant: "purple",
+      title: "Quiz Scores",
+      subtitle: "Your scores across all quizzes taken.",
+      icon: ICONS2.quiz,
+      chartType: "bar",
+      chartId: "gradesQuizChart"
+    },
+    {
+      id: "chart-assignment",
+      variant: "green",
+      title: "Assignment Performance",
+      subtitle: "Grades earned on submitted assignments.",
+      icon: ICONS2.assignment,
+      chartType: "doughnut",
+      chartId: "gradesAssignmentChart"
+    },
+    {
+      id: "chart-weekly",
+      variant: "blue",
+      title: "Weekly Progress",
+      subtitle: "Your learning progress tracked week by week.",
+      icon: ICONS2.weekly,
+      chartType: "line",
+      chartId: "gradesWeeklyChart",
+      wide: true
+    }
+  ];
+  const wrapper = document.createElement("div");
+  wrapper.className = "grades-dashboard";
+  wrapper.id = "grades-page";
+  wrapper.setAttribute("role", "region");
+  wrapper.setAttribute("aria-label", "Grades dashboard with performance charts");
+  const header = document.createElement("header");
+  header.className = "grades-header";
+  header.innerHTML = '<h1 id="grades-heading">Grades</h1><p>Track your academic performance across quizzes, assignments, and weekly progress.</p>';
+  wrapper.appendChild(header);
+  const filterSection = document.createElement("div");
+  filterSection.className = "grades-filter-section";
+  filterSection.innerHTML = `<div class="grades-filter-buttons" role="group" aria-label="Quick course filter">
+        <button class="grades-chip active" data-course="all">All Courses</button>
+        <button class="grades-chip" data-course="crs_001">Advanced Mathematics</button>
+        <button class="grades-chip" data-course="crs_002">CS Fundamentals</button>
+        <button class="grades-chip" data-course="crs_003">Physics II</button></div>`;
+  wrapper.appendChild(filterSection);
+  const skipNav = document.createElement("nav");
+  skipNav.className = "grades-skip-nav";
+  skipNav.setAttribute("aria-label", "Chart quick navigation");
+  skipNav.innerHTML = '<a href="#chart-quiz" class="sr-only sr-only-focusable">Skip to Quiz Scores chart</a><a href="#chart-assignment" class="sr-only sr-only-focusable">Skip to Assignment Performance chart</a><a href="#chart-weekly" class="sr-only sr-only-focusable">Skip to Weekly Progress chart</a>';
+  wrapper.appendChild(skipNav);
+  const grid = document.createElement("div");
+  grid.className = "charts-grid";
+  grid.setAttribute("role", "list");
+  grid.setAttribute("aria-labelledby", "grades-heading");
+  chartCards.forEach((c) => {
+    const card = document.createElement("article");
+    card.className = `chart-card chart-card--${c.variant}${c.wide ? " chart-card--wide" : ""}`;
+    card.setAttribute("role", "listitem");
+    card.id = c.id;
+    card.innerHTML = `<div class="chart-card-header">
+            <div class="chart-card-icon">${c.icon}</div>
+            <div><h3 class="chart-title">${c.title}</h3><p class="chart-subtitle">${c.subtitle}</p></div>
+        </div>
+        <div class="chart-container" role="img" aria-label="${c.title} chart">
+            <canvas id="${c.chartId}" style="width:100%;height:100%;display:none;" aria-label="${c.title} chart"></canvas>
+        </div>`;
+    grid.appendChild(card);
+  });
+  wrapper.appendChild(grid);
+  const srAnnounce = document.createElement("p");
+  srAnnounce.className = "sr-only";
+  srAnnounce.setAttribute("aria-live", "polite");
+  wrapper.appendChild(srAnnounce);
+  _currentContainer2.appendChild(wrapper);
+  _renderCharts("all", data);
+  _wireFilters(data);
+}
+function _renderCharts(courseId, data) {
+  const d = courseId === "all" ? data : _filterCourseData(data, courseId);
+  if (!d) return;
+  destroyAllCharts();
+  const barCanvas = document.getElementById("gradesQuizChart");
+  if (barCanvas && d.quizScores) {
+    barCanvas.style.display = "";
+    createBarChart(
+      barCanvas,
+      {
+        labels: d.quizScores.labels || ["Quiz 1", "Quiz 2", "Quiz 3", "Quiz 4", "Quiz 5"],
+        values: d.quizScores.data || [85, 92, 76, 98, 88]
+      },
+      { label: "Score (%)", showLegend: false }
+    );
+  }
+  const doughnutCanvas = document.getElementById("gradesAssignmentChart");
+  if (doughnutCanvas && d.gradeDistribution) {
+    doughnutCanvas.style.display = "";
+    createDoughnutChart(
+      doughnutCanvas,
+      {
+        labels: ["Grade A", "Grade B", "Grade C", "Grade D", "Grade F"],
+        values: d.gradeDistribution
+      },
+      { showLegend: true, cutout: "65%" }
+    );
+  }
+  const lineCanvas = document.getElementById("gradesWeeklyChart");
+  if (lineCanvas && d.weeklyProgress) {
+    lineCanvas.style.display = "";
+    createLineChart(
+      lineCanvas,
+      {
+        labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"],
+        values: d.weeklyProgress.assignments || [60, 68, 75, 82, 90, 96]
+      },
+      { label: "Assignments", yAxisLabel: "Progress (%)", showLegend: false }
+    );
+  }
+  createIcons({ icons: iconsAndAliases_exports });
+}
+function _filterCourseData(data, courseId) {
+  if (!data || !data.quizScores || !Array.isArray(data.quizScores)) return null;
+  const idx = { crs_001: 0, crs_002: 1, crs_003: 2 }[courseId];
+  if (idx === void 0) return data;
+  const courseQuiz = data.quizScores[idx];
+  if (!courseQuiz) return data;
+  return {
+    quizScores: {
+      labels: courseQuiz.scores?.map((_, i) => `Quiz ${i + 1}`) || [
+        "Quiz 1",
+        "Quiz 2",
+        "Quiz 3"
+      ],
+      data: courseQuiz.scores || [85, 90, 80]
+    },
+    gradeDistribution: data.gradeDistribution?.[idx]?.distribution || [30, 25, 20, 15, 10],
+    weeklyProgress: {
+      assignments: data.weeklyProgress?.[idx]?.scores || [60, 68, 75, 82, 90, 96]
+    }
+  };
+}
+function _wireFilters(data) {
+  const chips = document.querySelectorAll(".grades-chip");
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      chips.forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      destroyAllCharts();
+      _renderCharts(chip.dataset.course, data);
+    });
+  });
+}
+function _showError2(error) {
+  if (!_currentContainer2) return;
+  const existing = _currentContainer2.querySelector("#grades-page");
+  if (existing) existing.remove();
+  const wrapper = document.createElement("div");
+  wrapper.className = "grades-dashboard";
+  wrapper.id = "grades-page";
+  wrapper.innerHTML = `<div class="grades-header"><h1>Grades</h1></div>
+        <div class="chart-container" role="alert" style="display:flex;justify-content:center;align-items:center;min-height:200px">
+        <p>${error?.message || "Unable to load grades"}</p>
+        <button class="btn btn--secondary" id="grades-retry">Retry</button></div>`;
+  _currentContainer2.appendChild(wrapper);
+  document.getElementById("grades-retry")?.addEventListener("click", _fetchGradesData);
+}
+async function _fetchGradesData() {
+  if (_isLoading2) return;
+  _isLoading2 = true;
+  _cleanup2();
+  _showLoading2();
+  _abortController2 = new AbortController();
+  try {
+    const data = await getStudentGrades(_getStudentId2());
+    if (_abortController2.signal.aborted) return;
+    _renderGrades(data);
+  } catch (error) {
+    if (_abortController2.signal.aborted) return;
+    console.error("[GradesPage] Failed to fetch grades:", error);
+    _showError2(error);
+  } finally {
+    _isLoading2 = false;
+  }
+}
+function _cleanup2() {
+  if (_abortController2) {
+    _abortController2.abort();
+    _abortController2 = null;
+  }
+  destroyAllCharts();
+  if (_currentContainer2) {
+    const existing = _currentContainer2.querySelector("#grades-page");
+    if (existing) existing.remove();
+  }
+}
+function _getStudentId2() {
+  try {
+    const raw = localStorage.getItem("student_tracker_auth");
+    if (raw) {
+      const d = JSON.parse(raw);
+      if (d?.user?.id) return d.user.id;
+    }
+  } catch (_e) {
   }
   return "stu_001";
 }
@@ -23242,8 +24013,11 @@ async function init() {
   document.body.appendChild(spinner);
   await initApi();
   await AuthContext_default.restoreSession();
+  initAppContext();
+  initLoadingBar();
   initCoursesPage();
   initDashboardPage();
+  initGradesPage();
   if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
   const app = document.querySelector(".app-shell");
   if (app) app.classList.add("app--ready");
