@@ -153,5 +153,34 @@
       "courses": { "course_001": 65, "course_002": 40 },
       "cumulative": 105
     }
+  ],
+  "attendance": [
+    {
+      "courseId": "course_001",
+      "courseName": "Full Stack Web Development",
+      "totalClasses": 30,
+      "attended": 28,
+      "late": 1,
+      "absent": 1,
+      "percentage": 93.3
+    },
+    {
+      "courseId": "course_002",
+      "courseName": "Data Structures & Algorithms",
+      "totalClasses": 45,
+      "attended": 41,
+      "late": 2,
+      "absent": 2,
+      "percentage": 91.1
+    },
+    {
+      "courseId": "course_003",
+      "courseName": "UX Design Fundamentals",
+      "totalClasses": 38,
+      "attended": 36,
+      "late": 1,
+      "absent": 1,
+      "percentage": 94.7
+    }
   ]
 }
