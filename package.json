@@ -80,6 +80,7 @@
     }
   },
   "dependencies": {
+    "chart.js": "^4.4.7",
     "lucide": "^1.26.0"
   }
 }

@@ -9,8 +9,11 @@ import { removeSkeletons } from './components/SkeletonLoader.js';
 import { showError, showInfo } from './components/Toast.js';
 import { createTooltip } from './components/Tooltip.js';
 import AuthContext from './context/AuthContext.js';
+import { initAppContext } from './context/AppContext.js';
+import { initLoadingBar } from './components/LoadingBar.js';
 import { initCoursesPage } from './pages/CoursesPage.js';
 import { initDashboardPage } from './pages/DashboardPage.js';
+import { initGradesPage } from './pages/GradesPage.js';
 import { createLoginPage } from './pages/LoginPage.js';
 import { initApi } from './services/api.js';
 import { initMotionPreferences } from './utils/animations.js';
@@ -214,8 +217,11 @@ async function init() {
     await initApi();
     await AuthContext.restoreSession();
 
+    initAppContext();
+    initLoadingBar();
     initCoursesPage();
     initDashboardPage();
+    initGradesPage();
 
     if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
 
