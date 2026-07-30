@@ -113,13 +113,13 @@ export function isTokenExpired(expiresAt) {
  * Constructs the login URL with an encoded `redirect` query parameter so that
  * after a successful login the user is returned to their intended destination.
  *
- * @param {string} path - The relative path to encode (e.g. `'/dashboard'`)
+ * @param {string} path - The relative path to encode (e.g. `'/overview'`)
  * @returns {string} The full login URL with redirect param
- *                   (e.g. `'/login?redirect=%2Fdashboard'`)
+ *                   (e.g. `'/login?redirect=%2Foverview'`)
  *
  * @example
- * buildLoginRedirectUrl('/dashboard')
- * // → '/login?redirect=%2Fdashboard'
+ * buildLoginRedirectUrl('/overview')
+ * // → '/login?redirect=%2Foverview'
  */
 export function buildLoginRedirectUrl(path) {
     const sanitised = sanitizePath(path);
@@ -135,13 +135,13 @@ export function buildLoginRedirectUrl(path) {
  * Always passes the result through `sanitizePath()` to prevent open-redirect
  * attacks where a malicious `redirect` value points to an external domain.
  *
- * @param {string} searchString - The `location.search` string (e.g. `'?redirect=%2Fdashboard'`)
- * @returns {string} Decoded relative path, or `'/dashboard'` as default
+ * @param {string} searchString - The `location.search` string (e.g. `'?redirect=%2Foverview'`)
+ * @returns {string} Decoded relative path, or `'/overview'` as default
  *
  * @example
- * getRedirectDestination('?redirect=%2Fdashboard')  // '/dashboard'
- * getRedirectDestination('?redirect=https://evil.com') // '/dashboard' (sanitised)
- * getRedirectDestination('')                          // '/dashboard'
+ * getRedirectDestination('?redirect=%2Foverview')  // '/overview'
+ * getRedirectDestination('?redirect=https://evil.com') // '/overview' (sanitised)
+ * getRedirectDestination('')                          // '/overview'
  */
 export function getRedirectDestination(searchString) {
     try {
@@ -165,7 +165,7 @@ export function getRedirectDestination(searchString) {
  * @returns {string} The sanitised path, or `''` when unsafe/empty
  *
  * @example
- * sanitizePath('/dashboard')          // '/dashboard'
+ * sanitizePath('/overview')          // '/overview'
  * sanitizePath('https://evil.com')   // ''
  * sanitizePath('//evil.com')         // ''
  * sanitizePath(null)                  // ''

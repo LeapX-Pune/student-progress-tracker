@@ -1,5 +1,10 @@
-/* Modern premium dashboard design based on visual reference */
+/* ==========================================================================
+   DASHBOARD — Premium Card-Based Layout
+   Uses design tokens from style.css (:root). No conflicting overrides.
+   ========================================================================== */
+
 :root {
+    /* Dashboard-specific tokens (scoped, no conflicts with style.css) */
     --bg-gradient: radial-gradient(
         circle at 5% 5%,
         rgba(255, 237, 230, 0.8) 0%,
@@ -7,36 +12,17 @@
         rgba(243, 247, 254, 1) 100%
     );
     --bg-card: #ffffff;
+    --bg-primary: #f8fafc;
     --text-primary: #121824;
     --text-secondary: #748094;
-    --border-color: rgba(226, 232, 240, 0.8);
+    --border-color: var(--border-subtle);
     --shadow-premium: 0 12px 32px -4px rgba(0, 0, 0, 0.03), 0 4px 12px -2px rgba(0, 0, 0, 0.02);
 
-    /* Theme colors from image */
+    /* Dashboard accent card tints */
     --color-dark: #202425;
     --color-purple-card: #e4e6fc;
     --color-blue-card: #e1f1ff;
     --color-green-card: #e5f9eb;
-
-    --radius-xl: 1.75rem;
-    --radius-lg: 1.25rem;
-    --radius-md: 0.875rem;
-    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: var(--font-sans);
-    background: var(--bg-gradient);
-    color: var(--text-primary);
-    min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
 }
 
 /* Dashboard Layout Wrapper */
@@ -323,9 +309,9 @@ body {
     gap: 2rem;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
     .dashboard-grid {
-        grid-template-columns: 320px 1fr;
+        grid-template-columns: 300px 1fr;
     }
 }
 
@@ -576,17 +562,19 @@ body {
 
 /* ==========================================================================
    DARK MODE COMPATIBILITY
+   Inherits text/border tokens from style.css body.dark.
+   Only dashboard-specific tokens are overridden here.
    ========================================================================== */
 
 body.dark {
     --bg-gradient: radial-gradient(circle at 5% 5%, #1e1b4b 0%, #0f172a 50%, #020617 100%);
     --bg-card: #1e293b;
+    --bg-primary: #0f172a;
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
-    --border-color: rgba(51, 65, 85, 0.8);
+    --border-color: var(--border-subtle);
     --shadow-premium: 0 12px 32px -4px rgba(0, 0, 0, 0.3), 0 4px 12px -2px rgba(0, 0, 0, 0.2);
 
-    /* Dark theme colors for cards */
     --color-dark: #f8fafc;
     --color-purple-card: #2e2a52;
     --color-blue-card: #1e3a8a;
@@ -598,6 +586,21 @@ body.dark .nav-center,
 body.dark .sidebar-menu {
     background-color: rgba(30, 41, 59, 0.7);
     border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .nav-icon-btn {
+    background-color: #1e293b;
+    border-color: rgba(51, 65, 85, 0.8);
+    color: #f8fafc;
+}
+
+body.dark .search-input {
+    background-color: #0f172a;
+    color: #f8fafc;
+    border-color: rgba(51, 65, 85, 0.8);
+}
+body.dark .search-input::placeholder {
+    color: #64748b;
 }
 
 body.dark .nav-pill:hover,
@@ -671,4 +674,184 @@ body.dark .course-details-grid {
 }
 body.dark .course-next-module {
     background: rgba(15, 23, 42, 0.6) !important;
+}
+body.dark .course-item-box.purple {
+    background-color: rgba(99, 102, 241, 0.15);
+}
+body.dark .course-item-box.blue {
+    background-color: rgba(59, 130, 246, 0.15);
+}
+body.dark .course-item-box.green {
+    background-color: rgba(16, 185, 129, 0.15);
+}
+body.dark .progress-bar-bg {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Chart Container styling to increase visibility */
+.chart-container-line {
+    position: relative;
+    height: 340px !important;
+    width: 100%;
+}
+
+/* Meta badge customization */
+.meta-badge {
+    padding: 0.35rem 0.75rem;
+    background-color: #f1f5f9;
+    color: #475569;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+body.dark .meta-badge {
+    background-color: #334155;
+    color: #cbd5e1;
+}
+
+/* Student Profile Card responsiveness across all dimensions */
+.premium-card div[style*='display: flex'][style*='gap: 1.5rem'] {
+    flex-wrap: wrap;
+}
+@media (max-width: 640px) {
+    .premium-card div[style*='display: flex'][style*='gap: 1.5rem'] {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .profile-stats-container {
+        margin: 1rem 0 0 0 !important;
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+body.dark .student-avatar {
+    border: 2px solid #334155;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* ==========================================================================
+   COURSE CARD — Extracted from inline styles in dashboard.js
+   ========================================================================== */
+
+.course-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 0.75rem;
+}
+
+.course-card-header-text {
+    flex: 1;
+    padding-right: 0.5rem;
+}
+
+.course-card-header-text h3 {
+    margin-bottom: 0.15rem;
+    font-size: 1.1rem;
+    line-height: 1.3;
+}
+
+.course-instructor {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.status-badge-new {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.course-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.8rem;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.course-details-grid > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.course-details-grid .label {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.course-details-grid .value {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.course-next-module {
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+    padding: 0.4rem 0.5rem;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 6px;
+    border-left: 3px solid #3b82f6;
+    transition: background 0.3s ease;
+}
+
+.course-next-module .next-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.course-next-module .next-value {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-left: 0.25rem;
+}
+
+.course-progress-section {
+    margin-top: 0.5rem;
+}
+
+.course-progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: #3b82f6;
+    border-radius: 3px;
+}
+
+.no-courses-message {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
 }

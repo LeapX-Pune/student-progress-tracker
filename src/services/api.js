@@ -1,6 +1,9 @@
+import { API_ENDPOINTS } from '../utils/constants.js';
 import { getConfig, isDevelopment } from '../utils/env.js';
 import { normalizeApiError } from '../utils/errors.js';
 import { getAuthToken } from './authStorage.js';
+import { setupMockServer } from './mock.js';
+import { enqueueRequest, initOfflineSync } from './offlineSync.js';
 
 let mockHandlers = null;
 
@@ -8,12 +11,16 @@ let mockHandlers = null;
  *
  */
 export async function initApi() {
+    console.log('[API] Initializing API...');
     try {
         const config = getConfig();
+        console.log('[API] Config:', config);
 
         if (config.apiMockEnabled) {
-            const { setupMockServer } = await import('./mock.js');
+            console.log('[API] Mock API is enabled, setting up server...');
             mockHandlers = setupMockServer();
+        } else {
+            console.log('[API] Mock API is disabled.');
         }
     } catch (err) {
         console.warn('[API] Failed to initialize mock server:', err);
@@ -45,8 +52,12 @@ export class ApiService {
             '/api';
 
         this.pendingRequests = new Map();
+        this.responseCache = new Map();
         this.timeoutMs = 10000;
         this.maxRetries = 3;
+
+        // Initialize offline sync to replay queued requests when online
+        initOfflineSync(this);
     }
 
     /**
@@ -132,13 +143,24 @@ export class ApiService {
             body,
             retryCount = 0,
             skipDedup = false,
+            cacheTTL = 0, // Time-to-live in seconds
             ...otherOptions
         } = options;
 
         const url = `${this.baseUrl}${endpoint}`;
 
-        // Check deduplication
+        // Check deduplication (and cache key)
         const requestKey = !skipDedup && this._getRequestKey(method, url, body);
+
+        // Check Cache
+        if (method === 'GET' && cacheTTL > 0 && requestKey) {
+            const cached = this.responseCache.get(requestKey);
+            if (cached && Date.now() < cached.expiry) {
+                if (isDevelopment())
+                    console.log(`[API Cache] Returning cached response for ${url}`);
+                return Promise.resolve(cached.data);
+            }
+        }
         if (requestKey && this.pendingRequests.has(requestKey)) {
             if (isDevelopment())
                 console.log(`[API Dedup] Returning existing request for ${method} ${url}`);
@@ -181,7 +203,56 @@ export class ApiService {
                         `[API Response] ${method} ${url} (${response.status}) took ${Date.now() - requestStartTime}ms`
                     );
                 }
-                return await this._responseInterceptor(response);
+
+                if (options.onDownloadProgress && response.body) {
+                    const contentLength = response.headers.get('content-length');
+                    const total = contentLength ? parseInt(contentLength, 10) : 0;
+                    let loaded = 0;
+
+                    const reader = response.body.getReader();
+                    const chunks = [];
+
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+
+                        if (value) {
+                            loaded += value.length;
+                            chunks.push(value);
+                        }
+
+                        if (total) {
+                            options.onDownloadProgress({ loaded, total, progress: loaded / total });
+                        } else {
+                            options.onDownloadProgress({ loaded, total: 0, progress: 0 }); // Indeterminate
+                        }
+                    }
+
+                    const blob = new window.Blob(chunks);
+                    const newResponse = new Response(blob, {
+                        status: response.status,
+                        statusText: response.statusText,
+                        headers: response.headers,
+                    });
+
+                    const finalData = await this._responseInterceptor(newResponse);
+                    if (method === 'GET' && cacheTTL > 0 && requestKey) {
+                        this.responseCache.set(requestKey, {
+                            data: finalData,
+                            expiry: Date.now() + cacheTTL * 1000,
+                        });
+                    }
+                    return finalData;
+                }
+
+                const finalData = await this._responseInterceptor(response);
+                if (method === 'GET' && cacheTTL > 0 && requestKey) {
+                    this.responseCache.set(requestKey, {
+                        data: finalData,
+                        expiry: Date.now() + cacheTTL * 1000,
+                    });
+                }
+                return finalData;
             })
             .catch(error => {
                 if (requestKey) this.pendingRequests.delete(requestKey);
@@ -218,6 +289,17 @@ export class ApiService {
                     );
                 }
 
+                // If it's a network error and we're out of retries, OR we're offline
+                if (this._isNetworkError(error) || !window.navigator.onLine) {
+                    if (method !== 'GET') {
+                        enqueueRequest({ endpoint, method, options: { body, ...otherOptions } });
+                        // Throw a specific offline error so components know it was queued
+                        const offlineErr = new Error('Network offline, request queued for sync');
+                        offlineErr.code = 'OFFLINE_QUEUED';
+                        throw offlineErr;
+                    }
+                }
+
                 console.error(`API Error on ${endpoint}:`, error);
                 throw error;
             });
@@ -229,8 +311,8 @@ export class ApiService {
         if (requestKey) {
             this.pendingRequests.set(requestKey, requestPromise);
             // Ensure we clean up if race resolves before finally block
-            // eslint-disable-next-line promise/catch-or-return
-            requestPromise.finally(() => this.pendingRequests.delete(requestKey));
+
+            requestPromise.finally(() => this.pendingRequests.delete(requestKey)).catch(() => {}); // Prevent unhandled rejection on this detached branch
         }
 
         return requestPromise;
@@ -312,9 +394,10 @@ export const api = new ApiService();
  */
 export async function getCourses(studentId) {
     try {
-        const { API_ENDPOINTS } = await import('../utils/constants.js');
-        return await api.get(API_ENDPOINTS.STUDENT_COURSES(studentId));
+        const result = await api.get(API_ENDPOINTS.STUDENT_COURSES(studentId));
+        return result;
     } catch (err) {
+        console.error('[API] getCourses error:', err);
         throw {
             code: err.code || 'UNKNOWN',
             message: err.message || 'Failed to fetch courses',

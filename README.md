@@ -87,14 +87,17 @@ visualizations—without relying on heavy frameworks or build tools.
 
 ## 🛠️ Technology Stack
 
-To ensure maximum compatibility, performance, and simplicity, this project is
-built exclusively with vanilla frontend technologies:
-
-- **Markup**: HTML5 (Semantic elements for maximum accessibility).
-- **Styling**: CSS3 (Modern features like CSS Grid, Flexbox, Custom
-  Properties/Variables).
-- **Scripting**: Vanilla JavaScript (ES6+ features, native DOM APIs, fetch, and
-  modules).
+| Category       | Technology                  | Purpose                                  |
+| -------------- | --------------------------- | ---------------------------------------- |
+| **Language**   | Vanilla JavaScript (ES2022) | No framework overhead, max portability   |
+| **Styling**    | Tailwind CSS (CDN)          | Utility-first, responsive by default     |
+| **Charts**     | Chart.js                    | Lightweight, accessible, responsive      |
+| **Icons**      | Lucide (CDN)                | Consistent icon system                   |
+| **Routing**    | Custom hash router          | Zero-dep, works on static hosting        |
+| **Build**      | esbuild                     | Fast bundler, minification, tree-shaking |
+| **Testing**    | Vitest + Playwright         | Unit + E2E testing                       |
+| **CI/CD**      | GitHub Actions              | Lint → Test → Build → Deploy             |
+| **Deployment** | GitHub Pages                | Free static hosting, SPA fallback        |
 
 ---
 
@@ -102,25 +105,30 @@ built exclusively with vanilla frontend technologies:
 
 ```text
 student-progress-tracker/
-├── .github/workflows/   # CI/CD pipeline workflows
-├── docs/                # Documentation (PRD, API, architecture, guides)
-├── mock-api/            # JSON Server mock data
-├── public/              # Static assets (index.html, _redirects, sw.js)
-├── scripts/             # Build and dev scripts (esbuild)
-├── src/                 # Application source code
-│   ├── components/      # UI component factories
-│   ├── config/          # Environment configuration
-│   ├── context/         # Global state singletons
-│   ├── hooks/           # Reactive subscription hooks
-│   ├── pages/           # Page-level modules
-│   ├── router/          # Route guards
-│   ├── services/        # API, auth, storage, network
-│   ├── styles/          # CSS files (components/, courses/)
-│   └── utils/           # Pure helper functions
-├── tests/               # Unit, integration, E2E tests
-├── CHANGELOG.md
-├── CONTRIBUTING.md
-├── LICENSE
+├── .github/
+│   └── workflows/            # CI/CD pipelines
+├── public/                   # Static assets, HTML entry points
+│   ├── index.html
+│   ├── 404.html              # SPA fallback
+│   └── dashboard.html
+├── src/                      # Application source code
+│   ├── main.js               # Bootstrap & app init
+│   ├── router.js             # Hash-based SPA routing
+│   ├── pages/                # Page-level components
+│   ├── components/           # Reusable UI components
+│   ├── services/             # API, Auth, Storage, Mock
+│   ├── hooks/                # Custom hooks (useApi, useAuth, etc.)
+│   ├── context/              # Global state (Auth, App)
+│   ├── config/               # Environment & app config
+│   ├── utils/                # Helpers, date, DOM utilities
+│   └── styles/               # CSS stylesheets
+├── scripts/                  # Build & dev tooling
+│   ├── build.js              # esbuild production build
+│   └── dev.js                # Dev server
+├── tests/                    # Test suites
+├── docs/                     # Project documentation
+├── package.json
+├── .github/                  # CI/CD workflows
 └── README.md
 ```
 
@@ -128,21 +136,31 @@ student-progress-tracker/
 
 ## ⚙️ How to Run
 
-1. **Clone and install**:
-    ```bash
-    git clone https://github.com/LeapX-Pune/student-progress-tracker.git
-    cd student-progress-tracker
-    npm install
-    ```
-2. **Start dev server**:
-    ```bash
-    npm run dev
-    ```
-3. **Build for production**:
-    ```bash
-    npm run build
-    npm run preview
-    ```
+### Development
+
+```bash
+# Install dependencies
+npm ci
+
+# Start dev server (with mock API)
+npm run dev
+```
+
+### Production Build
+
+```bash
+npm run build
+npx serve dist -p 4173
+```
+
+### Deployment
+
+The project is deployed to **GitHub Pages** via GitHub Actions:
+
+| Environment | Trigger             | URL                                                                  |
+| ----------- | ------------------- | -------------------------------------------------------------------- |
+| Preview     | Pull Request opened | `https://leapx-pune.github.io/student-progress-tracker/pr-preview/N` |
+| Production  | Push to `main`      | `https://leapx-pune.github.io/student-progress-tracker/`             |
 
 ---
 
