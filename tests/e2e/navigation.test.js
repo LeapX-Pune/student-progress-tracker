@@ -77,8 +77,8 @@ test.describe('Page Content', () => {
         await expect(page.locator('[data-page-content]')).toBeVisible();
     });
 
-    test('route placeholder renders for each route', async ({ page }) => {
+    test('overview dashboard renders stats row', async ({ page }) => {
         await page.goto('/');
-        await expect(page.locator('.route-placeholder')).toBeVisible();
+        await expect(page.locator('.overview-stats')).toBeVisible();
     });
 });
