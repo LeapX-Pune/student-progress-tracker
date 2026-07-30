@@ -1,13 +1,13 @@
 (function () {
     'use strict';
 
-    var chartInstances = [];
+    var instances = [];
 
     function destroyCharts() {
-        chartInstances.forEach(function (c) {
+        instances.forEach(function (c) {
             if (c && typeof c.destroy === 'function') c.destroy();
         });
-        chartInstances = [];
+        instances = [];
     }
 
     function render() {
@@ -42,8 +42,17 @@
             callback();
             return;
         }
+
+        var existing = document.querySelector('script[data-chartjs-loader]');
+        if (existing) {
+            existing.addEventListener('load', callback);
+            return;
+        }
+
         var script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';
+        script.crossOrigin = 'anonymous';
+        script.dataset.chartjsLoader = 'true';
         script.onload = callback;
         script.onerror = function () {
             console.error('[Attendance] Failed to load Chart.js');
@@ -72,16 +81,22 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 cutout: '75%',
+                animation: { duration: 600, easing: 'easeOutQuart' },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
                         backgroundColor: '#1e293b',
-                        titleFont: { family: 'Inter', size: 12 },
-                        bodyFont: { family: 'Inter', size: 13, weight: '600' },
+                        titleFont: { family: 'Inter, system-ui, sans-serif', size: 12 },
+                        bodyFont: {
+                            family: 'Inter, system-ui, sans-serif',
+                            size: 13,
+                            weight: '600',
+                        },
                         padding: { x: 12, y: 8 },
                         cornerRadius: 8,
                         displayColors: true,
                         callbacks: {
+                            /** @param {import('chart.js').TooltipContext} ctx */
                             label: function (ctx) {
                                 return ctx.parsed + '%';
                             },
@@ -91,7 +106,7 @@
             },
         });
 
-        chartInstances.push(chart);
+        instances.push(chart);
 
         var legendContainer = document.getElementById('donutLegend');
         if (!legendContainer) return;

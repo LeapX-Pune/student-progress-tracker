@@ -30,7 +30,7 @@ lifecycle.
 | **9**  | **Data Persistence & State**          | localStorage/sessionStorage abstraction, hydration, theme, scroll restoration     | State Engineer     | Week 3   | Part 3, 8    |
 | **10** | **Error Handling & UX Polish**        | Toast system, skeleton loaders, empty states, retry logic, offline banner, a11y   | UX Engineer        | Week 5-6 | Part 5, 6, 7 |
 | **11** | **Responsive Design & Cross-Browser** | Breakpoint testing, touch targets, mobile nav, chart resize, fluid typography     | UI Engineer        | Week 6   | Part 4-10    |
-| **12** | **Deployment & Documentation**        | Production build, Vercel/Netlify deploy, README, env config, handoff docs         | Tech Lead          | Week 7   | Part 1-11    |
+| **12** | **Deployment & Documentation**        | Production build, GitHub Pages deploy, README, env config, handoff docs           | Tech Lead          | Week 7   | Part 1-11    |
 
 ---
 
