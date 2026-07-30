@@ -362,6 +362,79 @@
                 </main>
             </div>
         </div>
+        <script>
+            // --- Bar Chart (Quiz Scores / Homework) ---
+            new Chart(document.getElementById('quizChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Quiz 1', 'Quiz 2', 'Quiz 3', 'Quiz 4', 'Quiz 5'],
+                    datasets: [{
+                        label: 'Score (%)',
+                        data: [85, 92, 76, 98, 88],
+                        backgroundColor: ['#4F46E5', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'],
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false },
+                        tooltip: { callbacks: { label: ctx => `Score: ${ctx.raw}%` } }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true, max: 100,
+                            ticks: { font: { size: 11 }, callback: v => v + '%' },
+                            title: { display: false }
+                        },
+                        x: {
+                            ticks: { font: { size: 11 }, maxRotation: 0, minRotation: 0 },
+                            title: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // --- Doughnut Chart (Grade Distribution / Friends Score) ---
+            new Chart(document.getElementById('gradeChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Grade A', 'Grade B', 'Grade C', 'Grade D', 'Grade F'],
+                    datasets: [{
+                        data: [40, 30, 15, 10, 5],
+                        backgroundColor: ['#22C55E', '#3B82F6', '#FACC15', '#F97316', '#EF4444'],
+                        borderColor: '#ffffff',
+                        borderWidth: 3,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    layout: { padding: 10 },
+                    plugins: {
+                        title: { display: false },
+                        legend: {
+                            position: 'right', align: 'center',
+                            labels: { usePointStyle: true, pointStyle: 'circle', boxWidth: 12, padding: 20, font: { size: 12 } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label(ctx) {
+                                    const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                    const pct = ((ctx.raw / total) * 100).toFixed(1);
+                                    return `${ctx.label}: ${ctx.raw} Students (${pct}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
         <script src="assets/chart_script.js"></script>
     </body>
 </html>
