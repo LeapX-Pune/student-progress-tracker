@@ -1,0 +1,128 @@
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+a,
+button,
+input,
+select,
+textarea,
+[role='button'],
+[role='tab'],
+[role='menuitem'],
+[role='switch'],
+[role='option'],
+[tabindex]:not([tabindex='-1']) {
+    min-width: 44px;
+    min-height: 44px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+[aria-busy='true'] {
+    cursor: progress;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+html.reduced-motion *,
+html.reduced-motion *::before,
+html.reduced-motion *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+}
+
+/* Screen-reader only, but visible on focus (for skip links) */
+.sr-only-focusable:focus {
+    position: absolute;
+    width: auto;
+    height: auto;
+    padding: 12px 20px;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: nowrap;
+    background: var(--accent-600, #4f46e5);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    z-index: 1000;
+    top: 8px;
+    left: 8px;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+}
+
+/* Chart card focus styles */
+.chart-card:focus-visible {
+    outline: 2px solid var(--color-primary, #4f46e5);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+}
+
+.chart-card:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
+}
+
+/* Retry button focus styles */
+.retry-btn:focus-visible {
+    outline: 2px solid var(--color-primary, #4f46e5);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+}
+
+.retry-btn:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+    .chart-card:focus-visible {
+        outline: 3px solid LinkText;
+    }
+
+    .retry-btn:focus-visible {
+        outline: 3px solid LinkText;
+    }
+
+    .chart-container[role='img'] {
+        border: 2px solid CanvasText;
+    }
+}
