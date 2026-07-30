@@ -401,6 +401,23 @@ async function handleLogin(request) {
         );
     }
 
+    if (body.name) {
+        const signupRole = body.role || 'student';
+        return new Response(
+            JSON.stringify({
+                token: 'mock-jwt-token-' + Date.now(),
+                expiresAt: new Date(Date.now() + 3600000).toISOString(),
+                user: {
+                    id: signupRole === 'teacher' ? 'tch_mock' : 'stu_mock',
+                    name: body.name,
+                    email: body.email,
+                    role: signupRole,
+                },
+            }),
+            { status: 200, headers: { 'Content-Type': 'application/json' } }
+        );
+    }
+
     return new Response(JSON.stringify({ message: 'Invalid credentials' }), {
         status: 401,
         headers: { 'Content-Type': 'application/json' },

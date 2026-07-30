@@ -15,6 +15,7 @@ import { useNotifications } from './hooks/useNotifications.js';
 import { initAttendancePage } from './pages/AttendancePage.js';
 import { initCoursesPage } from './pages/CoursesPage.js';
 import { initGradesPage } from './pages/GradesPage.js';
+import { initDashboardPage } from './pages/DashboardPage.js';
 import { createLoginPage } from './pages/LoginPage.js';
 import { initProfilePage } from './pages/ProfilePage.js';
 import { initSettingsPage } from './pages/SettingsPage.js';
@@ -97,6 +98,7 @@ function showAppView() {
     if (appShell) {
         appShell.style.display = '';
         createIcons({ icons });
+        requestAnimationFrame(() => window.dispatchEvent(new window.Event('app:shell-visible')));
     }
 }
 
@@ -580,6 +582,7 @@ async function init() {
     initProfilePage();
     initOverviewPage();
     initNotifications();
+    initDashboardPage();
 
     if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
 

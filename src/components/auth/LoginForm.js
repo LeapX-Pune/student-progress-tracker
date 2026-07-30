@@ -121,6 +121,7 @@ export function createLoginForm(container, { onSuccess } = {}) {
     const formEl = cardEl.querySelector('#login-form');
 
     const nameGroup = cardEl.querySelector('#name-field');
+    const nameInput = cardEl.querySelector('#name');
     const emailInput = cardEl.querySelector('#email');
     const emailErrorSpan = cardEl.querySelector('#email-error');
 
@@ -302,6 +303,7 @@ export function createLoginForm(container, { onSuccess } = {}) {
         const password = passwordInput.value;
         const selectedRole = roleSelector.getSelectedRole();
         const shouldRememberMe = rememberMe.getValue();
+        const name = !isLoginMode ? nameInput.value.trim() : undefined;
 
         // Standard validation
         const errors = validateLoginForm({ email, password });
@@ -330,6 +332,7 @@ export function createLoginForm(container, { onSuccess } = {}) {
             password,
             role: selectedRole,
             rememberMe: shouldRememberMe,
+            name,
         });
 
         setSubmitLoading(false);

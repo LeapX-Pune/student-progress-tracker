@@ -13,6 +13,7 @@
 @import './components/login.css';
 @import './components/image-loader.css';
 @import './components/lazy-loader.css';
+@import './components/dashboard.css';
 
 /* Course Progress Modules */
 @import './courses/course-grid.css';

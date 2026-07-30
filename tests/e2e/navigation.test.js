@@ -2,6 +2,17 @@ import { test, expect } from '@playwright/test';
 
 const MOBILE_BREAKPOINT = 960;
 
+const AUTH_USER = {
+    token: 'mock-jwt-token',
+    expiresAt: Date.now() + 86400_000,
+    user: {
+        id: 'stu_001',
+        name: 'Alex Johnson',
+        email: 'student@demo.com',
+        role: 'student',
+    },
+};
+
 async function ensureNavVisible(page) {
     const vw = page.viewportSize()?.width ?? 0;
     if (vw <= MOBILE_BREAKPOINT) {
@@ -13,7 +24,17 @@ async function ensureNavVisible(page) {
     }
 }
 
+async function setupAuth(page) {
+    await page.addInitScript(authData => {
+        localStorage.setItem('student_tracker_auth', JSON.stringify(authData));
+    }, AUTH_USER);
+}
+
 test.describe('Navigation', () => {
+    test.beforeEach(async ({ page }) => {
+        await setupAuth(page);
+    });
+
     test('sidebar nav links are visible', async ({ page }) => {
         await page.goto('/');
         await ensureNavVisible(page);
@@ -47,6 +68,10 @@ test.describe('Navigation', () => {
 });
 
 test.describe('Page Content', () => {
+    test.beforeEach(async ({ page }) => {
+        await setupAuth(page);
+    });
+
     test('page content area exists', async ({ page }) => {
         await page.goto('/');
         await expect(page.locator('[data-page-content]')).toBeVisible();

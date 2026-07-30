@@ -56,6 +56,7 @@
                             <i data-lucide="x" aria-hidden="true"></i>
                         </button>
                     </div>
+  <div class="app-shell" style="display:none">
 
                     <!-- Primary navigation -->
                     <nav class="sidebar-nav" aria-label="Primary">
@@ -284,6 +285,26 @@
                     </div>
                 </template>
             </div>
+            <p class="notification-empty">This module is owned by another developer. Placeholder only.</p>
+          </div>
+
+          <div class="profile-menu" data-profile-menu>
+            <button class="profile-trigger" type="button" data-profile-toggle aria-haspopup="true" aria-expanded="false">
+              <span class="avatar" aria-hidden="true">AJ</span>
+              <span class="profile-meta">
+                <span class="profile-name">Alex Johnson</span>
+                <span class="profile-role">Administrator</span>
+              </span>
+              <i class="profile-chevron" data-lucide="chevron-down" aria-hidden="true"></i>
+            </button>
+
+            <div class="profile-dropdown" data-profile-dropdown hidden>
+              <a href="#/settings" class="profile-dropdown-item">Account settings</a>
+              <a href="#/settings" class="profile-dropdown-item">Preferences</a>
+              <div class="profile-dropdown-divider"></div>
+              <button class="profile-dropdown-item profile-dropdown-item--danger" type="button">Sign out</button>
+            </div>
+          </div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
