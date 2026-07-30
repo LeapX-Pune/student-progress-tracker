@@ -407,6 +407,11 @@
             return;
         }
 
+        if (routeKey === 'overview' || routeKey === 'courses') {
+            pageContent.innerHTML = '';
+            return;
+        }
+
         pageContent.innerHTML = `
 
         <div class="route-placeholder">
@@ -721,24 +726,6 @@
             shadowColor: 'rgba(0, 0, 0, 0.25)',
         };
 
-        Chart.register({
-            id: 'barGlow',
-            beforeDatasetDraw(chart, args) {
-                if (args.index === 0 && chart.canvas.id === 'gradesQuizChart') {
-                    const ctx = chart.ctx;
-                    ctx.save();
-                    ctx.shadowColor = 'rgba(74, 222, 156, 0.5)';
-                    ctx.shadowBlur = 20;
-                    ctx.shadowOffsetY = 4;
-                }
-            },
-            afterDatasetDraw(chart, args) {
-                if (args.index === 0 && chart.canvas.id === 'gradesQuizChart') {
-                    chart.ctx.restore();
-                }
-            },
-        });
-
         const courseData = {
             all: {
                 quizScores: {
@@ -803,34 +790,20 @@
                             {
                                 label: 'Score (%)',
                                 data: d.quizScores.data,
-                                backgroundColor: function (context) {
-                                    const chart = context.chart;
-                                    const { ctx, chartArea } = chart;
-                                    if (!chartArea) return '#4ADE9C';
-                                    const gradient = ctx.createLinearGradient(
-                                        0,
-                                        chartArea.top,
-                                        0,
-                                        chartArea.bottom
-                                    );
-                                    gradient.addColorStop(0, '#4ADE9C');
-                                    gradient.addColorStop(1, '#0F8F63');
-                                    return gradient;
-                                },
-                                hoverBackgroundColor: function (context) {
-                                    const chart = context.chart;
-                                    const { ctx, chartArea } = chart;
-                                    if (!chartArea) return '#6BEBB3';
-                                    const gradient = ctx.createLinearGradient(
-                                        0,
-                                        chartArea.top,
-                                        0,
-                                        chartArea.bottom
-                                    );
-                                    gradient.addColorStop(0, '#6BEBB3');
-                                    gradient.addColorStop(1, '#14B37D');
-                                    return gradient;
-                                },
+                                backgroundColor: [
+                                    'rgba(79, 70, 229, 0.85)',
+                                    'rgba(59, 130, 246, 0.85)',
+                                    'rgba(16, 185, 129, 0.85)',
+                                    'rgba(245, 158, 11, 0.85)',
+                                    'rgba(239, 68, 68, 0.85)',
+                                ],
+                                hoverBackgroundColor: [
+                                    '#4F46E5',
+                                    '#3B82F6',
+                                    '#10B981',
+                                    '#F59E0B',
+                                    '#EF4444',
+                                ],
                                 borderRadius: 8,
                                 borderSkipped: false,
                             },
@@ -839,25 +812,15 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        onHover: function (event, elements) {
-                            event.native.target.style.cursor =
-                                elements.length > 0 ? 'pointer' : 'default';
-                        },
                         animation: {
-                            duration: 200,
-                            easing: 'easeOutQuad',
+                            duration: 1200,
+                            easing: 'easeOutQuart',
                         },
                         plugins: {
                             legend: { display: false },
                             title: { display: false },
                             tooltip: {
                                 ...sharedTooltip,
-                                backgroundColor: '#1c2030',
-                                borderColor: '#0F8F63',
-                                titleColor: '#EDEFF5',
-                                bodyColor: '#4ADE9C',
-                                cornerRadius: 8,
-                                displayColors: false,
                                 callbacks: {
                                     /**
                                      *
@@ -874,20 +837,20 @@
                             y: {
                                 beginAtZero: true,
                                 max: 100,
-                                grid: { color: '#232838' },
+                                grid: { color: 'rgba(148, 163, 184, 0.08)' },
                                 ticks: {
                                     font: { size: 11 },
-                                    color: '#7C8299',
                                     /**
                                      *
                                      */
                                     callback: v => v + '%',
+                                    color: '#94a3b8',
                                 },
                                 title: { display: false },
                             },
                             x: {
                                 grid: { display: false },
-                                ticks: { font: { size: 11 }, maxRotation: 0, color: '#7C8299' },
+                                ticks: { font: { size: 11 }, maxRotation: 0, color: '#94a3b8' },
                                 title: { display: false },
                             },
                         },
@@ -902,58 +865,22 @@
                         datasets: [
                             {
                                 data: d.gradeDistribution,
-                                backgroundColor: function (context) {
-                                    const chart = context.chart;
-                                    const { ctx, chartArea } = chart;
-                                    if (!chartArea) return '#22C55E';
-                                    const pairs = [
-                                        ['#4ade80', '#16a34a'],
-                                        ['#93c5fd', '#2563eb'],
-                                        ['#fde68a', '#ca8a04'],
-                                        ['#fdba74', '#ea580c'],
-                                        ['#fca5a5', '#dc2626'],
-                                    ];
-                                    const [light, dark] = pairs[context.dataIndex % pairs.length];
-                                    const cx = (chartArea.left + chartArea.right) / 2;
-                                    const cy = (chartArea.top + chartArea.bottom) / 2;
-                                    const r =
-                                        Math.min(
-                                            chartArea.right - chartArea.left,
-                                            chartArea.bottom - chartArea.top
-                                        ) / 2;
-                                    const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
-                                    gradient.addColorStop(0, light);
-                                    gradient.addColorStop(1, dark);
-                                    return gradient;
-                                },
-                                hoverBackgroundColor: function (context) {
-                                    const chart = context.chart;
-                                    const { ctx, chartArea } = chart;
-                                    if (!chartArea) return '#22C55E';
-                                    const pairs = [
-                                        ['#86efac', '#22C55E'],
-                                        ['#bfdbfe', '#3B82F6'],
-                                        ['#fef08a', '#FACC15'],
-                                        ['#fed7aa', '#F97316'],
-                                        ['#fecaca', '#EF4444'],
-                                    ];
-                                    const [light, dark] = pairs[context.dataIndex % pairs.length];
-                                    const cx = (chartArea.left + chartArea.right) / 2;
-                                    const cy = (chartArea.top + chartArea.bottom) / 2;
-                                    const r =
-                                        Math.min(
-                                            chartArea.right - chartArea.left,
-                                            chartArea.bottom - chartArea.top
-                                        ) / 2;
-                                    const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
-                                    gradient.addColorStop(0, light);
-                                    gradient.addColorStop(1, dark);
-                                    return gradient;
-                                },
-                                borderColor: '#12151f',
-                                borderWidth: 3,
-                                spacing: 4,
-                                borderRadius: 4,
+                                backgroundColor: [
+                                    'rgba(34, 197, 94, 0.85)',
+                                    'rgba(59, 130, 246, 0.85)',
+                                    'rgba(250, 204, 21, 0.85)',
+                                    'rgba(249, 115, 22, 0.85)',
+                                    'rgba(239, 68, 68, 0.85)',
+                                ],
+                                hoverBackgroundColor: [
+                                    '#22C55E',
+                                    '#3B82F6',
+                                    '#FACC15',
+                                    '#F97316',
+                                    '#EF4444',
+                                ],
+                                borderColor: 'rgba(15, 23, 42, 0.6)',
+                                borderWidth: 2,
                                 hoverOffset: 12,
                             },
                         ],
