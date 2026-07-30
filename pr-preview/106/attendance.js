@@ -1,13 +1,14 @@
 (function () {
     'use strict';
 
-    var instances = [];
+    var chartInstance = null;
+    var currentData = null;
 
-    function destroyCharts() {
-        instances.forEach(function (c) {
-            if (c && typeof c.destroy === 'function') c.destroy();
-        });
-        instances = [];
+    function destroyChart() {
+        if (chartInstance && typeof chartInstance.destroy === 'function') {
+            chartInstance.destroy();
+            chartInstance = null;
+        }
     }
 
     function render() {
@@ -31,6 +32,7 @@
         }
 
         loadCourseAttendance();
+        loadChartJS(createDonutChart);
     }
 
     function loadCourseAttendance() {
@@ -40,11 +42,33 @@
         fetch('/api/attendance')
             .then(function (res) { return res.json(); })
             .then(function (data) {
+                currentData = data;
                 renderCourseCards(grid, data);
+                updateBreakdownStats(data);
+                if (chartInstance) {
+                    updateDonutChart(data);
+                }
             })
             .catch(function () {
                 renderFallback(grid);
             });
+    }
+
+    function updateBreakdownStats(data) {
+        var totalPresent = 0, totalAbsent = 0, totalLate = 0;
+        for (var i = 0; i < data.length; i++) {
+            totalPresent += data[i].attended || 0;
+            totalAbsent += data[i].absent || 0;
+            totalLate += data[i].late || 0;
+        }
+        var presentEl = document.getElementById('presentCount');
+        var absentEl = document.getElementById('absentCount');
+        var lateEl = document.getElementById('lateCount');
+        if (presentEl) presentEl.textContent = totalPresent;
+        if (absentEl) absentEl.textContent = totalAbsent;
+        if (lateEl) lateEl.textContent = totalLate;
+    }
+
     function loadChartJS(callback) {
         if (typeof Chart !== 'undefined') {
             callback();
@@ -66,6 +90,79 @@
             console.error('[Attendance] Failed to load Chart.js');
         };
         document.head.appendChild(script);
+    }
+
+    function createDonutChart() {
+        var canvas = document.getElementById('attendanceDonutChart');
+        if (!canvas) return;
+
+        var ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        chartInstance = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Present', 'Absent', 'Late'],
+                datasets: [
+                    {
+                        data: [94.2, 3.8, 2.0],
+                        backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
+                        borderWidth: 0,
+                        hoverOffset: 6,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                animation: { duration: 600, easing: 'easeOutQuart' },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1e293b',
+                        titleFont: { family: 'Inter, system-ui, sans-serif', size: 12 },
+                        bodyFont: {
+                            family: 'Inter, system-ui, sans-serif',
+                            size: 13,
+                            weight: '600',
+                        },
+                        padding: { x: 12, y: 8 },
+                        cornerRadius: 8,
+                        displayColors: true,
+                        callbacks: {
+                            label: function (ctx) {
+                                return ctx.parsed + '%';
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        if (currentData) {
+            updateDonutChart(currentData);
+        }
+    }
+
+    function updateDonutChart(data) {
+        if (!chartInstance) return;
+
+        var totalPresent = 0, totalAbsent = 0, totalLate = 0, totalAll = 0;
+        for (var i = 0; i < data.length; i++) {
+            totalPresent += data[i].attended || 0;
+            totalAbsent += data[i].absent || 0;
+            totalLate += data[i].late || 0;
+        }
+        totalAll = totalPresent + totalAbsent + totalLate;
+        if (totalAll === 0) return;
+
+        var presentPct = Math.round((totalPresent / totalAll) * 1000) / 10;
+        var absentPct = Math.round((totalAbsent / totalAll) * 1000) / 10;
+        var latePct = Math.round((totalLate / totalAll) * 1000) / 10;
+
+        chartInstance.data.datasets[0].data = [presentPct, absentPct, latePct];
+        chartInstance.update();
     }
 
     function renderCourseCards(grid, courses) {
@@ -135,49 +232,6 @@
         if (pct >= 60) return 'badge-warning';
         return 'badge-danger';
     }
-        var chart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Present', 'Absent', 'Late'],
-                datasets: [
-                    {
-                        data: [94.2, 3.8, 2.0],
-                        backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
-                        borderWidth: 0,
-                        hoverOffset: 6,
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '75%',
-                animation: { duration: 600, easing: 'easeOutQuart' },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#1e293b',
-                        titleFont: { family: 'Inter, system-ui, sans-serif', size: 12 },
-                        bodyFont: {
-                            family: 'Inter, system-ui, sans-serif',
-                            size: 13,
-                            weight: '600',
-                        },
-                        padding: { x: 12, y: 8 },
-                        cornerRadius: 8,
-                        displayColors: true,
-                        callbacks: {
-                            /** @param {import('chart.js').TooltipContext} ctx */
-                            label: function (ctx) {
-                                return ctx.parsed + '%';
-                            },
-                        },
-                    },
-                },
-            },
-        });
-
-        instances.push(chart);
 
     function getBadgeLabel(pct) {
         if (pct >= 90) return 'Excellent';
@@ -192,11 +246,17 @@
             { courseName: 'Data Structures & Algorithms', totalClasses: 45, attended: 41, absent: 2, late: 2, percentage: 91.1 },
             { courseName: 'Full Stack Web Development', totalClasses: 38, attended: 36, absent: 1, late: 1, percentage: 94.7 }
         ];
+        currentData = fallback;
         renderCourseCards(grid, fallback);
+        updateBreakdownStats(fallback);
+        if (chartInstance) {
+            updateDonutChart(fallback);
+        }
     }
 
     document.addEventListener('pathway:route', function (e) {
         if (e.detail && e.detail.route === 'attendance') {
+            destroyChart();
             render();
         }
     });

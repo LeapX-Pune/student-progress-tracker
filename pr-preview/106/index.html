@@ -225,6 +225,29 @@
               <div class="stat-card-value">3</div>
             </div>
           </div>
+          <!-- DONUT CHART + STATS ROW -->
+          <div class="attendance-chart-row">
+            <div class="attendance-donut-container">
+              <canvas id="attendanceDonutChart" role="img" aria-label="Attendance distribution chart"></canvas>
+            </div>
+            <div class="attendance-breakdown-stats" id="attendanceBreakdownStats">
+              <div class="breakdown-stat breakdown-stat--present">
+                <span class="breakdown-stat-dot" style="background:#10b981"></span>
+                <span class="breakdown-stat-label">Present</span>
+                <span class="breakdown-stat-value" id="presentCount">0</span>
+              </div>
+              <div class="breakdown-stat breakdown-stat--absent">
+                <span class="breakdown-stat-dot" style="background:#ef4444"></span>
+                <span class="breakdown-stat-label">Absent</span>
+                <span class="breakdown-stat-value" id="absentCount">0</span>
+              </div>
+              <div class="breakdown-stat breakdown-stat--late">
+                <span class="breakdown-stat-dot" style="background:#f59e0b"></span>
+                <span class="breakdown-stat-label">Late</span>
+                <span class="breakdown-stat-value" id="lateCount">0</span>
+              </div>
+            </div>
+          </div>
           <!-- PER-COURSE ATTENDANCE CARDS -->
           <div class="course-attendance-grid" id="courseAttendanceGrid"></div>
         </div>
