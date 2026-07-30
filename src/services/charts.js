@@ -347,7 +347,7 @@ export function createLineChart(canvas, data, options = {}) {
  */
 export function createChartSkeleton({ type = 'bar' } = {}) {
     const container = document.createElement('div');
-    container.className = `chart-container chart-container--${type} chart-container--skeleton`;
+    container.className = `chart-state chart-state--${type} chart-state--skeleton`;
     container.setAttribute('role', 'status');
     container.setAttribute('aria-label', 'Loading chart');
 
@@ -385,17 +385,17 @@ export function createChartSkeleton({ type = 'bar' } = {}) {
  */
 export function createChartError({ message = 'Unable to load chart', onRetry } = {}) {
     const container = document.createElement('div');
-    container.className = 'chart-container chart-container--error';
+    container.className = 'chart-state chart-state--error';
     container.setAttribute('role', 'alert');
 
     const errorIcon = document.createElement('div');
-    errorIcon.className = 'chart-container__error-icon';
+    errorIcon.className = 'chart-state__error-icon';
     errorIcon.innerHTML =
         '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
     container.appendChild(errorIcon);
 
     const errorMsg = document.createElement('p');
-    errorMsg.className = 'chart-container__error-message';
+    errorMsg.className = 'chart-state__error-message';
     errorMsg.textContent = message;
     container.appendChild(errorMsg);
 
@@ -419,17 +419,17 @@ export function createChartError({ message = 'Unable to load chart', onRetry } =
  */
 export function createChartEmpty({ message = 'No grade data available' } = {}) {
     const container = document.createElement('div');
-    container.className = 'chart-container chart-container--empty';
+    container.className = 'chart-state chart-state--empty';
     container.setAttribute('role', 'status');
 
     const emptyIcon = document.createElement('div');
-    emptyIcon.className = 'chart-container__empty-icon';
+    emptyIcon.className = 'chart-state__empty-icon';
     emptyIcon.innerHTML =
         '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>';
     container.appendChild(emptyIcon);
 
     const emptyMsg = document.createElement('p');
-    emptyMsg.className = 'chart-container__empty-message';
+    emptyMsg.className = 'chart-state__empty-message';
     emptyMsg.textContent = message;
     container.appendChild(emptyMsg);
 

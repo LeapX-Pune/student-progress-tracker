@@ -1,6 +1,21 @@
 import { test, expect } from '@playwright/test';
 
+const AUTH_USER = {
+    token: 'mock-jwt-token',
+    user: {
+        id: 'stu_001',
+        name: 'Alex Johnson',
+        email: 'student@demo.com',
+        role: 'student',
+    },
+};
+
 test.describe('Application Shell', () => {
+    test.beforeEach(async ({ page }) => {
+        await page.addInitScript(authData => {
+            localStorage.setItem('student_tracker_auth', JSON.stringify(authData));
+        }, AUTH_USER);
+    });
     test('dev server loads and returns HTML', async ({ page }) => {
         const response = await page.goto('/');
         expect(response.ok()).toBeTruthy();
@@ -60,7 +75,8 @@ test.describe('Application Shell', () => {
             window.location.hash = '#/courses';
         });
         await expect(page.locator('[data-breadcrumb-label]')).toHaveText('Courses');
-        await expect(page.locator('.dashboard-title')).toHaveText('Courses');
+        const routeTitle = page.locator('.route-placeholder-title, .dashboard-title').first();
+        await expect(routeTitle).toHaveText('Courses');
         await expect(page).toHaveTitle(/Courses.*The Reality|Courses.*Student Progress/);
     });
 });

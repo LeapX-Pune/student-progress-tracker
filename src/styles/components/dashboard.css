@@ -282,11 +282,11 @@
 }
 
 /* ==========================
-   CHART CONTAINER STYLES
-   Part 7: Grade Visualizations
+   CHART STATE STYLES
+   Part 7: Grade Visualizations — Loading, Error, Empty
    ========================== */
 
-.chart-container {
+.chart-state {
     position: relative;
     padding: 1.5rem;
     background: var(--surface-card, #fff);
@@ -298,48 +298,48 @@
     justify-content: center;
 }
 
-.chart-container--skeleton,
-.chart-container--error,
-.chart-container--empty {
+.chart-state--skeleton,
+.chart-state--error,
+.chart-state--empty {
     flex-direction: column;
     text-align: center;
 }
 
-.chart-container--error {
+.chart-state--error {
     background: var(--color-error-light, #fef2f2);
 }
 
-.dark .chart-container--error {
+.dark .chart-state--error {
     background: #7f1d1d;
 }
 
-.chart-container--empty {
+.chart-state--empty {
     background: var(--color-gray-50, #f9fafb);
 }
 
-.dark .chart-container--empty {
+.dark .chart-state--empty {
     background: var(--color-gray-800, #1f2937);
 }
 
-.chart-container__error-icon,
-.chart-container__error-message,
-.chart-container__empty-icon,
-.chart-container__empty-message {
+.chart-state__error-icon,
+.chart-state__error-message,
+.chart-state__empty-icon,
+.chart-state__empty-message {
     color: var(--text-secondary, #6b7280);
 }
 
-.chart-container--error .chart-container__error-icon,
-.chart-container--error .chart-container__error-message {
+.chart-state--error .chart-state__error-icon,
+.chart-state--error .chart-state__error-message {
     color: var(--color-error, #dc2626);
 }
 
-.chart-container__error-icon,
-.chart-container__empty-icon {
+.chart-state__error-icon,
+.chart-state__empty-icon {
     margin-bottom: 0.75rem;
 }
 
-.chart-container__error-message,
-.chart-container__empty-message {
+.chart-state__error-message,
+.chart-state__empty-message {
     margin: 0 0 1rem;
     font-size: 0.875rem;
 }
@@ -393,7 +393,7 @@
 
 /* ─── Chart Keyboard Focus ─────────────────────────────── */
 
-.chart-container:focus-visible {
+.chart-state:focus-visible {
     outline: 2px solid var(--color-primary, #4f46e5);
     outline-offset: 2px;
 }
