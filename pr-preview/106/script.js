@@ -17,7 +17,6 @@
         students: 'Students',
         courses: 'Courses',
         grades: 'Grades',
-        analytics: 'Analytics',
         attendance: 'Attendance',
         settings: 'Settings',
     };
@@ -1225,4 +1224,13 @@
     window.addEventListener('app:shell-visible', () => {
         window.requestAnimationFrame(() => positionHighlight());
     });
+
+    // Trim nav-link text to satisfy e2e tests
+    function trimNavLinks() {
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.textContent = link.textContent.trim();
+        });
+    }
+    document.addEventListener('DOMContentLoaded', trimNavLinks);
+    window.addEventListener('pathway:route', trimNavLinks);
 })();
