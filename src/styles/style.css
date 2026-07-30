@@ -1688,6 +1688,17 @@ svg.lucide {
     background: linear-gradient(135deg, #3b82f6, #60a5fa, #93c5fd);
 }
 
+/* Quiz Scores card — dark container theme */
+#chart-quiz {
+    background: #12151f;
+    border: 1px solid #232838;
+    border-radius: 16px;
+}
+#chart-quiz .chart-container {
+    background: transparent;
+    border: none;
+}
+
 /* Wide card — spans both columns */
 .chart-card--wide {
     grid-column: 1 / -1;
