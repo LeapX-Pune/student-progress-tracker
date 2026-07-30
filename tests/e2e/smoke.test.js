@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const AUTH_USER = {
     token: 'mock-jwt-token',
+    expiresAt: Date.now() + 86400_000,
     user: {
         id: 'stu_001',
         name: 'Alex Johnson',
