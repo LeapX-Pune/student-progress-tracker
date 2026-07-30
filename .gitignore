@@ -31,6 +31,7 @@ dasboard_1_demo
 # shared PRD drafts, and private part-by-part implementation notes that are
 # for individual developer reference only and must NOT be tracked in git.
 docs/project-docs-share/
+project-docs-share/
 project-docs/
 
 
