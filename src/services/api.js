@@ -55,6 +55,7 @@ export class ApiService {
         this.responseCache = new Map();
         this.timeoutMs = 10000;
         this.maxRetries = 3;
+        this.activeRequests = 0;
 
         // Initialize offline sync to replay queued requests when online
         initOfflineSync(this);
@@ -175,6 +176,26 @@ export class ApiService {
             return this.pendingRequests.get(requestKey);
         }
 
+        this.activeRequests++;
+        if (this.activeRequests === 1) {
+            window.dispatchEvent(
+                new window.CustomEvent('api:loading-changed', { detail: { active: true } })
+            );
+        }
+
+        /**
+         *
+         */
+        const decrementActive = () => {
+            this.activeRequests--;
+            if (this.activeRequests <= 0) {
+                this.activeRequests = 0;
+                window.dispatchEvent(
+                    new window.CustomEvent('api:loading-changed', { detail: { active: false } })
+                );
+            }
+        };
+
         if (isDevelopment()) {
             console.log(`[API Request] ${method} ${url}`, {
                 body: body ? JSON.parse(body) : null,
@@ -205,6 +226,7 @@ export class ApiService {
         // The actual fetch wrapped in our interceptors
         const fetchPromise = fetch(url, fetchOptions)
             .then(async response => {
+                decrementActive();
                 if (requestKey) this.pendingRequests.delete(requestKey);
                 if (isDevelopment()) {
                     console.log(
@@ -273,6 +295,7 @@ export class ApiService {
                 return finalData;
             })
             .catch(error => {
+                decrementActive();
                 if (requestKey) this.pendingRequests.delete(requestKey);
                 if (isDevelopment()) {
                     console.error(
