@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import './styles/main.css';
 import './dashboard/dashboard.css';
 import { createIcons, icons } from 'lucide';
@@ -487,9 +488,9 @@ function initOverviewPage() {
                 <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem;">
                     <h2 style="font-size: 1.125rem; font-weight: 600; margin: 0 0 1rem 0;">Enrolled Courses</h2>
                     <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        ${courses
-                            .map(
-                                c => `
+${courses
+    .map(
+        c => `
                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-page, var(--bg-surface)); border: 1px solid var(--border-color); border-radius: 12px;">
                                 <div>
                                     <div style="font-weight: 600; color: var(--text-primary);">${c.title}</div>
@@ -501,8 +502,8 @@ function initOverviewPage() {
                                 </div>
                             </div>
                         `
-                            )
-                            .join('')}
+    )
+    .join('')}
                     </div>
                 </div>
             </div>
@@ -593,3 +594,5 @@ if (document.readyState === 'loading') {
 } else {
     init();
 }
+
+/* eslint-enable indent */
