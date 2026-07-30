@@ -96,6 +96,7 @@ function normaliseError(err, fallback) {
  * @property {string}  password
  * @property {string}  [role]
  * @property {boolean} [rememberMe]
+ * @property {string}  [name]
  */
 
 /**
@@ -210,28 +211,6 @@ const AuthContext = (() => {
             const stored = getAuthToken();
 
             if (!stored) {
-                if (ENV.ENABLE_MOCK_API) {
-                    const mockUser = {
-                        id: 'mock-001',
-                        name: 'Sai Shendge',
-                        email: 'sai@example.com',
-                    };
-                    const mockToken = 'mock-jwt-token-dev';
-                    saveAuthToken({
-                        token: mockToken,
-                        expiresAt: Date.now() + 86400000,
-                        user: mockUser,
-                        rememberMe: true,
-                    });
-                    setState({
-                        user: mockUser,
-                        token: mockToken,
-                        isAuthenticated: true,
-                        isLoading: false,
-                        error: null,
-                    });
-                    return;
-                }
                 setState({ isLoading: false });
                 return;
             }
@@ -242,6 +221,13 @@ const AuthContext = (() => {
                 console.warn(
                     '[AuthContext] Malformed session payload found in storage — clearing.'
                 );
+                clearAuthToken();
+                setState({ isLoading: false });
+                return;
+            }
+
+            if (token === 'mock-jwt-token-dev') {
+                console.warn('[AuthContext] Stale mock auto-login token found — clearing.');
                 clearAuthToken();
                 setState({ isLoading: false });
                 return;

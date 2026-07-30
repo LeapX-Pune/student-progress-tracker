@@ -10,6 +10,7 @@ import { showError, showInfo } from './components/Toast.js';
 import { createTooltip } from './components/Tooltip.js';
 import AuthContext from './context/AuthContext.js';
 import { initCoursesPage } from './pages/CoursesPage.js';
+import { initDashboardPage } from './pages/DashboardPage.js';
 import { createLoginPage } from './pages/LoginPage.js';
 import { initApi } from './services/api.js';
 import { initMotionPreferences } from './utils/animations.js';
@@ -87,6 +88,7 @@ function showAppView() {
     if (appShell) {
         appShell.style.display = '';
         createIcons({ icons });
+        requestAnimationFrame(() => window.dispatchEvent(new window.Event('app:shell-visible')));
     }
 }
 
@@ -213,6 +215,7 @@ async function init() {
     await AuthContext.restoreSession();
 
     initCoursesPage();
+    initDashboardPage();
 
     if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
 

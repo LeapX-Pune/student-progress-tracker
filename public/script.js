@@ -1143,4 +1143,8 @@
     } else {
         init();
     }
+
+    window.addEventListener('app:shell-visible', () => {
+        window.requestAnimationFrame(() => positionHighlight());
+    });
 })();
