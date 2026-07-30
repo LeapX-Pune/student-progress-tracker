@@ -50,18 +50,20 @@ import { api } from './api.js';
  * @param {Object}  credentials            - Login form data
  * @param {string}  credentials.email      - User's email address
  * @param {string}  credentials.password   - User's password
+ * @param {string}  [credentials.role]     - Selected user role ('student' | 'teacher')
+ * @param {string}  [credentials.name]     - User's full name (for signup)
  * @returns {Promise<{ token: string, expiresAt: string|number, user: Object }>}
  *   The raw auth response body
  * @throws {{ code: string, message: string }} Normalised error on failure
  */
-export async function login({ email, password }) {
+export async function login({ email, password, role, name }) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), ENV.API_TIMEOUT || 10000);
 
     try {
         const response = await api.post(
             API_ENDPOINTS.AUTH_LOGIN,
-            { email, password },
+            { email, password, role, name },
             {
                 signal: controller.signal,
             }
@@ -116,3 +118,5 @@ export async function logout() {
         // The server session will eventually expire anyway.
     }
 }
+
+export const authApi = { login, logout };
