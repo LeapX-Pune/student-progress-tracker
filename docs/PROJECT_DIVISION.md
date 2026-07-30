@@ -26,7 +26,7 @@ independently. Git/GitHub Version Control is Part 1 as specified.
 | **Part 9**  | **Data Persistence & State**          | localStorage/sessionStorage abstraction, hydration, theme, filters           | 0.5 weeks        | Part 3         |
 | **Part 10** | **Error Handling & UX Polish**        | Toast system, skeleton loaders, empty states, retry, offline detection       | 1 week           | Part 5, 6, 7   |
 | **Part 11** | **Responsive Design & Cross-Browser** | Breakpoint testing, touch targets, mobile nav, chart resize, a11y            | 1 week           | Part 4-10      |
-| **Part 12** | **Deployment & Operations**           | Production build, Vercel/Netlify config, monitoring, documentation           | 0.5 weeks        | Part 1, 11     |
+| **Part 12** | **Deployment & Operations**           | Production build, GitHub Pages deploy, monitoring, documentation             | 0.5 weeks        | Part 1, 11     |
 
 ---
 
@@ -96,7 +96,8 @@ graph TD
 | **Mock API**   | JSON Server                 | 1.0+    | Zero-config REST API for development       |
 | **Testing**    | Vitest + Playwright         | Latest  | Fast unit, reliable E2E                    |
 | **CI/CD**      | GitHub Actions              | —       | Native integration, free for public        |
-| **Deployment** | Vercel / Netlify            | —       | SPA fallback, edge network, free tier      |
+| **Deployment** | GitHub Pages                | —       | SPA fallback via 404.html, free for public |
+|                |                             |         | repos, zero-config CDN                     |
 
 ---
 
@@ -167,8 +168,6 @@ student-progress-tracker/
 ├── .eslintrc.json           # Part 1: Linting config
 ├── .prettierrc              # Part 1: Formatting config
 ├── package.json             # Part 1: Scripts, deps
-├── vercel.json              # Part 12: Vercel config
-├── netlify.toml             # Part 12: Netlify config
 └── README.md                # Part 12: Project documentation
 ```
 
