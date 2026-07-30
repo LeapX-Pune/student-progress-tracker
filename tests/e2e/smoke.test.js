@@ -41,7 +41,6 @@ test.describe('Application Shell', () => {
             'Students',
             'Courses',
             'Grades',
-            'Analytics',
             'Attendance',
             'Settings',
         ]);
