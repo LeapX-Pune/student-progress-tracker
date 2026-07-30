@@ -61,6 +61,14 @@ export class ApiService {
     }
 
     /**
+     * Clears the response cache completely.
+     */
+    clearCache() {
+        if (isDevelopment()) console.log('[API Cache] Clearing response cache');
+        this.responseCache.clear();
+    }
+
+    /**
      * Request interceptor to inject authentication tokens.
      */
     _requestInterceptor(options, endpoint) {
@@ -236,22 +244,32 @@ export class ApiService {
                     });
 
                     const finalData = await this._responseInterceptor(newResponse);
+
                     if (method === 'GET' && cacheTTL > 0 && requestKey) {
                         this.responseCache.set(requestKey, {
                             data: finalData,
                             expiry: Date.now() + cacheTTL * 1000,
                         });
+                    } else if (method !== 'GET') {
+                        // Invalidate cache on successful mutation
+                        this.clearCache();
                     }
+
                     return finalData;
                 }
 
                 const finalData = await this._responseInterceptor(response);
+
                 if (method === 'GET' && cacheTTL > 0 && requestKey) {
                     this.responseCache.set(requestKey, {
                         data: finalData,
                         expiry: Date.now() + cacheTTL * 1000,
                     });
+                } else if (method !== 'GET') {
+                    // Invalidate cache on successful mutation
+                    this.clearCache();
                 }
+
                 return finalData;
             })
             .catch(error => {
