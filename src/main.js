@@ -14,7 +14,6 @@ import { useDashboard } from './hooks/useDashboard.js';
 import { useNotifications } from './hooks/useNotifications.js';
 import { initAttendancePage } from './pages/AttendancePage.js';
 import { initCoursesPage } from './pages/CoursesPage.js';
-import { initGradesPage } from './pages/GradesPage.js';
 import { initDashboardPage } from './pages/DashboardPage.js';
 import { createLoginPage } from './pages/LoginPage.js';
 import { initProfilePage } from './pages/ProfilePage.js';
@@ -25,7 +24,7 @@ import { initApi } from './services/api.js';
 window.useDashboard = useDashboard;
 import { initMotionPreferences } from './utils/animations.js';
 import { handleGlobalErrors } from './utils/errors.js';
-import { initScrollRestoration, initRouter } from './utils/router.js';
+import { initScrollRestoration } from './utils/router.js';
 import { initTheme } from './utils/theme.js';
 
 /**

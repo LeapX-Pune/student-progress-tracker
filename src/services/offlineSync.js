@@ -10,7 +10,9 @@ const QUEUE_KEY = 'offline_sync_queue';
 export function getOfflineQueue() {
     try {
         const data = localStorage.getItem(QUEUE_KEY);
-        return data ? JSON.parse(data) : [];
+        if (!data) return [];
+        // Decode base64 and parse
+        return JSON.parse(decodeURIComponent(window.atob(data)));
     } catch {
         return [];
     }
@@ -21,7 +23,9 @@ export function getOfflineQueue() {
  */
 export function saveOfflineQueue(queue) {
     try {
-        localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+        // Encode queue before saving to obscure payload contents
+        const encodedQueue = window.btoa(encodeURIComponent(JSON.stringify(queue)));
+        localStorage.setItem(QUEUE_KEY, encodedQueue);
     } catch (err) {
         console.error('[OfflineSync] Failed to save queue', err);
     }
@@ -35,6 +39,12 @@ export function enqueueRequest(requestConfig) {
 
     // Only queue mutations (POST, PUT, PATCH, DELETE)
     if (requestConfig.method === 'GET') return;
+
+    // Do not queue auth requests (security to prevent storing passwords)
+    if (requestConfig.endpoint && requestConfig.endpoint.includes('/auth/')) {
+        console.warn('[OfflineSync] Not queuing auth request for security reasons.');
+        return;
+    }
 
     // Strip headers to prevent storing sensitive tokens in plain text in localStorage.
     // The ApiService will regenerate headers (including current Auth token) on replay.

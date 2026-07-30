@@ -56,6 +56,10 @@ if (!existsSync(publicDir)) mkdirSync(publicDir, { recursive: true });
 // Copy assets needed by index.html
 copyAsset(resolve(srcDir, 'styles', 'style.css'), resolve(publicDir, 'style.css'));
 
+// Copy assets needed by standalone HTML pages
+copyAsset(resolve(srcDir, 'dashboard', 'dashboard.css'), resolve(publicDir, 'dashboard.css'));
+copyAsset(resolve(srcDir, 'dashboard', 'dashboard.js'), resolve(publicDir, 'dashboard.js'));
+
 // Copy auth assets (SVG, images) from src/assets to public/assets for dev server
 if (existsSync(resolve(srcDir, 'assets'))) {
     copyDir(resolve(srcDir, 'assets'), resolve(publicDir, 'assets'));

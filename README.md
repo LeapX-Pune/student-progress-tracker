@@ -87,18 +87,17 @@ visualizations—without relying on heavy frameworks or build tools.
 
 ## 🛠️ Technology Stack
 
-To ensure maximum compatibility, performance, and simplicity, this project is
-built exclusively with vanilla frontend technologies:
-
-- **Markup**: HTML5 (Semantic elements for maximum accessibility).
-- **Styling**: CSS3 (Modern features like CSS Grid, Flexbox, Custom
-  Properties/Variables).
-- **Scripting**: Vanilla JavaScript (ES6+ features, native DOM APIs, fetch, and
-  modules).
-
-> [!IMPORTANT] **No build tools or frameworks allowed.** This means no React,
-> TypeScript, Vite, Tailwind, Bootstrap, Node.js, npm, package.json, or custom
-> bundlers.
+| Category       | Technology                  | Purpose                                  |
+| -------------- | --------------------------- | ---------------------------------------- |
+| **Language**   | Vanilla JavaScript (ES2022) | No framework overhead, max portability   |
+| **Styling**    | Tailwind CSS (CDN)          | Utility-first, responsive by default     |
+| **Charts**     | Chart.js                    | Lightweight, accessible, responsive      |
+| **Icons**      | Lucide (CDN)                | Consistent icon system                   |
+| **Routing**    | Custom hash router          | Zero-dep, works on static hosting        |
+| **Build**      | esbuild                     | Fast bundler, minification, tree-shaking |
+| **Testing**    | Vitest + Playwright         | Unit + E2E testing                       |
+| **CI/CD**      | GitHub Actions              | Lint → Test → Build → Deploy             |
+| **Deployment** | GitHub Pages                | Free static hosting, SPA fallback        |
 
 ---
 
@@ -107,40 +106,61 @@ built exclusively with vanilla frontend technologies:
 ```text
 student-progress-tracker/
 ├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   │   ├── bug_report.md
-│   │   └── feature_request.md
-│   └── PULL_REQUEST_TEMPLATE.md
-├── assets/
-│   ├── css/      # Stylesheets (Vanilla CSS files)
-│   ├── js/       # Vanilla JavaScript modules and logic
-│   ├── images/   # Graphic files, avatars, and illustration assets
-│   └── icons/    # Vector icons (SVG formats)
-├── pages/        # Static pages & view templates
-├── data/         # Mock data and static JSON objects
-├── index.html    # Application Entry Point
-├── README.md     # Project Documentation
-├── LICENSE       # Project License
-└── .gitignore    # Ignored files list
+│   └── workflows/            # CI/CD pipelines
+├── public/                   # Static assets, HTML entry points
+│   ├── index.html
+│   ├── 404.html              # SPA fallback
+│   └── dashboard.html
+├── src/                      # Application source code
+│   ├── main.js               # Bootstrap & app init
+│   ├── router.js             # Hash-based SPA routing
+│   ├── pages/                # Page-level components
+│   ├── components/           # Reusable UI components
+│   ├── services/             # API, Auth, Storage, Mock
+│   ├── hooks/                # Custom hooks (useApi, useAuth, etc.)
+│   ├── context/              # Global state (Auth, App)
+│   ├── config/               # Environment & app config
+│   ├── utils/                # Helpers, date, DOM utilities
+│   └── styles/               # CSS stylesheets
+├── scripts/                  # Build & dev tooling
+│   ├── build.js              # esbuild production build
+│   └── dev.js                # Dev server
+├── tests/                    # Test suites
+├── docs/                     # Project documentation
+├── package.json
+├── .github/                  # CI/CD workflows
+└── README.md
 ```
 
 ---
 
 ## ⚙️ How to Run
 
-Since this project uses no bundlers, compilation, or package managers:
+### Development
 
-1. **Clone the repository**:
-    ```bash
-    git clone https://github.com/LeapX-Pune/student-progress-tracker.git
-    cd student-progress-tracker
-    ```
-2. **Launch the application**:
-    - Open the
-      [index.html](file:///Users/devanshmittal/Documents/LeapX_Internship/student-progress-tracker/index.html)
-      file directly in any modern web browser.
-    - Alternatively, use a lightweight local server extension (e.g., _Live
-      Server_ in VS Code) to serve the directory.
+```bash
+# Install dependencies
+npm ci
+
+# Start dev server (with mock API)
+npm run dev
+```
+
+### Production Build
+
+```bash
+npm run build
+npx serve dist -p 4173
+```
+
+### Deployment
+
+The project is deployed to **GitHub Pages** via GitHub Actions:
+
+| Environment | Trigger             | URL                                                                  |
+| ----------- | ------------------- | -------------------------------------------------------------------- |
+| Preview     | Pull Request opened | `https://leapx-pune.github.io/student-progress-tracker/pr-preview/N` |
+| Production  | Push to `main`      | `https://leapx-pune.github.io/student-progress-tracker/`             |
 
 ---
 
@@ -155,6 +175,15 @@ For detailed implementation guidance, refer to the committed docs in
 | [`docs/PROJECT_DIVISION_OVERVIEW.md`](./docs/PROJECT_DIVISION_OVERVIEW.md)                                     | High-level overview of all 12 project parts                               |
 | [`docs/FILE_STRUCTURE.md`](./docs/FILE_STRUCTURE.md)                                                           | Complete file tree and folder conventions                                 |
 | [`docs/Student_Progress_Tracking_SaaS_Detailed_PRD.md`](./docs/Student_Progress_Tracking_SaaS_Detailed_PRD.md) | Full PRD with functional and non-functional requirements                  |
+| [`docs/api/endpoints.md`](./docs/api/endpoints.md)                                                             | API endpoint reference                                                    |
+| [`docs/api/auth.md`](./docs/api/auth.md)                                                                       | Authentication flow documentation                                         |
+| [`docs/api/data-models.md`](./docs/api/data-models.md)                                                         | Data model definitions                                                    |
+| [`docs/architecture/overview.md`](./docs/architecture/overview.md)                                             | System architecture overview                                              |
+| [`docs/architecture/adr/`](./docs/architecture/adr)                                                            | Architecture Decision Records                                             |
+| [`docs/guides/getting-started.md`](./docs/guides/getting-started.md)                                           | Developer onboarding guide                                                |
+| [`docs/guides/testing.md`](./docs/guides/testing.md)                                                           | Testing strategies and configuration                                      |
+| [`docs/deployment/vercel.md`](./docs/deployment/vercel.md)                                                     | Vercel deployment guide                                                   |
+| [`docs/references/design-tokens.md`](./docs/references/design-tokens.md)                                       | Colors, typography, spacing tokens                                        |
 
 ---
 

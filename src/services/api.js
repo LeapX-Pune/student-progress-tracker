@@ -1,5 +1,3 @@
-// eslint-disable-next-line import-x/no-cycle
-import AuthContext from '../context/AuthContext.js';
 import { API_ENDPOINTS } from '../utils/constants.js';
 import { getConfig, isDevelopment } from '../utils/env.js';
 import { normalizeApiError } from '../utils/errors.js';
@@ -60,6 +58,14 @@ export class ApiService {
 
         // Initialize offline sync to replay queued requests when online
         initOfflineSync(this);
+    }
+
+    /**
+     * Clears the response cache completely.
+     */
+    clearCache() {
+        if (isDevelopment()) console.log('[API Cache] Clearing response cache');
+        this.responseCache.clear();
     }
 
     /**
@@ -238,22 +244,32 @@ export class ApiService {
                     });
 
                     const finalData = await this._responseInterceptor(newResponse);
+
                     if (method === 'GET' && cacheTTL > 0 && requestKey) {
                         this.responseCache.set(requestKey, {
                             data: finalData,
                             expiry: Date.now() + cacheTTL * 1000,
                         });
+                    } else if (method !== 'GET') {
+                        // Invalidate cache on successful mutation
+                        this.clearCache();
                     }
+
                     return finalData;
                 }
 
                 const finalData = await this._responseInterceptor(response);
+
                 if (method === 'GET' && cacheTTL > 0 && requestKey) {
                     this.responseCache.set(requestKey, {
                         data: finalData,
                         expiry: Date.now() + cacheTTL * 1000,
                     });
+                } else if (method !== 'GET') {
+                    // Invalidate cache on successful mutation
+                    this.clearCache();
                 }
+
                 return finalData;
             })
             .catch(error => {
@@ -396,9 +412,7 @@ export const api = new ApiService();
  */
 export async function getCourses(studentId) {
     try {
-        const targetId = studentId || AuthContext.getCurrentUserId();
-        if (!targetId) throw new Error('No user authenticated');
-        const result = await api.get(API_ENDPOINTS.STUDENT_COURSES(targetId));
+        const result = await api.get(API_ENDPOINTS.STUDENT_COURSES(studentId));
         return result;
     } catch (err) {
         console.error('[API] getCourses error:', err);

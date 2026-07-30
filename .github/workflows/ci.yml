@@ -7,7 +7,7 @@ on:
         branches: [main, develop]
 
 env:
-    NODE_VERSION: '24'
+  NODE_VERSION: '20'
 
 jobs:
     lint:
@@ -35,76 +35,127 @@ jobs:
                   commit_message: 'chore: auto-fix lint and format'
                   commit_user_name: 'github-actions[bot]'
 
-    test:
-        name: Unit Tests
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: ${{ env.NODE_VERSION }}
-                  cache: 'npm'
-            - run: npm ci
-            - run: npm run test
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run typecheck
 
-    build:
-        name: Production Build
-        runs-on: ubuntu-latest
-        needs: [lint, test]
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: ${{ env.NODE_VERSION }}
-                  cache: 'npm'
-            - run: npm ci
-            - run: npm run build
-            - uses: actions/upload-artifact@v4
-              with:
-                  name: dist
-                  path: dist
-                  retention-days: 7
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run test:coverage
 
-    e2e:
-        name: E2E Tests
-        runs-on: ubuntu-latest
-        needs: build
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: ${{ env.NODE_VERSION }}
-                  cache: 'npm'
-            - run: npm ci
-            - run: npx playwright install --with-deps
-            - run: npm run build
-            - run: npx serve dist -p 4173 &
-            - run: npm run test:e2e
-            - uses: actions/upload-artifact@v4
-              if: failure()
-              with:
-                  name: playwright-report
-                  path: playwright-report
-                  retention-days: 7
+  build:
+    name: Production Build
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck, test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
 
-    deploy:
-        name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/develop'
-        runs-on: ubuntu-latest
-        needs: build
-        permissions:
-            contents: write
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: ${{ env.NODE_VERSION }}
-                  cache: 'npm'
-            - run: npm ci
-            - run: npm run build
-            - run: touch dist/.nojekyll
-            - uses: peaceiris/actions-gh-pages@v4
-              with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-                  publish_dir: ./dist
-                  force_orphan: true
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - run: npx playwright test --project=chromium
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
+
+  bundle-size:
+    name: Bundle Size
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: Check bundle size
+        run: |
+          JS_SIZE=$(du -sb dist/main.js | cut -f1)
+          JS_GZIPPED=$(gzip -c dist/main.js | wc -c)
+          echo "main.js: $JS_SIZE bytes ($((JS_SIZE / 1024)) KB)"
+          echo "main.js gzipped: $JS_GZIPPED bytes ($((JS_GZIPPED / 1024)) KB)"
+          if [ "$JS_GZIPPED" -gt 153600 ]; then echo "ERROR: main.js gzipped exceeds 150KB budget"; exit 1; fi
+
+  a11y:
+    name: Accessibility Audit
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npx playwright install chromium --with-deps
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - run: npm run test:a11y
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: a11y-report
+          path: playwright-report
+          retention-days: 7
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm audit --audit-level=critical
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: npm-audit-report
+          path: ~/.npm/_logs/
+          retention-days: 7
