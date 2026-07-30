@@ -493,6 +493,28 @@ body.dark .progress-bar-bg {
     width: 100%;
 }
 
+.chart-container-bar {
+    position: relative;
+    height: 200px;
+    width: 100%;
+}
+
+.chart-container-bar canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.chart-container-doughnut {
+    position: relative;
+    height: 220px;
+    width: 100%;
+}
+
+.chart-container-doughnut canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 /* Meta badge customization */
 .meta-badge {
     padding: 0.35rem 0.75rem;
