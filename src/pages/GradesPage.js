@@ -4,7 +4,6 @@ import {
     createLineChart,
     createChartSkeleton,
     createChartError,
-    createChartEmpty,
     destroyAllCharts,
 } from '../services/charts.js';
 import { getStudentGrades } from '../services/studentApi.js';

@@ -170,14 +170,14 @@ export class ApiService {
 
         this.activeRequests++;
         if (this.activeRequests === 1) {
-            window.dispatchEvent(new CustomEvent('api:loading-changed', { detail: { active: true } }));
+            window.dispatchEvent(new window.CustomEvent('api:loading-changed', { detail: { active: true } }));
         }
 
         const decrementActive = () => {
             this.activeRequests--;
             if (this.activeRequests <= 0) {
                 this.activeRequests = 0;
-                window.dispatchEvent(new CustomEvent('api:loading-changed', { detail: { active: false } }));
+                window.dispatchEvent(new window.CustomEvent('api:loading-changed', { detail: { active: false } }));
             }
         };
 
