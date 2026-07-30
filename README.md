@@ -175,6 +175,15 @@ For detailed implementation guidance, refer to the committed docs in
 | [`docs/PROJECT_DIVISION_OVERVIEW.md`](./docs/PROJECT_DIVISION_OVERVIEW.md)                                     | High-level overview of all 12 project parts                               |
 | [`docs/FILE_STRUCTURE.md`](./docs/FILE_STRUCTURE.md)                                                           | Complete file tree and folder conventions                                 |
 | [`docs/Student_Progress_Tracking_SaaS_Detailed_PRD.md`](./docs/Student_Progress_Tracking_SaaS_Detailed_PRD.md) | Full PRD with functional and non-functional requirements                  |
+| [`docs/api/endpoints.md`](./docs/api/endpoints.md)                                                             | API endpoint reference                                                    |
+| [`docs/api/auth.md`](./docs/api/auth.md)                                                                       | Authentication flow documentation                                         |
+| [`docs/api/data-models.md`](./docs/api/data-models.md)                                                         | Data model definitions                                                    |
+| [`docs/architecture/overview.md`](./docs/architecture/overview.md)                                             | System architecture overview                                              |
+| [`docs/architecture/adr/`](./docs/architecture/adr)                                                            | Architecture Decision Records                                             |
+| [`docs/guides/getting-started.md`](./docs/guides/getting-started.md)                                           | Developer onboarding guide                                                |
+| [`docs/guides/testing.md`](./docs/guides/testing.md)                                                           | Testing strategies and configuration                                      |
+| [`docs/deployment/vercel.md`](./docs/deployment/vercel.md)                                                     | Vercel deployment guide                                                   |
+| [`docs/references/design-tokens.md`](./docs/references/design-tokens.md)                                       | Colors, typography, spacing tokens                                        |
 
 ---
 
