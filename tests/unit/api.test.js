@@ -86,4 +86,39 @@ describe('ApiService', () => {
         expect(results[1]).toEqual({ data: 'res2' });
         expect(window.fetch).toHaveBeenCalledTimes(2);
     });
+
+    it('should invalidate cache on successful mutation (POST)', async () => {
+        // Mock GET response
+        const getMockResponse = new Response(JSON.stringify({ data: 'cached_data' }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        // Mock POST response
+        const postMockResponse = new Response(JSON.stringify({ success: true }), {
+            status: 201,
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        window.fetch
+            .mockResolvedValueOnce(getMockResponse.clone()) // First GET
+            .mockResolvedValueOnce(postMockResponse.clone()) // POST
+            .mockResolvedValueOnce(getMockResponse.clone()); // Second GET
+
+        // 1. Fetch and cache
+        await api.get('/cache-test', { cacheTTL: 60 });
+        expect(window.fetch).toHaveBeenCalledTimes(1);
+
+        // 2. Fetch again, should hit cache
+        await api.get('/cache-test', { cacheTTL: 60 });
+        expect(window.fetch).toHaveBeenCalledTimes(1); // Still 1
+
+        // 3. Perform a mutation (POST)
+        await api.post('/cache-test', { updated: true });
+        expect(window.fetch).toHaveBeenCalledTimes(2);
+
+        // 4. Fetch GET again, should miss cache and hit network because POST invalidated it
+        await api.get('/cache-test', { cacheTTL: 60 });
+        expect(window.fetch).toHaveBeenCalledTimes(3);
+    });
 });
