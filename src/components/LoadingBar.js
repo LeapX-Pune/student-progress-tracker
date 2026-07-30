@@ -1,6 +1,9 @@
 let _bar = null;
 let _activeCount = 0;
 
+/**
+ *
+ */
 export function createLoadingBar() {
     if (_bar) return _bar;
     _bar = document.createElement('div');
@@ -15,6 +18,9 @@ export function createLoadingBar() {
     return _bar;
 }
 
+/**
+ *
+ */
 export function showLoadingBar() {
     const bar = createLoadingBar();
     _activeCount++;
@@ -26,6 +32,9 @@ export function showLoadingBar() {
     });
 }
 
+/**
+ *
+ */
 export function hideLoadingBar() {
     if (_activeCount <= 0) return;
     _activeCount--;
@@ -38,6 +47,9 @@ export function hideLoadingBar() {
     }, 200);
 }
 
+/**
+ *
+ */
 export function initLoadingBar() {
     createLoadingBar();
     window.addEventListener('api:loading-changed', event => {

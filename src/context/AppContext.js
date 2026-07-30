@@ -5,6 +5,9 @@ let _state = {
     coursesFilter: { search: '', sort: 'name', status: 'all' },
 };
 
+/**
+ *
+ */
 function _notify(prevState) {
     _subscribers.forEach(fn => {
         try {
@@ -15,25 +18,40 @@ function _notify(prevState) {
     });
 }
 
+/**
+ *
+ */
 export function getState() {
     return { ..._state };
 }
 
+/**
+ *
+ */
 export function setState(partial) {
     const prev = { ..._state };
     _state = { ..._state, ...partial };
     _notify(prev);
 }
 
+/**
+ *
+ */
 export function subscribe(fn) {
     _subscribers.add(fn);
     return () => _subscribers.delete(fn);
 }
 
+/**
+ *
+ */
 export function getCoursesFilter() {
     return { ..._state.coursesFilter };
 }
 
+/**
+ *
+ */
 export function setCoursesFilter(filter) {
     const prev = { ..._state };
     _state.coursesFilter = { ..._state.coursesFilter, ...filter };
@@ -45,6 +63,9 @@ export function setCoursesFilter(filter) {
     _notify(prev);
 }
 
+/**
+ *
+ */
 export function initAppContext() {
     try {
         const saved = localStorage.getItem('app_courses_filter');

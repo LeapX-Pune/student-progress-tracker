@@ -1,4 +1,10 @@
+/**
+ *
+ */
 export function useLocalStorage(key, defaultValue) {
+    /**
+     *
+     */
     function get() {
         try {
             const raw = localStorage.getItem(key);
@@ -10,6 +16,9 @@ export function useLocalStorage(key, defaultValue) {
         }
     }
 
+    /**
+     *
+     */
     function set(value) {
         try {
             localStorage.setItem(key, JSON.stringify(value));
@@ -18,6 +27,9 @@ export function useLocalStorage(key, defaultValue) {
         }
     }
 
+    /**
+     *
+     */
     function remove() {
         try {
             localStorage.removeItem(key);

@@ -1,3 +1,4 @@
+import { createIcons, icons } from 'lucide';
 import {
     createBarChart,
     createDoughnutChart,
@@ -7,20 +8,30 @@ import {
     destroyAllCharts,
 } from '../services/charts.js';
 import { getStudentGrades } from '../services/studentApi.js';
-import { createIcons, icons } from 'lucide';
 
 let _currentContainer = null;
 let _abortController = null;
 let _isLoading = false;
 
+/**
+ *
+ */
 export function initGradesPage() {
     const pageContent = document.querySelector('[data-page-content]');
     if (!pageContent) {
-        return { destroy() {} };
+        return {
+            /**
+             *
+             */
+            destroy() {},
+        };
     }
 
     _currentContainer = pageContent;
 
+    /**
+     *
+     */
     const handleRoute = event => {
         if (event.detail?.route === 'grades') {
             _fetchGradesData();
@@ -35,6 +46,9 @@ export function initGradesPage() {
     }
 
     return {
+        /**
+         *
+         */
         destroy() {
             document.removeEventListener('pathway:route', handleRoute);
             _cleanup();
@@ -42,6 +56,9 @@ export function initGradesPage() {
     };
 }
 
+/**
+ *
+ */
 function _showLoading() {
     if (!_currentContainer) return;
     const wrapper = document.createElement('div');
@@ -60,6 +77,9 @@ function _showLoading() {
     _currentContainer.appendChild(wrapper);
 }
 
+/**
+ *
+ */
 function _renderGrades(data) {
     if (!_currentContainer) return;
     const existing = _currentContainer.querySelector('#grades-page');
@@ -101,6 +121,9 @@ function _renderGrades(data) {
     _wireFilters(data);
 }
 
+/**
+ *
+ */
 function _createChartCard(title, type) {
     const card = document.createElement('div');
     card.className = `chart-card chart-card--${type}`;
@@ -115,6 +138,9 @@ function _createChartCard(title, type) {
     return card;
 }
 
+/**
+ *
+ */
 function _renderCharts(courseId, data) {
     const d = courseId === 'all' ? data : _filterCourseData(data, courseId);
     if (!d) return;
@@ -123,34 +149,49 @@ function _renderCharts(courseId, data) {
 
     const barCanvas = document.querySelector('.chart-card--bar canvas');
     if (barCanvas && d.quizScores) {
-        createBarChart(barCanvas, {
-            labels: d.quizScores.labels || ['Quiz 1', 'Quiz 2', 'Quiz 3', 'Quiz 4', 'Quiz 5'],
-            values: d.quizScores.data || [85, 92, 76, 98, 88],
-        }, { label: 'Score (%)', showLegend: false });
+        createBarChart(
+            barCanvas,
+            {
+                labels: d.quizScores.labels || ['Quiz 1', 'Quiz 2', 'Quiz 3', 'Quiz 4', 'Quiz 5'],
+                values: d.quizScores.data || [85, 92, 76, 98, 88],
+            },
+            { label: 'Score (%)', showLegend: false }
+        );
         _hideSkeleton(barCanvas);
     }
 
     const doughnutCanvas = document.querySelector('.chart-card--doughnut canvas');
     if (doughnutCanvas && d.gradeDistribution) {
-        createDoughnutChart(doughnutCanvas, {
-            labels: ['Grade A', 'Grade B', 'Grade C', 'Grade D', 'Grade F'],
-            values: d.gradeDistribution,
-        }, { showLegend: true, cutout: '65%' });
+        createDoughnutChart(
+            doughnutCanvas,
+            {
+                labels: ['Grade A', 'Grade B', 'Grade C', 'Grade D', 'Grade F'],
+                values: d.gradeDistribution,
+            },
+            { showLegend: true, cutout: '65%' }
+        );
         _hideSkeleton(doughnutCanvas);
     }
 
     const lineCanvas = document.querySelector('.chart-card--line canvas');
     if (lineCanvas && d.weeklyProgress) {
-        createLineChart(lineCanvas, {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
-            values: d.weeklyProgress.assignments || [60, 68, 75, 82, 90, 96],
-        }, { label: 'Assignments', yAxisLabel: 'Progress (%)', showLegend: false });
+        createLineChart(
+            lineCanvas,
+            {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                values: d.weeklyProgress.assignments || [60, 68, 75, 82, 90, 96],
+            },
+            { label: 'Assignments', yAxisLabel: 'Progress (%)', showLegend: false }
+        );
         _hideSkeleton(lineCanvas);
     }
 
     createIcons({ icons });
 }
 
+/**
+ *
+ */
 function _hideSkeleton(canvas) {
     const card = canvas.closest('.chart-card');
     if (card) {
@@ -160,6 +201,9 @@ function _hideSkeleton(canvas) {
     }
 }
 
+/**
+ *
+ */
 function _filterCourseData(data, courseId) {
     if (!data || !data.quizScores || !Array.isArray(data.quizScores)) return null;
     const idx = { crs_001: 0, crs_002: 1, crs_003: 2 }[courseId];
@@ -168,7 +212,11 @@ function _filterCourseData(data, courseId) {
     if (!courseQuiz) return data;
     return {
         quizScores: {
-            labels: courseQuiz.scores?.map((_, i) => `Quiz ${i + 1}`) || ['Quiz 1', 'Quiz 2', 'Quiz 3'],
+            labels: courseQuiz.scores?.map((_, i) => `Quiz ${i + 1}`) || [
+                'Quiz 1',
+                'Quiz 2',
+                'Quiz 3',
+            ],
             data: courseQuiz.scores || [85, 90, 80],
         },
         gradeDistribution: data.gradeDistribution?.[idx]?.distribution || [30, 25, 20, 15, 10],
@@ -178,6 +226,9 @@ function _filterCourseData(data, courseId) {
     };
 }
 
+/**
+ *
+ */
 function _wireFilters(data) {
     const chips = document.querySelectorAll('.grades-chip');
     chips.forEach(chip => {
@@ -190,6 +241,9 @@ function _wireFilters(data) {
     });
 }
 
+/**
+ *
+ */
 function _showError(error) {
     if (!_currentContainer) return;
     const existing = _currentContainer.querySelector('#grades-page');
@@ -201,13 +255,21 @@ function _showError(error) {
     title.className = 'route-placeholder-title';
     title.textContent = 'Grades';
     wrapper.appendChild(title);
-    wrapper.appendChild(createChartError({
-        message: error?.message || 'Unable to load grades',
-        onRetry: () => _fetchGradesData(),
-    }));
+    wrapper.appendChild(
+        createChartError({
+            message: error?.message || 'Unable to load grades',
+            /**
+             *
+             */
+            onRetry: () => _fetchGradesData(),
+        })
+    );
     _currentContainer.appendChild(wrapper);
 }
 
+/**
+ *
+ */
 async function _fetchGradesData() {
     if (_isLoading) return;
     _isLoading = true;
@@ -230,6 +292,9 @@ async function _fetchGradesData() {
     }
 }
 
+/**
+ *
+ */
 function _cleanup() {
     if (_abortController) {
         _abortController.abort();
@@ -242,6 +307,9 @@ function _cleanup() {
     }
 }
 
+/**
+ *
+ */
 function _getStudentId() {
     try {
         const authDataRaw = localStorage.getItem('student_tracker_auth');
