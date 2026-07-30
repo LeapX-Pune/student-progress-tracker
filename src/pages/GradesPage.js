@@ -46,7 +46,7 @@ function _showLoading() {
     wrapper.innerHTML = `<div class="grades-header"><h1>Grades</h1><p>Loading grade data...</p></div>
         <div class="grades-filter-section"><div class="grades-filter-buttons"></div></div>
         <div class="charts-grid" role="list">
-            ${[1,2,3].map(i => `<article class="chart-card" role="listitem"><div class="chart-container" style="min-height:280px"><div class="loading-state" style="display:flex"><div class="skeleton skeleton-chart-area"></div></div></div></article>`).join('')}
+            ${[1,2,3].map(() => `<article class="chart-card" role="listitem"><div class="chart-container" style="min-height:280px"><div class="loading-state" style="display:flex"><div class="skeleton skeleton-chart-area"></div></div></div></article>`).join('')}
         </div>`;
     _currentContainer.appendChild(wrapper);
 }
@@ -250,7 +250,7 @@ function _getStudentId() {
     try {
         const raw = localStorage.getItem('student_tracker_auth');
         if (raw) { const d = JSON.parse(raw); if (d?.user?.id) return d.user.id; }
-    } catch (e) { /* ignore */ }
+    } catch (_e) { /* ignore */ }
     return 'stu_001';
 }
 
