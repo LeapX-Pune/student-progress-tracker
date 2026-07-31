@@ -3,15 +3,15 @@
 ## Overview
 
 This project is deployed to **GitHub Pages** via GitHub Actions. The CI/CD
-pipeline automatically builds and deploys on every push to `main` (production)
-and on every pull request (preview).
+pipeline automatically builds and deploys on every push to `develop`
+(production) and on every pull request (preview).
 
 ## Environments
 
 | Environment    | Trigger                     | URL                                                                   |
 | -------------- | --------------------------- | --------------------------------------------------------------------- |
 | **Preview**    | Pull Request opened/updated | `https://leapx-pune.github.io/student-progress-tracker/pr-preview/N/` |
-| **Production** | Push to `main`              | `https://leapx-pune.github.io/student-progress-tracker/`              |
+| **Production** | Push to `develop`           | `https://leapx-pune.github.io/student-progress-tracker/`              |
 
 ## Workflows
 
@@ -34,7 +34,7 @@ pushes to the `gh-pages` branch under `pr-preview/{number}/`.
 
 ### Deploy Production (`deploy-prod.yml`)
 
-Triggers on push to `main`. Builds with `--env production` and pushes to the
+Triggers on push to `develop`. Builds with `--env production` and pushes to the
 `gh-pages` branch root.
 
 ### Cleanup Preview (`deploy-preview-cleanup.yml`)

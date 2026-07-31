@@ -689,10 +689,14 @@
         window.requestAnimationFrame(() => positionHighlight());
     });
 
-    // Trim nav-link text to satisfy e2e tests
+    // Trim whitespace-only text nodes inside nav links without removing child elements
     function trimNavLinks() {
         document.querySelectorAll('.nav-link').forEach(link => {
-            link.textContent = link.textContent.trim();
+            Array.from(link.childNodes).forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    node.textContent = node.textContent.trim();
+                }
+            });
         });
     }
     document.addEventListener('DOMContentLoaded', trimNavLinks);

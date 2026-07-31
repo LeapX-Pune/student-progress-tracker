@@ -160,7 +160,7 @@ The project is deployed to **GitHub Pages** via GitHub Actions:
 | Environment | Trigger             | URL                                                                  |
 | ----------- | ------------------- | -------------------------------------------------------------------- |
 | Preview     | Pull Request opened | `https://leapx-pune.github.io/student-progress-tracker/pr-preview/N` |
-| Production  | Push to `main`      | `https://leapx-pune.github.io/student-progress-tracker/`             |
+| Production  | Push to `develop`   | `https://leapx-pune.github.io/student-progress-tracker/`             |
 
 ---
 

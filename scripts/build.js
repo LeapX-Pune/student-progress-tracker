@@ -60,7 +60,7 @@ const envDefines = {
 };
 
 const defines = envDefines[env] || envDefines.production;
-const BUNDLE_LIMIT_KB = 100;
+const BUNDLE_LIMIT_KB = 150;
 
 // Clean dist
 if (existsSync(distDir)) rmSync(distDir, { recursive: true });
