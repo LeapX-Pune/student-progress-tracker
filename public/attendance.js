@@ -1,15 +1,6 @@
 (function () {
     'use strict';
 
-    var instances = [];
-
-    function destroyCharts() {
-        instances.forEach(function (c) {
-            if (c && typeof c.destroy === 'function') c.destroy();
-        });
-        instances = [];
-    }
-
     function render() {
         var container = document.querySelector('[data-page-content]');
         if (!container) return;
@@ -31,30 +22,6 @@
         }
 
         loadCourseAttendance();
-        renderDonutChart();
-    }
-
-    function loadChartJS(callback) {
-        if (typeof Chart !== 'undefined') {
-            callback();
-            return;
-        }
-
-        var existing = document.querySelector('script[data-chartjs-loader]');
-        if (existing) {
-            existing.addEventListener('load', callback);
-            return;
-        }
-
-        var script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';
-        script.crossOrigin = 'anonymous';
-        script.dataset.chartjsLoader = 'true';
-        script.onload = callback;
-        script.onerror = function () {
-            console.error('[Attendance] Failed to load Chart.js');
-        };
-        document.head.appendChild(script);
     }
 
     function loadCourseAttendance() {
@@ -158,51 +125,6 @@
         if (pct >= 75) return 'Good';
         if (pct >= 60) return 'At Risk';
         return 'Poor';
-    }
-
-    function renderDonutChart() {
-        loadChartJS(function () {
-            var canvas = document.getElementById('attendanceDonut');
-            if (!canvas || typeof Chart === 'undefined') return;
-            if (instances.length > 0) destroyCharts();
-            var chart = new Chart(canvas, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Present', 'Absent', 'Late'],
-                    datasets: [
-                        {
-                            data: [92.9, 3.8, 2.0],
-                            backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
-                            borderColor: 'rgba(255,255,255,0.15)',
-                            borderWidth: 1,
-                            hoverOffset: 6,
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '75%',
-                    animation: { duration: 700, easing: 'easeOutQuart' },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: '#1e293b',
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
-                            padding: { x: 12, y: 8 },
-                            cornerRadius: 8,
-                            callbacks: {
-                                label: function (ctx) {
-                                    return ctx.parsed + '%';
-                                },
-                            },
-                        },
-                    },
-                },
-            });
-            instances.push(chart);
-        });
     }
 
     function renderFallback(grid) {
