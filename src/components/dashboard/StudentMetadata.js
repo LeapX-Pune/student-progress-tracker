@@ -17,10 +17,12 @@
  * @param {string} [student.studentId] - Student ID (e.g., 'STU-2024-001')
  * @param {string} [student.enrolledAt] - Enrollment date ISO string
  * @param {number} [student.currentStreak] - Current learning streak in days
- * @param {Object} [_options] - Additional options
+ * @param {Object} [options] - Additional options
+ * @param {boolean} [options.showStreak=true] - Whether to show the learning streak item
  * @returns {HTMLElement} The metadata component element
  */
-export function createStudentMetadata(student, _options = {}) {
+export function createStudentMetadata(student, options = {}) {
+    const showStreak = options.showStreak !== false;
     const container = document.createElement('div');
     container.className = 'student-metadata';
     container.setAttribute('role', 'region');
@@ -37,7 +39,7 @@ export function createStudentMetadata(student, _options = {}) {
         items.push(_createMetadataItem('Enrolled', formattedDate, 'enrolled'));
     }
 
-    if (student?.currentStreak !== undefined && student?.currentStreak !== null) {
+    if (showStreak && student?.currentStreak !== undefined && student?.currentStreak !== null) {
         items.push(
             _createMetadataItem('Learning Streak', `${student.currentStreak} days`, 'streak')
         );
@@ -46,7 +48,9 @@ export function createStudentMetadata(student, _options = {}) {
     if (items.length === 0) {
         items.push(_createMetadataItem('Student ID', 'N/A', 'id'));
         items.push(_createMetadataItem('Enrolled', 'N/A', 'enrolled'));
-        items.push(_createMetadataItem('Learning Streak', '0 days', 'streak'));
+        if (showStreak) {
+            items.push(_createMetadataItem('Learning Streak', '0 days', 'streak'));
+        }
     }
 
     const list = document.createElement('div');

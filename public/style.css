@@ -1301,56 +1301,279 @@ svg.lucide {
     margin-bottom: var(--space-6);
 }
 
-.stat-card {
+/* Modern glass stat cards */
+.stat-card--glass {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(18px) saturate(1.25);
+    -webkit-backdrop-filter: blur(18px) saturate(1.25);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow:
+        0 4px 24px rgba(15, 23, 42, 0.06),
+        0 1px 2px rgba(15, 23, 42, 0.04);
+}
+body.dark .stat-card--glass {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.35),
+        0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.stat-card--highlight {
+    position: relative;
+    overflow: hidden;
+}
+.stat-card--highlight::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.06));
+    pointer-events: none;
+    border-radius: inherit;
+}
+.stat-card-sub {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-top: var(--space-1);
+    letter-spacing: 0.02em;
+}
+
+.section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    gap: var(--space-4);
+}
+.section-header h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+.section-header p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: 0;
+    white-space: nowrap;
+}
+
+.attendance-chart-section {
+    margin-bottom: var(--space-8);
+}
+
+.course-attendance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-5);
+}
+
+/* Course attendance card redesign */
+.course-attendance-card {
     background: var(--surface-card);
     border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    position: relative;
+    overflow: hidden;
     transition:
-        box-shadow var(--duration-base) var(--ease-out),
-        transform var(--duration-base) var(--ease-out);
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+.course-attendance-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+.course-attendance-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    opacity: 0.85;
 }
 
-.stat-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-}
-
-.stat-card-header {
+/* Per-course heading */
+.course-attendance-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
 }
-
-.stat-card-label {
+.course-attendance-name {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+.course-attendance-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
     font-size: var(--text-xs);
     font-weight: 600;
-    text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--text-tertiary);
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.badge-excellent {
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+}
+.badge-good {
+    background: rgba(59, 130, 246, 0.12);
+    color: #1d4ed8;
+}
+.badge-warning {
+    background: rgba(245, 158, 11, 0.12);
+    color: #b45309;
+}
+.badge-danger {
+    background: rgba(239, 68, 68, 0.12);
+    color: #b91c1c;
 }
 
-.stat-card-icon {
+body.dark .badge-excellent {
+    background: rgba(16, 185, 129, 0.18);
+    color: #6ee7b7;
+}
+body.dark .badge-good {
+    background: rgba(59, 130, 246, 0.18);
+    color: #93c5fd;
+}
+body.dark .badge-warning {
+    background: rgba(245, 158, 11, 0.18);
+    color: #fbbf24;
+}
+body.dark .badge-danger {
+    background: rgba(239, 68, 68, 0.18);
+    color: #f87171;
+}
+
+/* Attendance metrics row */
+.course-attendance-pct {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+}
+.course-attendance-pct-value {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+}
+.course-attendance-pct-label {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Stats row inside card */
+.course-attendance-stats {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-sm);
-    color: var(--accent-600);
-    background: var(--accent-50);
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+}
+.course-attendance-stat {
+    flex: 1;
+    text-align: center;
+}
+.course-attendance-stat-value {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1;
+}
+.course-attendance-stat-label {
+    display: block;
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+}
+.course-attendance-divider {
+    width: 1px;
+    height: 36px;
+    background: var(--border-subtle);
+    flex-shrink: 0;
 }
 
-.stat-card-value {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.03em;
-    line-height: 1;
+/* Progress bar */
+.course-attendance-bar-wrap {
+    margin-top: auto;
+    padding-top: var(--space-4);
+}
+.course-attendance-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--surface-sunken);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--space-2);
+}
+.course-attendance-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.8s ease;
+}
+.course-attendance-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Chart card for donut */
+.chart-card--wide .chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-4);
+}
+
+@media (max-width: 960px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .course-attendance-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .stat-card-value {
+        font-size: 1.75rem;
+    }
+    .course-attendance-pct-value {
+        font-size: 2rem;
+    }
 }
 
 .charts-row {
