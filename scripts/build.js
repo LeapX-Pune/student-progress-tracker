@@ -99,12 +99,6 @@ await build({
         'import.meta.env.VITE_CACHE_TTL_SECONDS': '300',
         'import.meta.env.VITE_CHART_ANIMATION_DURATION': '750',
         'import.meta.env.VITE_CHART_RESPONSIVE': 'true',
-
-        'import.meta.env.DEV': 'false',
-        'import.meta.env.PROD': 'true',
-        'import.meta.env.VITE_API_BASE_URL': '"/api"',
-        'import.meta.env.VITE_ENABLE_MOCK_API': '"true"',
-        'import.meta.env.VITE_API_MOCK_ENABLED': '"true"',
     },
     treeShaking: true,
     legalComments: 'none',
@@ -177,6 +171,9 @@ if (existsSync(resolve(publicDir, 'script.js'))) {
 // Copy standalone JS files from public root
 if (existsSync(resolve(publicDir, 'attendance.js'))) {
     copyFileSync(resolve(publicDir, 'attendance.js'), resolve(distDir, 'attendance.js'));
+}
+if (existsSync(resolve(publicDir, 'overview.js'))) {
+    copyFileSync(resolve(publicDir, 'overview.js'), resolve(distDir, 'overview.js'));
 }
 
 // Copy deployment config (SPA fallback, redirects)

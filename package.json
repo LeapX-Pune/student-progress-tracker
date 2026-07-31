@@ -33,7 +33,7 @@
   "bugs": {
     "url": "https://github.com/LeapX-Pune/student-progress-tracker/issues"
   },
-  "homepage": "https://github.com/LeapX-Pune/student-progress-tracker#readme",
+  "homepage": "https://leapx-pune.github.io/student-progress-tracker/",
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
     "@commitlint/cli": "21.2.1",
