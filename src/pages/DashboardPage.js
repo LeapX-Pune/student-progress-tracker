@@ -564,6 +564,9 @@ function _cleanup() {
     if (_currentContainer) {
         const existing = _currentContainer.querySelector('#dashboard-profile');
         if (existing) existing.remove();
+
+        const legacyOverview = _currentContainer.querySelector('.overview-page');
+        if (legacyOverview) legacyOverview.remove();
     }
 }
 
