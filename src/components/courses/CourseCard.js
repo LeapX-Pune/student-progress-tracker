@@ -9,7 +9,6 @@ import { createStatusBadge } from './StatusBadge.js';
 export function createCourseCard(course) {
     const card = document.createElement('div');
     card.className = 'course-card';
-    card.setAttribute('tabindex', '0');
 
     card.appendChild(createCourseThumbnail(course.thumbnailUrl, course.title));
 

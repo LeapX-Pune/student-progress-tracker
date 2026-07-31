@@ -350,6 +350,9 @@ function _cleanup() {
     if (_currentContainer) {
         const existing = _currentContainer.querySelector('#grades-page');
         if (existing) existing.remove();
+
+        const placeholder = _currentContainer.querySelector('.route-placeholder');
+        if (placeholder) placeholder.remove();
     }
 }
 

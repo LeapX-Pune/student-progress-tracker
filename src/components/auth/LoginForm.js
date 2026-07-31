@@ -357,8 +357,8 @@ export function createLoginForm(container, { onSuccess } = {}) {
         destroy() {
             formEl.removeEventListener('submit', handleSubmit);
             roleSelector.destroy();
-            if (container.contains(cardEl)) {
-                container.removeChild(cardEl);
+            if (container.contains(shellEl)) {
+                container.removeChild(shellEl);
             }
         },
     };

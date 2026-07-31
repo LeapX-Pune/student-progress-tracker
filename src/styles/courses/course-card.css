@@ -10,16 +10,10 @@
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease;
-    cursor: pointer;
     text-align: left;
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .course-card:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-lg, 0 18px 45px rgba(0, 0, 0, 0.3));
-    }
-
     .course-card:hover .course-thumbnail__img {
         transform: scale(1.05);
     }

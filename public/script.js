@@ -61,6 +61,16 @@
     }
 
     /**
+     * Removes off-canvas sidebar (and its focusable controls) from the
+     * accessibility tree and tab order when the mobile drawer is closed.
+     * Desktop always keeps the sidebar interactive.
+     */
+    function syncSidebarInert() {
+        const drawerOpen = appShell?.classList.contains('is-drawer-open');
+        sidebar.inert = isMobileViewport() && !drawerOpen;
+    }
+
+    /**
      *
      */
     function trapFocusables(container) {
@@ -83,6 +93,7 @@
         drawerOverlay.classList.add('is-visible');
         drawerOpenBtn.setAttribute('aria-expanded', 'true');
         document.body.style.overflow = 'hidden';
+        syncSidebarInert();
 
         const focusables = trapFocusables(sidebar);
         if (focusables.length) focusables[0].focus();
@@ -96,6 +107,7 @@
         drawerOverlay.classList.remove('is-visible');
         drawerOpenBtn.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
+        syncSidebarInert();
     }
 
     /**
@@ -112,6 +124,8 @@
     if (drawerOpenBtn) drawerOpenBtn.addEventListener('click', toggleDrawer);
     if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
     if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
+
+    syncSidebarInert();
 
     /* ------------------------------------------------------------------------
      Desktop sidebar collapse
@@ -510,6 +524,7 @@
                 closeDrawer();
                 document.body.style.overflow = '';
             }
+            syncSidebarInert();
             positionHighlight();
         }, 120);
     });
@@ -647,8 +662,6 @@
             });
         });
     }
-
-
 
     /* ------------------------------------------------------------------------
      Init
