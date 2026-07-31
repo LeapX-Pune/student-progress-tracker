@@ -567,6 +567,13 @@ svg.lucide {
     padding: var(--space-2);
 }
 
+.app-shell.is-collapsed .nav-link .nav-icon {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .app-shell.is-collapsed .collapse-toggle {
     justify-content: center;
 }
