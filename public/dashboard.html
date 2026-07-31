@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Student Profile - Dashboard</title>
+        <!-- Core design tokens (CSS variables used by dashboard.css) -->
+        <link rel="stylesheet" href="style.css" />
+        <!-- Dashboard-specific layout and component styles -->
+        <link rel="stylesheet" href="dashboard.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <!-- Dark mode: apply class before paint to avoid flash -->
+        <script>
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        </script>
+        <script>
+            function applyTheme() {
+                var isDark =
+                    localStorage.getItem('theme') === 'dark' ||
+                    document.documentElement.classList.contains('dark');
+                if (isDark) document.body.classList.add('dark');
+                else document.body.classList.remove('dark');
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', applyTheme);
+            } else {
+                applyTheme();
+            }
+        </script>
+        <!-- Link the JS file copied from src/dashboard -->
+        <script src="dashboard.js" defer></script>
+        <!-- Chart.js CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
+        <div class="dashboard-wrapper">
+            <!-- Dashboard Body Container -->
+            <div class="dashboard-body">
+                <!-- Main Content Area -->
+                <main class="main-content">
+                    <h1 class="dashboard-title">Dashboard</h1>
+
+                    <div class="dashboard-grid">
+                        <!-- Left Column: Courses Search & List -->
+                        <div class="grid-column">
+                            <section class="premium-card">
+                                <div class="card-header">
+                                    <div>
+                                        <h2 class="card-title">Select a course</h2>
+                                        <p class="card-subtitle">Start learning today.</p>
+                                    </div>
+                                    <button class="action-btn-circle" aria-label="Expand search">
+                                        <svg
+                                            width="14"
+                                            height="14"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2.5"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        >
+                                            <polyline points="15 3 21 3 21 9"></polyline>
+                                            <polyline points="9 21 3 21 3 15"></polyline>
+                                            <line x1="21" y1="3" x2="14" y2="10"></line>
+                                            <line x1="3" y1="21" x2="10" y2="14"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div class="search-input-wrapper">
+                                    <input type="text" placeholder="Search" class="search-input" />
+                                    <button class="search-btn-embed" aria-label="Execute search">
+                                        <svg
+                                            width="14"
+                                            height="14"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2.5"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        >
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div class="course-list-container">
+                                    <div class="course-item-box purple">
+                                        <h3 class="course-title-sub">Speak with Confidence</h3>
+                                        <p class="course-desc">
+                                            Learn how to speak English clearly and confidently in
+                                            everyday situations.
+                                        </p>
+                                        <div class="course-footer">
+                                            <span class="course-date-badge">
+                                                <svg
+                                                    width="12"
+                                                    height="12"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                >
+                                                    <rect
+                                                        x="3"
+                                                        y="4"
+                                                        width="18"
+                                                        height="18"
+                                                        rx="2"
+                                                        ry="2"
+                                                    ></rect>
+                                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                                </svg>
+                                                27 Apr 2025
+                                            </span>
+                                            <div class="student-meta" style="margin-bottom: 0">
+                                                <img
+                                                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=32&q=80"
+                                                    style="
+                                                        width: 24px;
+                                                        height: 24px;
+                                                        border-radius: 50%;
+                                                        border: 1.5px solid #ffffff;
+                                                    "
+                                                    alt="Avatar"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="course-item-box blue">
+                                        <h3 class="course-title-sub">Master the Basics</h3>
+                                        <p class="course-desc">
+                                            Build a strong foundation with essential grammar and
+                                            vocabulary.
+                                        </p>
+                                        <div class="course-footer">
+                                            <span class="course-date-badge">
+                                                <svg
+                                                    width="12"
+                                                    height="12"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                >
+                                                    <rect
+                                                        x="3"
+                                                        y="4"
+                                                        width="18"
+                                                        height="18"
+                                                        rx="2"
+                                                        ry="2"
+                                                    ></rect>
+                                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                                </svg>
+                                                30 Apr 2025
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <!-- Right Column: Performance & Status Boxes -->
+                        <div class="grid-column">
+                            <!-- Student Profile Card (Part 5 Component) -->
+                            <article class="premium-card" style="padding: 1.5rem">
+                                <div
+                                    style="
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                        margin-bottom: 1.5rem;
+                                    "
+                                >
+                                    <h2 class="card-title">Student Profile</h2>
+                                    <span
+                                        class="meta-badge meta-id"
+                                        id="studentId"
+                                        style="margin: 0"
+                                        >PWIOI-SOT-2025-29-0035</span
+                                    >
+                                </div>
+                                <div
+                                    style="
+                                        display: flex;
+                                        gap: 1.5rem;
+                                        align-items: center;
+                                        flex-wrap: wrap;
+                                    "
+                                >
+                                    <img
+                                        class="student-avatar"
+                                        id="studentAvatar"
+                                        src="https://plus.unsplash.com/premium_vector-1727956885098-4bf2c2be130a?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                        alt="Alex Johnson"
+                                    />
+                                    <div>
+                                        <h3
+                                            id="studentName"
+                                            style="font-size: 1.25rem; font-weight: 700"
+                                        >
+                                            Alex Johnson
+                                        </h3>
+                                        <p
+                                            id="studentEmail"
+                                            style="
+                                                color: var(--text-secondary);
+                                                font-size: 0.875rem;
+                                            "
+                                        >
+                                            rehan@student.edu
+                                        </p>
+                                        <span
+                                            id="studentSince"
+                                            style="font-size: 0.75rem; color: var(--text-secondary)"
+                                            >Student since Aug 24, 2025</span
+                                        >
+                                    </div>
+                                    <div class="profile-stats-container">
+                                        <div class="progress-ring">
+                                            <svg class="progress-ring-svg" width="60" height="60">
+                                                <circle
+                                                    class="progress-ring-circle-bg"
+                                                    cx="30"
+                                                    cy="30"
+                                                    r="26"
+                                                />
+                                                <circle
+                                                    class="progress-ring-circle-bar"
+                                                    cx="30"
+                                                    cy="30"
+                                                    r="26"
+                                                    stroke-dasharray="163.36"
+                                                    stroke-dashoffset="6.21"
+                                                />
+                                            </svg>
+                                            <div
+                                                class="progress-text"
+                                                style="
+                                                    font-size: 0.65rem;
+                                                    line-height: 1.1;
+                                                    text-align: center;
+                                                "
+                                            >
+                                                <span
+                                                    style="
+                                                        font-size: 0.6rem;
+                                                        font-weight: 600;
+                                                        display: block;
+                                                        opacity: 0.8;
+                                                        text-transform: uppercase;
+                                                        letter-spacing: 0.05em;
+                                                        line-height: 1;
+                                                    "
+                                                    >Att.</span
+                                                ><span
+                                                    style="
+                                                        font-size: 0.85rem;
+                                                        font-weight: 800;
+                                                        display: block;
+                                                        margin-top: 0.1rem;
+                                                    "
+                                                    >96.2%</span
+                                                >
+                                            </div>
+                                        </div>
+                                        <div class="profile-stats">
+                                            <div class="stat-item stat-streak">🔥 12 days</div>
+                                            <div class="stat-item stat-active">
+                                                🕒 Active 2h ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Empty Performance Chart Container -->
+
+                            <section class="premium-card">
+                                <div class="card-header">
+                                    <div>
+                                        <h2 class="card-title">Performance Chart</h2>
+                                        <p class="card-subtitle">
+                                            Track results and watch your progress rise.
+                                        </p>
+                                    </div>
+                                    <button class="action-btn-circle" aria-label="Expand chart">
+                                        <svg
+                                            width="14"
+                                            height="14"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2.5"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        >
+                                            <polyline points="15 3 21 3 21 9"></polyline>
+                                            <polyline points="9 21 3 21 3 15"></polyline>
+                                            <line x1="21" y1="3" x2="14" y2="10"></line>
+                                            <line x1="3" y1="21" x2="10" y2="14"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div class="chart-container-line">
+                                    <canvas id="weeklyProgressChart"></canvas>
+                                </div>
+                            </section>
+
+                            <!-- Bottom Stats Row -->
+
+                            <div class="stats-row">
+                                <section class="premium-card">
+                                    <div class="card-header">
+                                        <div>
+                                            <h2 class="card-title">Homework</h2>
+                                            <p class="card-subtitle">Check and complete tasks</p>
+                                        </div>
+                                    </div>
+                                    <div class="chart-container-bar">
+                                        <canvas id="quizChart"></canvas>
+                                    </div>
+                                </section>
+
+                                <section class="premium-card">
+                                    <div class="card-header">
+                                        <div>
+                                            <h2 class="card-title">Friends Score</h2>
+                                            <p class="card-subtitle">
+                                                See how you rank among friends
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chart-container-doughnut">
+                                        <canvas id="gradeChart"></canvas>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <script src="assets/chart_script.js"></script>
+    </body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "/api/auth/login": "/auth/login",
+  "/api/students/:id": "/students/:id",
+  "/api/students/:id/courses": "/courses?studentId=:id",
+  "/api/students/:id/grades": "/grades?studentId=:id",
+  "/api/courses/:id": "/courses/:id",
+  "/api/courses/:id/progress": "/progress?courseId=:id",
+  "/api/attendance": "/attendance"
+}

@@ -1,0 +1,53 @@
+name: Deploy Production
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., v1.0.0)'
+        required: false
+
+permissions:
+  contents: write
+
+env:
+  NODE_VERSION: '20'
+  GH_PAGES_BASE: /student-progress-tracker
+
+jobs:
+  deploy-production:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Wait for CI checks to complete
+        uses: lewagon/wait-on-check-action@v1.9.0
+        with:
+          ref: ${{ github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          check-regexp: '^(Lint & Format|Type Check|Unit Tests|Security Audit)$'
+          running-workflow-name: Deploy to GitHub Pages
+          wait-interval: 15
+          checks-discovery-timeout: 120
+          allowed-conclusions: success
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: >
+          node scripts/build.js
+          --base ${{ env.GH_PAGES_BASE }}/
+          --env production
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          keep_files: false
