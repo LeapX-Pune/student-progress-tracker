@@ -91,14 +91,6 @@
             <span class="nav-group-label">Insights</span>
             <ul class="nav-list">
               <li class="nav-item">
-                <a href="#/analytics" class="nav-link" data-route="analytics">
-                  <span class="nav-icon" aria-hidden="true">
-                    <i data-lucide="trending-up"></i>
-                  </span>
-                  <span class="nav-label">Analytics</span>
-                </a>
-              </li>
-              <li class="nav-item">
                 <a href="#/attendance" class="nav-link" data-route="attendance">
                   <span class="nav-icon" aria-hidden="true">
                     <i data-lucide="calendar"></i>
@@ -201,50 +193,49 @@
         <div class="attendance-page">
           <div class="page-header">
             <h1>Attendance</h1>
-            <p>Track student attendance and monitor trends.</p>
+            <p>Track student attendance and monitor trends across courses.</p>
           </div>
-          <div class="stats-grid">
-            <div class="stat-card">
+
+          <section class="stats-grid" aria-label="Attendance summary statistics">
+            <article class="stat-card stat-card--glass">
               <div class="stat-card-header">
-                <span class="stat-card-label">Present</span>
-                <span class="stat-card-icon"><i data-lucide="user-check" aria-hidden="true"></i></span>
+                <span class="stat-card-label">Total Classes</span>
+                <span class="stat-card-icon" aria-hidden="true"><i data-lucide="calendar-days"></i></span>
               </div>
-              <div class="stat-card-value">94.2%</div>
-            </div>
-            <div class="stat-card">
+              <div class="stat-card-value" id="totalClasses">113</div>
+            </article>
+            <article class="stat-card stat-card--glass">
               <div class="stat-card-header">
-                <span class="stat-card-label">Absent</span>
-                <span class="stat-card-icon"><i data-lucide="user-x" aria-hidden="true"></i></span>
+                <span class="stat-card-label">Attended</span>
+                <span class="stat-card-icon" aria-hidden="true"><i data-lucide="user-check"></i></span>
               </div>
-              <div class="stat-card-value">3.8%</div>
-            </div>
-            <div class="stat-card">
+              <div class="stat-card-value" id="totalAttended">105</div>
+            </article>
+            <article class="stat-card stat-card--glass stat-card--highlight">
               <div class="stat-card-header">
-                <span class="stat-card-label">Late</span>
-                <span class="stat-card-icon"><i data-lucide="clock" aria-hidden="true"></i></span>
+                <span class="stat-card-label">Overall Rate</span>
+                <span class="stat-card-icon" aria-hidden="true"><i data-lucide="target"></i></span>
               </div>
-              <div class="stat-card-value">2.0%</div>
-            </div>
-            <div class="stat-card">
+              <div class="stat-card-value" id="overallPercent">92.9%</div>
+              <div class="stat-card-sub">Across all enrolled courses</div>
+            </article>
+            <article class="stat-card stat-card--glass">
               <div class="stat-card-header">
-                <span class="stat-card-label">Avg Attendance</span>
-                <span class="stat-card-icon"><i data-lucide="calendar-check" aria-hidden="true"></i></span>
+                <span class="stat-card-label">Enrolled</span>
+                <span class="stat-card-icon" aria-hidden="true"><i data-lucide="book-open"></i></span>
               </div>
-              <div class="stat-card-value">96.2%</div>
+              <div class="stat-card-value">3</div>
+            </article>
+          </section>
+
+          <!-- PER-COURSE ATTENDANCE -->
+          <section aria-label="Per course attendance">
+            <div class="section-header">
+              <h2>Per Course</h2>
+              <p>Breakdown by enrolled course.</p>
             </div>
-          </div>
-          <div class="charts-row">
-            <div class="chart-card">
-              <div class="chart-card-header">
-                <div class="chart-card-title">Distribution</div>
-                <div class="chart-card-subtitle">Overall breakdown</div>
-              </div>
-              <div class="donut-container">
-                <canvas id="attendanceDonutChart"></canvas>
-                <div class="donut-legend" id="donutLegend"></div>
-              </div>
-            </div>
-          </div>
+            <div class="course-attendance-grid" id="courseAttendanceGrid"></div>
+          </section>
         </div>
       </template>
 
@@ -254,6 +245,7 @@
 
    <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous"></script>
    <script defer src="script.js"></script>
+   <script defer src="overview.js"></script>
    <script defer src="attendance.js"></script>
    <script type="module" src="main.js"></script>
 
