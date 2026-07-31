@@ -715,6 +715,16 @@
     justify-content: center;
 }
 
+/* Inside a chart container the state fills the whole chart area,
+   matching the original full-bleed loading/error/empty layout. */
+.chart-container .chart-state {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+    border: 0;
+    box-shadow: none;
+}
+
 .chart-state--skeleton,
 .chart-state--error,
 .chart-state--empty {
