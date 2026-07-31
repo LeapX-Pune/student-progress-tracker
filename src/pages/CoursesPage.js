@@ -1,4 +1,5 @@
 import { createEmptyState, EMPTY_ILLUSTRATIONS } from '../components/EmptyState.js';
+import { showInfo } from '../components/Toast.js';
 import { mountCourseGrid } from '../components/courses/CourseGrid.js';
 import { createErrorState } from '../components/courses/ErrorState.js';
 import { createSkeletonCard } from '../components/courses/SkeletonCard.js';
@@ -66,13 +67,20 @@ export function initCoursesPage() {
             gridContainer.innerHTML = '';
 
             if (!courses || courses.length === 0) {
-                gridContainer.appendChild(
-                    createEmptyState({
-                        title: 'No Courses Yet',
-                        description: "You haven't been enrolled in any courses for this term.",
-                        illustration: EMPTY_ILLUSTRATIONS.course,
-                    })
-                );
+                const emptyState = createEmptyState({
+                    title: 'No Courses Yet',
+                    description: "You haven't been enrolled in any courses for this term.",
+                    illustration: EMPTY_ILLUSTRATIONS.course,
+                    actions: [
+                        '<button class="btn btn--primary" id="browse-catalog-btn" type="button">Browse Catalog</button>',
+                    ],
+                });
+                gridContainer.appendChild(emptyState);
+
+                const browseBtn = gridContainer.querySelector('#browse-catalog-btn');
+                browseBtn?.addEventListener('click', () => {
+                    showInfo('Course Catalog', 'The course catalog is coming soon.');
+                });
                 return;
             }
 

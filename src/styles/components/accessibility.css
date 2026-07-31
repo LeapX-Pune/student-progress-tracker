@@ -27,7 +27,7 @@ textarea,
 [role='menuitem'],
 [role='switch'],
 [role='option'],
-[tabindex]:not([tabindex='-1']) {
+[tabindex]:not([tabindex='-1']):not(.chart-container) {
     min-width: 44px;
     min-height: 44px;
 }

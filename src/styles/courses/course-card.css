@@ -14,9 +14,19 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+    .course-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg, 0 12px 32px rgba(0, 0, 0, 0.28));
+        border-color: var(--border-strong, #475569);
+    }
+
     .course-card:hover .course-thumbnail__img {
         transform: scale(1.05);
     }
+}
+
+.course-card:active {
+    transform: translateY(-1px);
 }
 
 .course-card__content {

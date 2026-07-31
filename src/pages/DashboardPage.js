@@ -14,7 +14,8 @@ import {
     createProfileCardError,
 } from '../components/dashboard/StudentProfileCard.js';
 import AuthContext from '../context/AuthContext.js';
-import { getStudentCourses } from '../services/studentApi.js';
+import { getStudentCourses, getStudentProfile } from '../services/studentApi.js';
+import { getLetterGrade } from '../utils/courseHelpers.js';
 
 const ACCENT_CLASSES = ['accent-1', 'accent-2', 'accent-3'];
 
@@ -78,14 +79,24 @@ async function _fetchDashboardData() {
     _abortController = new AbortController();
 
     const authState = AuthContext.getState();
-    const profile = authState.user;
-    const studentId = profile?.id || _getStudentId();
+    const authUser = authState.user;
+    const studentId = authUser?.id || _getStudentId();
 
     try {
-        const courses = await getStudentCourses(studentId);
+        // Fetch the student profile from the API alongside courses. The auth
+        // payload is used as the identity fallback so the dashboard never
+        // breaks if the profile endpoint is unavailable (FR-DASH-001/003).
+        const [courses, apiProfile] = await Promise.all([
+            getStudentCourses(studentId),
+            getStudentProfile(studentId).catch(err => {
+                console.warn('[DashboardPage] Failed to fetch student profile:', err);
+                return null;
+            }),
+        ]);
 
         if (_abortController.signal.aborted) return;
 
+        const profile = { ...(apiProfile || {}), ...(authState.user || {}) };
         _renderProfile(profile, courses);
     } catch (error) {
         if (_abortController.signal.aborted) return;
@@ -395,7 +406,11 @@ function _createCourseCard(course, index) {
     gradeStat.className = 'overview-course-card__stat';
     const gradeValue = document.createElement('span');
     gradeValue.className = 'overview-course-card__stat-value';
-    gradeValue.textContent = course.currentGrade ? `${course.currentGrade}%` : '--';
+    if (course.currentGrade != null) {
+        gradeValue.textContent = `${course.currentGrade}% (${getLetterGrade(course.currentGrade)})`;
+    } else {
+        gradeValue.textContent = '--';
+    }
     gradeStat.appendChild(gradeValue);
     const gradeLabel = document.createElement('span');
     gradeLabel.className = 'overview-course-card__stat-label';

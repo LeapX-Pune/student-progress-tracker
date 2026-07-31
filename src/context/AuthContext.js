@@ -237,6 +237,7 @@ const AuthContext = (() => {
                 console.warn('[AuthContext] Stored token has expired — clearing session.');
                 clearAuthToken();
                 setState({ isLoading: false });
+                window.dispatchEvent(new window.Event('auth:session-expired'));
                 return;
             }
 
