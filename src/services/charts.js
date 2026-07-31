@@ -24,10 +24,10 @@ function _getThemeColors() {
     const isDark = document.body.classList.contains('dark');
     return {
         isDark,
-        gridColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(226, 232, 240, 0.8)',
-        textColor: isDark ? '#94a3b8' : '#64748b',
-        tooltipBg: isDark ? '#1e293b' : '#121824',
-        tooltipText: '#fff',
+        gridColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(226, 232, 240, 0.9)',
+        textColor: isDark ? '#e2e8f0' : '#1e293b',
+        tooltipBg: isDark ? '#1e293b' : '#ffffff',
+        tooltipText: isDark ? '#f8fafc' : '#1e293b',
     };
 }
 

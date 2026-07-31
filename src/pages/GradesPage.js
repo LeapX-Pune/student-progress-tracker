@@ -188,7 +188,12 @@ function _renderCharts(courseId, data) {
                 labels: d.quizScores.labels || ['Quiz 1', 'Quiz 2', 'Quiz 3', 'Quiz 4', 'Quiz 5'],
                 values: d.quizScores.data || [85, 92, 76, 98, 88],
             },
-            { label: 'Score (%)', showLegend: false }
+            {
+                label: 'Score (%)',
+                showLegend: false,
+                backgroundColor: 'rgba(99, 102, 241, 0.85)',
+                borderColor: '#6366f1',
+            }
         );
     }
 
@@ -223,6 +228,37 @@ function _renderCharts(courseId, data) {
 
 /**
  *
+ */
+function _mapGradesData(rawData) {
+    if (!rawData) return null;
+    const quizLabels = (rawData.quizScores || []).map((q, i) => q.label || `Quiz ${i + 1}`);
+    const quizData = (rawData.quizScores || []).map(q => (q.score != null ? q.score : q));
+    const gradeDistArray = Array.isArray(rawData.gradeDistribution)
+        ? rawData.gradeDistribution.map(g => (g.percentage != null ? g.percentage : g))
+        : [30, 25, 20, 15, 10];
+    const weeklyAssignments = (rawData.weeklyProgress || []).map(
+        w => w.cumulative || w.assignments || w
+    );
+    return {
+        quizScores: {
+            labels: quizLabels.length
+                ? quizLabels
+                : ['Quiz 1', 'Quiz 2', 'Quiz 3', 'Quiz 4', 'Quiz 5'],
+            data: quizData.length ? quizData : [85, 92, 76, 98, 88],
+        },
+        gradeDistribution: gradeDistArray,
+        weeklyProgress: {
+            assignments: weeklyAssignments.length ? weeklyAssignments : [60, 68, 75, 82, 90, 96],
+        },
+    };
+}
+
+/**
+ * Filters grade data down to a single course.
+ *
+ * @param {Object} data - Full grades data for the active student
+ * @param {string} courseId - Course identifier (e.g. "crs_001") or "all"
+ * @returns {Object|null} Course-specific chart data, or the original data
  */
 function _filterCourseData(data, courseId) {
     if (!data || !data.quizScores || !Array.isArray(data.quizScores)) return null;
@@ -289,8 +325,9 @@ async function _fetchGradesData() {
     _showLoading();
     _abortController = new AbortController();
     try {
-        const data = await getStudentGrades(_getStudentId());
+        const rawData = await getStudentGrades(_getStudentId());
         if (_abortController.signal.aborted) return;
+        const data = _mapGradesData(rawData) || rawData;
         _renderGrades(data);
     } catch (error) {
         if (_abortController.signal.aborted) return;

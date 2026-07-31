@@ -55,8 +55,8 @@ export function createLoginForm(container, { onSuccess } = {}) {
           <div class="hidden" id="name-field">
             <label class="block text-sm font-bold text-[#1E293B] mb-1.5" for="name">Full Name</label>
             <div class="relative flex items-center">
-              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">person</span>
-              <input class="w-full h-10 sm:h-11 pl-10 pr-4 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="name" placeholder="Your Name" type="text"/>
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#475569] text-[20px]">person</span>
+              <input class="w-full h-10 sm:h-11 pl-10 pr-4 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#475569] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="name" placeholder="Your Name" type="text"/>
             </div>
           </div>
 
@@ -64,8 +64,8 @@ export function createLoginForm(container, { onSuccess } = {}) {
           <div>
             <label class="block text-sm font-bold text-[#1E293B] mb-1.5" for="email">Email Address</label>
             <div class="relative flex items-center">
-              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">mail</span>
-              <input class="w-full h-10 sm:h-11 pl-10 pr-4 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="email" placeholder="student@school.edu" required="" type="email" autocomplete="email"/>
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#475569] text-[20px]">mail</span>
+              <input class="w-full h-10 sm:h-11 pl-10 pr-4 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#475569] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="email" placeholder="student@school.edu" required="" type="email" autocomplete="email"/>
             </div>
             <span id="email-error" style="color: var(--error); font-size: 0.75rem; margin-top: 0.25rem; display: block;"></span>
           </div>
@@ -77,9 +77,9 @@ export function createLoginForm(container, { onSuccess } = {}) {
               <a class="text-xs font-semibold text-primary hover:underline transition-colors underline-offset-2" href="#" id="forgot-password-link">Forgot password?</a>
             </div>
             <div class="relative flex items-center">
-              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">lock</span>
-              <input class="w-full h-10 sm:h-11 pl-10 pr-12 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="password" placeholder="••••••••" required="" type="password" autocomplete="current-password"/>
-              <button class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center text-[#64748B] hover:text-[#0F172A] transition-colors focus:outline-none" id="toggle-password-btn" type="button" aria-label="Toggle password visibility">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#475569] text-[20px]">lock</span>
+              <input class="w-full h-10 sm:h-11 pl-10 pr-12 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#475569] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="password" placeholder="••••••••" required="" type="password" autocomplete="current-password"/>
+              <button class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center text-[#475569] hover:text-[#0F172A] transition-colors focus:outline-none" id="toggle-password-btn" type="button" aria-label="Toggle password visibility">
                 <span class="material-symbols-outlined text-[20px]">visibility_off</span>
               </button>
             </div>
@@ -90,8 +90,8 @@ export function createLoginForm(container, { onSuccess } = {}) {
           <div class="hidden" id="confirm-password-field">
             <label class="block text-sm font-bold text-[#1E293B] mb-1.5" for="confirm-password">Confirm Password</label>
             <div class="relative flex items-center">
-              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">lock_reset</span>
-              <input class="w-full h-10 sm:h-11 pl-10 pr-12 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="confirm-password" placeholder="••••••••" type="password"/>
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#475569] text-[20px]">lock_reset</span>
+              <input class="w-full h-10 sm:h-11 pl-10 pr-12 bg-white border border-[#CBD5E1] rounded-xl text-sm lg:text-[15px] font-medium text-[#0F172A] placeholder:text-[#475569] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-xs" id="confirm-password" placeholder="••••••••" type="password"/>
             </div>
             <span id="confirm-password-error" style="color: var(--error); font-size: 0.75rem; margin-top: 0.25rem; display: block;"></span>
           </div>

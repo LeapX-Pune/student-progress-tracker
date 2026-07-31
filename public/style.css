@@ -163,7 +163,7 @@ body.dark {
 
     --text-primary: var(--gray-800);
     --text-secondary: var(--gray-500);
-    --text-tertiary: var(--gray-400);
+    --text-tertiary: var(--gray-300);
     --text-on-accent: #ffffff;
 
     --border-subtle: var(--gray-150);
@@ -1688,15 +1688,15 @@ svg.lucide {
     background: linear-gradient(135deg, #3b82f6, #60a5fa, #93c5fd);
 }
 
-/* Quiz Scores card — dark container theme */
+/* Quiz Scores card — theme-aware surfaces */
 #chart-quiz {
-    background: #12151f;
-    border: 1px solid #232838;
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
     border-radius: 16px;
 }
 #chart-quiz .chart-container {
-    background: transparent;
-    border: none;
+    background: var(--surface-sunken);
+    border: 1px solid var(--border-subtle);
 }
 
 /* Wide card — spans both columns */

@@ -31,20 +31,9 @@
         }
 
         loadCourseAttendance();
+        renderDonutChart();
     }
 
-    function loadCourseAttendance() {
-        var grid = document.getElementById('courseAttendanceGrid');
-        if (!grid) return;
-
-        fetch('/api/attendance')
-            .then(function (res) { return res.json(); })
-            .then(function (data) {
-                renderCourseCards(grid, data);
-            })
-            .catch(function () {
-                renderFallback(grid);
-            });
     function loadChartJS(callback) {
         if (typeof Chart !== 'undefined') {
             callback();
@@ -68,6 +57,22 @@
         document.head.appendChild(script);
     }
 
+    function loadCourseAttendance() {
+        var grid = document.getElementById('courseAttendanceGrid');
+        if (!grid) return;
+
+        fetch('/api/attendance')
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (data) {
+                renderCourseCards(grid, data);
+            })
+            .catch(function () {
+                renderFallback(grid);
+            });
+    }
+
     function renderCourseCards(grid, courses) {
         var colors = ['#8b5cf6', '#3b82f6', '#10b981'];
         var html = '';
@@ -89,10 +94,18 @@
             '  <div class="course-attendance-accent" style="background:' + color + '"></div>',
             '  <div class="course-attendance-header">',
             '    <h3 class="course-attendance-name">' + course.courseName + '</h3>',
-            '    <span class="course-attendance-badge ' + badgeClass + '">' + badgeLabel + '</span>',
+            '    <span class="course-attendance-badge ' +
+                badgeClass +
+                '">' +
+                badgeLabel +
+                '</span>',
             '  </div>',
             '  <div class="course-attendance-pct">',
-            '    <div class="course-attendance-pct-value" style="color:' + color + '">' + pct + '%</div>',
+            '    <div class="course-attendance-pct-value" style="color:' +
+                color +
+                '">' +
+                pct +
+                '%</div>',
             '    <div class="course-attendance-pct-label">Attendance Rate</div>',
             '  </div>',
             '  <div class="course-attendance-stats">',
@@ -118,14 +131,18 @@
             '  </div>',
             '  <div class="course-attendance-bar-wrap">',
             '    <div class="course-attendance-bar">',
-            '      <div class="course-attendance-bar-fill" style="width:' + barWidth + '%; background:' + color + '"></div>',
+            '      <div class="course-attendance-bar-fill" style="width:' +
+                barWidth +
+                '%; background:' +
+                color +
+                '"></div>',
             '    </div>',
             '    <div class="course-attendance-bar-label">',
             '      <span>' + course.attended + ' / ' + course.totalClasses + ' classes</span>',
             '      <span>' + pct + '%</span>',
             '    </div>',
             '  </div>',
-            '</div>'
+            '</div>',
         ].join('\n');
     }
 
@@ -135,49 +152,6 @@
         if (pct >= 60) return 'badge-warning';
         return 'badge-danger';
     }
-        var chart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Present', 'Absent', 'Late'],
-                datasets: [
-                    {
-                        data: [94.2, 3.8, 2.0],
-                        backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
-                        borderWidth: 0,
-                        hoverOffset: 6,
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '75%',
-                animation: { duration: 600, easing: 'easeOutQuart' },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#1e293b',
-                        titleFont: { family: 'Inter, system-ui, sans-serif', size: 12 },
-                        bodyFont: {
-                            family: 'Inter, system-ui, sans-serif',
-                            size: 13,
-                            weight: '600',
-                        },
-                        padding: { x: 12, y: 8 },
-                        cornerRadius: 8,
-                        displayColors: true,
-                        callbacks: {
-                            /** @param {import('chart.js').TooltipContext} ctx */
-                            label: function (ctx) {
-                                return ctx.parsed + '%';
-                            },
-                        },
-                    },
-                },
-            },
-        });
-
-        instances.push(chart);
 
     function getBadgeLabel(pct) {
         if (pct >= 90) return 'Excellent';
@@ -186,11 +160,77 @@
         return 'Poor';
     }
 
+    function renderDonutChart() {
+        loadChartJS(function () {
+            var canvas = document.getElementById('attendanceDonut');
+            if (!canvas || typeof Chart === 'undefined') return;
+            if (instances.length > 0) destroyCharts();
+            var chart = new Chart(canvas, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Present', 'Absent', 'Late'],
+                    datasets: [
+                        {
+                            data: [92.9, 3.8, 2.0],
+                            backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
+                            borderColor: 'rgba(255,255,255,0.15)',
+                            borderWidth: 1,
+                            hoverOffset: 6,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    animation: { duration: 700, easing: 'easeOutQuart' },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            padding: { x: 12, y: 8 },
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function (ctx) {
+                                    return ctx.parsed + '%';
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+            instances.push(chart);
+        });
+    }
+
     function renderFallback(grid) {
         var fallback = [
-            { courseName: 'UX Design Fundamentals', totalClasses: 30, attended: 28, absent: 1, late: 1, percentage: 93.3 },
-            { courseName: 'Data Structures & Algorithms', totalClasses: 45, attended: 41, absent: 2, late: 2, percentage: 91.1 },
-            { courseName: 'Full Stack Web Development', totalClasses: 38, attended: 36, absent: 1, late: 1, percentage: 94.7 }
+            {
+                courseName: 'UX Design Fundamentals',
+                totalClasses: 30,
+                attended: 28,
+                absent: 1,
+                late: 1,
+                percentage: 93.3,
+            },
+            {
+                courseName: 'Data Structures & Algorithms',
+                totalClasses: 45,
+                attended: 41,
+                absent: 2,
+                late: 2,
+                percentage: 91.1,
+            },
+            {
+                courseName: 'Full Stack Web Development',
+                totalClasses: 38,
+                attended: 36,
+                absent: 1,
+                late: 1,
+                percentage: 94.7,
+            },
         ];
         renderCourseCards(grid, fallback);
     }
