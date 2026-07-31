@@ -448,9 +448,14 @@ export function createChartEmpty({ message = 'No grade data available' } = {}) {
 export function addChartKeyboardNavigation(container, chartInstance) {
     if (!container || !chartInstance) return () => {};
 
+    const originalRole = container.getAttribute('role');
+    const originalLabel = container.getAttribute('aria-label');
+
     container.setAttribute('tabindex', '0');
     container.setAttribute('role', 'application');
-    container.setAttribute('aria-label', 'Chart. Use arrow keys to navigate data points.');
+    if (!originalLabel) {
+        container.setAttribute('aria-label', 'Chart. Use arrow keys to navigate data points.');
+    }
 
     let currentIndex = -1;
 
@@ -494,7 +499,16 @@ export function addChartKeyboardNavigation(container, chartInstance) {
     return () => {
         container.removeEventListener('keydown', handleKeyDown);
         container.removeAttribute('tabindex');
-        container.removeAttribute('role');
+        if (originalRole) {
+            container.setAttribute('role', originalRole);
+        } else {
+            container.removeAttribute('role');
+        }
+        if (originalLabel) {
+            container.setAttribute('aria-label', originalLabel);
+        } else {
+            container.removeAttribute('aria-label');
+        }
     };
 }
 

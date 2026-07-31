@@ -1,6 +1,10 @@
 import { createIcons, icons } from 'lucide';
 import {
+    addChartKeyboardNavigation,
     createBarChart,
+    createChartEmpty,
+    createChartError,
+    createChartSkeleton,
     createDoughnutChart,
     createLineChart,
     destroyAllCharts,
@@ -10,6 +14,9 @@ import { getStudentGrades } from '../services/studentApi.js';
 let _currentContainer = null;
 let _abortController = null;
 let _isLoading = false;
+let _lastData = null;
+let _activeCourse = 'all';
+const _keyboardCleanups = new Map();
 
 const ICONS = {
     quiz: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="m9 14 2 2 4-4"/></svg>',
@@ -17,6 +24,37 @@ const ICONS = {
         '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>',
     weekly: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',
 };
+
+const CHART_DEFS = [
+    {
+        id: 'chart-quiz',
+        variant: 'purple',
+        title: 'Quiz Scores',
+        subtitle: 'Your scores across all quizzes taken.',
+        icon: ICONS.quiz,
+        chartType: 'bar',
+        chartId: 'gradesQuizChart',
+    },
+    {
+        id: 'chart-assignment',
+        variant: 'green',
+        title: 'Assignment Performance',
+        subtitle: 'Grades earned on submitted assignments.',
+        icon: ICONS.assignment,
+        chartType: 'doughnut',
+        chartId: 'gradesAssignmentChart',
+    },
+    {
+        id: 'chart-weekly',
+        variant: 'blue',
+        title: 'Weekly Progress',
+        subtitle: 'Your learning progress tracked week by week.',
+        icon: ICONS.weekly,
+        chartType: 'line',
+        chartId: 'gradesWeeklyChart',
+        wide: true,
+    },
+];
 
 /**
  *
@@ -55,6 +93,36 @@ export function initGradesPage() {
 }
 
 /**
+ * Builds a single chart card element (shared by loading and render states).
+ *
+ * @param {Object} def - Chart card definition from CHART_DEFS
+ * @param {string} [skeletonType] - When set, a loading skeleton is appended
+ * @returns {HTMLElement} The chart card element
+ */
+function _buildChartCard(def, skeletonType) {
+    const card = document.createElement('article');
+    card.className = `chart-card chart-card--${def.variant}${def.wide ? ' chart-card--wide' : ''}`;
+    card.setAttribute('role', 'listitem');
+    card.id = def.id;
+
+    card.innerHTML = `<div class="chart-card-header">
+        <div class="chart-card-icon">${def.icon}</div>
+        <div><h3 class="chart-title">${def.title}</h3><p class="chart-subtitle">${def.subtitle}</p></div>
+    </div>
+    <div class="chart-container" role="img" aria-label="${def.title} chart">
+        <canvas id="${def.chartId}" style="width:100%;height:100%;display:none;" aria-label="${def.title} chart"></canvas>
+    </div>`;
+
+    if (skeletonType) {
+        card.querySelector('.chart-container').appendChild(
+            createChartSkeleton({ type: skeletonType })
+        );
+    }
+
+    return card;
+}
+
+/**
  *
  */
 function _showLoading() {
@@ -63,10 +131,17 @@ function _showLoading() {
     wrapper.className = 'grades-dashboard';
     wrapper.id = 'grades-page';
     wrapper.innerHTML = `<div class="grades-header"><h1>Grades</h1><p>Loading grade data...</p></div>
-        <div class="grades-filter-section"><div class="grades-filter-buttons"></div></div>
-        <div class="charts-grid" role="list">
-            ${[1, 2, 3].map(() => '<article class="chart-card" role="listitem"><div class="chart-container" style="min-height:280px"><div class="loading-state" style="display:flex"><div class="skeleton skeleton-chart-area"></div></div></div></article>').join('')}
-        </div>`;
+        <div class="grades-filter-section"><div class="grades-filter-buttons"></div></div>`;
+
+    const grid = document.createElement('div');
+    grid.className = 'charts-grid';
+    grid.setAttribute('role', 'list');
+
+    CHART_DEFS.forEach(def => {
+        grid.appendChild(_buildChartCard(def, def.chartType));
+    });
+
+    wrapper.appendChild(grid);
     _currentContainer.appendChild(wrapper);
 }
 
@@ -77,37 +152,6 @@ function _renderGrades(data) {
     if (!_currentContainer) return;
     const existing = _currentContainer.querySelector('#grades-page');
     if (existing) existing.remove();
-
-    const chartCards = [
-        {
-            id: 'chart-quiz',
-            variant: 'purple',
-            title: 'Quiz Scores',
-            subtitle: 'Your scores across all quizzes taken.',
-            icon: ICONS.quiz,
-            chartType: 'bar',
-            chartId: 'gradesQuizChart',
-        },
-        {
-            id: 'chart-assignment',
-            variant: 'green',
-            title: 'Assignment Performance',
-            subtitle: 'Grades earned on submitted assignments.',
-            icon: ICONS.assignment,
-            chartType: 'doughnut',
-            chartId: 'gradesAssignmentChart',
-        },
-        {
-            id: 'chart-weekly',
-            variant: 'blue',
-            title: 'Weekly Progress',
-            subtitle: 'Your learning progress tracked week by week.',
-            icon: ICONS.weekly,
-            chartType: 'line',
-            chartId: 'gradesWeeklyChart',
-            wide: true,
-        },
-    ];
 
     const wrapper = document.createElement('div');
     wrapper.className = 'grades-dashboard';
@@ -142,20 +186,8 @@ function _renderGrades(data) {
     grid.setAttribute('role', 'list');
     grid.setAttribute('aria-labelledby', 'grades-heading');
 
-    chartCards.forEach(c => {
-        const card = document.createElement('article');
-        card.className = `chart-card chart-card--${c.variant}${c.wide ? ' chart-card--wide' : ''}`;
-        card.setAttribute('role', 'listitem');
-        card.id = c.id;
-
-        card.innerHTML = `<div class="chart-card-header">
-            <div class="chart-card-icon">${c.icon}</div>
-            <div><h3 class="chart-title">${c.title}</h3><p class="chart-subtitle">${c.subtitle}</p></div>
-        </div>
-        <div class="chart-container" role="img" aria-label="${c.title} chart">
-            <canvas id="${c.chartId}" style="width:100%;height:100%;display:none;" aria-label="${c.title} chart"></canvas>
-        </div>`;
-        grid.appendChild(card);
+    CHART_DEFS.forEach(def => {
+        grid.appendChild(_buildChartCard(def));
     });
 
     wrapper.appendChild(grid);
@@ -166,8 +198,73 @@ function _renderGrades(data) {
     wrapper.appendChild(srAnnounce);
 
     _currentContainer.appendChild(wrapper);
-    _renderCharts('all', data);
+    _renderCharts(_activeCourse, data);
     _wireFilters(data);
+}
+
+/**
+ * Removes any chart state overlay (skeleton/error/empty) from a container.
+ *
+ * @param {HTMLElement} container - Chart container element
+ */
+function _clearChartState(container) {
+    if (!container) return;
+    container.querySelectorAll('.chart-state').forEach(el => el.remove());
+}
+
+/**
+ * Cleans up keyboard navigation listeners attached to chart containers.
+ */
+function _clearKeyboardNav() {
+    _keyboardCleanups.forEach(cleanup => cleanup());
+    _keyboardCleanups.clear();
+}
+
+/**
+ * Renders a single chart with loading/empty/error states handled per chart.
+ *
+ * @param {string} canvasId - Canvas element ID
+ * @param {Function} create - Factory that returns the chart instance, or
+ *   { empty: true } when no data is available
+ * @param {Function} onRetry - Retry callback for the chart's error state
+ */
+function _renderChart(canvasId, create, onRetry) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const container = canvas.closest('.chart-container');
+
+    _clearChartState(container);
+
+    let result;
+    try {
+        result = create(canvas);
+    } catch (error) {
+        console.error(`[GradesPage] Failed to render chart "${canvasId}":`, error);
+        canvas.style.display = 'none';
+        if (container) {
+            container.appendChild(
+                createChartError({
+                    message: 'Unable to load chart data',
+                    /**
+                     *
+                     */
+                    onRetry,
+                })
+            );
+        }
+        return;
+    }
+
+    if (!result || result.empty) {
+        canvas.style.display = 'none';
+        if (container) container.appendChild(createChartEmpty());
+        return;
+    }
+
+    canvas.style.display = '';
+    if (container && result.chart) {
+        _keyboardCleanups.set(container, addChartKeyboardNavigation(container, result.chart));
+    }
 }
 
 /**
@@ -178,52 +275,74 @@ function _renderCharts(courseId, data) {
     if (!d) return;
 
     destroyAllCharts();
+    _clearKeyboardNav();
 
-    const barCanvas = document.getElementById('gradesQuizChart');
-    if (barCanvas && d.quizScores) {
-        barCanvas.style.display = '';
-        createBarChart(
-            barCanvas,
-            {
-                labels: d.quizScores.labels || ['Quiz 1', 'Quiz 2', 'Quiz 3', 'Quiz 4', 'Quiz 5'],
-                values: d.quizScores.data || [85, 92, 76, 98, 88],
-            },
-            {
-                label: 'Score (%)',
-                showLegend: false,
-                backgroundColor: 'rgba(99, 102, 241, 0.85)',
-                borderColor: '#6366f1',
-            }
-        );
-    }
+    _renderChart(
+        'gradesQuizChart',
+        canvas => {
+            const labels = d.quizScores?.labels || [];
+            const values = d.quizScores?.data || [];
+            if (!labels.length || !values.length) return { empty: true };
+            return createBarChart(
+                canvas,
+                { labels, values },
+                {
+                    label: 'Score (%)',
+                    showLegend: false,
+                    backgroundColor: 'rgba(99, 102, 241, 0.85)',
+                    borderColor: '#6366f1',
+                }
+            );
+        },
+        () => _retryCharts()
+    );
 
-    const doughnutCanvas = document.getElementById('gradesAssignmentChart');
-    if (doughnutCanvas && d.gradeDistribution) {
-        doughnutCanvas.style.display = '';
-        createDoughnutChart(
-            doughnutCanvas,
-            {
-                labels: ['Grade A', 'Grade B', 'Grade C', 'Grade D', 'Grade F'],
-                values: d.gradeDistribution,
-            },
-            { showLegend: true, cutout: '65%' }
-        );
-    }
+    _renderChart(
+        'gradesAssignmentChart',
+        canvas => {
+            const values = Array.isArray(d.gradeDistribution) ? d.gradeDistribution : [];
+            if (!values.length) return { empty: true };
+            return createDoughnutChart(
+                canvas,
+                {
+                    labels: ['Grade A', 'Grade B', 'Grade C', 'Grade D', 'Grade F'],
+                    values,
+                },
+                { showLegend: true, cutout: '65%' }
+            );
+        },
+        () => _retryCharts()
+    );
 
-    const lineCanvas = document.getElementById('gradesWeeklyChart');
-    if (lineCanvas && d.weeklyProgress) {
-        lineCanvas.style.display = '';
-        createLineChart(
-            lineCanvas,
-            {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
-                values: d.weeklyProgress.assignments || [60, 68, 75, 82, 90, 96],
-            },
-            { label: 'Assignments', yAxisLabel: 'Progress (%)', showLegend: false }
-        );
-    }
+    _renderChart(
+        'gradesWeeklyChart',
+        canvas => {
+            const values = d.weeklyProgress?.assignments || [];
+            if (!values.length) return { empty: true };
+            return createLineChart(
+                canvas,
+                {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                    values,
+                },
+                { label: 'Assignments', yAxisLabel: 'Progress (%)', showLegend: false }
+            );
+        },
+        () => _retryCharts()
+    );
 
     createIcons({ icons });
+}
+
+/**
+ * Re-renders charts from the last fetched data, or refetches if unavailable.
+ */
+function _retryCharts() {
+    if (_lastData) {
+        _renderCharts(_activeCourse, _lastData);
+        return;
+    }
+    _fetchGradesData();
 }
 
 /**
@@ -231,24 +350,18 @@ function _renderCharts(courseId, data) {
  */
 function _mapGradesData(rawData) {
     if (!rawData) return null;
-    const quizLabels = (rawData.quizScores || []).map((q, i) => q.label || `Quiz ${i + 1}`);
-    const quizData = (rawData.quizScores || []).map(q => (q.score != null ? q.score : q));
-    const gradeDistArray = Array.isArray(rawData.gradeDistribution)
-        ? rawData.gradeDistribution.map(g => (g.percentage != null ? g.percentage : g))
-        : [30, 25, 20, 15, 10];
-    const weeklyAssignments = (rawData.weeklyProgress || []).map(
-        w => w.cumulative || w.assignments || w
-    );
     return {
         quizScores: {
-            labels: quizLabels.length
-                ? quizLabels
-                : ['Quiz 1', 'Quiz 2', 'Quiz 3', 'Quiz 4', 'Quiz 5'],
-            data: quizData.length ? quizData : [85, 92, 76, 98, 88],
+            labels: (rawData.quizScores || []).map((q, i) => q.label || `Quiz ${i + 1}`),
+            data: (rawData.quizScores || []).map(q => (q.score != null ? q.score : q)),
         },
-        gradeDistribution: gradeDistArray,
+        gradeDistribution: Array.isArray(rawData.gradeDistribution)
+            ? rawData.gradeDistribution.map(g => (g.percentage != null ? g.percentage : g))
+            : [],
         weeklyProgress: {
-            assignments: weeklyAssignments.length ? weeklyAssignments : [60, 68, 75, 82, 90, 96],
+            assignments: (rawData.weeklyProgress || []).map(
+                w => w.cumulative || w.assignments || w
+            ),
         },
     };
 }
@@ -291,8 +404,8 @@ function _wireFilters(data) {
         chip.addEventListener('click', () => {
             chips.forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
-            destroyAllCharts();
-            _renderCharts(chip.dataset.course, data);
+            _activeCourse = chip.dataset.course;
+            _renderCharts(_activeCourse, data);
         });
     });
 }
@@ -328,6 +441,7 @@ async function _fetchGradesData() {
         const rawData = await getStudentGrades(_getStudentId());
         if (_abortController.signal.aborted) return;
         const data = _mapGradesData(rawData) || rawData;
+        _lastData = data;
         _renderGrades(data);
     } catch (error) {
         if (_abortController.signal.aborted) return;
@@ -347,6 +461,7 @@ function _cleanup() {
         _abortController = null;
     }
     destroyAllCharts();
+    _clearKeyboardNav();
     if (_currentContainer) {
         const existing = _currentContainer.querySelector('#grades-page');
         if (existing) existing.remove();

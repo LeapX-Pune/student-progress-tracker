@@ -1,6 +1,18 @@
+/**
+ * @fileoverview Toast notification system.
+ *
+ * Provides accessible toast notifications with optional action buttons and
+ * per-type auto-dismiss durations. Toasts anchor top-right on desktop and
+ * bottom-center on mobile (FR-ERR-001/002/003).
+ *
+ * @module components/Toast
+ */
+
+import { TOAST_DURATION } from '../utils/constants.js';
+
 const TOAST_DEFAULTS = {
     type: 'info',
-    duration: 5000,
+    duration: TOAST_DURATION.INFO,
 };
 
 const ICONS = {
@@ -44,6 +56,7 @@ export function showToast({
     message,
     type = TOAST_DEFAULTS.type,
     duration = TOAST_DEFAULTS.duration,
+    action,
 }) {
     const toastContainer = getContainer();
     const toast = document.createElement('div');
@@ -60,6 +73,18 @@ export function showToast({
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
     </button>
   `;
+
+    if (action && action.label) {
+        const actionBtn = document.createElement('button');
+        actionBtn.className = 'toast__action';
+        actionBtn.type = 'button';
+        actionBtn.textContent = action.label;
+        actionBtn.addEventListener('click', () => {
+            removeToast(toast);
+            if (typeof action.onClick === 'function') action.onClick();
+        });
+        toast.querySelector('.toast__content').appendChild(actionBtn);
+    }
 
     const closeBtn = toast.querySelector('.toast__close');
     closeBtn.addEventListener('click', () => removeToast(toast));
@@ -96,26 +121,26 @@ function removeToast(toast) {
  *
  */
 export function showSuccess(title, message) {
-    return showToast({ type: 'success', title, message });
+    return showToast({ type: 'success', title, message, duration: TOAST_DURATION.SUCCESS });
 }
 
 /**
  *
  */
 export function showError(title, message) {
-    return showToast({ type: 'error', title, message });
+    return showToast({ type: 'error', title, message, duration: TOAST_DURATION.ERROR });
 }
 
 /**
  *
  */
 export function showWarning(title, message) {
-    return showToast({ type: 'warning', title, message });
+    return showToast({ type: 'warning', title, message, duration: TOAST_DURATION.WARNING });
 }
 
 /**
  *
  */
 export function showInfo(title, message) {
-    return showToast({ type: 'info', title, message });
+    return showToast({ type: 'info', title, message, duration: TOAST_DURATION.INFO });
 }

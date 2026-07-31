@@ -19,6 +19,27 @@ export function getStatusConfig(status) {
 }
 
 /**
+ * Maps a numeric grade to its letter equivalent.
+ *
+ * @param {number} grade - Numeric grade (0-100)
+ * @returns {string} Letter grade
+ */
+export function getLetterGrade(grade) {
+    if (grade === null || grade === undefined || Number.isNaN(grade)) return '';
+    if (grade >= 97) return 'A+';
+    if (grade >= 93) return 'A';
+    if (grade >= 90) return 'A-';
+    if (grade >= 87) return 'B+';
+    if (grade >= 83) return 'B';
+    if (grade >= 80) return 'B-';
+    if (grade >= 77) return 'C+';
+    if (grade >= 73) return 'C';
+    if (grade >= 70) return 'C-';
+    if (grade >= 60) return 'D';
+    return 'F';
+}
+
+/**
  *
  */
 export function formatGrade(grade) {
@@ -31,17 +52,6 @@ export function formatGrade(grade) {
         return grade;
     }
 
-    let letter = 'F';
-    if (grade >= 97) letter = 'A+';
-    else if (grade >= 93) letter = 'A';
-    else if (grade >= 90) letter = 'A-';
-    else if (grade >= 87) letter = 'B+';
-    else if (grade >= 83) letter = 'B';
-    else if (grade >= 80) letter = 'B-';
-    else if (grade >= 77) letter = 'C+';
-    else if (grade >= 73) letter = 'C';
-    else if (grade >= 70) letter = 'C-';
-    else if (grade >= 60) letter = 'D';
-
+    const letter = getLetterGrade(grade);
     return `${letter} (${Math.round(grade)}%)`;
 }
