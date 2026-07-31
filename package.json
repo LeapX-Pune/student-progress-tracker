@@ -21,7 +21,8 @@
     "lint:fix": "eslint src --fix",
     "format": "prettier --write \"src/**/*.{js,css,html}\"",
     "format:check": "prettier --check \"src/**/*.{js,css,html}\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "deploy": "node scripts/build.js --base /student-progress-tracker/ --env production && git add -f dist && git commit -m \"chore: deploy to gh-pages\" && git push origin `git subtree split --prefix dist HEAD`:gh-pages --force"
   },
   "repository": {
     "type": "git",
