@@ -157,9 +157,22 @@
         renderCourseCards(grid, fallback);
     }
 
+    function mount() {
+        var currentHash = window.location.hash.replace(/^#\/?/, '').split('?')[0].trim();
+        if (currentHash === 'attendance') {
+            render();
+        }
+    }
+
     document.addEventListener('pathway:route', function (e) {
         if (e.detail && e.detail.route === 'attendance') {
             render();
         }
     });
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', mount);
+    } else {
+        mount();
+    }
 })();
